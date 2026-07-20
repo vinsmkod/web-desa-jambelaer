@@ -16,6 +16,13 @@ class DashboardController extends Controller
             'produk_aktif'   => Produk::where('is_active', true)->count(),
             'total_pesan'    => Pesan::count(),
             'pesan_belum'    => Pesan::where('is_read', false)->count(),
+            // Statistik per jenis pesan
+            'pertanyaan_umum' => Pesan::where('jenis_pesan', 'pertanyaan_umum')->count(),
+            'pengaduan'       => Pesan::where('jenis_pesan', 'pengaduan')->count(),
+            'kerja_sama'      => Pesan::where('jenis_pesan', 'kerja_sama')->count(),
+            'pengajuan_acara' => Pesan::where('jenis_pesan', 'pengajuan_acara')->count(),
+            'acara_menunggu'  => Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'menunggu')->count(),
+            'acara_disetujui' => Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'disetujui')->count(),
         ];
 
         $pesan_terbaru   = Pesan::latest()->take(5)->get();

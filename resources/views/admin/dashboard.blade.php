@@ -106,6 +106,53 @@
 
 </div>
 
+{{-- ── Pesan per Jenis ──────────────────────────────────────────────────────── --}}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    {{-- Pertanyaan Umum --}}
+    <a href="{{ route('admin.pesan.index') }}" class="stat-card hover:border-sky-600/50 hover:bg-slate-800 transition-all">
+        <div class="w-9 h-9 rounded-lg bg-sky-600/20 flex items-center justify-center text-sky-400 flex-shrink-0">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-lg font-bold font-display text-white leading-none">{{ $stats['pertanyaan_umum'] }}</p>
+            <p class="text-xs text-slate-400 mt-1">Pertanyaan Umum</p>
+        </div>
+    </a>
+
+    {{-- Pengaduan --}}
+    <a href="{{ route('admin.pesan.index') }}" class="stat-card hover:border-red-600/50 hover:bg-slate-800 transition-all">
+        <div class="w-9 h-9 rounded-lg bg-red-600/20 flex items-center justify-center text-red-400 flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-lg font-bold font-display text-white leading-none">{{ $stats['pengaduan'] }}</p>
+            <p class="text-xs text-slate-400 mt-1">Pengaduan</p>
+        </div>
+    </a>
+
+    {{-- Kerja Sama --}}
+    <a href="{{ route('admin.pesan.index') }}" class="stat-card hover:border-cyan-600/50 hover:bg-slate-800 transition-all">
+        <div class="w-9 h-9 rounded-lg bg-cyan-600/20 flex items-center justify-center text-cyan-400 flex-shrink-0">
+            <i data-lucide="handshake" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-lg font-bold font-display text-white leading-none">{{ $stats['kerja_sama'] }}</p>
+            <p class="text-xs text-slate-400 mt-1">Kerja Sama</p>
+        </div>
+    </a>
+
+    {{-- Pengajuan Acara --}}
+    <a href="{{ route('admin.pengajuan-acara.index') }}" class="stat-card hover:border-amber-600/50 hover:bg-slate-800 transition-all">
+        <div class="w-9 h-9 rounded-lg bg-amber-600/20 flex items-center justify-center text-amber-400 flex-shrink-0">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="text-lg font-bold font-display text-white leading-none">{{ $stats['pengajuan_acara'] }}</p>
+            <p class="text-xs text-slate-400 mt-1">Pengajuan Acara</p>
+        </div>
+    </a>
+</div>
+
 {{-- ── Main Area: Chart + Quick Actions ─────────────────────────────────── --}}
 <div class="grid lg:grid-cols-3 gap-5 mb-5">
 

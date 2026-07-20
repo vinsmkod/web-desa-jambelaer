@@ -8,11 +8,12 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PesanController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\TentangController;
+use App\Http\Controllers\Admin\BudayaController;
+use App\Http\Controllers\Admin\PengajuanAcaraController;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use App\Models\Budaya;
-use App\Http\Controllers\Admin\BudayaController;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
@@ -162,6 +163,17 @@ Route::get('/kontak', function () {
 // Kontak – Submit pesan (simpan ke DB)
 Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 
+// Acara – Daftar acara yang disetujui & dipublikasikan
+Route::get('/acara', function () {
+    $acaras = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')
+        ->where('status', 'disetujui')
+        ->where('dipublikasikan', true)
+        ->orderBy('tanggal_acara', 'asc')
+        ->orderBy('waktu_acara', 'asc')
+        ->get();
+    return view('pages.acara', compact('acaras'));
+})->name('acara');
+
 
 // ── Admin Routes ─────────────────────────────────────────────────────────────
 
@@ -185,6 +197,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pesan/{pesan}', [PesanController::class, 'show'])->name('pesan.show');
         Route::patch('/pesan/{pesan}/read', [PesanController::class, 'markRead'])->name('pesan.read');
         Route::delete('/pesan/{pesan}', [PesanController::class, 'destroy'])->name('pesan.destroy');
+
+        // Pengajuan Acara
+        Route::get('/pengajuan-acara', [PengajuanAcaraController::class, 'index'])->name('pengajuan-acara.index');
+        Route::get('/pengajuan-acara/{pesan}', [PengajuanAcaraController::class, 'show'])->name('pengajuan-acara.show');
+        Route::patch('/pengajuan-acara/{pesan}/status', [PengajuanAcaraController::class, 'updateStatus'])->name('pengajuan-acara.status');
+        Route::post('/pengajuan-acara/{pesan}/publikasi', [PengajuanAcaraController::class, 'publikasiAcara'])->name('pengajuan-acara.publikasi');
+        Route::delete('/pengajuan-acara/{pesan}', [PengajuanAcaraController::class, 'destroy'])->name('pengajuan-acara.destroy');
 
         // Pengaturan
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');

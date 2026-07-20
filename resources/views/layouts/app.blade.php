@@ -84,7 +84,7 @@
                     <a href="{{ route('tentang') }}"     class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('tentang')     ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Tentang Kami</a>
                     <a href="{{ route('umkm') }}"        class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('umkm')        ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">UMKM</a>
                     <a href="{{ route('budaya') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('budaya')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Budaya</a>
-                    <a href="{{ route('kontak') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('kontak')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Kontak</a>
+                    <a href="{{ route('acara') }}"       class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('acara')       ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Acara</a>
                 </nav>
 
                 <!-- CTA -->
@@ -111,7 +111,7 @@
                 <a href="{{ route('tentang') }}" class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Tentang Kami</a>
                 <a href="{{ route('umkm') }}"    class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">UMKM</a>
                 <a href="{{ route('budaya') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Budaya</a>
-                <a href="{{ route('kontak') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Kontak</a>
+                <a href="{{ route('acara') }}"   class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Acara</a>
                 <a href="{{ route('kontak') }}"  class="flex items-center justify-center w-full py-3 text-sm font-semibold tracking-wider uppercase text-white bg-emerald-900 rounded-lg shadow-sm mt-2">Hubungi Kami</a>
             </div>
         </div>
@@ -148,7 +148,7 @@
                         <a href="{{ route('tentang') }}" class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Tentang Kami</a>
                         <a href="{{ route('umkm') }}"    class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">UMKM</a>
                         <a href="{{ route('budaya') }}"  class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Budaya</a>
-                        <a href="{{ route('kontak') }}"  class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Kontak</a>
+                        <a href="{{ route('acara') }}"   class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Acara</a>
                     </div>
                 </div>
 
