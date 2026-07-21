@@ -69,10 +69,31 @@
 
                 <div class="pt-8 border-t border-white/10 mt-8">
                     <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase mb-3">Media Sosial Desa</span>
-                    <div class="flex items-center space-x-3">
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100"><i data-lucide="facebook" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    @php
+                        $kFb = \App\Models\Pengaturan::get('sosmed_facebook', '');
+                        $kIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
+                        $kYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
+                        $kTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
+                        $kWa = \App\Models\Pengaturan::get('sosmed_whatsapp', '');
+                    @endphp
+                    <div class="flex items-center flex-wrap gap-2">
+                        @if($kFb)
+                        <a href="{{ str_starts_with($kFb, 'http') ? $kFb : 'https://'.$kFb }}" target="_blank" rel="noopener" title="Facebook" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all text-emerald-100"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        @endif
+                        @if($kIg)
+                        <a href="{{ str_starts_with($kIg, 'http') ? $kIg : 'https://'.$kIg }}" target="_blank" rel="noopener" title="Instagram" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-pink-600 transition-all text-emerald-100"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        @endif
+                        @if($kYt)
+                        <a href="{{ str_starts_with($kYt, 'http') ? $kYt : 'https://'.$kYt }}" target="_blank" rel="noopener" title="YouTube" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-red-600 transition-all text-emerald-100"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                        @endif
+                        @if($kTt)
+                        <a href="{{ str_starts_with($kTt, 'http') ? $kTt : 'https://'.$kTt }}" target="_blank" rel="noopener" title="TikTok" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-slate-700 transition-all text-emerald-100">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+                        </a>
+                        @endif
+                        @if($kWa)
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $kWa) }}" target="_blank" rel="noopener" title="WhatsApp" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-green-600 transition-all text-emerald-100"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -147,14 +168,14 @@
                                 -translate-y-2.5 scale-75">Nama Lengkap</label>
                         </div>
 
-                        <!-- PERTANYAAN UMUM: Email + Subjek + Pesan -->
+                        <!-- PERTANYAAN UMUM: WhatsApp + Subjek + Pesan -->
                         <div id="field-email" class="hidden relative">
-                            <input id="f-email" name="email" type="email" placeholder=" "
+                            <input id="f-email" name="no_whatsapp" type="tel" placeholder=" "
                                 class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
                             <label for="f-email" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
                                 peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
                                 peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Alamat Email</label>
+                                -translate-y-2.5 scale-75">Nomor WhatsApp</label>
                         </div>
 
                         <!-- PENGADUAN + KERJA SAMA + PENGAJUAN ACARA: No WhatsApp -->
@@ -363,7 +384,7 @@
         submitBtn.disabled = false;
 
         if (jenisPesan === 'pertanyaan_umum') {
-            // Pertanyaan Umum: Nama, Email, Subjek, Pesan
+            // Pertanyaan Umum: Nama, WhatsApp, Subjek, Pesan
             showFieldWithRequired(fieldEmail, inputEmail);
             showFieldWithRequired(fieldSubject, inputSubject);
             labelSubject.textContent = 'Subjek Pesan';

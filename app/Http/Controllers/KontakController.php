@@ -22,9 +22,9 @@ class KontakController extends Controller
         switch ($jenisPesan) {
             case 'pertanyaan_umum':
                 $rules = array_merge($rules, [
-                    'email'   => ['required', 'email', 'max:255'],
-                    'subject' => ['required', 'string', 'max:255'],
-                    'message' => ['required', 'string'],
+                    'no_whatsapp' => ['required', 'string', 'max:20'],
+                    'subject'     => ['required', 'string', 'max:255'],
+                    'message'     => ['required', 'string'],
                 ]);
                 break;
 

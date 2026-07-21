@@ -142,7 +142,7 @@
                         </p>
                     </div>
                     @else
-                    <form method="POST" action="{{ route('admin.pengajuan-acara.publikasi', $pesan) }}" onsubmit="return confirm('Publikasikan acara ini ke halaman budaya desa?')">
+                    <form method="POST" action="{{ route('admin.pengajuan-acara.publikasi', $pesan) }}" onsubmit="return confirm('Publikasikan acara ini ke halaman agenda acara desa?')">
                         @csrf
                         <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition-all flex items-center justify-center gap-2">
                             <i data-lucide="upload" class="w-4 h-4"></i>

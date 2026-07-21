@@ -22,7 +22,7 @@
         ],
         'statistik' => [
             'label' => 'Statistik Desa',
-            'desc'  => 'Angka-angka yang tampil di halaman utama',
+            'desc'  => 'Data demografi dan wilayah yang tampil di halaman utama',
             'icon'  => 'bar-chart-2',
             'color' => 'violet',
         ],
@@ -31,6 +31,12 @@
             'desc'  => 'URL akun media sosial resmi desa',
             'icon'  => 'share-2',
             'color' => 'amber',
+        ],
+        'peta' => [
+            'label' => 'Peta Lokasi',
+            'desc'  => 'Google Maps embed URL lokasi kantor desa',
+            'icon'  => 'map',
+            'color' => 'emerald',
         ],
     ];
 
@@ -55,22 +61,28 @@
         'stat_luas'       => 'ruler',
         'stat_penduduk'   => 'users',
         'stat_umkm'       => 'shopping-bag',
+        'stat_kk'         => 'home',
+        'stat_rtrw'       => 'network',
+        'stat_dusun'      => 'map',
         'sosmed_facebook' => 'facebook',
         'sosmed_instagram'=> 'instagram',
         'sosmed_youtube'  => 'youtube',
         'sosmed_twitter'  => 'twitter',
+        'sosmed_tiktok'   => 'video',
+        'sosmed_whatsapp' => 'message-circle',
+        'maps_embed_url'  => 'map-pin',
     ];
 @endphp
 
 {{-- ── Tab Navigation ─────────────────────────────────────────────────────── --}}
-<div class="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-2xl p-1.5 mb-6 max-w-3xl">
+<div class="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-2xl p-1.5 mb-6 max-w-3xl overflow-x-auto">
     @foreach($settings as $group => $items)
     @php $meta = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'emerald']; @endphp
     <button onclick="switchTab('{{ $group }}')" id="tab-{{ $group }}"
-        class="peng-tab flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200
+        class="peng-tab flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap
                {{ $loop->first ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
         <i data-lucide="{{ $meta['icon'] }}" class="w-4 h-4 flex-shrink-0"></i>
-        <span class="hidden sm:inline">{{ $meta['label'] }}</span>
+        <span>{{ $meta['label'] }}</span>
     </button>
     @endforeach
 </div>
@@ -104,7 +116,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
             @foreach($items as $item)
             @php $fieldIcon = $fieldIcons[$item->key] ?? 'pencil'; @endphp
-            <div class="{{ $item->key === 'desa_alamat' ? '' : '' }}">
+            <div>
                 <label class="flex items-center gap-2 mb-2">
                     <div class="w-5 h-5 rounded flex items-center justify-center {{ $color['icon_bg'] }} {{ $color['icon_text'] }} flex-shrink-0">
                         <i data-lucide="{{ $fieldIcon }}" class="w-3 h-3"></i>
@@ -112,28 +124,26 @@
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ $item->label }}</span>
                 </label>
 
-                @if($item->key === 'desa_alamat')
-                <textarea name="{{ $item->key }}" rows="2"
-                          class="form-input resize-none"
+                @if($item->key === 'desa_alamat' || $item->key === 'maps_embed_url')
+                <textarea name="{{ $item->key }}" rows="3"
+                          class="form-input resize-none font-mono text-xs"
                           placeholder="{{ $item->label }}...">{{ $item->value }}</textarea>
 
-                @elseif(in_array($item->key, ['sosmed_facebook', 'sosmed_instagram', 'sosmed_youtube', 'sosmed_twitter']))
-                <div class="flex items-center gap-0">
-                    <div class="flex-shrink-0 px-3 h-10 flex items-center rounded-l-xl bg-slate-700 border border-slate-700 border-r-0 text-slate-400 text-xs font-mono">
-                        https://
-                    </div>
-                    <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
-                           class="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-r-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
-                           placeholder="{{ str_replace('_', '.', str_replace('sosmed_', '', $item->key)) }}.com/namaakun">
-                </div>
+                @elseif(in_array($item->key, ['sosmed_facebook', 'sosmed_instagram', 'sosmed_youtube', 'sosmed_twitter', 'sosmed_tiktok', 'sosmed_whatsapp']))
+                <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
+                       class="form-input"
+                       placeholder="cth: instagram.com/desa_jambelaer atau 08123456789">
 
-                @elseif(in_array($item->key, ['stat_luas', 'stat_penduduk', 'stat_umkm']))
+                @elseif(in_array($item->key, ['stat_luas', 'stat_penduduk', 'stat_umkm', 'stat_kk', 'stat_rtrw', 'stat_dusun']))
                 <div class="flex items-center gap-0">
                     <input type="number" name="{{ $item->key }}" value="{{ $item->value }}"
                            class="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-l-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
-                    <div class="flex-shrink-0 px-3 h-10 flex items-center rounded-r-xl bg-slate-700 border border-slate-700 border-l-0 text-slate-400 text-xs">
+                    <div class="flex-shrink-0 px-3 h-10 flex items-center rounded-r-xl bg-slate-700 border border-slate-700 border-l-0 text-slate-400 text-xs font-semibold">
                         @if($item->key === 'stat_luas') Ha
                         @elseif($item->key === 'stat_penduduk') Jiwa
+                        @elseif($item->key === 'stat_kk') KK
+                        @elseif($item->key === 'stat_rtrw') RT/RW
+                        @elseif($item->key === 'stat_dusun') Dusun
                         @else UMKM
                         @endif
                     </div>

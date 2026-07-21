@@ -74,17 +74,86 @@
                 </div>
 
                 {{-- CTA Buttons --}}
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="{{ route('kontak') }}"
-                       class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold tracking-wide text-white bg-emerald-900 hover:bg-emerald-800 rounded-xl shadow-md transition-all duration-200 hover:-translate-y-0.5">
-                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                        Pesan Sekarang
-                    </a>
-                    <a href="{{ route('kontak') }}"
-                       class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold tracking-wide text-emerald-950 bg-white border border-slate-200 hover:bg-emerald-50 rounded-xl transition-all duration-200 hover:-translate-y-0.5">
-                        <i data-lucide="phone" class="w-4 h-4"></i>
-                        Tanyakan via WhatsApp
-                    </a>
+                @php
+                    $rawWa = $product->no_whatsapp_umkm ?: \App\Models\Pengaturan::get('sosmed_whatsapp', \App\Models\Pengaturan::get('kontak_telp', ''));
+                    $waClean = preg_replace('/[^0-9]/', '', $rawWa);
+                    if (str_starts_with($waClean, '0')) {
+                        $waClean = '62' . substr($waClean, 1);
+                    }
+                    
+                    $recipientName = $product->nama_pemilik ?: $product->producer;
+                    $greeting = $recipientName ? "Halo {$recipientName}, " : "Halo, ";
+                    $msg = urlencode("{$greeting}saya ingin bertanya mengenai produk \"{$product->title}\" yang ada di website Desa Jambelaer.");
+                    
+                    $waUrl = $waClean ? "https://wa.me/{$waClean}?text={$msg}" : route('kontak');
+                @endphp
+
+                {{-- Information Card UMKM --}}
+                <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h2 class="font-display font-bold text-emerald-950 text-base border-b border-slate-100 pb-3 flex items-center">
+                        <i data-lucide="store" class="w-4 h-4 mr-2 text-emerald-700"></i>
+                        Informasi Pengelola UMKM
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                        @if($product->nama_pemilik)
+                        <div>
+                            <span class="text-slate-400 font-medium block">Nama Pemilik</span>
+                            <span class="text-emerald-950 font-bold block mt-0.5">{{ $product->nama_pemilik }}</span>
+                        </div>
+                        @endif
+                        @if($product->producer)
+                        <div>
+                            <span class="text-slate-400 font-medium block">Nama Usaha / Producer</span>
+                            <span class="text-emerald-950 font-bold block mt-0.5">{{ $product->producer }}</span>
+                        </div>
+                        @endif
+                        @if($product->badge)
+                        <div>
+                            <span class="text-slate-400 font-medium block">Kategori Produk</span>
+                            <span class="text-emerald-950 font-bold block mt-0.5">{{ $product->badge }}</span>
+                        </div>
+                        @endif
+                        @if($product->jam_operasional)
+                        <div>
+                            <span class="text-slate-400 font-medium block">Jam Operasional</span>
+                            <span class="text-emerald-950 font-bold block mt-0.5">{{ $product->jam_operasional }}</span>
+                        </div>
+                        @endif
+                        @if($product->alamat_umkm)
+                        <div class="sm:col-span-2">
+                            <span class="text-slate-400 font-medium block">Alamat UMKM</span>
+                            <span class="text-emerald-950 font-bold block mt-0.5 leading-relaxed">{{ $product->alamat_umkm }}</span>
+                        </div>
+                        @endif
+                        @if($product->no_whatsapp_umkm)
+                        @php
+                            $cardWa = preg_replace('/[^0-9]/', '', $product->no_whatsapp_umkm);
+                            if (str_starts_with($cardWa, '0')) $cardWa = '62' . substr($cardWa, 1);
+                        @endphp
+                        <div>
+                            <span class="text-slate-400 font-medium block">Nomor WhatsApp</span>
+                            <a href="https://wa.me/{{ $cardWa }}?text={{ $msg }}" target="_blank" class="text-emerald-700 font-bold hover:underline block mt-0.5">
+                                {{ $product->no_whatsapp_umkm }}
+                            </a>
+                        </div>
+                        @endif
+                        @if($product->instagram_umkm)
+                        <div>
+                            <span class="text-slate-400 font-medium block">Instagram</span>
+                            <a href="{{ str_starts_with($product->instagram_umkm, 'http') ? $product->instagram_umkm : 'https://instagram.com/'.ltrim($product->instagram_umkm, '@') }}" target="_blank" class="text-pink-600 font-bold hover:underline block mt-0.5">
+                                {{ $product->instagram_umkm }}
+                            </a>
+                        </div>
+                        @endif
+                        @if($product->link_marketplace)
+                        <div class="sm:col-span-2">
+                            <span class="text-slate-400 font-medium block">Link Toko / Marketplace</span>
+                            <a href="{{ $product->link_marketplace }}" target="_blank" class="text-emerald-800 font-bold hover:underline block mt-0.5 truncate">
+                                {{ $product->link_marketplace }} &rarr;
+                            </a>
+                        </div>
+                        @endif
+                    </div>
                 </div>
 
                 {{-- Description --}}

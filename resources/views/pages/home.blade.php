@@ -100,6 +100,78 @@
                 <span class="text-xs text-slate-500 font-light mt-1">Hubungi &amp; kirim aspirasi ke kantor desa</span>
             </a>
         </div>
+
+        <!-- ── Statistik Desa Section ── -->
+        <div class="mt-24 reveal-on-scroll delay-200">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold tracking-widest uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Data Resmi</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-emerald-950 mt-3">Statistik Desa Jambelaer</h2>
+                <p class="mt-2 text-slate-500 font-light text-sm max-w-xl mx-auto">Data demografis dan wilayah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.</p>
+                <div class="w-12 h-1 bg-gradient-to-r from-emerald-800 to-amber-600 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
+                <!-- Jumlah Penduduk -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-3 group-hover:bg-emerald-900 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_penduduk'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">Jiwa</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Penduduk</span>
+                </div>
+
+                <!-- Kepala Keluarga -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 mb-3 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_kk'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">KK</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Kepala Keluarga</span>
+                </div>
+
+                <!-- Luas Wilayah -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-sky-50 flex items-center justify-center text-sky-700 mb-3 group-hover:bg-sky-700 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_luas'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">Ha</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Luas Wilayah</span>
+                </div>
+
+                <!-- Jumlah UMKM -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center text-violet-700 mb-3 group-hover:bg-violet-700 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="store" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_umkm'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">Unit</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Pelaku UMKM</span>
+                </div>
+
+                <!-- RT/RW -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center text-rose-700 mb-3 group-hover:bg-rose-600 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="network" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_rtrw'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">RT/RW</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Lingkungan RT</span>
+                </div>
+
+                <!-- Dusun -->
+                <div class="bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col items-center text-center group">
+                    <div class="w-11 h-11 rounded-xl bg-teal-50 flex items-center justify-center text-teal-700 mb-3 group-hover:bg-teal-700 group-hover:text-white transition-colors duration-200">
+                        <i data-lucide="map" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold font-display text-emerald-950 block" data-target="{{ $settings['stat_dusun'] }}">0</span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-500 uppercase block mt-1 leading-tight">Dusun</span>
+                    <span class="text-xs text-emerald-700 font-medium mt-0.5">Wilayah Dusun</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @endsection

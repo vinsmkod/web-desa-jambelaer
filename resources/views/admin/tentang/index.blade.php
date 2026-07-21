@@ -265,6 +265,49 @@
                     <textarea name="tentang_admin" rows="2" class="form-input resize-none text-sm"
                               placeholder="Salah satu dari 10 desa di bawah Kecamatan Dawuan dengan pemerintahan yang aktif dan transparan.">{{ old('tentang_admin', $settings['tentang_admin']->value ?? '') }}</textarea>
                 </div>
+
+                {{-- Batas Wilayah --}}
+                <div class="p-4 rounded-xl border border-slate-700/60 bg-slate-800/40 font-display">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-6 h-6 rounded-lg bg-emerald-600/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                            <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Batas-Batas Wilayah</span>
+                    </div>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block">Sebelah Utara</label>
+                            <input type="text" name="batas_utara"
+                                   value="{{ old('batas_utara', $settings['batas_utara']->value ?? '') }}"
+                                   class="form-input text-sm" placeholder="cth: Desa Cisampih">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block">Sebelah Timur</label>
+                            <input type="text" name="batas_timur"
+                                   value="{{ old('batas_timur', $settings['batas_timur']->value ?? '') }}"
+                                   class="form-input text-sm" placeholder="cth: Kelurahan Parung">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block">Sebelah Selatan</label>
+                            <input type="text" name="batas_selatan"
+                                   value="{{ old('batas_selatan', $settings['batas_selatan']->value ?? '') }}"
+                                   class="form-input text-sm" placeholder="cth: Desa Curug Agung">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block">Sebelah Barat</label>
+                            <input type="text" name="batas_barat"
+                                   value="{{ old('batas_barat', $settings['batas_barat']->value ?? '') }}"
+                                   class="form-input text-sm" placeholder="cth: Desa Tanggulun Timur">
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700/60">
+                        <label class="text-xs text-slate-400 mb-1.5 block">Luas Wilayah (Ha)</label>
+                        <input type="text" name="stat_luas"
+                               value="{{ old('stat_luas', $settings['stat_luas']->value ?? '') }}"
+                               class="form-input text-sm" placeholder="cth: 2.500,366">
+                        <p class="text-xs text-slate-500 mt-1">Nilai ini ditampilkan pada bagian <em>"Luas Wilayah"</em> di halaman Tentang Kami.</p>
+                    </div>
+                </div>
             </div>
         </div>
 

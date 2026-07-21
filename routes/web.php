@@ -10,10 +10,13 @@ use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\TentangController;
 use App\Http\Controllers\Admin\BudayaController;
 use App\Http\Controllers\Admin\PengajuanAcaraController;
+use App\Http\Controllers\Admin\GaleriController;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use App\Models\Budaya;
+use App\Models\Galeri;
+use App\Models\Pesan;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
@@ -23,15 +26,19 @@ Route::get('/', function () {
         'stat_luas'     => Pengaturan::get('stat_luas', '1240'),
         'stat_penduduk' => Pengaturan::get('stat_penduduk', '4850'),
         'stat_umkm'     => Pengaturan::get('stat_umkm', '35'),
+        'stat_kk'       => Pengaturan::get('stat_kk', '1250'),
+        'stat_rtrw'     => Pengaturan::get('stat_rtrw', '24'),
+        'stat_dusun'    => Pengaturan::get('stat_dusun', '4'),
     ];
     return view('pages.home', compact('settings'));
 })->name('home');
 
 // Tentang Kami
 Route::get('/tentang-kami', function () {
-    $settings = Pengaturan::where('group', 'tentang')->get()->keyBy('key');
+    $settings  = Pengaturan::whereIn('group', ['tentang', 'statistik'])->get()->keyBy('key');
     $struktur  = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
-    return view('pages.tentang', compact('settings', 'struktur'));
+    $mapsUrl   = Pengaturan::get('maps_embed_url', '');
+    return view('pages.tentang', compact('settings', 'struktur', 'mapsUrl'));
 })->name('tentang');
 
 // UMKM – Daftar produk (grouped by jenis)
@@ -155,9 +162,35 @@ Route::get('/budaya/{id}', function ($id) {
     return view('pages.budaya-detail', compact('budaya', 'rekomendasi'));
 })->name('budaya.detail');
 
+// Galeri – Daftar foto galeri desa
+Route::get('/galeri', function () {
+    $galeris      = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
+    $kategoriList = Galeri::kategoriList();
+    return view('pages.galeri', compact('galeris', 'kategoriList'));
+})->name('galeri');
+
+// Galeri – Detail foto
+Route::get('/galeri/{id}', function ($id) {
+    $foto    = Galeri::where('is_active', true)->findOrFail($id);
+    $lainnya = Galeri::where('is_active', true)
+        ->where('id', '!=', $id)
+        ->where('kategori', $foto->kategori)
+        ->orderBy('urutan')
+        ->take(6)
+        ->get();
+    return view('pages.galeri-detail', compact('foto', 'lainnya'));
+})->name('galeri.detail');
+
 // Kontak – Form
 Route::get('/kontak', function () {
-    return view('pages.kontak');
+    $sosmed = [
+        'facebook'  => Pengaturan::get('sosmed_facebook', ''),
+        'instagram' => Pengaturan::get('sosmed_instagram', ''),
+        'youtube'   => Pengaturan::get('sosmed_youtube', ''),
+        'tiktok'    => Pengaturan::get('sosmed_tiktok', ''),
+        'whatsapp'  => Pengaturan::get('sosmed_whatsapp', ''),
+    ];
+    return view('pages.kontak', compact('sosmed'));
 })->name('kontak');
 
 // Kontak – Submit pesan (simpan ke DB)
@@ -165,13 +198,19 @@ Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store')
 
 // Acara – Daftar acara yang disetujui & dipublikasikan
 Route::get('/acara', function () {
-    $acaras = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')
+    $acaras = Pesan::where('jenis_pesan', 'pengajuan_acara')
         ->where('status', 'disetujui')
         ->where('dipublikasikan', true)
         ->orderBy('tanggal_acara', 'asc')
         ->orderBy('waktu_acara', 'asc')
         ->get();
-    return view('pages.acara', compact('acaras'));
+
+    // Kelompokkan per bulan untuk kalender timeline
+    $acaraPerBulan = $acaras->groupBy(function ($a) {
+        return $a->tanggal_acara ? $a->tanggal_acara->format('Y-m') : 'unknown';
+    });
+
+    return view('pages.acara', compact('acaras', 'acaraPerBulan'));
 })->name('acara');
 
 
@@ -191,6 +230,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Produk UMKM
         Route::resource('produk', ProdukController::class);
+
+        // Galeri Desa
+        Route::resource('galeri', GaleriController::class);
 
         // Pesan
         Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');

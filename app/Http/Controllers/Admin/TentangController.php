@@ -26,8 +26,13 @@ class TentangController extends Controller
 
         $inputs = $request->except(['_token', '_method', 'kades_foto']);
 
+        // Keys yang boleh disimpan dari halaman ini (group tentang + stat_luas dari group statistik)
+        $allowedExtras = ['stat_luas'];
+
         foreach ($inputs as $key => $value) {
             if (Pengaturan::where('key', $key)->where('group', 'tentang')->exists()) {
+                Pengaturan::set($key, $value);
+            } elseif (in_array($key, $allowedExtras) && Pengaturan::where('key', $key)->exists()) {
                 Pengaturan::set($key, $value);
             }
         }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Produk;
 use App\Models\Pengaturan;
+use App\Models\Budaya;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -189,7 +190,7 @@ class DatabaseSeeder extends Seeder
             ['key' => 'desa_whatsapp',     'value' => '+62 812-3456-7890',         'label' => 'WhatsApp',               'group' => 'kontak'],
             ['key' => 'desa_email',        'value' => 'info@jambelaer-subang.desa.id', 'label' => 'Email Resmi',       'group' => 'kontak'],
             ['key' => 'desa_jam_buka',     'value' => 'Senin – Jumat: 08:00 – 15:30 WIB', 'label' => 'Jam Operasional','group' => 'kontak'],
-            ['key' => 'stat_luas',         'value' => '1240',                      'label' => 'Luas Wilayah (Ha)',      'group' => 'statistik'],
+            ['key' => 'stat_luas',         'value' => '2.500,366',                 'label' => 'Luas Wilayah (Ha)',      'group' => 'statistik'],
             ['key' => 'stat_penduduk',     'value' => '4850',                      'label' => 'Jumlah Penduduk (Jiwa)', 'group' => 'statistik'],
             ['key' => 'stat_umkm',         'value' => '35',                        'label' => 'Pelaku UMKM',            'group' => 'statistik'],
             ['key' => 'facebook_url',      'value' => '#',                         'label' => 'URL Facebook',           'group' => 'sosmed'],
@@ -203,16 +204,85 @@ class DatabaseSeeder extends Seeder
             ['key' => 'kades_sambutan_1',  'value' => 'Sampurasun, salam sejahtera bagi kita semua. Sebagai Kepala Desa Jambelaer, saya menyambut baik kehadiran portal resmi ini. Website ini merupakan wujud keterbukaan informasi publik dan media komunikasi terpadu untuk memperkenalkan kekayaan alam, kearifan lokal, dan kreasi produk UMKM warga kami.', 'label' => 'Sambutan Paragraf 1', 'group' => 'tentang'],
             ['key' => 'kades_sambutan_2',  'value' => 'Desa Jambelaer dikaruniai tanah Dawuan yang subur, budaya yang terus dijaga kelestariannya, serta masyarakat wirausaha yang gigih. Melalui platform digital ini, kami membuka pintu kolaborasi dan kemitraan seluas-luasnya dengan pihak luar untuk memajukan perekonomian desa.', 'label' => 'Sambutan Paragraf 2', 'group' => 'tentang'],
             ['key' => 'kades_motto',       'value' => 'Melayani dengan Amanah, Terbuka, dan Transparan.', 'label' => 'Slogan / Motto Melayani', 'group' => 'tentang'],
-            ['key' => 'visi_text',         'value' => 'Mewujudkan Desa Jambelaer yang Mandiri, Sejahtera, Berbasis Pertanian Berkelanjutan, dan Teguh Memegang Nilai Budaya Siliwangi pada Tahun 2030.', 'label' => 'Teks Visi', 'group' => 'tentang'],
+            ['key' => 'visi_text',         'value' => 'Terwujudnya Desa Jambelaer Yang Dinamis, Kreatif, Mandiri, Santun dan Kepribadian. Dengan Mewujudkan Pemerintah Desa Yang Bersih dan Amanah, Dengan Pembangunan Berbasis Gotong Royong Menuju Masyarakat Yang Sejahtera', 'label' => 'Teks Visi', 'group' => 'tentang'],
             ['key' => 'visi_desc',         'value' => 'Visi ini menjadi arah pembangunan desa kami dalam mengoptimalkan potensi bumi, memberdayakan sumber daya manusia, dan menciptakan tata kelola pemerintahan desa yang bersih dan akuntabel.', 'label' => 'Deskripsi Visi', 'group' => 'tentang'],
-            ['key' => 'misi_list',         'value' => "Meningkatkan produktivitas pertanian melalui modernisasi alat ramah lingkungan dan pendampingan intensif bagi kelompok tani.\nMendorong pertumbuhan UMKM desa melalui program digitalisasi pemasaran dan penyediaan akses permodalan bergulir.\nMelestarikan kesenian daerah Sunda dan tradisi Ruwatan Bumi sebagai benteng identitas dan daya tarik pariwisata budaya desa.\nMenyelenggarakan pelayanan administrasi desa yang cepat, ramah, digital, tanpa diskriminasi melalui inovasi e-Office Desa.", 'label' => 'Daftar Misi (Satu Per Baris)', 'group' => 'tentang'],
-            ['key' => 'tentang_geo',       'value' => 'Desa Jambelaer terletak di Kecamatan Dawuan, Kabupaten Subang, Provinsi Jawa Barat.', 'label' => 'Deskripsi Letak Geografis', 'group' => 'tentang'],
+            ['key' => 'misi_list',         'value' => "Memperkokoh persatuan dan kesatuan warga masyarakat desa;\nMeningkatkan pelayanan kepada masyarakat dalam proses pembangunan sebagai upaya mewujudkan pembangunan yang berkeadilan;\nMewujudkan demokratis dalam segala aspek kehidupan dan menjamin supremasi hukum", 'label' => 'Daftar Misi (Satu Per Baris)', 'group' => 'tentang'],
+            ['key' => 'tentang_geo',       'value' => 'Wilayah Desa Jambelaer terletak di Kecamatan Dawuan, Kabupaten Subang, Provinsi Jawa Barat.', 'label' => 'Deskripsi Letak Geografis', 'group' => 'tentang'],
             ['key' => 'tentang_potensi',   'value' => 'Lahan persawahan yang produktif menjadi tulang punggung perekonomian desa bersama industri UMKM rumahan dan kerajinan bambu.', 'label' => 'Deskripsi Potensi Utama', 'group' => 'tentang'],
             ['key' => 'tentang_admin',     'value' => 'Salah satu dari 10 desa di bawah Kecamatan Dawuan dengan pemerintahan yang aktif dan transparan.', 'label' => 'Deskripsi Administrasi', 'group' => 'tentang'],
+            ['key' => 'batas_utara',       'value' => 'Desa Cisampih',              'label' => 'Batas Utara',            'group' => 'tentang'],
+            ['key' => 'batas_timur',       'value' => 'Kelurahan Parung',          'label' => 'Batas Timur',            'group' => 'tentang'],
+            ['key' => 'batas_selatan',     'value' => 'Desa Curug Agung',          'label' => 'Batas Selatan',          'group' => 'tentang'],
+            ['key' => 'batas_barat',       'value' => 'Desa Tanggulun Timur',      'label' => 'Batas Barat',            'group' => 'tentang'],
+            ['key' => 'sejarah_text',       'value' => 'Desa Jambelaer merupakan salah satu desa yang berada di wilayah Kecamatan Dawuan yang sebelumnya termasuk ke dalam wilayah Kecamatan Kalijati. Berdasarkan Peraturan Daerah Nomor 3 Tahun 2007 tentang Pemekaran dan Pembentukan Wilayah Kerja Kecamatan Di Lingkungan Pemerintah Kabupaten Subang Desa Jambelaer termasuk wilayah Kecamatan Dawuan. Pembentukan Desa Jambelaer mulai pada tahun 1923 atas prakarsa dan kesepakatan dari 4 Galandang (tokoh) dari 4 (empat) kampung yaitu SURLI dari Kampung Jambelaer, ARNAB dari Kampung Sadang, RUKI dari Kampung Jambelaer, dan SUWARI dari Kampung Melong. Kepala Desa Jambelaer pertama kali dipimpin oleh SUWARI dengan masa jabatan 1940 sampai dengan 1985. Sistem pemilihan kepala desa oleh masyarakat pertama kali dilaksanakan pada tahun 1961.', 'label' => 'Sejarah Singkat Desa', 'group' => 'tentang'],
         ];
 
         foreach ($settings as $s) {
             Pengaturan::updateOrCreate(['key' => $s['key']], $s);
+        }
+
+        // ── Budaya ──────────────────────────────────────────────────────────
+        $budayas = [
+            [
+                'title'    => 'Ruwatan Bumi (Hajat Bumi)',
+                'kategori' => 'Upacara Adat',
+                'excerpt'  => 'Upacara adat tanda syukur hasil bumi pertanian desa yang melimpah.',
+                'desc'     => 'Tradisi Ruwatan Bumi (atau Hajat Bumi) diadakan setahun sekali setelah panen raya sebagai wujud syukur masyarakat Desa Jambelaer kepada Tuhan Yang Maha Esa atas kelimpahan hasil bumi pertanian. Upacara adat diisi dengan mengarak tumpeng besar, doa bersama para sepuh desa, pagelaran wayang golek, serta saling bertukar hidangan makanan antar tetangga untuk mempererat silaturahmi gotong royong.',
+                'img'      => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 1,
+            ],
+            [
+                'title'    => 'Kesenian Sisingaan',
+                'kategori' => 'Seni Pertunjukan',
+                'excerpt'  => 'Atraksi budaya khas Subang pemacu semangat kebersamaan rakyat.',
+                'desc'     => 'Kesenian Sisingaan adalah pertunjukan boneka singa raksasa khas Kabupaten Subang yang ditunggangi anak-anak lalu diusung oleh para pemuda gagah sambil menari mengikuti irama tabuhan kendang pencak silat. Pertunjukan ini sering dijumpai dalam upacara khitanan anak atau perayaan hari besar desa (Milangkala), melambangkan semangat persatuan, patriotisme, dan sukacita kebersamaan warga.',
+                'img'      => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 2,
+            ],
+            [
+                'title'    => 'Pencak Silat Tradisional',
+                'kategori' => 'Seni Bela Diri',
+                'excerpt'  => 'Pelatihan fisik dan spiritual bela diri Sunda yang menjunjung persaudaraan.',
+                'desc'     => 'Sebagai bentuk pelestarian bela diri warisan Sunda, Desa Jambelaer memiliki padepokan pencak silat lokal tempat berkumpulnya pemuda untuk melatih ketahanan fisik, konsentrasi mental, dan kehalusan budi pekerti. Dengan iringan musik terompet Sunda dan kendang, gerakan jurus silat diperagakan dalam pergelaran milangkala desa.',
+                'img'      => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 3,
+            ],
+            [
+                'title'    => 'Milangkala & Karnaval Desa',
+                'kategori' => 'Festival Tahunan',
+                'excerpt'  => 'Peringatan hari lahir desa yang diramaikan pawai budaya kreasi warga.',
+                'desc'     => 'Milangkala atau hari jadi Desa Jambelaer dirayakan meriah setiap tahun dengan karnaval budaya. Setiap dusun bergotong royong membuat hiasan replika hasil bumi, memakai pakaian adat sunda pengantin atau kebaya, serta memamerkan kesenian kreasi masing-masing dusun dalam parade keliling sepanjang jalan desa.',
+                'img'      => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 4,
+            ],
+            [
+                'title'    => 'Musik Tradisional Tutunggulan',
+                'kategori' => 'Musik Tradisional',
+                'excerpt'  => 'Seni menabuh lesung padi tradisional menghasilkan harmoni ritmis yang indah.',
+                'desc'     => 'Musik Tradisional Tutunggulan adalah kesenian musik tradisional khas Jawa Barat berupa ketukan ritmis dari benturan alu dan lesung kayu pembumbung padi. Dulu digunakan sebagai penanda waktu panen atau pesta rakyat, kini dilestarikan sebagai wujud kebersamaan, gotong royong, serta ungkapan rasa syukur masyarakat agraris atas melimpahnya hasil pertanian desa.',
+                'img'      => 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 5,
+            ],
+            [
+                'title'    => 'Kridatani',
+                'kategori' => 'Tari Tradisional',
+                'excerpt'  => 'Tarian kolosal petani Sunda yang melambangkan kemandirian pangan desa.',
+                'desc'     => 'Kridatani merupakan seni tari tradisional yang secara filosofis menggambarkan gerak gerik petani Sunda mulai dari mengolah sawah, menanam padi, merawat tanaman, hingga memanen bersama-sama. Tarian ini dimainkan secara berkelompok dengan iringan kendang dan suling Sunda, melambangkan etos kerja tinggi, kemandirian pangan, serta rasa syukur agraris.',
+                'img'      => 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 6,
+            ],
+            [
+                'title'    => 'Musik Marawis',
+                'kategori' => 'Seni Religi',
+                'excerpt'  => 'Seni rebana dengan perpaduan selawat dan tabuhan perkusi rohani islami.',
+                'desc'     => 'Musik Marawis adalah salah satu kesenian islami bernuansa rohani agung yang memadukan lagu pujian selawat kepada Nabi Muhammad SAW dengan ketukan ritmis dari seperangkat instrumen perkusi tradisional (hajir, marawis, dumbuk). Kesenian rohani ini tumbuh subur di tengah pemuda-pemudi Desa Jambelaer dan selalu tampil memeriahkan hari-hari besar keagamaan islam di desa.',
+                'img'      => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
+                'urutan'   => 7,
+            ]
+        ];
+
+        foreach ($budayas as $b) {
+            Budaya::updateOrCreate(['title' => $b['title']], $b);
         }
     }
 }

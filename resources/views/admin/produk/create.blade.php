@@ -98,6 +98,55 @@
             </div>
         </div>
 
+        {{-- Informas Pemilik & Kontak UMKM --}}
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+            <h2 class="font-display font-bold text-white text-sm border-b border-slate-800 pb-3">Informasi Pemilik &amp; Kontak UMKM</h2>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="form-label">Nama Pemilik UMKM</label>
+                    <input type="text" name="nama_pemilik" value="{{ old('nama_pemilik') }}"
+                        class="form-input" placeholder="cth: Ibu Suryani">
+                    @error('nama_pemilik') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="form-label">Nomor WhatsApp UMKM</label>
+                    <input type="text" name="no_whatsapp_umkm" value="{{ old('no_whatsapp_umkm') }}"
+                        class="form-input" placeholder="cth: 081234567890">
+                    @error('no_whatsapp_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="form-label">Jam Operasional</label>
+                    <input type="text" name="jam_operasional" value="{{ old('jam_operasional') }}"
+                        class="form-input" placeholder="cth: Senin - Sabtu (08.00 - 17.00 WIB)">
+                    @error('jam_operasional') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="form-label">Instagram (Opsional)</label>
+                    <input type="text" name="instagram_umkm" value="{{ old('instagram_umkm') }}"
+                        class="form-input" placeholder="cth: @umkmjambelaer">
+                    @error('instagram_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label">Alamat Lengkap UMKM</label>
+                <textarea name="alamat_umkm" rows="2" class="form-input resize-none"
+                    placeholder="cth: RT 04/RW 02, Dusun Jambelaer I, Desa Jambelaer">{{ old('alamat_umkm') }}</textarea>
+                @error('alamat_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="form-label">Link Marketplace (Opsional)</label>
+                <input type="url" name="link_marketplace" value="{{ old('link_marketplace') }}"
+                    class="form-input" placeholder="cth: https://shopee.co.id/namatoko">
+                @error('link_marketplace') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
         {{-- Description --}}
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
             <h2 class="font-display font-bold text-white text-sm border-b border-slate-800 pb-3">Deskripsi</h2>

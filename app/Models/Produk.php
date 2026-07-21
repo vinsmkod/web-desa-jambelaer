@@ -15,6 +15,9 @@ class Produk extends Model
         'slug', 'title', 'producer', 'price', 'badge',
         'category', 'img', 'desc_short', 'desc_long',
         'details', 'is_active', 'urutan', 'jenis', 'jenis_label',
+        // Detail UMKM
+        'nama_pemilik', 'alamat_umkm', 'jam_operasional',
+        'no_whatsapp_umkm', 'instagram_umkm', 'link_marketplace',
     ];
 
     protected $casts = [

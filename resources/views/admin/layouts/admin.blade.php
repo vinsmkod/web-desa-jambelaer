@@ -123,6 +123,12 @@
                 <span>Budaya Desa</span>
                 <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Budaya::count() }}</span>
             </a>
+            <a href="{{ route('admin.galeri.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
+                <i data-lucide="image" class="icon"></i>
+                <span>Galeri Desa</span>
+                <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
+            </a>
             <a href="{{ route('admin.pengaturan.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
                 <i data-lucide="settings" class="icon"></i>

@@ -23,18 +23,25 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'producer'    => ['required', 'string', 'max:255'],
-            'price'       => ['required', 'string', 'max:100'],
-            'badge'       => ['required', 'string', 'max:100'],
-            'category'    => ['required', 'array'],
-            'img'         => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'desc_short'  => ['required', 'string'],
-            'desc_long'   => ['required', 'string'],
-            'is_active'   => ['boolean'],
-            'urutan'      => ['nullable', 'integer'],
-            'jenis'       => ['nullable', 'string', 'max:100'],
-            'jenis_label' => ['nullable', 'string', 'max:100'],
+            'title'            => ['required', 'string', 'max:255'],
+            'producer'         => ['required', 'string', 'max:255'],
+            'price'            => ['required', 'string', 'max:100'],
+            'badge'            => ['required', 'string', 'max:100'],
+            'category'         => ['required', 'array'],
+            'img'              => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'desc_short'       => ['required', 'string'],
+            'desc_long'        => ['required', 'string'],
+            'is_active'        => ['boolean'],
+            'urutan'           => ['nullable', 'integer'],
+            'jenis'            => ['nullable', 'string', 'max:100'],
+            'jenis_label'      => ['nullable', 'string', 'max:100'],
+            // Detail UMKM
+            'nama_pemilik'     => ['nullable', 'string', 'max:255'],
+            'alamat_umkm'      => ['nullable', 'string'],
+            'jam_operasional'  => ['nullable', 'string', 'max:255'],
+            'no_whatsapp_umkm' => ['nullable', 'string', 'max:20'],
+            'instagram_umkm'   => ['nullable', 'string', 'max:255'],
+            'link_marketplace' => ['nullable', 'url', 'max:500'],
         ]);
 
         if ($request->hasFile('img')) {
@@ -79,18 +86,25 @@ class ProdukController extends Controller
     public function update(Request $request, Produk $produk)
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'producer'    => ['required', 'string', 'max:255'],
-            'price'       => ['required', 'string', 'max:100'],
-            'badge'       => ['required', 'string', 'max:100'],
-            'category'    => ['required', 'array'],
-            'img'         => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'desc_short'  => ['required', 'string'],
-            'desc_long'   => ['required', 'string'],
-            'is_active'   => ['boolean'],
-            'urutan'      => ['nullable', 'integer'],
-            'jenis'       => ['nullable', 'string', 'max:100'],
-            'jenis_label' => ['nullable', 'string', 'max:100'],
+            'title'            => ['required', 'string', 'max:255'],
+            'producer'         => ['required', 'string', 'max:255'],
+            'price'            => ['required', 'string', 'max:100'],
+            'badge'            => ['required', 'string', 'max:100'],
+            'category'         => ['required', 'array'],
+            'img'              => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'desc_short'       => ['required', 'string'],
+            'desc_long'        => ['required', 'string'],
+            'is_active'        => ['boolean'],
+            'urutan'           => ['nullable', 'integer'],
+            'jenis'            => ['nullable', 'string', 'max:100'],
+            'jenis_label'      => ['nullable', 'string', 'max:100'],
+            // Detail UMKM
+            'nama_pemilik'     => ['nullable', 'string', 'max:255'],
+            'alamat_umkm'      => ['nullable', 'string'],
+            'jam_operasional'  => ['nullable', 'string', 'max:255'],
+            'no_whatsapp_umkm' => ['nullable', 'string', 'max:20'],
+            'instagram_umkm'   => ['nullable', 'string', 'max:255'],
+            'link_marketplace' => ['nullable', 'url', 'max:500'],
         ]);
 
         if ($request->hasFile('img')) {

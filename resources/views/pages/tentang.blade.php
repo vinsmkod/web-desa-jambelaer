@@ -14,6 +14,62 @@
             <div class="w-16 h-1 bg-gradient-to-r from-emerald-800 to-amber-600 mx-auto mt-4 rounded-full"></div>
         </div>
 
+        <!-- Sejarah Desa -->
+        <div class="mb-20 reveal-on-scroll delay-50">
+            <div class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                <div class="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl -ml-20 -mb-20"></div>
+                
+                <div class="grid lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <!-- Left Column: Title -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                            <i data-lucide="history" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="font-display font-extrabold text-3xl tracking-tight text-white">
+                            Sejarah <br/>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-400">Desa Jambelaer</span>
+                        </h2>
+                        <div class="w-16 h-1 bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full"></div>
+                        <p class="text-xs text-slate-400 font-light leading-relaxed">
+                            Penelusuran sejarah asal-usul terbentuknya kesepakatan adat dan wilayah administratif Desa Jambelaer sejak tahun 1923.
+                        </p>
+                    </div>
+
+                    <!-- Right Column: Content -->
+                    <div class="lg:col-span-8 space-y-6 text-slate-300 font-light text-sm sm:text-base leading-relaxed">
+                        <p>
+                            {{ $settings['sejarah_text']->value ?? 'Desa Jambelaer merupakan salah satu desa yang berada di wilayah Kecamatan Dawuan yang sebelumnya termasuk ke dalam wilayah Kecamatan Kalijati. Berdasarkan Peraturan Daerah Nomor 3 Tahun 2007 tentang Pemekaran dan Pembentukan Wilayah Kerja Kecamatan Di Lingkungan Pemerintah Kabupaten Subang Desa Jambelaer termasuk wilayah Kecamatan Dawuan.' }}
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+                            <div class="space-y-2">
+                                <h4 class="font-display font-bold text-amber-400 text-sm flex items-center">
+                                    <i data-lucide="users" class="w-4 h-4 mr-2"></i>
+                                    Prakarsa 4 Galandang (1923)
+                                </h4>
+                                <p class="text-xs text-slate-400 leading-normal">
+                                    Pembentukan mulai pada tahun 1923 atas kesepakatan 4 tokoh: 
+                                    <strong class="text-slate-300">SURLI</strong> (Kampung Jambelaer), 
+                                    <strong class="text-slate-300">ARNAB</strong> (Kampung Sadang), 
+                                    <strong class="text-slate-300">RUKI</strong> (Kampung Jambelaer), dan 
+                                    <strong class="text-slate-300">SUWARI</strong> (Kampung Melong).
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <h4 class="font-display font-bold text-emerald-400 text-sm flex items-center">
+                                    <i data-lucide="landmark" class="w-4 h-4 mr-2"></i>
+                                    Pemerintahan Pertama & Demokrasi
+                                </h4>
+                                <p class="text-xs text-slate-400 leading-normal">
+                                    Dipimpin pertama kali oleh <strong class="text-slate-300">SUWARI</strong> (1940-1985). Sistem pemilihan kepala desa oleh masyarakat pertama kali dilaksanakan pada tahun <strong class="text-slate-300">1961</strong>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Sambutan Kepala Desa -->
         <div class="grid lg:grid-cols-12 gap-12 items-center mb-20 reveal-on-scroll">
             <!-- Photo -->
@@ -48,33 +104,74 @@
         </div>
 
         <!-- Informasi Desa -->
-        <div class="grid md:grid-cols-3 gap-6 mb-20 reveal-on-scroll delay-100">
-            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-4">
-                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+        <div class="grid lg:grid-cols-3 gap-6 mb-20 reveal-on-scroll delay-100">
+            <!-- Letak Geografis & Batas Wilayah -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-bold text-base text-emerald-950">Letak Geografis</h3>
+                            <span class="text-xs text-slate-400 font-light">Batas & Luas Administratif</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 font-light leading-relaxed mb-5">
+                        {{ $settings['tentang_geo']->value ?? 'Wilayah Desa Jambelaer terletak di Kecamatan Dawuan, Kabupaten Subang.' }}
+                    </p>
+
+                    <!-- Batas-Batas Wilayah -->
+                    <div class="grid grid-cols-2 gap-2 pt-4 border-t border-slate-100/80">
+                        <div class="p-2.5 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Sebelah Utara</span>
+                            <span class="text-xs font-semibold text-emerald-950">{{ $settings['batas_utara']->value ?? 'Desa Cisampih' }}</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Sebelah Timur</span>
+                            <span class="text-xs font-semibold text-emerald-950">{{ $settings['batas_timur']->value ?? 'Kelurahan Parung' }}</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Sebelah Selatan</span>
+                            <span class="text-xs font-semibold text-emerald-950">{{ $settings['batas_selatan']->value ?? 'Desa Curug Agung' }}</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50/50 rounded-xl border border-slate-100/80">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Sebelah Barat</span>
+                            <span class="text-xs font-semibold text-emerald-950">{{ $settings['batas_barat']->value ?? 'Desa Tanggulun Timur' }}</span>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="font-display font-bold text-base text-emerald-950 mb-2">Letak Geografis</h3>
-                <p class="text-sm text-slate-500 font-light leading-relaxed">
-                    {{ $settings['tentang_geo']->value ?? 'Desa Jambelaer terletak di Kecamatan Dawuan, Kabupaten Subang, Provinsi Jawa Barat.' }}
-                </p>
+
+                <div class="mt-5 pt-3 border-t border-slate-100/80 flex items-center justify-between text-xs font-semibold text-emerald-900">
+                    <span>Luas Wilayah</span>
+                    <span class="bg-emerald-50 px-2.5 py-1 rounded-full text-emerald-800 font-bold">{{ $settings['stat_luas']->value ?? '2.500,366' }} Ha</span>
+                </div>
             </div>
-            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-4">
-                    <i data-lucide="tractor" class="w-5 h-5"></i>
+
+            <!-- Potensi Utama -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-4">
+                        <i data-lucide="tractor" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-base text-emerald-950 mb-2">Potensi Utama</h3>
+                    <p class="text-sm text-slate-500 font-light leading-relaxed">
+                        {{ $settings['tentang_potensi']->value ?? 'Lahan persawahan yang produktif menjadi tulang punggung perekonomian desa bersama industri UMKM rumahan dan kerajinan bambu.' }}
+                    </p>
                 </div>
-                <h3 class="font-display font-bold text-base text-emerald-950 mb-2">Potensi Utama</h3>
-                <p class="text-sm text-slate-500 font-light leading-relaxed">
-                    {{ $settings['tentang_potensi']->value ?? 'Lahan persawahan yang produktif menjadi tulang punggung perekonomian desa bersama industri UMKM rumahan dan kerajinan bambu.' }}
-                </p>
             </div>
-            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-4">
-                    <i data-lucide="users" class="w-5 h-5"></i>
+
+            <!-- Administrasi -->
+            <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-800 mb-4">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-base text-emerald-950 mb-2">Administrasi</h3>
+                    <p class="text-sm text-slate-500 font-light leading-relaxed">
+                        {{ $settings['tentang_admin']->value ?? 'Salah satu dari 10 desa di bawah Kecamatan Dawuan dengan pemerintahan yang aktif dan transparan.' }}
+                    </p>
                 </div>
-                <h3 class="font-display font-bold text-base text-emerald-950 mb-2">Administrasi</h3>
-                <p class="text-sm text-slate-500 font-light leading-relaxed">
-                    {{ $settings['tentang_admin']->value ?? 'Salah satu dari 10 desa di bawah Kecamatan Dawuan dengan pemerintahan yang aktif dan transparan.' }}
-                </p>
             </div>
         </div>
 
@@ -221,7 +318,7 @@
             <div class="max-w-4xl mx-auto bg-white border border-slate-100 rounded-3xl p-4 shadow-sm">
                 <div class="h-80 sm:h-[400px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.262529813204!2d107.6761755!3d-6.612457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sid!2sid!4v1720894000000!5m2!1sid!2sid"
+                        src="{{ !empty($mapsUrl) ? $mapsUrl : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.262529813204!2d107.6761755!3d-6.612457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sid!2sid!4v1720894000000!5m2!1sid!2sid' }}"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>

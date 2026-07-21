@@ -84,6 +84,7 @@
                     <a href="{{ route('tentang') }}"     class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('tentang')     ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Tentang Kami</a>
                     <a href="{{ route('umkm') }}"        class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('umkm')        ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">UMKM</a>
                     <a href="{{ route('budaya') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('budaya')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Budaya</a>
+                    <a href="{{ route('galeri') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('galeri')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Galeri</a>
                     <a href="{{ route('acara') }}"       class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('acara')       ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Acara</a>
                 </nav>
 
@@ -111,6 +112,7 @@
                 <a href="{{ route('tentang') }}" class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Tentang Kami</a>
                 <a href="{{ route('umkm') }}"    class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">UMKM</a>
                 <a href="{{ route('budaya') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Budaya</a>
+                <a href="{{ route('galeri') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Galeri</a>
                 <a href="{{ route('acara') }}"   class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Acara</a>
                 <a href="{{ route('kontak') }}"  class="flex items-center justify-center w-full py-3 text-sm font-semibold tracking-wider uppercase text-white bg-emerald-900 rounded-lg shadow-sm mt-2">Hubungi Kami</a>
             </div>
@@ -148,7 +150,9 @@
                         <a href="{{ route('tentang') }}" class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Tentang Kami</a>
                         <a href="{{ route('umkm') }}"    class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">UMKM</a>
                         <a href="{{ route('budaya') }}"  class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Budaya</a>
+                        <a href="{{ route('galeri') }}"  class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Galeri</a>
                         <a href="{{ route('acara') }}"   class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Acara</a>
+                        <a href="{{ route('kontak') }}"  class="text-xs text-emerald-200/70 hover:text-white font-medium transition-colors">Hubungi Kami</a>
                     </div>
                 </div>
 
@@ -158,28 +162,71 @@
                     <ul class="space-y-2 text-xs font-light text-emerald-200/75">
                         <li class="flex items-center space-x-2">
                             <i data-lucide="phone"   class="w-3.5 h-3.5 flex-shrink-0 text-amber-500"></i>
-                            <span>(0260) 123456</span>
+                            <span>{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <i data-lucide="mail"    class="w-3.5 h-3.5 flex-shrink-0 text-amber-500"></i>
-                            <span>info@jambelaer-subang.desa.id</span>
+                            <span>{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
                         </li>
                         <li class="flex items-center space-x-2">
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 flex-shrink-0 text-amber-500"></i>
                             <span>Dawuan, Subang, Jawa Barat 41270</span>
                         </li>
                     </ul>
-                    <!-- Social Icons -->
-                    <div class="flex items-center space-x-2 pt-1">
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100">
+                    <!-- Social Icons from DB -->
+                    @php
+                        $footerFb  = \App\Models\Pengaturan::get('sosmed_facebook', '');
+                        $footerIg  = \App\Models\Pengaturan::get('sosmed_instagram', '');
+                        $footerYt  = \App\Models\Pengaturan::get('sosmed_youtube', '');
+                        $footerTt  = \App\Models\Pengaturan::get('sosmed_tiktok', '');
+                        $footerWa  = \App\Models\Pengaturan::get('sosmed_whatsapp', '');
+                    @endphp
+                    <div class="flex items-center flex-wrap gap-2 pt-1">
+                        @if($footerFb)
+                        <a href="{{ str_starts_with($footerFb, 'http') ? $footerFb : 'https://'.$footerFb }}" target="_blank" rel="noopener" title="Facebook Desa" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all text-emerald-100">
                             <i data-lucide="facebook"  class="w-4 h-4"></i>
                         </a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100">
+                        @else
+                        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-600" title="Facebook belum diatur">
+                            <i data-lucide="facebook"  class="w-4 h-4"></i>
+                        </span>
+                        @endif
+                        @if($footerIg)
+                        <a href="{{ str_starts_with($footerIg, 'http') ? $footerIg : 'https://'.$footerIg }}" target="_blank" rel="noopener" title="Instagram Desa" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-pink-600 transition-all text-emerald-100">
                             <i data-lucide="instagram" class="w-4 h-4"></i>
                         </a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-amber-600 transition-all text-emerald-100">
+                        @else
+                        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-600" title="Instagram belum diatur">
+                            <i data-lucide="instagram" class="w-4 h-4"></i>
+                        </span>
+                        @endif
+                        @if($footerYt)
+                        <a href="{{ str_starts_with($footerYt, 'http') ? $footerYt : 'https://'.$footerYt }}" target="_blank" rel="noopener" title="YouTube Desa" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-red-600 transition-all text-emerald-100">
                             <i data-lucide="youtube"   class="w-4 h-4"></i>
                         </a>
+                        @else
+                        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-600" title="YouTube belum diatur">
+                            <i data-lucide="youtube"   class="w-4 h-4"></i>
+                        </span>
+                        @endif
+                        @if($footerTt)
+                        <a href="{{ str_starts_with($footerTt, 'http') ? $footerTt : 'https://'.$footerTt }}" target="_blank" rel="noopener" title="TikTok Desa" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-slate-700 transition-all text-emerald-100">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+                        </a>
+                        @else
+                        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-600" title="TikTok belum diatur">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+                        </span>
+                        @endif
+                        @if($footerWa)
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $footerWa) }}" target="_blank" rel="noopener" title="WhatsApp Desa" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-green-600 transition-all text-emerald-100">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        </a>
+                        @else
+                        <span class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-600" title="WhatsApp belum diatur">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        </span>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -261,15 +308,48 @@
             revealEls.forEach(el => observer.observe(el));
 
             function animateCounter(el) {
-                const target    = parseInt(el.getAttribute('data-target'));
-                const start     = performance.now();
-                const duration  = 2000;
+                const targetAttr = el.getAttribute('data-target');
+                if (!targetAttr) return;
+                
+                const hasComma = targetAttr.includes(',');
+                let rawValue = targetAttr;
+                if (hasComma) {
+                    rawValue = rawValue.replace(/\./g, '').replace(',', '.');
+                } else {
+                    rawValue = rawValue.replace(/,/g, '');
+                }
+                
+                const target = parseFloat(rawValue);
+                if (isNaN(target)) {
+                    el.textContent = targetAttr;
+                    return;
+                }
+
+                const start = performance.now();
+                const duration = 2000;
                 (function update(now) {
                     const t = Math.min((now - start) / duration, 1);
                     const ease = 1 - Math.pow(1 - t, 3);
-                    el.textContent = Math.floor(ease * target).toLocaleString('id-ID');
+                    const current = ease * target;
+                    
+                    if (hasComma) {
+                        const decimalPart = targetAttr.split(',')[1] || '';
+                        const decimalPlaces = decimalPart.length;
+                        el.textContent = current.toLocaleString('id-ID', {
+                            minimumFractionDigits: decimalPlaces,
+                            maximumFractionDigits: decimalPlaces
+                        });
+                    } else if (Number.isInteger(target)) {
+                        el.textContent = Math.floor(current).toLocaleString('id-ID');
+                    } else {
+                        el.textContent = current.toLocaleString('id-ID', {
+                            minimumFractionDigits: 1,
+                            maximumFractionDigits: 3
+                        });
+                    }
+                    
                     if (t < 1) requestAnimationFrame(update);
-                    else el.textContent = target.toLocaleString('id-ID');
+                    else el.textContent = targetAttr;
                 })(start);
             }
         });
