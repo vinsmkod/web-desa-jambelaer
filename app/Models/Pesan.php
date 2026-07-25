@@ -32,4 +32,16 @@ class Pesan extends Model
         'dipublikasikan' => 'boolean',
         'tanggal_acara' => 'date',
     ];
+
+    /**
+     * Hapus otomatis pengajuan acara yang tanggalnya sudah melewati hari ini (expired/lewat hari)
+     */
+    public static function cleanupExpiredAcara()
+    {
+        static::where('jenis_pesan', 'pengajuan_acara')
+            ->whereNotNull('tanggal_acara')
+            ->whereDate('tanggal_acara', '<', now()->toDateString())
+            ->delete();
+    }
 }
+

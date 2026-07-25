@@ -2,7 +2,7 @@
 
 @section('title', 'Pengaturan')
 @section('page_title', 'Pengaturan Desa')
-@section('page_subtitle', 'Kelola informasi, kontak, statistik, dan media sosial website')
+@section('page_subtitle', 'Kelola informasi resmi, kontak, data statistik, dan media sosial Desa Jambelaer')
 
 @section('content')
 
@@ -10,44 +10,43 @@
     $groupMeta = [
         'identitas' => [
             'label' => 'Identitas Desa',
-            'desc'  => 'Nama, alamat, dan informasi resmi desa',
-            'icon'  => 'map-pin',
-            'color' => 'emerald',
+            'desc'  => 'Nama, alamat, dan data administratif resmi desa',
+            'icon'  => 'landmark',
+            'color' => 'forest',
         ],
         'kontak' => [
             'label' => 'Kontak & Operasional',
-            'desc'  => 'Nomor telepon, email, dan jam layanan',
-            'icon'  => 'phone',
+            'desc'  => 'Nomor telepon, email resmi, dan jam pelayanan warga',
+            'icon'  => 'phone-call',
             'color' => 'sky',
         ],
         'statistik' => [
             'label' => 'Statistik Desa',
             'desc'  => 'Data demografi dan wilayah yang tampil di halaman utama',
-            'icon'  => 'bar-chart-2',
+            'icon'  => 'bar-chart-3',
             'color' => 'violet',
         ],
         'sosmed' => [
             'label' => 'Media Sosial',
-            'desc'  => 'URL akun media sosial resmi desa',
+            'desc'  => 'Tautan ke akun media sosial resmi Pemerintah Desa',
             'icon'  => 'share-2',
             'color' => 'amber',
         ],
         'peta' => [
             'label' => 'Peta Lokasi',
-            'desc'  => 'Google Maps embed URL lokasi kantor desa',
-            'icon'  => 'map',
-            'color' => 'emerald',
+            'desc'  => 'Sematkan (Embed) Google Maps lokasi kantor desa',
+            'icon'  => 'map-pin',
+            'color' => 'forest',
         ],
     ];
 
     $colorMap = [
-        'emerald' => ['icon_bg' => 'bg-emerald-600/20', 'icon_text' => 'text-emerald-400'],
-        'sky'     => ['icon_bg' => 'bg-sky-600/20',     'icon_text' => 'text-sky-400'],
-        'violet'  => ['icon_bg' => 'bg-violet-600/20',  'icon_text' => 'text-violet-400'],
-        'amber'   => ['icon_bg' => 'bg-amber-600/20',   'icon_text' => 'text-amber-400'],
+        'forest' => ['icon_bg' => 'bg-forest-50 border border-forest-200', 'icon_text' => 'text-forest-700'],
+        'sky'    => ['icon_bg' => 'bg-sky-50 border border-sky-200',       'icon_text' => 'text-sky-600'],
+        'violet' => ['icon_bg' => 'bg-violet-50 border border-violet-200', 'icon_text' => 'text-violet-600'],
+        'amber'  => ['icon_bg' => 'bg-amber-50 border border-amber-200',   'icon_text' => 'text-amber-600'],
     ];
 
-    // Field icons per key
     $fieldIcons = [
         'desa_nama'       => 'landmark',
         'desa_kecamatan'  => 'map',
@@ -75,12 +74,12 @@
 @endphp
 
 {{-- ── Tab Navigation ─────────────────────────────────────────────────────── --}}
-<div class="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-2xl p-1.5 mb-6 max-w-3xl overflow-x-auto">
+<div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-2xl p-1.5 mb-6 max-w-3xl overflow-x-auto shadow-sm">
     @foreach($settings as $group => $items)
-    @php $meta = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'emerald']; @endphp
-    <button onclick="switchTab('{{ $group }}')" id="tab-{{ $group }}"
-        class="peng-tab flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap
-               {{ $loop->first ? 'bg-emerald-600 text-white shadow' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+    @php $meta = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'forest']; @endphp
+    <button type="button" onclick="switchTab('{{ $group }}')" id="tab-{{ $group }}"
+        class="peng-tab flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap cursor-pointer
+               {{ $loop->first ? 'bg-forest-700 text-white shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100' }}">
         <i data-lucide="{{ $meta['icon'] }}" class="w-4 h-4 flex-shrink-0"></i>
         <span>{{ $meta['label'] }}</span>
     </button>
@@ -92,28 +91,28 @@
 
     @foreach($settings as $group => $items)
     @php
-        $meta  = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'emerald', 'desc' => ''];
-        $color = $colorMap[$meta['color']] ?? $colorMap['emerald'];
+        $meta  = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'forest', 'desc' => ''];
+        $color = $colorMap[$meta['color']] ?? $colorMap['forest'];
     @endphp
 
     <div id="panel-{{ $group }}" class="space-y-5 {{ $loop->first ? '' : 'hidden' }}">
 
         {{-- Panel Header Card --}}
-        <div class="flex items-center gap-4 p-4 bg-slate-900 border border-slate-800 rounded-2xl">
+        <div class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
             <div class="w-10 h-10 rounded-xl {{ $color['icon_bg'] }} flex items-center justify-center {{ $color['icon_text'] }} flex-shrink-0">
                 <i data-lucide="{{ $meta['icon'] }}" class="w-5 h-5"></i>
             </div>
             <div>
-                <h2 class="font-display font-bold text-white text-sm">{{ $meta['label'] }}</h2>
-                <p class="text-xs text-slate-500 mt-0.5">{{ $meta['desc'] }}</p>
+                <h2 class="font-display font-bold text-slate-900 text-sm">{{ $meta['label'] }}</h2>
+                <p class="text-xs text-slate-400 mt-0.5">{{ $meta['desc'] }}</p>
             </div>
             <div class="ml-auto">
-                <span class="text-xs text-slate-600">{{ $items->count() }} field</span>
+                <span class="text-xs text-slate-500 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg font-mono font-semibold">{{ $items->count() }} field</span>
             </div>
         </div>
 
-        {{-- Fields --}}
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+        {{-- Fields Card --}}
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5 shadow-sm">
             @foreach($items as $item)
             @php $fieldIcon = $fieldIcons[$item->key] ?? 'pencil'; @endphp
             <div>
@@ -121,24 +120,35 @@
                     <div class="w-5 h-5 rounded flex items-center justify-center {{ $color['icon_bg'] }} {{ $color['icon_text'] }} flex-shrink-0">
                         <i data-lucide="{{ $fieldIcon }}" class="w-3 h-3"></i>
                     </div>
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">{{ $item->label }}</span>
+                    <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">{{ $item->label }}</span>
                 </label>
 
-                @if($item->key === 'desa_alamat' || $item->key === 'maps_embed_url')
+                @if($item->key === 'desa_alamat')
                 <textarea name="{{ $item->key }}" rows="3"
-                          class="form-input resize-none font-mono text-xs"
+                          class="form-input resize-none"
                           placeholder="{{ $item->label }}...">{{ $item->value }}</textarea>
 
+                @elseif($item->key === 'maps_embed_url')
+                <textarea name="{{ $item->key }}" rows="3"
+                          class="form-input resize-none font-mono text-xs"
+                          placeholder="Sematkan src URL Google Maps...">{{ $item->value }}</textarea>
+                <p class="text-[11px] text-slate-400 mt-1.5 flex items-center gap-1">
+                    <i data-lucide="info" class="w-3 h-3"></i>
+                    Isi dengan atribut <code>src="..."</code> dari kode Embed iFrame Google Maps.
+                </p>
+
                 @elseif(in_array($item->key, ['sosmed_facebook', 'sosmed_instagram', 'sosmed_youtube', 'sosmed_twitter', 'sosmed_tiktok', 'sosmed_whatsapp']))
-                <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
-                       class="form-input"
-                       placeholder="cth: instagram.com/desa_jambelaer atau 08123456789">
+                <div class="relative">
+                    <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
+                           class="form-input"
+                           placeholder="cth: instagram.com/desa_jambelaer atau 08123456789">
+                </div>
 
                 @elseif(in_array($item->key, ['stat_luas', 'stat_penduduk', 'stat_umkm', 'stat_kk', 'stat_rtrw', 'stat_dusun']))
-                <div class="flex items-center gap-0">
-                    <input type="number" name="{{ $item->key }}" value="{{ $item->value }}"
-                           class="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-l-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
-                    <div class="flex-shrink-0 px-3 h-10 flex items-center rounded-r-xl bg-slate-700 border border-slate-700 border-l-0 text-slate-400 text-xs font-semibold">
+                <div class="flex items-center">
+                    <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
+                           class="flex-1 form-input rounded-r-none" placeholder="0">
+                    <div class="flex-shrink-0 px-3.5 h-[42px] flex items-center rounded-r-xl bg-slate-100 border border-slate-300 border-l-0 text-slate-600 text-xs font-bold font-mono">
                         @if($item->key === 'stat_luas') Ha
                         @elseif($item->key === 'stat_penduduk') Jiwa
                         @elseif($item->key === 'stat_kk') KK
@@ -151,11 +161,11 @@
 
                 @elseif($item->key === 'kontak_telp')
                 <input type="tel" name="{{ $item->key }}" value="{{ $item->value }}"
-                       class="form-input" placeholder="cth: +62-260-123456">
+                       class="form-input" placeholder="cth: (0260) 123456">
 
                 @elseif($item->key === 'kontak_email')
                 <input type="email" name="{{ $item->key }}" value="{{ $item->value }}"
-                       class="form-input" placeholder="cth: desa@jambelaer.id">
+                       class="form-input" placeholder="cth: desa@jambelaer-subang.desa.id">
 
                 @else
                 <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
@@ -165,11 +175,11 @@
             @endforeach
         </div>
 
-        {{-- Tombol Simpan per tab --}}
-        <div class="flex items-center justify-between pb-2">
-            <p class="text-xs text-slate-600">
-                <i data-lucide="info" class="w-3 h-3 inline"></i>
-                Perubahan disimpan ke seluruh pengaturan sekaligus.
+        {{-- Action Bar --}}
+        <div class="flex items-center justify-between pt-1 pb-2">
+            <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-forest-600"></i>
+                Perubahan disimpan secara langsung untuk seluruh tab.
             </p>
             <button type="submit" class="btn-primary">
                 <i data-lucide="save" class="w-4 h-4"></i>
@@ -195,18 +205,18 @@ function switchTab(name) {
         if (!panel || !btn) return;
         if (t === name) {
             panel.classList.remove('hidden');
-            btn.classList.add('bg-emerald-600', 'text-white', 'shadow');
-            btn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+            btn.classList.add('bg-forest-700', 'text-white', 'shadow-sm');
+            btn.classList.remove('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
         } else {
             panel.classList.add('hidden');
-            btn.classList.remove('bg-emerald-600', 'text-white', 'shadow');
-            btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+            btn.classList.remove('bg-forest-700', 'text-white', 'shadow-sm');
+            btn.classList.add('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-800');
         }
     });
     localStorage.setItem('pengaturan_active_tab', name);
+    lucide.createIcons();
 }
 
-// Restore last active tab on load
 const savedPengaturanTab = localStorage.getItem('pengaturan_active_tab');
 if (savedPengaturanTab && pengaturanTabs.includes(savedPengaturanTab)) {
     switchTab(savedPengaturanTab);

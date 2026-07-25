@@ -194,13 +194,19 @@ Route::get('/kontak', function () {
 })->name('kontak');
 
 // Kontak – Submit pesan (simpan ke DB)
-Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
+Route::post('/kontak', [KontakController::class, 'store'])->middleware('throttle:6,1')->name('kontak.store');
 
-// Acara – Daftar acara yang disetujui & dipublikasikan
+// Acara – Daftar acara yang disetujui & dipublikasikan (Sesi Aktif & Auto-Delete Expired)
 Route::get('/acara', function () {
+    // Hapus otomatis pengajuan acara yang sudah melewati tanggal hari ini
+    Pesan::cleanupExpiredAcara();
+
+    $today = now()->toDateString();
+
     $acaras = Pesan::where('jenis_pesan', 'pengajuan_acara')
         ->where('status', 'disetujui')
         ->where('dipublikasikan', true)
+        ->whereDate('tanggal_acara', '>=', $today)
         ->orderBy('tanggal_acara', 'asc')
         ->orderBy('waktu_acara', 'asc')
         ->get();
@@ -210,8 +216,9 @@ Route::get('/acara', function () {
         return $a->tanggal_acara ? $a->tanggal_acara->format('Y-m') : 'unknown';
     });
 
-    return view('pages.acara', compact('acaras', 'acaraPerBulan'));
+    return view('pages.acara', compact('acaras', 'acaraPerBulan', 'today'));
 })->name('acara');
+
 
 
 // ── Admin Routes ─────────────────────────────────────────────────────────────
@@ -219,7 +226,7 @@ Route::get('/acara', function () {
 // Login (public)
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 
     // Protected routes
     Route::middleware(\App\Http\Middleware\AdminAuth::class)->group(function () {

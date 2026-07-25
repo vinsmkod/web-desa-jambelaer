@@ -8,7 +8,7 @@
 
 <div class="max-w-3xl">
     <div class="mb-5">
-        <a href="{{ route('admin.budaya.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+        <a href="{{ route('admin.budaya.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
             Kembali ke Daftar
         </a>
@@ -18,12 +18,12 @@
         @csrf
         @method('PUT')
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
-            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
                 <div class="w-8 h-8 rounded-lg bg-emerald-600/20 flex items-center justify-center text-emerald-400">
                     <i data-lucide="music-4" class="w-4 h-4"></i>
                 </div>
-                <h2 class="font-display font-bold text-white text-sm">Informasi Budaya</h2>
+                <h2 class="font-display font-bold text-slate-900 text-sm">Informasi Budaya</h2>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-5">
@@ -76,12 +76,12 @@
 
             <div id="preview-container" class="mt-2">
                 <p class="form-label">Foto Saat Ini / Pratinjau:</p>
-                <img id="img-preview" src="{{ $budaya->img_url }}" alt="Foto Budaya" class="w-full max-h-64 object-cover rounded-xl border border-slate-800 shadow-md">
+                <img id="img-preview" src="{{ $budaya->img_url }}" alt="Foto Budaya" class="w-full max-h-64 object-cover rounded-xl border border-slate-200 shadow-md">
             </div>
         </div>
 
         <div class="flex items-center justify-end gap-3 pb-8">
-            <a href="{{ route('admin.budaya.index') }}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 transition-colors">
+            <a href="{{ route('admin.budaya.index') }}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-600 transition-colors">
                 Batal
             </a>
             <button type="submit" class="btn-primary">
@@ -105,3 +105,5 @@
     }
 </script>
 @endpush
+
+

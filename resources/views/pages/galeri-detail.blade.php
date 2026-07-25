@@ -4,44 +4,44 @@
 @section('meta_desc', Str::limit($foto->deskripsi ?? $foto->judul, 160))
 
 @section('content')
-<div class="pt-28 pb-24 bg-gradient-to-b from-white to-ivory">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="pt-24 pb-24 bg-stone-50/50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {{-- Breadcrumb --}}
-        <nav class="flex items-center flex-wrap gap-1.5 text-xs text-slate-500 mb-8 reveal-on-scroll">
-            <a href="{{ route('home') }}" class="hover:text-emerald-800 transition-colors">Home</a>
-            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0"></i>
-            <a href="{{ route('galeri') }}" class="hover:text-emerald-800 transition-colors">Galeri</a>
-            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0"></i>
-            <span class="text-emerald-800 font-semibold truncate max-w-xs">{{ $foto->judul }}</span>
+        <nav class="flex items-center flex-wrap gap-1.5 text-xs text-stone-500 mb-6 reveal-on-scroll">
+            <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0 text-stone-300"></i>
+            <a href="{{ route('galeri') }}" class="hover:text-forest-800 transition-colors">Galeri</a>
+            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0 text-stone-300"></i>
+            <span class="text-forest-800 font-semibold truncate max-w-xs">{{ $foto->judul }}</span>
         </nav>
 
-        <div class="grid lg:grid-cols-12 gap-10 items-start">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
             {{-- ── Left / Main: Photo ── --}}
             <div class="lg:col-span-8 space-y-6 reveal-on-scroll">
-                <div class="relative rounded-3xl overflow-hidden shadow-lg border border-slate-100 bg-slate-900">
+                <div class="relative rounded-xl overflow-hidden shadow-sm border border-stone-200 bg-stone-900">
                     <img src="{{ $foto->foto }}" alt="{{ $foto->judul }}"
                          class="w-full h-auto max-h-[600px] object-contain mx-auto">
-                    <span class="absolute top-5 left-5 px-3 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase shadow-sm bg-emerald-900/90 text-white backdrop-blur-sm">
+                    <span class="absolute top-4 left-4 px-2.5 py-1 rounded text-[10px] font-extrabold tracking-wider uppercase shadow-sm bg-forest-800 text-white">
                         {{ $foto->kategori_label }}
                     </span>
                 </div>
 
-                <div class="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
-                        <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-emerald-950">
+                <div class="bg-white border border-stone-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-100 pb-4">
+                        <h1 class="font-display font-extrabold text-xl sm:text-2xl text-stone-800">
                             {{ $foto->judul }}
                         </h1>
-                        <span class="text-xs font-semibold text-slate-400 flex items-center">
-                            <i data-lucide="calendar" class="w-4 h-4 mr-1.5 text-amber-600"></i>
+                        <span class="text-xs font-semibold text-stone-400 flex items-center">
+                            <i data-lucide="calendar" class="w-4 h-4 mr-1.5 text-sand-500"></i>
                             {{ $foto->tanggal_publikasi ? $foto->tanggal_publikasi->translatedFormat('d F Y') : $foto->created_at->translatedFormat('d F Y') }}
                         </span>
                     </div>
 
                     @if($foto->deskripsi)
                     <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Deskripsi</h3>
-                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line font-light">
+                        <h3 class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2">Deskripsi</h3>
+                        <p class="text-stone-600 text-sm sm:text-base leading-relaxed whitespace-pre-line font-light">
                             {{ $foto->deskripsi }}
                         </p>
                     </div>
@@ -51,9 +51,9 @@
 
             {{-- ── Right: Related Photos ── --}}
             <div class="lg:col-span-4 space-y-6 reveal-on-scroll delay-100">
-                <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
-                    <h3 class="font-display font-bold text-emerald-950 text-base mb-4 flex items-center">
-                        <i data-lucide="image" class="w-4 h-4 mr-2 text-emerald-700"></i>
+                <div class="bg-white border border-stone-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="font-display font-bold text-stone-800 text-sm mb-4 flex items-center">
+                        <i data-lucide="image" class="w-4 h-4 mr-2 text-forest-750"></i>
                         Foto Terkait
                     </h3>
 
@@ -61,14 +61,14 @@
                     <div class="space-y-3">
                         @foreach($lainnya as $item)
                         <a href="{{ route('galeri.detail', $item->id) }}"
-                           class="group flex items-center gap-3 p-2.5 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/50 transition-all">
+                           class="group flex items-center gap-3 p-2.5 rounded-lg border border-stone-200 hover:border-forest-200 hover:bg-forest-50/20 transition-all">
                             <img src="{{ $item->foto }}" alt="{{ $item->judul }}"
-                                 class="w-16 h-16 object-cover rounded-xl flex-shrink-0">
+                                 class="w-14 h-14 object-cover rounded flex-shrink-0">
                             <div class="min-w-0 flex-grow">
-                                <h4 class="text-xs font-bold text-emerald-950 group-hover:text-emerald-700 truncate">
+                                <h4 class="text-xs font-bold text-stone-850 group-hover:text-forest-700 truncate">
                                     {{ $item->judul }}
                                 </h4>
-                                <span class="text-[10px] text-slate-400 block mt-1">
+                                <span class="text-[10px] text-stone-400 block mt-1">
                                     {{ $item->tanggal_publikasi ? $item->tanggal_publikasi->translatedFormat('d M Y') : $item->created_at->translatedFormat('d M Y') }}
                                 </span>
                             </div>
@@ -76,14 +76,14 @@
                         @endforeach
                     </div>
                     @else
-                    <p class="text-xs text-slate-400 font-light">Tidak ada foto lain dalam kategori ini.</p>
+                    <p class="text-xs text-stone-400 font-light">Tidak ada foto lain dalam kategori ini.</p>
                     @endif
 
-                    <div class="mt-6 pt-4 border-t border-slate-100">
+                    <div class="mt-6 pt-4 border-t border-stone-100">
                         <a href="{{ route('galeri') }}"
-                           class="inline-flex items-center text-xs font-bold text-emerald-800 hover:text-emerald-950 transition-colors">
-                            <i data-lucide="arrow-left" class="w-4 h-4 mr-1.5"></i>
-                            Kembali ke Galeri Desa
+                           class="inline-flex items-center text-xs font-bold text-forest-800 hover:text-forest-650 transition-colors uppercase tracking-wider">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-1.5 text-sand-500"></i>
+                            Kembali ke Galeri
                         </a>
                     </div>
                 </div>

@@ -12,6 +12,8 @@ class PengajuanAcaraController extends Controller
     // Menampilkan daftar pengajuan acara
     public function index()
     {
+        Pesan::cleanupExpiredAcara();
+
         $pengajuan = Pesan::where('jenis_pesan', 'pengajuan_acara')
             ->latest()
             ->get();

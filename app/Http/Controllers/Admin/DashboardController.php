@@ -11,6 +11,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        Pesan::cleanupExpiredAcara();
+
         $stats = [
             'total_produk'   => Produk::count(),
             'produk_aktif'   => Produk::where('is_active', true)->count(),

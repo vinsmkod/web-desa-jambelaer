@@ -13,9 +13,8 @@ class TentangController extends Controller
 
     public function index()
     {
-        $settings = Pengaturan::where('group', 'tentang')->get()->keyBy('key');
         $strukturList = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
-        return view('admin.tentang.index', compact('settings', 'strukturList'));
+        return view('admin.tentang.index', compact('strukturList'));
     }
 
     public function update(Request $request)
@@ -65,7 +64,7 @@ class TentangController extends Controller
         $fotoPath = null;
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
-            $filename = 'struktur_' . time() . '_' . $file->getClientOriginalName();
+            $filename = 'struktur_' . time() . '_' . \Illuminate\Support\Str::random(8) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/struktur'), $filename);
             $fotoPath = '/uploads/struktur/' . $filename;
         }
@@ -95,7 +94,7 @@ class TentangController extends Controller
                 @unlink(public_path($fotoPath));
             }
             $file = $request->file('foto');
-            $filename = 'struktur_' . time() . '_' . $file->getClientOriginalName();
+            $filename = 'struktur_' . time() . '_' . \Illuminate\Support\Str::random(8) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/struktur'), $filename);
             $fotoPath = '/uploads/struktur/' . $filename;
         }

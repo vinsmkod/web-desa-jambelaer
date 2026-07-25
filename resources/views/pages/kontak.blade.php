@@ -4,71 +4,136 @@
 @section('meta_desc', 'Hubungi Kantor Desa Jambelaer, Dawuan, Subang. Kirim pertanyaan, atau permintaan kemitraan UMKM melalui formulir kontak resmi kami.')
 
 @section('content')
-<div class="pt-28 pb-24 bg-gradient-to-b from-ivory to-white">
+
+{{-- ══════════════════════════════════════════════════════════════════
+     PAGE HEADER BANNER
+══════════════════════════════════════════════════════════════════ --}}
+<div class="relative h-52 sm:h-64 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-6 shadow-sm">
+    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+         alt="Kantor Desa Jambelaer" class="w-full h-full object-cover opacity-25">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-900 to-forest-900/50"></div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Layanan Informasi</span>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Hubungi Kantor Desa</h1>
+        <p class="text-sm text-white/50 mt-2 font-light max-w-md">Kami siap melayani pertanyaan, aspirasi, dan keperluan Anda</p>
+    </div>
+</div>
+
+<div class="bg-white pb-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
-            <span class="text-xs font-bold tracking-widest uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Layanan Informasi</span>
-            <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-emerald-950 mt-3">Hubungi Kantor Desa Kami</h1>
-            <p class="mt-4 text-slate-500 font-light text-sm sm:text-base">
-                Apakah Anda memiliki pertanyaan mengenai pelayanan administrasi, potensi kemitraan UMKM, atau kunjungan budaya? Tim kami siap melayani Anda.
-            </p>
-            <div class="w-16 h-1 bg-gradient-to-r from-emerald-800 to-amber-600 mx-auto mt-4 rounded-full"></div>
+        {{-- ══════════════════════════════════════════════════════════
+             KONTAK INFO STRIP
+        ══════════════════════════════════════════════════════════ --}}
+        <div class="py-10 border-b border-stone-100">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex items-start gap-4 p-5 bg-forest-50 border border-forest-100 rounded-xl">
+                    <div class="w-10 h-10 rounded-lg bg-forest-800 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-sand-300"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-forest-600 block">Alamat</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">Jl. Raya Jambelaer, Dawuan, Subang 41270</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-5 bg-sand-50 border border-sand-100 rounded-xl">
+                    <div class="w-10 h-10 rounded-lg bg-sand-500 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="phone" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-sand-600 block">Telepon</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-5 bg-stone-50 border border-stone-100 rounded-xl">
+                    <div class="w-10 h-10 rounded-lg bg-stone-600 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="mail" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-stone-500 block">Email</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block break-all">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-5 bg-sky-50 border border-sky-100 rounded-xl">
+                    <div class="w-10 h-10 rounded-lg bg-sky-600 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="clock" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-sky-600 block">Jam Layanan</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">Sen–Jum: 08.00–15.30 WIB</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="grid lg:grid-cols-12 gap-12 items-stretch reveal-on-scroll delay-100">
+        {{-- ══════════════════════════════════════════════════════════
+             FORM + INFO PANEL
+        ══════════════════════════════════════════════════════════ --}}
+        <div class="py-14 grid lg:grid-cols-12 gap-10 items-start reveal-on-scroll">
 
-            <!-- ── Left: Contact Info ── -->
-            <div class="lg:col-span-5 bg-gradient-to-br from-emerald-950 to-emerald-900 rounded-3xl p-8 sm:p-10 text-white flex flex-col justify-between shadow-lg">
-                <div class="space-y-8">
-                    <div>
-                        <h2 class="font-display font-bold text-2xl text-white">Kantor Desa Jambelaer</h2>
-                        <p class="text-emerald-200/70 text-xs font-light mt-1">Kecamatan Dawuan, Kabupaten Subang, Jawa Barat, 41270</p>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-amber-400">
-                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+            {{-- Left: Info Panel --}}
+            <div class="lg:col-span-5 space-y-5">
+                {{-- Office Info Card --}}
+                <div class="bg-forest-900 text-white rounded-xl p-7">
+                    <h2 class="font-display font-bold text-lg text-white mb-5 pb-4 border-b border-white/10">
+                        Kantor Desa Jambelaer
+                    </h2>
+                    <div class="space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-sand-400"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase">Alamat Lengkap</span>
-                                <span class="text-sm font-light text-emerald-50 mt-1 block leading-relaxed">Jl. Raya Jambelaer No. 12, Dawuan, Subang, Jawa Barat, 41270</span>
+                                <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Alamat Lengkap</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block leading-relaxed">Jl. Raya Jambelaer No. 12, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
                             </div>
                         </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-amber-400">
-                                <i data-lucide="phone" class="w-5 h-5"></i>
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="phone" class="w-4 h-4 text-sand-400"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase">Hubungi Kami</span>
-                                <span class="text-sm font-light text-emerald-50 mt-1 block">(0260) 123456 / +62 812-3456-7890</span>
+                                <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Telepon / Fax</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
                             </div>
                         </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-amber-400">
-                                <i data-lucide="mail" class="w-5 h-5"></i>
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="mail" class="w-4 h-4 text-sand-400"></i>
                             </div>
                             <div>
-                                <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase">Email Resmi</span>
-                                <span class="text-sm font-light text-emerald-50 mt-1 block">info@jambelaer-subang.desa.id</span>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-4">
-                            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-amber-400">
-                                <i data-lucide="clock" class="w-5 h-5"></i>
-                            </div>
-                            <div>
-                                <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase">Jam Operasional</span>
-                                <span class="text-sm font-light text-emerald-50 mt-1 block">Senin – Jumat: 08:00 – 15:30 WIB</span>
+                                <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Email Resmi</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-8 border-t border-white/10 mt-8">
-                    <span class="text-xs text-emerald-300 font-semibold tracking-wider block uppercase mb-3">Media Sosial Desa</span>
+                {{-- Jam Layanan Card --}}
+                <div class="bg-white border border-stone-200 rounded-xl p-6">
+                    <h3 class="font-display font-bold text-sm text-forest-900 mb-4 flex items-center gap-2">
+                        <i data-lucide="calendar-clock" class="w-4 h-4 text-sand-500"></i>
+                        Jam Operasional Layanan
+                    </h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between py-2 border-b border-stone-50">
+                            <span class="text-sm text-stone-600 font-medium">Senin – Kamis</span>
+                            <span class="text-sm font-semibold text-forest-800 bg-forest-50 px-3 py-1 rounded-full text-xs">08.00 – 15.30 WIB</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2 border-b border-stone-50">
+                            <span class="text-sm text-stone-600 font-medium">Jumat</span>
+                            <span class="text-sm font-semibold text-forest-800 bg-forest-50 px-3 py-1 rounded-full text-xs">08.00 – 11.30 WIB</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm text-stone-400 font-medium">Sabtu – Minggu</span>
+                            <span class="text-xs font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full">Libur</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Sosmed Card --}}
+                <div class="bg-sand-50 border border-sand-100 rounded-xl p-6">
+                    <h3 class="font-display font-bold text-sm text-forest-900 mb-4">Media Sosial Resmi Desa</h3>
                     @php
                         $kFb = \App\Models\Pengaturan::get('sosmed_facebook', '');
                         $kIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
@@ -76,214 +141,241 @@
                         $kTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
                         $kWa = \App\Models\Pengaturan::get('sosmed_whatsapp', '');
                     @endphp
-                    <div class="flex items-center flex-wrap gap-2">
+                    <div class="flex flex-wrap gap-2">
                         @if($kFb)
-                        <a href="{{ str_starts_with($kFb, 'http') ? $kFb : 'https://'.$kFb }}" target="_blank" rel="noopener" title="Facebook" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-blue-600 transition-all text-emerald-100"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="{{ str_starts_with($kFb, 'http') ? $kFb : 'https://'.$kFb }}" target="_blank" rel="noopener"
+                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-blue-300 hover:text-blue-600 transition-all">
+                            <i data-lucide="facebook" class="w-4 h-4"></i> Facebook
+                        </a>
                         @endif
                         @if($kIg)
-                        <a href="{{ str_starts_with($kIg, 'http') ? $kIg : 'https://'.$kIg }}" target="_blank" rel="noopener" title="Instagram" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-pink-600 transition-all text-emerald-100"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="{{ str_starts_with($kIg, 'http') ? $kIg : 'https://'.$kIg }}" target="_blank" rel="noopener"
+                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-pink-300 hover:text-pink-600 transition-all">
+                            <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
+                        </a>
                         @endif
                         @if($kYt)
-                        <a href="{{ str_starts_with($kYt, 'http') ? $kYt : 'https://'.$kYt }}" target="_blank" rel="noopener" title="YouTube" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-red-600 transition-all text-emerald-100"><i data-lucide="youtube" class="w-4 h-4"></i></a>
-                        @endif
-                        @if($kTt)
-                        <a href="{{ str_starts_with($kTt, 'http') ? $kTt : 'https://'.$kTt }}" target="_blank" rel="noopener" title="TikTok" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-slate-700 transition-all text-emerald-100">
-                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+                        <a href="{{ str_starts_with($kYt, 'http') ? $kYt : 'https://'.$kYt }}" target="_blank" rel="noopener"
+                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-red-300 hover:text-red-600 transition-all">
+                            <i data-lucide="youtube" class="w-4 h-4"></i> YouTube
                         </a>
                         @endif
                         @if($kWa)
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $kWa) }}" target="_blank" rel="noopener" title="WhatsApp" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center hover:bg-green-600 transition-all text-emerald-100"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $kWa) }}" target="_blank" rel="noopener"
+                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-green-300 hover:text-green-600 transition-all">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                        </a>
+                        @endif
+                        @if(!$kFb && !$kIg && !$kYt && !$kWa)
+                        <p class="text-xs text-stone-400 font-light">Media sosial belum dikonfigurasi.</p>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <!-- ── Right: Form + Map ── -->
-            <div class="lg:col-span-7 flex flex-col space-y-6">
+            {{-- Right: Form --}}
+            <div class="lg:col-span-7">
+                <div class="bg-white border border-stone-200 rounded-xl p-7 sm:p-9 shadow-sm">
+                    <h2 class="font-display font-bold text-xl text-forest-900 mb-1">Kirim Pesan</h2>
+                    <p class="text-sm text-stone-400 font-light mb-7">Isi formulir di bawah ini, kami akan membalas pesan Anda.</p>
 
-                <!-- Form Card -->
-                <div class="bg-white border border-slate-100 rounded-3xl p-8 sm:p-10 shadow-sm flex-grow">
-                    <h2 class="font-display font-bold text-xl text-emerald-950 mb-6">Hubungi Kami</h2>
-
-                    <!-- Success Alert -->
+                    {{-- Success Alert --}}
                     @if(session('success'))
-                    <div id="contact-success" class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start space-x-3">
-                        <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-800">
+                    <div id="contact-success" class="mb-6 p-4 rounded-xl bg-forest-50 border border-forest-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-full bg-forest-800 flex items-center justify-center flex-shrink-0 text-white">
                             <i data-lucide="check" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <span class="font-bold text-emerald-950 text-sm block">Pesan Berhasil Terkirim!</span>
-                            <span class="text-xs text-emerald-700/80 font-light mt-0.5 block">{{ session('success') }}</span>
+                            <span class="font-bold text-forest-900 text-sm block">Pesan Berhasil Terkirim!</span>
+                            <span class="text-xs text-forest-700/80 font-light mt-0.5 block">{{ session('success') }}</span>
                         </div>
                     </div>
                     @else
-                    <div id="contact-success" class="hidden mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start space-x-3">
-                        <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-800">
+                    <div id="contact-success" class="hidden mb-6 p-4 rounded-xl bg-forest-50 border border-forest-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-full bg-forest-800 flex items-center justify-center flex-shrink-0 text-white">
                             <i data-lucide="check" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <span class="font-bold text-emerald-950 text-sm block">Pesan Berhasil Terkirim!</span>
-                            <span class="text-xs text-emerald-700/80 font-light mt-0.5 block">Terima kasih atas pesan Anda. Kami akan segera meninjau pesan Anda.</span>
+                            <span class="font-bold text-forest-900 text-sm block">Pesan Berhasil Terkirim!</span>
+                            <span class="text-xs text-forest-700/80 font-light mt-0.5 block">Terima kasih atas pesan Anda. Kami akan segera merespons.</span>
                         </div>
                     </div>
                     @endif
 
-                    <!-- Error Alert -->
-                    <div id="contact-error" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start space-x-3">
-                        <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 text-red-800">
+                    {{-- Error Alert --}}
+                    <div id="contact-error" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0 text-white">
                             <i data-lucide="alert-circle" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <span class="font-bold text-red-950 text-sm block">Gagal Mengirim Pesan!</span>
-                            <ul id="error-list" class="text-xs text-red-700/80 font-light mt-0.5 list-disc list-inside space-y-1"></ul>
+                            <span class="font-bold text-red-900 text-sm block">Gagal Mengirim Pesan</span>
+                            <ul id="error-list" class="text-xs text-red-700/80 font-light mt-1 list-disc list-inside space-y-1"></ul>
                         </div>
                     </div>
 
-                    <form id="contact-form" method="POST" action="{{ route('kontak.store') }}" class="space-y-5">
+                    <form id="contact-form" method="POST" action="{{ route('kontak.store') }}" class="space-y-4">
                         @csrf
 
-                        <!-- Dropdown: Jenis Pesan -->
-                        <div class="relative">
-                            <select id="jenis-pesan" name="jenis_pesan" required
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium bg-white cursor-pointer appearance-none">
-                                <option value="">-- Pilih Jenis Pesan --</option>
+                        {{-- Style umum input --}}
+                        <style>
+                            .input-village {
+                                width: 100%;
+                                padding: 14px 16px 6px 16px;
+                                border: 1px solid #e7e5e4;
+                                border-radius: 8px;
+                                font-size: 0.875rem;
+                                font-weight: 500;
+                                color: #292524;
+                                background: #fdfaf5;
+                                outline: none;
+                                transition: border-color 0.2s, box-shadow 0.2s;
+                                appearance: none;
+                            }
+                            .input-village:focus {
+                                border-color: #1a4731;
+                                box-shadow: 0 0 0 3px rgba(26,71,49,0.08);
+                                background: #ffffff;
+                            }
+                            .label-float {
+                                position: absolute;
+                                left: 16px;
+                                top: 4px;
+                                font-size: 0.65rem;
+                                font-weight: 700;
+                                letter-spacing: 0.1em;
+                                text-transform: uppercase;
+                                color: #a8a29e;
+                                pointer-events: none;
+                            }
+                            .input-wrap { position: relative; }
+                        </style>
+
+                        {{-- Jenis Pesan --}}
+                        <div class="input-wrap">
+                            <label class="label-float">Jenis Pesan</label>
+                            <select id="jenis-pesan" name="jenis_pesan" required class="input-village pt-7 cursor-pointer">
+                                <option value="">— Pilih Jenis Pesan —</option>
                                 <option value="pertanyaan_umum">Pertanyaan Umum</option>
                                 <option value="pengaduan">Pengaduan</option>
                                 <option value="kerja_sama">Kerja Sama</option>
                                 <option value="pengajuan_acara">Pengajuan Acara</option>
                             </select>
-                            <label for="jenis-pesan" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Jenis Pesan</label>
-                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-slate-400"></i>
+                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
                         </div>
 
-                        <!-- Common: Nama Lengkap -->
-                        <div class="relative">
-                            <input id="f-name" name="name" type="text" required placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-name" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Nama Lengkap</label>
+                        {{-- Nama Lengkap --}}
+                        <div class="input-wrap">
+                            <label class="label-float" for="f-name">Nama Lengkap</label>
+                            <input id="f-name" name="name" type="text" required placeholder="" class="input-village pt-7">
                         </div>
 
-                        <!-- PERTANYAAN UMUM: WhatsApp + Subjek + Pesan -->
-                        <div id="field-email" class="hidden relative">
-                            <input id="f-email" name="no_whatsapp" type="tel" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-email" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Nomor WhatsApp</label>
+                        {{-- WhatsApp (Pertanyaan Umum) --}}
+                        <div id="field-email" class="hidden input-wrap">
+                            <label class="label-float" for="f-email">Nomor WhatsApp</label>
+                            <input id="f-email" name="no_whatsapp" type="tel" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <!-- PENGADUAN + KERJA SAMA + PENGAJUAN ACARA: No WhatsApp -->
-                        <div id="field-whatsapp" class="hidden relative">
-                            <input id="f-whatsapp" name="no_whatsapp" type="text" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-whatsapp" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Nomor WhatsApp</label>
+                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara) --}}
+                        <div id="field-whatsapp" class="hidden input-wrap">
+                            <label class="label-float" for="f-whatsapp">Nomor WhatsApp</label>
+                            <input id="f-whatsapp" name="no_whatsapp" type="text" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <!-- PERTANYAAN UMUM + PENGADUAN: Subjek -->
-                        <div id="field-subject" class="hidden relative">
-                            <input id="f-subject" name="subject" type="text" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label id="label-subject" for="f-subject" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Subjek Pesan</label>
+                        {{-- Subjek --}}
+                        <div id="field-subject" class="hidden input-wrap">
+                            <label id="label-subject" class="label-float" for="f-subject">Subjek Pesan</label>
+                            <input id="f-subject" name="subject" type="text" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <!-- KERJA SAMA: Email + Nama Instansi -->
-                        <div id="field-email-kerja-sama" class="hidden relative">
-                            <input id="f-email-ks" name="email" type="email" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-email-ks" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Alamat Email</label>
+                        {{-- Email Kerja Sama --}}
+                        <div id="field-email-kerja-sama" class="hidden input-wrap">
+                            <label class="label-float" for="f-email-ks">Alamat Email</label>
+                            <input id="f-email-ks" name="email" type="email" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <div id="field-nama-instansi" class="hidden relative">
-                            <input id="f-instansi" name="nama_instansi" type="text" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-instansi" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Nama Instansi / Organisasi</label>
+                        {{-- Nama Instansi --}}
+                        <div id="field-nama-instansi" class="hidden input-wrap">
+                            <label class="label-float" for="f-instansi">Nama Instansi / Organisasi</label>
+                            <input id="f-instansi" name="nama_instansi" type="text" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <!-- PENGAJUAN ACARA: Nama Acara + Tanggal + Waktu + Lokasi + Jumlah Peserta -->
-                        <div id="field-nama-acara" class="hidden relative">
-                            <input id="f-nama-acara" name="nama_acara" type="text" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                            <label for="f-nama-acara" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Nama Acara</label>
+                        {{-- Nama Acara --}}
+                        <div id="field-nama-acara" class="hidden input-wrap">
+                            <label class="label-float" for="f-nama-acara">Nama Acara</label>
+                            <input id="f-nama-acara" name="nama_acara" type="text" placeholder="" class="input-village pt-7">
                         </div>
 
-                        <div id="field-tanggal-waktu" class="hidden grid sm:grid-cols-2 gap-5">
-                            <div class="relative">
-                                <input id="f-tanggal-acara" name="tanggal_acara" type="date" placeholder=" "
-                                    class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                                <label for="f-tanggal-acara" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                    peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                    -translate-y-2.5 scale-75">Tanggal Acara</label>
+                        {{-- Tanggal & Waktu --}}
+                        <div id="field-tanggal-waktu" class="hidden grid sm:grid-cols-2 gap-4">
+                            <div class="input-wrap">
+                                <label class="label-float" for="f-tanggal-acara">Tanggal Acara</label>
+                                <input id="f-tanggal-acara" name="tanggal_acara" type="date" class="input-village pt-7">
                             </div>
-                            <div class="relative">
-                                <input id="f-waktu-acara" name="waktu_acara" type="time" placeholder=" "
-                                    class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                                <label for="f-waktu-acara" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                    peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                    -translate-y-2.5 scale-75">Waktu Acara</label>
+                            <div class="input-wrap">
+                                <label class="label-float" for="f-waktu-acara">Waktu Acara</label>
+                                <input id="f-waktu-acara" name="waktu_acara" type="time" class="input-village pt-7">
                             </div>
                         </div>
 
-                        <div id="field-lokasi-peserta" class="hidden grid sm:grid-cols-2 gap-5">
-                            <div class="relative">
-                                <input id="f-lokasi-acara" name="lokasi_acara" type="text" placeholder=" "
-                                    class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                                <label for="f-lokasi-acara" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                    peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                    peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                    -translate-y-2.5 scale-75">Lokasi Acara</label>
+                        {{-- Lokasi & Peserta --}}
+                        <div id="field-lokasi-peserta" class="hidden grid sm:grid-cols-2 gap-4">
+                            <div class="input-wrap">
+                                <label class="label-float" for="f-lokasi-acara">Lokasi Acara</label>
+                                <input id="f-lokasi-acara" name="lokasi_acara" type="text" placeholder="" class="input-village pt-7">
                             </div>
-                            <div class="relative">
-                                <input id="f-jumlah-peserta" name="jumlah_peserta" type="number" min="1" placeholder=" "
-                                    class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium">
-                                <label for="f-jumlah-peserta" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                    peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                    peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                    -translate-y-2.5 scale-75">Perkiraan Jumlah Peserta</label>
+                            <div class="input-wrap">
+                                <label class="label-float" for="f-jumlah-peserta">Perkiraan Peserta</label>
+                                <input id="f-jumlah-peserta" name="jumlah_peserta" type="number" min="1" placeholder="" class="input-village pt-7">
                             </div>
                         </div>
 
-                        <!-- PERTANYAAN UMUM + PENGADUAN + KERJA SAMA + PENGAJUAN ACARA: Pesan -->
-                        <div id="field-message" class="hidden relative">
-                            <textarea id="f-msg" name="message" rows="4" placeholder=" "
-                                class="peer w-full px-4 pt-6 pb-2 border border-slate-200 rounded-xl focus:border-emerald-700 focus:ring-1 focus:ring-emerald-700 outline-none transition-all text-sm font-medium resize-none"></textarea>
-                            <label id="label-message" for="f-msg" class="absolute left-4 top-4 text-xs font-semibold text-slate-400 tracking-wider uppercase pointer-events-none origin-left transition-all
-                                peer-placeholder-shown:text-sm peer-placeholder-shown:top-4
-                                peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-emerald-700
-                                -translate-y-2.5 scale-75">Isi Pesan</label>
+                        {{-- Pesan --}}
+                        <div id="field-message" class="hidden input-wrap">
+                            <label id="label-message" class="label-float" for="f-msg">Isi Pesan</label>
+                            <textarea id="f-msg" name="message" rows="4" placeholder="" class="input-village pt-7 resize-none"></textarea>
                         </div>
 
+                        {{-- Submit --}}
                         <button id="submit-btn" type="submit" disabled
-                            class="w-full inline-flex items-center justify-center h-14 text-sm font-bold tracking-wide uppercase text-white bg-emerald-900 hover:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed rounded-xl shadow-md transition-all duration-200">
-                            Pilih Jenis Pesan
+                            class="w-full btn-primary justify-center h-13 text-[11px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none">
+                            <span id="btn-text">Pilih Jenis Pesan</span>
                             <i data-lucide="send" class="w-4 h-4 ml-2"></i>
                         </button>
                     </form>
                 </div>
             </div>
         </div>
+
+        {{-- ══════════════════════════════════════════════════════════
+             MAPS
+        ══════════════════════════════════════════════════════════ --}}
+        <div class="py-10 border-t border-stone-100 reveal-on-scroll delay-100">
+            <div class="text-center mb-8">
+                <span class="section-label">Peta Lokasi</span>
+                <h2 class="font-display font-extrabold text-2xl text-forest-900 mt-3">Temukan Kami di Sini</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="bg-white border border-stone-200 rounded-xl p-3 shadow-sm max-w-5xl mx-auto">
+                <div class="h-80 sm:h-96 rounded-lg overflow-hidden">
+                    <iframe
+                        src="{{ !empty($mapsUrl) ? $mapsUrl : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.262529813204!2d107.6761755!3d-6.612457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sid!2sid!4v1720894000000!5m2!1sid!2sid' }}"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="flex items-center gap-3 px-3 pt-3 pb-1">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-forest-600 flex-shrink-0"></i>
+                    <span class="text-xs text-stone-500 font-light">Jl. Raya Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
+                    <a href="https://maps.google.com" target="_blank" class="ml-auto text-[11px] text-forest-700 font-semibold hover:text-forest-500 whitespace-nowrap flex items-center gap-1">
+                        Buka Maps <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
 @endsection
 
 @push('scripts')
@@ -291,9 +383,9 @@
     const form = document.getElementById('contact-form');
     const successBox = document.getElementById('contact-success');
     const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
     const jenisPesanSelect = document.getElementById('jenis-pesan');
 
-    // Field Elements
     const fieldEmail = document.getElementById('field-email');
     const fieldWhatsapp = document.getElementById('field-whatsapp');
     const fieldSubject = document.getElementById('field-subject');
@@ -304,7 +396,6 @@
     const fieldLokasiPeserta = document.getElementById('field-lokasi-peserta');
     const fieldMessage = document.getElementById('field-message');
 
-    // Input Elements
     const inputEmail = document.getElementById('f-email');
     const inputWhatsapp = document.getElementById('f-whatsapp');
     const inputSubject = document.getElementById('f-subject');
@@ -316,125 +407,74 @@
     const inputLokasiAcara = document.getElementById('f-lokasi-acara');
     const inputJumlahPeserta = document.getElementById('f-jumlah-peserta');
     const inputMessage = document.getElementById('f-msg');
-
-    // Label elements
     const labelSubject = document.getElementById('label-subject');
     const labelMessage = document.getElementById('label-message');
 
-    // Fungsi untuk hide semua field dinamis
     function hideAllDynamicFields() {
-        fieldEmail.classList.add('hidden');
-        fieldWhatsapp.classList.add('hidden');
-        fieldSubject.classList.add('hidden');
-        fieldEmailKerjaSama.classList.add('hidden');
-        fieldNamaInstansi.classList.add('hidden');
-        fieldNamaAcara.classList.add('hidden');
-        fieldTanggalWaktu.classList.add('hidden');
-        fieldLokasiPeserta.classList.add('hidden');
-        fieldMessage.classList.add('hidden');
+        [fieldEmail, fieldWhatsapp, fieldSubject, fieldEmailKerjaSama,
+         fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
+         fieldLokasiPeserta, fieldMessage].forEach(f => f.classList.add('hidden'));
 
-        // Clear required and disable inputs
-        inputEmail.removeAttribute('required');
-        inputEmail.disabled = true;
-
-        inputWhatsapp.removeAttribute('required');
-        inputWhatsapp.disabled = true;
-
-        inputSubject.removeAttribute('required');
-        inputSubject.disabled = true;
-
-        inputEmailKS.removeAttribute('required');
-        inputEmailKS.disabled = true;
-
-        inputInstansi.removeAttribute('required');
-        inputInstansi.disabled = true;
-
-        inputNamaAcara.removeAttribute('required');
-        inputNamaAcara.disabled = true;
-
-        inputTanggalAcara.removeAttribute('required');
-        inputTanggalAcara.disabled = true;
-
-        inputWaktuAcara.removeAttribute('required');
-        inputWaktuAcara.disabled = true;
-
-        inputLokasiAcara.removeAttribute('required');
-        inputLokasiAcara.disabled = true;
-
-        inputJumlahPeserta.removeAttribute('required');
-        inputJumlahPeserta.disabled = true;
-
-        inputMessage.removeAttribute('required');
-        inputMessage.disabled = true;
+        [inputEmail, inputWhatsapp, inputSubject, inputEmailKS, inputInstansi,
+         inputNamaAcara, inputTanggalAcara, inputWaktuAcara,
+         inputLokasiAcara, inputJumlahPeserta, inputMessage].forEach(inp => {
+            inp.removeAttribute('required');
+            inp.disabled = true;
+        });
     }
 
-    // Fungsi untuk show field dengan required
     function showFieldWithRequired(field, input) {
         field.classList.remove('hidden');
         input.disabled = false;
         input.setAttribute('required', 'required');
     }
 
-    // Update form berdasarkan jenis pesan
     function updateFormFields() {
         const jenisPesan = jenisPesanSelect.value;
         hideAllDynamicFields();
-
-        // Reset button state
         submitBtn.disabled = false;
 
         if (jenisPesan === 'pertanyaan_umum') {
-            // Pertanyaan Umum: Nama, WhatsApp, Subjek, Pesan
             showFieldWithRequired(fieldEmail, inputEmail);
             showFieldWithRequired(fieldSubject, inputSubject);
             labelSubject.textContent = 'Subjek Pesan';
-            inputMessage.name = 'message'; // pastikan name benar
+            inputMessage.name = 'message';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Isi Pesan';
-            submitBtn.innerHTML = 'Kirim Pesan <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
-        }
-        else if (jenisPesan === 'pengaduan') {
-            // Pengaduan: Nama, WhatsApp, Subjek, Pesan
+            btnText.textContent = 'Kirim Pesan';
+        } else if (jenisPesan === 'pengaduan') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
             showFieldWithRequired(fieldSubject, inputSubject);
             labelSubject.textContent = 'Subjek Pengaduan';
-            inputMessage.name = 'message'; // pastikan name benar
+            inputMessage.name = 'message';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Isi Pengaduan';
-            submitBtn.innerHTML = 'Kirim Pengaduan <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
-        }
-        else if (jenisPesan === 'kerja_sama') {
-            // Kerja Sama: Nama, WhatsApp, Email, Nama Instansi, Pesan
+            btnText.textContent = 'Kirim Pengaduan';
+        } else if (jenisPesan === 'kerja_sama') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
             showFieldWithRequired(fieldEmailKerjaSama, inputEmailKS);
             showFieldWithRequired(fieldNamaInstansi, inputInstansi);
-            inputMessage.name = 'message'; // pastikan name benar
+            inputMessage.name = 'message';
             showFieldWithRequired(fieldMessage, inputMessage);
-            labelMessage.textContent = 'Isi Pesan';
-            submitBtn.innerHTML = 'Kirim Kerja Sama <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
-        }
-        else if (jenisPesan === 'pengajuan_acara') {
+            labelMessage.textContent = 'Isi Pesan Kerja Sama';
+            btnText.textContent = 'Kirim Kerja Sama';
+        } else if (jenisPesan === 'pengajuan_acara') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
             showFieldWithRequired(fieldNamaAcara, inputNamaAcara);
-            
             showFieldWithRequired(fieldTanggalWaktu, inputTanggalAcara);
             inputWaktuAcara.disabled = false;
             inputWaktuAcara.setAttribute('required', 'required');
-
             showFieldWithRequired(fieldLokasiPeserta, inputLokasiAcara);
             inputJumlahPeserta.disabled = false;
             inputJumlahPeserta.setAttribute('required', 'required');
-
-            inputMessage.name = 'deskripsi_acara'; // controller pakai 'deskripsi_acara'
+            inputMessage.name = 'deskripsi_acara';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Deskripsi Acara';
-            submitBtn.innerHTML = 'Kirim Pengajuan <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
-        }
-        else {
+            btnText.textContent = 'Kirim Pengajuan';
+        } else {
             submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Pilih Jenis Pesan <i data-lucide="send" class="w-4 h-4 ml-2"></i>';
+            btnText.textContent = 'Pilih Jenis Pesan';
         }
-
         lucide.createIcons();
     }
 
@@ -445,34 +485,23 @@
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-
-        // Reset alerts
         successBox.classList.add('hidden');
         errorBox.classList.add('hidden');
         errorList.innerHTML = '';
 
-        const originalBtnHTML = submitBtn.innerHTML;
+        const originalBtnText = btnText.textContent;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Mengirim...</span>
-            <svg class="animate-spin ml-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>`;
+        btnText.textContent = 'Mengirim...';
 
-        // Submit via fetch
         fetch(form.action, {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             body: new FormData(form)
         })
         .then(response => {
             return response.json().then(data => {
                 if (!response.ok) {
                     if (data.errors && typeof data.errors === 'object') {
-                        // Laravel validation errors object
                         const errorMsgs = Object.values(data.errors).flat();
                         throw new Error(errorMsgs.join('<br>'));
                     }
@@ -483,40 +512,22 @@
         })
         .then(data => {
             successBox.classList.remove('hidden');
-            const successDesc = successBox.querySelector('span:nth-child(2)') || successBox.querySelector('.text-emerald-700\\/80');
-            if (successDesc) {
-                successDesc.textContent = data.message;
-            }
             form.reset();
             updateFormFields();
-            
-            // Scroll to success box
-            successBox.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         })
         .catch(err => {
-            // Error
             errorBox.classList.remove('hidden');
-            
-            // Try to split error message by line breaks if it contains multiple errors
             const errors = err.message.split('<br>');
             errors.forEach(errMsg => {
                 const li = document.createElement('li');
                 li.textContent = errMsg;
                 errorList.appendChild(li);
             });
-
-            // Restore submit button
             submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnHTML;
+            btnText.textContent = originalBtnText;
             lucide.createIcons();
-
-            errorBox.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
+            errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
     });
 
