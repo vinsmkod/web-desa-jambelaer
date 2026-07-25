@@ -122,23 +122,15 @@
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Produk::count() }}</span>
             </a>
             <a href="{{ route('admin.pesan.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
+               class="sidebar-link {{ request()->routeIs('admin.pesan.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
                 <i data-lucide="mail" class="icon"></i>
                 <span>Pesan Masuk</span>
-                @php $unread = \App\Models\Pesan::where('is_read', false)->where('jenis_pesan', '!=', 'pengajuan_acara')->count(); @endphp
+                @php $unread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
                 @if($unread > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unread }}</span>
                 @endif
             </a>
-            <a href="{{ route('admin.pengajuan-acara.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
-                <i data-lucide="calendar-check" class="icon"></i>
-                <span>Pengajuan Acara</span>
-                @php $unreadAcara = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'menunggu')->count(); @endphp
-                @if($unreadAcara > 0)
-                <span class="ml-auto text-[10px] bg-violet-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadAcara }}</span>
-                @endif
-            </a>
+
 
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Konten</p>
 

@@ -10,7 +10,12 @@ class PengaturanController extends Controller
 {
     public function index()
     {
-        $settings = Pengaturan::orderBy('group')->orderBy('id')->get()->groupBy('group');
+        $settings = Pengaturan::where('group', '!=', 'tentang')
+            ->orderBy('group')
+            ->orderBy('id')
+            ->get()
+            ->groupBy('group');
+
         return view('admin.pengaturan.index', compact('settings'));
     }
 

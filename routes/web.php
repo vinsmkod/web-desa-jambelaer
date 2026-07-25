@@ -35,7 +35,7 @@ Route::get('/', function () {
 
 // Tentang Kami
 Route::get('/tentang-kami', function () {
-    $settings  = Pengaturan::whereIn('group', ['tentang', 'statistik'])->get()->keyBy('key');
+    $settings  = Pengaturan::where('group', 'statistik')->get()->keyBy('key');
     $struktur  = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
     $mapsUrl   = Pengaturan::get('maps_embed_url', '');
     return view('pages.tentang', compact('settings', 'struktur', 'mapsUrl'));

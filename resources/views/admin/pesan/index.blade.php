@@ -10,7 +10,7 @@
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
             <span class="text-sm text-slate-500">{{ $stats['total'] }} total pesan</span>
-            @php $unread = \App\Models\Pesan::where('is_read', false)->where('jenis_pesan', '!=', 'pengajuan_acara')->count(); @endphp
+            @php $unread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
             @if($unread > 0)
             <span class="badge-unread">{{ $unread }} belum dibaca</span>
             @endif
@@ -39,11 +39,11 @@
             <i data-lucide="handshake" class="w-4 h-4 inline-block mr-1.5"></i>
             Kerja Sama <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['kerja_sama'] }}</span>
         </button>
-        <a href="{{ route('admin.pengajuan-acara.index') }}"
-            class="px-4 py-3 text-sm font-semibold text-slate-400 hover:text-amber-600 transition-colors border-b-2 border-transparent hover:border-amber-500 -mb-px inline-flex items-center gap-1.5">
-            <i data-lucide="calendar" class="w-4 h-4"></i>
-            Pengajuan Acara
-        </a>
+        <button onclick="switchTab('pengajuan_acara')" role="tab" data-tab="pengajuan_acara"
+            class="tab-button px-4 py-3 text-sm font-semibold text-slate-400 hover:text-amber-600 transition-colors border-b-2 border-transparent hover:border-amber-500 -mb-px">
+            <i data-lucide="calendar-check" class="w-4 h-4 inline-block mr-1.5"></i>
+            Pengajuan Acara <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['pengajuan_acara'] }}</span>
+        </button>
     </div>
 </div>
 
@@ -87,12 +87,14 @@
                                 'pertanyaan_umum' => 'bg-sky-50 text-sky-700 border-sky-200',
                                 'pengaduan'       => 'bg-red-50 text-red-600 border-red-200',
                                 'kerja_sama'      => 'bg-cyan-50 text-cyan-700 border-cyan-200',
+                                'pengajuan_acara' => 'bg-amber-50 text-amber-700 border-amber-200',
                                 default           => 'bg-slate-50 text-slate-600 border-slate-200',
                             };
                             $jenisLabel = match($p->jenis_pesan) {
                                 'pertanyaan_umum' => 'Pertanyaan',
                                 'pengaduan'       => 'Pengaduan',
                                 'kerja_sama'      => 'Kerja Sama',
+                                'pengajuan_acara' => 'Pengajuan Acara',
                                 default           => $p->jenis_pesan,
                             };
                         @endphp

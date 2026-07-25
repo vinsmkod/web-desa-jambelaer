@@ -9,19 +9,17 @@ class PesanController extends Controller
 {
     public function index()
     {
-        $pesan = Pesan::whereIn('jenis_pesan', ['pertanyaan_umum', 'pengaduan', 'kerja_sama'])
-            ->orWhereNull('jenis_pesan')
-            ->latest()
-            ->get();
+        $pesan = Pesan::latest()->get();
 
         // Group berdasarkan jenis pesan
         $grouped = $pesan->groupBy('jenis_pesan');
 
         $stats = [
-            'total' => $pesan->count(),
+            'total'           => $pesan->count(),
             'pertanyaan_umum' => $grouped->get('pertanyaan_umum', collect())->count(),
-            'pengaduan' => $grouped->get('pengaduan', collect())->count(),
-            'kerja_sama' => $grouped->get('kerja_sama', collect())->count(),
+            'pengaduan'       => $grouped->get('pengaduan', collect())->count(),
+            'kerja_sama'      => $grouped->get('kerja_sama', collect())->count(),
+            'pengajuan_acara' => $grouped->get('pengajuan_acara', collect())->count(),
         ];
 
         return view('admin.pesan.index', compact('pesan', 'grouped', 'stats'));
@@ -29,9 +27,9 @@ class PesanController extends Controller
 
     public function show(Pesan $pesan)
     {
-        // Exclude pengajuan_acara (has dedicated controller)
+        // Redirect pengajuan_acara ke halaman detail-nya sendiri
         if ($pesan->jenis_pesan === 'pengajuan_acara') {
-            abort(404);
+            return redirect()->route('admin.pengajuan-acara.show', $pesan);
         }
 
         $pesan->update(['is_read' => true]);

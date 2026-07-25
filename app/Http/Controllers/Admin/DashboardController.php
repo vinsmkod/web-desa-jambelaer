@@ -11,8 +11,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        Pesan::cleanupExpiredAcara();
-
         $stats = [
             'total_produk'   => Produk::count(),
             'produk_aktif'   => Produk::where('is_active', true)->count(),
@@ -26,6 +24,9 @@ class DashboardController extends Controller
             'acara_menunggu'  => Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'menunggu')->count(),
             'acara_disetujui' => Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'disetujui')->count(),
         ];
+
+        // Hapus pengajuan acara yang sudah expired (setelah stats dihitung)
+        Pesan::cleanupExpiredAcara();
 
         $pesan_terbaru   = Pesan::latest()->take(5)->get();
         $produk_terbaru  = Produk::latest()->take(5)->get();
