@@ -9,7 +9,7 @@
 <div class="max-w-4xl space-y-6">
     {{-- Header Actions & Counter --}}
     <div class="flex items-center justify-between">
-        <p class="text-xs text-slate-500 font-medium">Total {{ $strukturList->count() }} anggota terdaftar · urutan terkecil tampil paling atas</p>
+        <p class="text-xs text-slate-500 font-medium">Total {{ $strukturList->total() }} anggota terdaftar · diurutkan otomatis (1, 2, 3...)</p>
         <button onclick="document.getElementById('form-tambah').classList.toggle('hidden')"
             class="btn-primary">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
@@ -51,8 +51,8 @@
                 </div>
                 <div>
                     <label class="form-label">Urutan Tampil</label>
-                    <input type="number" name="urutan" value="0" min="0" class="form-input" placeholder="0">
-                    <p class="text-[11px] text-slate-400 mt-1">Angka 1 = Kepala Desa (Posisi paling atas/pusat).</p>
+                    <input type="number" name="urutan" value="{{ $nextUrutan }}" min="1" class="form-input" placeholder="{{ $nextUrutan }}">
+                    <p class="text-[11px] text-slate-400 mt-1">Otomatis terisi urutan berikutnya. Angka 1 = Kepala Desa.</p>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 pt-2">
@@ -119,6 +119,52 @@
             </div>
             @endforeach
         </div>
+        @if($strukturList->hasPages())
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-slate-500 font-medium">
+                Menampilkan <span class="font-bold text-slate-700">{{ $strukturList->firstItem() }}</span>
+                – <span class="font-bold text-slate-700">{{ $strukturList->lastItem() }}</span>
+                dari <span class="font-bold text-slate-700">{{ $strukturList->total() }}</span> anggota
+            </p>
+
+            <div class="flex items-center gap-1.5">
+                {{-- Previous Page Link --}}
+                @if ($strukturList->onFirstPage())
+                    <span class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 text-slate-300 border border-slate-200 cursor-not-allowed font-bold text-sm">
+                        &lt;
+                    </span>
+                @else
+                    <a href="{{ $strukturList->previousPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-forest-50 hover:text-forest-700 hover:border-forest-200 transition-all shadow-sm font-bold text-sm">
+                        &lt;
+                    </a>
+                @endif
+
+                {{-- Page Numbers --}}
+                @foreach ($strukturList->getUrlRange(1, $strukturList->lastPage()) as $page => $url)
+                    @if ($page == $strukturList->currentPage())
+                        <span class="w-8 h-8 flex items-center justify-center rounded-xl bg-forest-700 text-white font-bold text-xs shadow-sm border border-forest-800">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white text-slate-600 font-medium text-xs border border-slate-200 hover:bg-forest-50 hover:text-forest-700 hover:border-forest-200 transition-all shadow-sm">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                {{-- Next Page Link --}}
+                @if ($strukturList->hasMorePages())
+                    <a href="{{ $strukturList->nextPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-forest-50 hover:text-forest-700 hover:border-forest-200 transition-all shadow-sm font-bold text-sm">
+                        &gt;
+                    </a>
+                @else
+                    <span class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 text-slate-300 border border-slate-200 cursor-not-allowed font-bold text-sm">
+                        &gt;
+                    </span>
+                @endif
+            </div>
+        </div>
+        @endif
         @endif
     </div>
 

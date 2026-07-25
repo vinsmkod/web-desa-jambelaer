@@ -187,13 +187,11 @@ class DatabaseSeeder extends Seeder
             ['key' => 'desa_kodepos',      'value' => '41270',                     'label' => 'Kode Pos',               'group' => 'identitas'],
             ['key' => 'desa_alamat',       'value' => 'Jl. Raya Jambelaer No. 12, Dawuan, Subang', 'label' => 'Alamat', 'group' => 'identitas'],
             ['key' => 'desa_telepon',      'value' => '(0260) 123456',             'label' => 'Nomor Telepon',          'group' => 'kontak'],
-            ['key' => 'desa_whatsapp',     'value' => '+62 812-3456-7890',         'label' => 'WhatsApp',               'group' => 'kontak'],
             ['key' => 'desa_email',        'value' => 'info@jambelaer-subang.desa.id', 'label' => 'Email Resmi',       'group' => 'kontak'],
             ['key' => 'desa_jam_buka',     'value' => 'Senin – Jumat: 08:00 – 15:30 WIB', 'label' => 'Jam Operasional','group' => 'kontak'],
             ['key' => 'stat_luas',         'value' => '2.500,366',                 'label' => 'Luas Wilayah (Ha)',      'group' => 'statistik'],
             ['key' => 'stat_penduduk',     'value' => '4850',                      'label' => 'Jumlah Penduduk (Jiwa)', 'group' => 'statistik'],
             ['key' => 'stat_umkm',         'value' => '35',                        'label' => 'Pelaku UMKM',            'group' => 'statistik'],
-            ['key' => 'facebook_url',      'value' => '#',                         'label' => 'URL Facebook',           'group' => 'sosmed'],
             ['key' => 'instagram_url',     'value' => '#',                         'label' => 'URL Instagram',          'group' => 'sosmed'],
             ['key' => 'youtube_url',       'value' => '#',                         'label' => 'URL YouTube',            'group' => 'sosmed'],
         ];

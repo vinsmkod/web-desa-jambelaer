@@ -184,11 +184,9 @@ Route::get('/galeri/{id}', function ($id) {
 // Kontak – Form
 Route::get('/kontak', function () {
     $sosmed = [
-        'facebook'  => Pengaturan::get('sosmed_facebook', ''),
         'instagram' => Pengaturan::get('sosmed_instagram', ''),
         'youtube'   => Pengaturan::get('sosmed_youtube', ''),
         'tiktok'    => Pengaturan::get('sosmed_tiktok', ''),
-        'whatsapp'  => Pengaturan::get('sosmed_whatsapp', ''),
     ];
     return view('pages.kontak', compact('sosmed'));
 })->name('kontak');

@@ -63,12 +63,10 @@
         'stat_kk'         => 'home',
         'stat_rtrw'       => 'network',
         'stat_dusun'      => 'map',
-        'sosmed_facebook' => 'facebook',
         'sosmed_instagram'=> 'instagram',
         'sosmed_youtube'  => 'youtube',
         'sosmed_twitter'  => 'twitter',
         'sosmed_tiktok'   => 'video',
-        'sosmed_whatsapp' => 'message-circle',
         'maps_embed_url'  => 'map-pin',
     ];
 @endphp
@@ -137,7 +135,7 @@
                     Isi dengan atribut <code>src="..."</code> dari kode Embed iFrame Google Maps.
                 </p>
 
-                @elseif(in_array($item->key, ['sosmed_facebook', 'sosmed_instagram', 'sosmed_youtube', 'sosmed_twitter', 'sosmed_tiktok', 'sosmed_whatsapp']))
+                @elseif(in_array($item->key, ['sosmed_instagram', 'sosmed_youtube', 'sosmed_twitter', 'sosmed_tiktok']))
                 <div class="relative">
                     <input type="text" name="{{ $item->key }}" value="{{ $item->value }}"
                            class="form-input"

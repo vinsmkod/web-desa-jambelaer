@@ -292,23 +292,11 @@
                     </p>
                     <!-- Social Icons -->
                     @php
-                    $footerFb = \App\Models\Pengaturan::get('sosmed_facebook', '');
                     $footerIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
                     $footerYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
                     $footerTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
-                    $footerWa = \App\Models\Pengaturan::get('sosmed_whatsapp', '');
                     @endphp
                     <div class="flex items-center flex-wrap gap-2 pt-1">
-                        @if($footerFb)
-                        <a href="{{ str_starts_with($footerFb, 'http') ? $footerFb : 'https://'.$footerFb }}" target="_blank" rel="noopener" title="Facebook Desa"
-                            class="w-8 h-8 rounded border border-white/10 bg-white/5 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all text-white/60 hover:text-white">
-                            <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
-                        </a>
-                        @else
-                        <span class="w-8 h-8 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/20" title="Facebook belum diatur">
-                            <i data-lucide="facebook" class="w-3.5 h-3.5"></i>
-                        </span>
-                        @endif
 
                         @if($footerIg)
                         <a href="{{ str_starts_with($footerIg, 'http') ? $footerIg : 'https://'.$footerIg }}" target="_blank" rel="noopener" title="Instagram Desa"
@@ -344,17 +332,6 @@
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
                             </svg>
-                        </span>
-                        @endif
-
-                        @if($footerWa)
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $footerWa) }}" target="_blank" rel="noopener" title="WhatsApp Desa"
-                            class="w-8 h-8 rounded border border-white/10 bg-white/5 flex items-center justify-center hover:bg-green-600 hover:border-green-600 transition-all text-white/60 hover:text-white">
-                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                        </a>
-                        @else
-                        <span class="w-8 h-8 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/20" title="WhatsApp belum diatur">
-                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                         </span>
                         @endif
                     </div>

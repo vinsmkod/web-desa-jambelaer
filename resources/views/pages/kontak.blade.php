@@ -135,19 +135,11 @@
                 <div class="bg-sand-50 border border-sand-100 rounded-xl p-6">
                     <h3 class="font-display font-bold text-sm text-forest-900 mb-4">Media Sosial Resmi Desa</h3>
                     @php
-                        $kFb = \App\Models\Pengaturan::get('sosmed_facebook', '');
                         $kIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
                         $kYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
                         $kTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
-                        $kWa = \App\Models\Pengaturan::get('sosmed_whatsapp', '');
                     @endphp
                     <div class="flex flex-wrap gap-2">
-                        @if($kFb)
-                        <a href="{{ str_starts_with($kFb, 'http') ? $kFb : 'https://'.$kFb }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-blue-300 hover:text-blue-600 transition-all">
-                            <i data-lucide="facebook" class="w-4 h-4"></i> Facebook
-                        </a>
-                        @endif
                         @if($kIg)
                         <a href="{{ str_starts_with($kIg, 'http') ? $kIg : 'https://'.$kIg }}" target="_blank" rel="noopener"
                            class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-pink-300 hover:text-pink-600 transition-all">
@@ -160,13 +152,7 @@
                             <i data-lucide="youtube" class="w-4 h-4"></i> YouTube
                         </a>
                         @endif
-                        @if($kWa)
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $kWa) }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-green-300 hover:text-green-600 transition-all">
-                            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
-                        </a>
-                        @endif
-                        @if(!$kFb && !$kIg && !$kYt && !$kWa)
+                        @if(!$kIg && !$kYt && !$kTt)
                         <p class="text-xs text-stone-400 font-light">Media sosial belum dikonfigurasi.</p>
                         @endif
                     </div>
