@@ -82,6 +82,7 @@
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('home') }}"        class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('home')       ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Home</a>
                     <a href="{{ route('tentang') }}"     class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('tentang')     ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Tentang Kami</a>
+                    <a href="{{ route('berita') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('berita*')     ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Berita</a>
                     <a href="{{ route('umkm') }}"        class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('umkm')        ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">UMKM</a>
                     <a href="{{ route('budaya') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('budaya')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Budaya</a>
                     <a href="{{ route('galeri') }}"      class="nav-link font-medium text-sm transition-colors duration-200 {{ request()->routeIs('galeri')      ? 'text-emerald-800 font-semibold' : 'text-slate-600 hover:text-emerald-800' }}">Galeri</a>
@@ -110,6 +111,7 @@
             <div class="px-4 space-y-2">
                 <a href="{{ route('home') }}"    class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Home</a>
                 <a href="{{ route('tentang') }}" class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Tentang Kami</a>
+                <a href="{{ route('berita') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Berita</a>
                 <a href="{{ route('umkm') }}"    class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">UMKM</a>
                 <a href="{{ route('budaya') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Budaya</a>
                 <a href="{{ route('galeri') }}"  class="block px-4 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all">Galeri</a>

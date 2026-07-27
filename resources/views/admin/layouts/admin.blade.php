@@ -129,10 +129,21 @@
                 <span>Galeri Desa</span>
                 <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
             </a>
+            <a href="{{ route('admin.berita.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                <i data-lucide="newspaper" class="icon"></i>
+                <span>Berita Desa</span>
+                <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
+            </a>
             <a href="{{ route('admin.pengaturan.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
                 <i data-lucide="settings" class="icon"></i>
                 <span>Pengaturan</span>
+            </a>
+            <a href="{{ route('admin.kelola-admin.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.kelola-admin.*') ? 'active' : '' }}">
+                <i data-lucide="user-plus" class="icon"></i>
+                <span>Kelola Admin</span>
             </a>
 
             <div class="pt-4 mt-4 border-t border-slate-800">
@@ -181,16 +192,40 @@
                 <p class="text-xs text-slate-500">@yield('page_subtitle', 'Panel Admin Desa Jambelaer')</p>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Date Display -->
+                <span class="text-xs text-slate-400 hidden md:block">{{ now()->translatedFormat('d M Y') }}</span>
+
                 <!-- Notification Bell -->
-                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 transition-all">
+                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 transition-all" title="Notifikasi">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     @if(\App\Models\Pesan::where('is_read', false)->count() > 0)
                     <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full"></span>
                     @endif
                 </button>
-                <div class="h-6 w-px bg-slate-700"></div>
-                <span class="text-xs text-slate-400 hidden sm:block">{{ now()->translatedFormat('d M Y') }}</span>
+
+                <div class="h-6 w-px bg-slate-800"></div>
+
+                <!-- Admin Aktif (Pojok Kanan Atas) -->
+                @if(auth()->check())
+                <div class="flex items-center gap-2.5 bg-slate-800/80 border border-slate-700/60 rounded-xl px-3 py-1.5 shadow-sm">
+                    <div class="relative">
+                        <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center text-white font-bold text-xs shadow">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                        </div>
+                        <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-slate-900 rounded-full" title="Status: Online"></span>
+                    </div>
+                    <div class="hidden sm:block text-left">
+                        <div class="text-xs font-semibold text-white leading-tight flex items-center gap-1.5">
+                            <span>{{ auth()->user()->name }}</span>
+                        </div>
+                        <span class="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Admin Aktif
+                        </span>
+                    </div>
+                </div>
+                @endif
             </div>
         </header>
 
