@@ -9,10 +9,11 @@ use Illuminate\Support\Str;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produk = Produk::orderBy('urutan')->orderBy('id')->get();
-        return view('admin.produk.index', compact('produk'));
+        $allProduk = Produk::orderBy('urutan')->orderBy('id')->get();
+        $produk    = Produk::orderBy('urutan')->orderBy('id')->paginate(5)->withQueryString();
+        return view('admin.produk.index', compact('produk', 'allProduk'));
     }
 
     public function create()

@@ -17,41 +17,50 @@
         </div>
     </div>
 
-    <!-- Tabs Navigation -->
+    <!-- Tabs Navigation (server-side filter via query string) -->
     <div class="flex gap-1 overflow-x-auto border-b border-slate-200 pb-0" role="tablist">
-        <button onclick="switchTab('semua')" role="tab" data-tab="semua"
-            class="tab-button active px-4 py-3 text-sm font-semibold text-slate-500 hover:text-forest-700 transition-colors border-b-2 border-forest-600 -mb-px">
-            <i data-lucide="inbox" class="w-4 h-4 inline-block mr-1.5"></i>
-            Semua <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['total'] }}</span>
-        </button>
-        <button onclick="switchTab('pertanyaan_umum')" role="tab" data-tab="pertanyaan_umum"
-            class="tab-button px-4 py-3 text-sm font-semibold text-slate-400 hover:text-forest-700 transition-colors border-b-2 border-transparent hover:border-forest-600 -mb-px">
-            <i data-lucide="help-circle" class="w-4 h-4 inline-block mr-1.5"></i>
-            Pertanyaan <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['pertanyaan_umum'] }}</span>
-        </button>
-        <button onclick="switchTab('pengaduan')" role="tab" data-tab="pengaduan"
-            class="tab-button px-4 py-3 text-sm font-semibold text-slate-400 hover:text-red-600 transition-colors border-b-2 border-transparent hover:border-red-500 -mb-px">
-            <i data-lucide="alert-triangle" class="w-4 h-4 inline-block mr-1.5"></i>
-            Pengaduan <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['pengaduan'] }}</span>
-        </button>
-        <button onclick="switchTab('kerja_sama')" role="tab" data-tab="kerja_sama"
-            class="tab-button px-4 py-3 text-sm font-semibold text-slate-400 hover:text-sky-600 transition-colors border-b-2 border-transparent hover:border-sky-500 -mb-px">
-            <i data-lucide="handshake" class="w-4 h-4 inline-block mr-1.5"></i>
-            Kerja Sama <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['kerja_sama'] }}</span>
-        </button>
-        <button onclick="switchTab('pengajuan_acara')" role="tab" data-tab="pengajuan_acara"
-            class="tab-button px-4 py-3 text-sm font-semibold text-slate-400 hover:text-amber-600 transition-colors border-b-2 border-transparent hover:border-amber-500 -mb-px">
-            <i data-lucide="calendar-check" class="w-4 h-4 inline-block mr-1.5"></i>
-            Pengajuan Acara <span class="ml-1.5 text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ $stats['pengajuan_acara'] }}</span>
-        </button>
+        @php
+            $tabs = [
+                'semua'           => ['label' => 'Semua',           'icon' => 'inbox',          'count' => $stats['total'],           'color' => 'forest'],
+                'pertanyaan_umum' => ['label' => 'Pertanyaan',      'icon' => 'help-circle',    'count' => $stats['pertanyaan_umum'], 'color' => 'sky'],
+                'pengaduan'       => ['label' => 'Pengaduan',       'icon' => 'alert-triangle', 'count' => $stats['pengaduan'],       'color' => 'red'],
+                'kerja_sama'      => ['label' => 'Kerja Sama',      'icon' => 'handshake',      'count' => $stats['kerja_sama'],      'color' => 'cyan'],
+                'pengajuan_acara' => ['label' => 'Pengajuan Acara', 'icon' => 'calendar-check', 'count' => $stats['pengajuan_acara'], 'color' => 'amber'],
+            ];
+            $colorMap = [
+                'forest' => ['active' => 'border-forest-600 text-forest-700', 'hover' => 'hover:border-forest-600 hover:text-forest-700'],
+                'sky'    => ['active' => 'border-sky-500 text-sky-700',       'hover' => 'hover:border-sky-500 hover:text-sky-700'],
+                'red'    => ['active' => 'border-red-500 text-red-600',       'hover' => 'hover:border-red-500 hover:text-red-600'],
+                'cyan'   => ['active' => 'border-cyan-500 text-cyan-700',     'hover' => 'hover:border-cyan-500 hover:text-cyan-700'],
+                'amber'  => ['active' => 'border-amber-500 text-amber-700',   'hover' => 'hover:border-amber-500 hover:text-amber-700'],
+            ];
+        @endphp
+
+        @foreach($tabs as $key => $tab)
+        @php
+            $isActive = $activeTab === $key;
+            $colors = $colorMap[$tab['color']];
+        @endphp
+        <a href="{{ route('admin.pesan.index', ['jenis' => $key === 'semua' ? null : $key]) }}"
+           class="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px
+                  {{ $isActive ? $colors['active'] : 'border-transparent text-slate-400 '.$colors['hover'] }}">
+            <i data-lucide="{{ $tab['icon'] }}" class="w-4 h-4"></i>
+            {{ $tab['label'] }}
+            <span class="ml-1 text-xs {{ $isActive ? 'bg-slate-200 text-slate-700' : 'bg-slate-100 text-slate-500' }} px-2 py-0.5 rounded-full">
+                {{ $tab['count'] }}
+            </span>
+        </a>
+        @endforeach
     </div>
 </div>
 
-<!-- Tab Content -->
+<!-- Table Content -->
 <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
     @if($pesan->isEmpty())
     <div class="flex flex-col items-center justify-center py-20 text-slate-400">
-        <i data-lucide="inbox" class="w-12 h-12 mb-3"></i>
+        <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
+            <i data-lucide="inbox" class="w-7 h-7"></i>
+        </div>
         <p class="font-semibold text-slate-600">Belum ada pesan masuk</p>
         <p class="text-sm mt-1">Pesan dari form kontak akan muncul di sini</p>
     </div>
@@ -71,7 +80,7 @@
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @foreach($pesan as $p)
-                <tr class="hover:bg-slate-50 transition-colors {{ !$p->is_read ? 'bg-amber-50/50' : '' }} pesan-row" data-jenis="{{ $p->jenis_pesan }}">
+                <tr class="hover:bg-slate-50 transition-colors {{ !$p->is_read ? 'bg-amber-50/50' : '' }}">
                     <td class="px-5 py-4">
                         <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-600 to-violet-400 flex items-center justify-center text-white font-bold text-xs">
                             {{ strtoupper(substr($p->name, 0, 1)) }}
@@ -147,28 +156,14 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Pagination --}}
+    @if($pesan->hasPages())
+    <div class="px-5 py-4 border-t border-slate-100">
+        {{ $pesan->links() }}
+    </div>
+    @endif
     @endif
 </div>
-
-@push('scripts')
-<script>
-function switchTab(tab) {
-    const rows = document.querySelectorAll('.pesan-row');
-    rows.forEach(row => {
-        row.style.display = (tab === 'semua' || row.dataset.jenis === tab) ? 'table-row' : 'none';
-    });
-
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        if (btn.dataset.tab === tab) {
-            btn.classList.add('border-forest-600', 'text-forest-700');
-            btn.classList.remove('border-transparent', 'text-slate-400');
-        } else {
-            btn.classList.remove('border-forest-600', 'text-forest-700');
-            btn.classList.add('border-transparent', 'text-slate-400');
-        }
-    });
-}
-</script>
-@endpush
 
 @endsection

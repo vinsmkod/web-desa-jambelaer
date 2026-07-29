@@ -10,7 +10,7 @@ class BudayaController extends Controller
 {
     public function index()
     {
-        $budayaList = Budaya::orderBy('urutan')->orderBy('id')->get();
+        $budayaList = Budaya::orderBy('urutan')->orderBy('id')->paginate(5)->withQueryString();
         return view('admin.budaya.index', compact('budayaList'));
     }
 

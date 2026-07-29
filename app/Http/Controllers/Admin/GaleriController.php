@@ -11,7 +11,7 @@ class GaleriController extends Controller
 {
     public function index()
     {
-        $galeri = Galeri::orderBy('urutan')->orderBy('id')->get();
+        $galeri = Galeri::orderBy('urutan')->orderBy('id')->paginate(5)->withQueryString();
         return view('admin.galeri.index', compact('galeri'));
     }
 

@@ -9,9 +9,9 @@
 
 {{-- ── Stats Row ──────────────────────────────────────────────────────── --}}
 @php
-    $totalAktif   = $produk->where('is_active', true)->count();
-    $totalJenis   = $produk->whereNotNull('jenis')->groupBy('jenis')->count();
-    $totalIndividu = $produk->whereNull('jenis')->count();
+    $totalAktif    = $allProduk->where('is_active', true)->count();
+    $totalJenis    = $allProduk->whereNotNull('jenis')->groupBy('jenis')->count();
+    $totalIndividu = $allProduk->whereNull('jenis')->count();
 @endphp
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
     <div class="bg-white border border-slate-200 rounded-2xl p-5">
@@ -35,7 +35,7 @@
 
 {{-- ── Header Actions ──────────────────────────────────────────────────── --}}
 <div class="flex items-center justify-between mb-4">
-    <p class="text-slate-500 text-sm">{{ $produk->count() }} produk terdaftar</p>
+    <p class="text-slate-500 text-sm">{{ $allProduk->count() }} produk terdaftar</p>
     <a href="{{ route('admin.produk.create') }}" class="btn-primary">
         <i data-lucide="plus" class="w-4 h-4"></i>
         Tambah Produk
@@ -161,11 +161,17 @@
             </tbody>
         </table>
     </div>
+    {{-- Pagination --}}
+    @if($produk->hasPages())
+    <div class="px-5 py-4 border-t border-slate-100">
+        {{ $produk->links() }}
+    </div>
+    @endif
     @endif
 </div>
 
 {{-- ── Info Kelompok Jenis ─────────────────────────────────────────────── --}}
-@php $jenisGroups = $produk->whereNotNull('jenis')->groupBy('jenis'); @endphp
+@php $jenisGroups = $allProduk->whereNotNull('jenis')->groupBy('jenis'); @endphp
 @if($jenisGroups->isNotEmpty())
 <div class="mt-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
     <div class="flex items-center gap-2 mb-4">

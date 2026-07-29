@@ -8,7 +8,7 @@
 <div class="space-y-6">
 
     <div class="flex items-center justify-between">
-        <p class="text-xs text-slate-500">Total {{ $galeri->count() }} foto galeri terdaftar</p>
+        <p class="text-xs text-slate-500">Total {{ $galeri->total() }} foto galeri terdaftar</p>
         <a href="{{ route('admin.galeri.create') }}" class="btn-primary">
             <i data-lucide="plus" class="w-4 h-4"></i>
             Tambah Foto Galeri
@@ -87,6 +87,12 @@
                 </tbody>
             </table>
         </div>
+        {{-- Pagination --}}
+        @if($galeri->hasPages())
+        <div class="px-5 py-4 border-t border-slate-100">
+            {{ $galeri->links() }}
+        </div>
+        @endif
     </div>
 </div>
 @endsection

@@ -151,10 +151,21 @@
                 <span>Galeri Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
             </a>
+            <a href="{{ route('admin.berita.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                <i data-lucide="newspaper" class="icon"></i>
+                <span>Berita Desa</span>
+                <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
+            </a>
             <a href="{{ route('admin.pengaturan.index') }}"
                class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
                 <i data-lucide="settings-2" class="icon"></i>
                 <span>Pengaturan</span>
+            </a>
+            <a href="{{ route('admin.kelola-admin.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.kelola-admin.*') ? 'active' : '' }}">
+                <i data-lucide="user-plus" class="icon"></i>
+                <span>Kelola Admin</span>
             </a>
 
             <div class="pt-3 mt-3 border-t border-slate-100">
@@ -203,16 +214,37 @@
                 <p class="text-[11px] text-slate-400 truncate hidden sm:block">@yield('page_subtitle', 'Panel Admin Desa Jambelaer')</p>
             </div>
 
-            <div class="flex items-center gap-2 flex-shrink-0 ml-4">
-                <!-- Notif bell -->
-                <a href="{{ route('admin.pesan.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all">
+            <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 ml-auto">
+                <!-- Notif bell / Mail -->
+                <a href="{{ route('admin.pesan.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Pesan Masuk">
                     <i data-lucide="mail" class="w-4 h-4"></i>
                     @if(\App\Models\Pesan::where('is_read', false)->count() > 0)
                     <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-white"></span>
                     @endif
                 </a>
+
                 <div class="h-5 w-px bg-slate-200 hidden sm:block"></div>
-                <span class="text-xs text-slate-400 hidden sm:block font-medium">{{ now()->translatedFormat('d M Y') }}</span>
+
+                <!-- Admin Aktif -->
+                @if(auth()->check())
+                <div class="flex items-center gap-2.5 bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 shadow-xs">
+                    <div class="relative">
+                        <div class="w-7 h-7 rounded-lg bg-forest-800 flex items-center justify-center text-white font-bold text-xs shadow">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                        </div>
+                        <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" title="Status: Online"></span>
+                    </div>
+                    <div class="hidden sm:block text-left">
+                        <div class="text-xs font-semibold text-slate-800 leading-tight">
+                            {{ auth()->user()->name }}
+                        </div>
+                        <span class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Admin Aktif
+                        </span>
+                    </div>
+                </div>
+                @endif
             </div>
         </header>
 

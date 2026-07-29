@@ -11,12 +11,15 @@ use App\Http\Controllers\Admin\TentangController;
 use App\Http\Controllers\Admin\BudayaController;
 use App\Http\Controllers\Admin\PengajuanAcaraController;
 use App\Http\Controllers\Admin\GaleriController;
+use App\Http\Controllers\Admin\AdminManagementController;
+use App\Http\Controllers\Admin\BeritaController;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use App\Models\Budaya;
 use App\Models\Galeri;
 use App\Models\Pesan;
+use App\Models\Berita;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
@@ -35,7 +38,7 @@ Route::get('/', function () {
 
 // Tentang Kami
 Route::get('/tentang-kami', function () {
-    $settings  = Pengaturan::where('group', 'statistik')->get()->keyBy('key');
+    $settings  = Pengaturan::all()->keyBy('key');
     $struktur  = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
     $mapsUrl   = Pengaturan::get('maps_embed_url', '');
     return view('pages.tentang', compact('settings', 'struktur', 'mapsUrl'));
@@ -217,6 +220,28 @@ Route::get('/acara', function () {
     return view('pages.acara', compact('acaras', 'acaraPerBulan', 'today'));
 })->name('acara');
 
+// Berita – Portal Berita Publik
+Route::get('/berita', function () {
+    $featuredBerita = Berita::where('is_published', true)->orderBy('published_at', 'desc')->first();
+    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->orderBy('id', 'desc')->paginate(9);
+
+    return view('pages.berita', compact('beritas', 'featuredBerita'));
+})->name('berita');
+
+// Berita – Detail Artikel
+Route::get('/berita/{slug}', function ($slug) {
+    $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
+    $berita->increment('views');
+
+    $rekomendasi = Berita::where('is_published', true)
+        ->where('id', '!=', $berita->id)
+        ->orderBy('published_at', 'desc')
+        ->take(4)
+        ->get();
+
+    return view('pages.berita-detail', compact('berita', 'rekomendasi'));
+})->name('berita.detail');
+
 
 
 // ── Admin Routes ─────────────────────────────────────────────────────────────
@@ -267,5 +292,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Budaya CRUD
         Route::resource('budaya', BudayaController::class);
+
+        // Berita CRUD
+        Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
+
+        // Kelola Admin (Hanya Tambah & Lihat)
+        Route::get('/kelola-admin', [AdminManagementController::class, 'index'])->name('kelola-admin.index');
+        Route::get('/kelola-admin/create', [AdminManagementController::class, 'create'])->name('kelola-admin.create');
+        Route::post('/kelola-admin', [AdminManagementController::class, 'store'])->name('kelola-admin.store');
     });
 });

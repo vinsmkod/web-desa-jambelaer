@@ -14,6 +14,12 @@
             'icon'  => 'landmark',
             'color' => 'forest',
         ],
+        'sambutan' => [
+            'label' => 'Sambutan Kades',
+            'desc'  => 'Foto, nama, dan isi teks sambutan Kepala Desa',
+            'icon'  => 'user-check',
+            'color' => 'forest',
+        ],
         'kontak' => [
             'label' => 'Kontak & Operasional',
             'desc'  => 'Nomor telepon, email resmi, dan jam pelayanan warga',
@@ -68,11 +74,18 @@
         'sosmed_twitter'  => 'twitter',
         'sosmed_tiktok'   => 'video',
         'maps_embed_url'  => 'map-pin',
+        'kades_nama'      => 'user',
+        'kades_jabatan'   => 'award',
+        'kades_foto'      => 'image',
+        'sambutan_judul'  => 'heading',
+        'sambutan_quote'  => 'quote',
+        'sambutan_teks'   => 'file-text',
+        'sambutan_tagline'=> 'sparkles',
     ];
 @endphp
 
 {{-- ── Tab Navigation ─────────────────────────────────────────────────────── --}}
-<div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-2xl p-1.5 mb-6 max-w-3xl overflow-x-auto shadow-sm">
+<div class="flex items-center gap-1.5 bg-white border border-slate-200 rounded-2xl p-1.5 mb-6 overflow-x-auto shadow-sm">
     @foreach($settings as $group => $items)
     @php $meta = $groupMeta[$group] ?? ['label' => ucfirst($group), 'icon' => 'settings', 'color' => 'forest']; @endphp
     <button type="button" onclick="switchTab('{{ $group }}')" id="tab-{{ $group }}"
@@ -84,7 +97,7 @@
     @endforeach
 </div>
 
-<form method="POST" action="{{ route('admin.pengaturan.update') }}" class="max-w-3xl" id="pengaturan-form">
+<form method="POST" action="{{ route('admin.pengaturan.update') }}" enctype="multipart/form-data" id="pengaturan-form">
     @csrf @method('PUT')
 
     @foreach($settings as $group => $items)
@@ -121,7 +134,38 @@
                     <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">{{ $item->label }}</span>
                 </label>
 
-                @if($item->key === 'desa_alamat')
+                @if($item->key === 'kades_foto')
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                        @php
+                            $imgSrc = $item->value;
+                            if ($imgSrc && !str_starts_with($imgSrc, 'http') && file_exists(public_path($imgSrc))) {
+                                $imgSrc = asset($imgSrc);
+                            }
+                        @endphp
+                        <img id="kades-foto-preview" src="{{ $imgSrc ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80' }}"
+                             alt="Foto Kades" class="w-16 h-20 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0">
+                        <div class="flex-1 min-w-0 space-y-1.5">
+                            <label class="block text-xs font-semibold text-slate-700">Upload Foto Baru (Komputer/HP)</label>
+                            <input type="file" name="kades_foto_file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-forest-50 file:text-forest-700 hover:file:bg-forest-100 transition-all"
+                                   onchange="if(this.files[0]){ document.getElementById('kades-foto-preview').src = URL.createObjectURL(this.files[0]); }">
+                            <p class="text-[11px] text-slate-400">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Atau Gunakan URL Foto Eksternal</label>
+                        <input type="text" name="kades_foto" value="{{ $item->value }}" class="form-input text-xs" placeholder="https://...">
+                    </div>
+                </div>
+
+                @elseif($item->key === 'sambutan_quote')
+                <textarea name="{{ $item->key }}" rows="2" class="form-input resize-y" placeholder="Kutipan ringkas pembuka sambutan...">{{ $item->value }}</textarea>
+
+                @elseif($item->key === 'sambutan_teks')
+                <textarea name="{{ $item->key }}" rows="6" class="form-input resize-y leading-relaxed" placeholder="Isi paragraf lengkap sambutan kepala desa...">{{ $item->value }}</textarea>
+                <p class="text-[11px] text-slate-400 mt-1">Gunakan baris baru (Enter) untuk memisahkan antar paragraf.</p>
+
+                @elseif($item->key === 'desa_alamat')
                 <textarea name="{{ $item->key }}" rows="3"
                           class="form-input resize-none"
                           placeholder="{{ $item->label }}...">{{ $item->value }}</textarea>

@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="flex items-center justify-between mb-6">
-    <p class="text-slate-500 text-sm">{{ $budayaList->count() }} item budaya terdaftar</p>
+    <p class="text-slate-500 text-sm">{{ $budayaList->total() }} item budaya terdaftar</p>
     <a href="{{ route('admin.budaya.create') }}" class="btn-primary">
         <i data-lucide="plus" class="w-4 h-4"></i>
         Tambah Budaya
@@ -82,6 +82,12 @@
             </tbody>
         </table>
     </div>
+    {{-- Pagination --}}
+    @if($budayaList->hasPages())
+    <div class="px-5 py-4 border-t border-slate-100">
+        {{ $budayaList->links() }}
+    </div>
+    @endif
     @endif
 </div>
 

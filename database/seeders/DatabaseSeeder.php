@@ -6,8 +6,10 @@ use App\Models\User;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\Budaya;
+use App\Models\Berita;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -263,5 +265,47 @@ class DatabaseSeeder extends Seeder
         foreach ($budayas as $b) {
             Budaya::updateOrCreate(['title' => $b['title']], $b);
         }
+
+        // ── Berita Desa ──────────────────────────────────────────────────────
+        $beritaList = [
+            [
+                'judul'        => 'Pemerintah Desa Jambelaer Luncurkan Portal Informasi Resmi Berbasis Digital',
+                'slug'         => 'pemerintah-desa-jambelaer-luncurkan-portal-informasi-resmi-berbasis-digital',
+                'kategori'     => 'pemerintahan',
+                'ringkasan'    => 'Peluncuran website desa untuk mempermudah akses informasi publik, promosi UMKM lokal, dan jadwal kegiatan warga.',
+                'konten'       => 'Pemerintah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang secara resmi meluncurkan portal informasi desa berbasis digital. Website ini dirancang untuk memudahkan warga masyarakat dan publik luas dalam mengakses profil desa, informasi layanan publik, promosi produk unggulan UMKM, hingga agenda kebudayaan lokal. Kepala Desa berharap inovasi digital ini dapat mendorong keterbukaan informasi publik dan memajukan perekonomian warga desa.',
+                'gambar'       => 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80',
+                'penulis'      => 'Admin Desa',
+                'is_published' => true,
+                'published_at' => now(),
+            ],
+            [
+                'judul'        => 'Pelatihan Pembinaan UMKM Dan Inovasi Kemasan Produk Olahan Pangan Desa',
+                'slug'         => 'pelatihan-pembinaan-umkm-dan-inovasi-kemasan-produk-olahan-pangan-desa',
+                'kategori'     => 'kegiatan_warga',
+                'ringkasan'    => 'Para pelaku UMKM Desa Jambelaer mengikuti pelatihan pembinaan desain kemasan dan strategi pemasaran digital.',
+                'konten'       => 'Guna meningkatkan daya saing produk lokal seperti opak singkong, keripik, dan gula aren, Pemerintah Desa Jambelaer menggelar pelatihan pembinaan UMKM. Acara ini dihadiri puluhan pengrajin makanan tradisional dan produsen lokal. Dalam kesempatan ini, peserta mendapatkan bimbingan mengenai pembuatan kemasan higienis berstandar P-IRT serta pemanfaatan e-commerce.',
+                'gambar'       => 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80',
+                'penulis'      => 'Tim Redaksi Desa',
+                'is_published' => true,
+                'published_at' => now()->subDays(2),
+            ],
+            [
+                'judul'        => 'Pembangunan Saluran Irigasi Pertanian Dusun III Selesai Dikerjakan',
+                'slug'         => 'pembangunan-saluran-irigasi-pertanian-dusun-iii-selesai-dikerjakan',
+                'kategori'     => 'pembangunan',
+                'ringkasan'    => 'Fasilitas irigasi sawah sepanjang 450 meter kini siap mengairi puluhan hektar lahan pertanian warga.',
+                'konten'       => 'Pembangunan saluran irigasi beton di Dusun III Desa Jambelaer telah rampung 100%. Saluran irigasi sepanjang 450 meter ini didanai melalui program alokasi dana desa tahun berjalan. Dengan selesainya irigasi ini, pasokan air menuju lahan persawahan warga dipastikan lancar sehingga diharapkan mampu meningkatkan produktivitas hasil panen padi organik lokal.',
+                'gambar'       => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
+                'penulis'      => 'Kasi Pembangunan',
+                'is_published' => true,
+                'published_at' => now()->subDays(5),
+            ],
+        ];
+
+        foreach ($beritaList as $br) {
+            Berita::updateOrCreate(['slug' => $br['slug']], $br);
+        }
     }
 }
+

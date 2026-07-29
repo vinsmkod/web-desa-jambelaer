@@ -21,7 +21,14 @@ class PengaturanController extends Controller
 
     public function update(Request $request)
     {
-        $inputs = $request->except(['_token', '_method']);
+        $inputs = $request->except(['_token', '_method', 'kades_foto_file']);
+
+        if ($request->hasFile('kades_foto_file')) {
+            $file = $request->file('kades_foto_file');
+            $filename = 'kades_' . time() . '_' . \Illuminate\Support\Str::random(6) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/kades'), $filename);
+            $inputs['kades_foto'] = '/uploads/kades/' . $filename;
+        }
 
         foreach ($inputs as $key => $value) {
             Pengaturan::set($key, $value);

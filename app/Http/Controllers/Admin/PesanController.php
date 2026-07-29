@@ -4,25 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pesan;
+use Illuminate\Http\Request;
 
 class PesanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pesan = Pesan::latest()->get();
-
-        // Group berdasarkan jenis pesan
-        $grouped = $pesan->groupBy('jenis_pesan');
+        // Stats selalu dari semua data
+        $allPesan = Pesan::all();
+        $grouped  = $allPesan->groupBy('jenis_pesan');
 
         $stats = [
-            'total'           => $pesan->count(),
+            'total'           => $allPesan->count(),
             'pertanyaan_umum' => $grouped->get('pertanyaan_umum', collect())->count(),
             'pengaduan'       => $grouped->get('pengaduan', collect())->count(),
             'kerja_sama'      => $grouped->get('kerja_sama', collect())->count(),
             'pengajuan_acara' => $grouped->get('pengajuan_acara', collect())->count(),
         ];
 
-        return view('admin.pesan.index', compact('pesan', 'grouped', 'stats'));
+        // Paginated data with optional jenis filter
+        $query = Pesan::latest();
+        $activeTab = $request->get('jenis', 'semua');
+
+        if ($activeTab && $activeTab !== 'semua') {
+            $query->where('jenis_pesan', $activeTab);
+        }
+
+        $pesan = $query->paginate(5)->withQueryString();
+
+        return view('admin.pesan.index', compact('pesan', 'stats', 'activeTab'));
     }
 
     public function show(Pesan $pesan)

@@ -219,13 +219,14 @@
                 </a>
 
                 <!-- Desktop Menu -->
-                <nav class="hidden md:flex items-center space-x-7">
+                <nav class="hidden md:flex items-center space-x-6 lg:space-x-7">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Beranda</a>
                     <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Tentang</a>
-                    <a href="{{ route('umkm') }}" class="{{ request()->routeIs('umkm*')   ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">UMKM</a>
-                    <a href="{{ route('budaya') }}" class="{{ request()->routeIs('budaya*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Budaya</a>
-                    <a href="{{ route('galeri') }}" class="{{ request()->routeIs('galeri*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Galeri</a>
-                    <a href="{{ route('acara') }}" class="{{ request()->routeIs('acara')   ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Acara</a>
+                    <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Berita</a>
+                    <a href="{{ route('umkm') }}" class="{{ request()->routeIs('umkm*')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">UMKM</a>
+                    <a href="{{ route('budaya') }}" class="{{ request()->routeIs('budaya*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Budaya</a>
+                    <a href="{{ route('galeri') }}" class="{{ request()->routeIs('galeri*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Galeri</a>
+                    <a href="{{ route('acara') }}" class="{{ request()->routeIs('acara')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Acara</a>
                 </nav>
 
                 <!-- CTA -->
@@ -251,6 +252,7 @@
             <div class="px-4 space-y-0.5">
                 <a href="{{ route('home') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Beranda</a>
                 <a href="{{ route('tentang') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Tentang</a>
+                <a href="{{ route('berita') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Berita</a>
                 <a href="{{ route('umkm') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">UMKM</a>
                 <a href="{{ route('budaya') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Budaya</a>
                 <a href="{{ route('galeri') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Galeri</a>
@@ -261,6 +263,8 @@
                         Hubungi Kami
                     </a>
                 </div>
+            </div>
+        </div>
             </div>
         </div>
     </header>
