@@ -194,8 +194,8 @@ class DatabaseSeeder extends Seeder
             ['key' => 'stat_luas',         'value' => '2.500,366',                 'label' => 'Luas Wilayah (Ha)',      'group' => 'statistik'],
             ['key' => 'stat_penduduk',     'value' => '4850',                      'label' => 'Jumlah Penduduk (Jiwa)', 'group' => 'statistik'],
             ['key' => 'stat_umkm',         'value' => '35',                        'label' => 'Pelaku UMKM',            'group' => 'statistik'],
-            ['key' => 'instagram_url',     'value' => '#',                         'label' => 'URL Instagram',          'group' => 'sosmed'],
-            ['key' => 'youtube_url',       'value' => '#',                         'label' => 'URL YouTube',            'group' => 'sosmed'],
+            ['key' => 'sosmed_instagram',  'value' => '#',                         'label' => 'Instagram Desa',         'group' => 'sosmed'],
+            ['key' => 'sosmed_youtube',    'value' => '#',                         'label' => 'YouTube Desa',           'group' => 'sosmed'],
         ];
 
         foreach ($settings as $s) {
