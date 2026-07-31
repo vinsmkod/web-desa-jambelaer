@@ -48,13 +48,13 @@
             {{-- Right: Rounded Photo Panel --}}
             <div class="hidden lg:flex items-center justify-center py-10">
                 <div class="w-full h-[560px] rounded-3xl overflow-hidden border border-white/10 shadow-lg relative">
-                    <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=85"
-                         alt="Sawah Desa Jambelaer"
-                         class="w-full h-full object-cover">
+                    <img src="{{ asset('uploads/img/beranda.jpeg') }}"
+                        alt="beranda"
+                        class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-transparent to-transparent"></div>
                     <div class="absolute bottom-6 right-6 text-right">
-                        <span class="block text-[9px] text-white/50 tracking-widest uppercase font-semibold">Pemandangan Desa</span>
-                        <span class="block text-xs text-white/80 font-light mt-0.5">Sawah Desa Jambelaer</span>
+                        <span class="block text-[9px] text-white/50 tracking-widest uppercase font-semibold">Milangkala Desa</span>
+                        <span class="block text-xs text-white/80 font-light mt-0.5">Milangkala Desa Jambelaer</span>
                     </div>
                 </div>
             </div>
@@ -143,4 +143,3 @@
 
 
 @endsection
-

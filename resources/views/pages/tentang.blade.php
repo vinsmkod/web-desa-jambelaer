@@ -8,10 +8,10 @@
 {{-- ══════════════════════════════════════════════════════════════════
      PAGE HEADER BANNER
 ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-52 sm:h-64 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-6 shadow-sm">
-    <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1920&q=80"
-        alt="Desa Jambelaer" class="w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-gradient-to-t from-forest-900 to-forest-900/60"></div>
+<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-6 shadow-sm">
+    <img src="{{ asset('uploads/img/sawah.jpeg') }}"
+        alt="Desa Jambelaer" class="w-full h-full object-cover opacity-70">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Tentang Kami</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Mengenal Desa Jambelaer</h1>
@@ -139,10 +139,10 @@
                         <div class="absolute -top-3 -left-3 w-full h-full border-2 border-sand-200 rounded-xl"></div>
                         <div class="relative">
                             @php
-                                $kadesFoto = $settings['kades_foto']->value ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80';
-                                if ($kadesFoto && !str_starts_with($kadesFoto, 'http') && file_exists(public_path($kadesFoto))) {
-                                    $kadesFoto = asset($kadesFoto);
-                                }
+                            $kadesFoto = $settings['kades_foto']->value ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80';
+                            if ($kadesFoto && !str_starts_with($kadesFoto, 'http') && file_exists(public_path($kadesFoto))) {
+                            $kadesFoto = asset($kadesFoto);
+                            }
                             @endphp
                             <img src="{{ $kadesFoto }}"
                                 alt="Kepala Desa Jambelaer"
@@ -169,23 +169,23 @@
                     @endif
 
                     @php
-                        $rawTeks = $settings['sambutan_teks']->value ?? '';
-                        $paragraphs = array_filter(explode("\n", str_replace("\r", "", $rawTeks)));
+                    $rawTeks = $settings['sambutan_teks']->value ?? '';
+                    $paragraphs = array_filter(explode("\n", str_replace("\r", "", $rawTeks)));
                     @endphp
 
                     @if(!empty($paragraphs))
-                        @foreach($paragraphs as $p)
-                            <p class="text-stone-600 leading-relaxed font-light text-sm">
-                                {{ trim($p) }}
-                            </p>
-                        @endforeach
+                    @foreach($paragraphs as $p)
+                    <p class="text-stone-600 leading-relaxed font-light text-sm">
+                        {{ trim($p) }}
+                    </p>
+                    @endforeach
                     @else
-                        <p class="text-stone-600 leading-relaxed font-light text-sm">
-                            Kami berkomitmen untuk terus membangun desa yang mandiri, sejahtera, dan berdaya saing dengan menjunjung tinggi nilai-nilai budaya lokal yang telah diwariskan leluhur. Dengan semangat gotong royong dan kebersamaan, kami yakin Desa Jambelaer akan terus maju dan berkembang.
-                        </p>
-                        <p class="text-stone-600 leading-relaxed font-light text-sm">
-                            Kami mengundang seluruh masyarakat, perantau, dan mitra usaha untuk berkolaborasi membangun desa yang kita cintai bersama. Portal ini hadir sebagai jembatan informasi yang terbuka bagi semua.
-                        </p>
+                    <p class="text-stone-600 leading-relaxed font-light text-sm">
+                        Kami berkomitmen untuk terus membangun desa yang mandiri, sejahtera, dan berdaya saing dengan menjunjung tinggi nilai-nilai budaya lokal yang telah diwariskan leluhur. Dengan semangat gotong royong dan kebersamaan, kami yakin Desa Jambelaer akan terus maju dan berkembang.
+                    </p>
+                    <p class="text-stone-600 leading-relaxed font-light text-sm">
+                        Kami mengundang seluruh masyarakat, perantau, dan mitra usaha untuk berkolaborasi membangun desa yang kita cintai bersama. Portal ini hadir sebagai jembatan informasi yang terbuka bagi semua.
+                    </p>
                     @endif
 
                     @if(!empty($settings['sambutan_tagline']->value))

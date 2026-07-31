@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,6 +91,7 @@
 
     @stack('head')
 </head>
+
 <body class="h-full bg-slate-50 text-slate-800 font-sans antialiased flex">
 
     <!-- ══════════════ SIDEBAR ══════════════ -->
@@ -98,7 +100,7 @@
         <!-- Brand -->
         <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 flex-shrink-0">
             <div class="w-9 h-9 rounded-xl bg-forest-800 flex items-center justify-center shadow-sm flex-shrink-0">
-                <i data-lucide="wheat" class="w-4 h-4 text-amber-300"></i>
+                <img src="{{ asset('uploads/img/DESA_JAMBELAER.png') }}" alt="Logo Desa Jambelaer" class="w-full h-full object-cover">
             </div>
             <div class="min-w-0">
                 <span class="font-display font-bold text-sm text-slate-900 block leading-tight truncate">Desa Jambelaer</span>
@@ -111,18 +113,18 @@
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2">Menu Utama</p>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i data-lucide="layout-dashboard" class="icon"></i>
                 <span>Dashboard</span>
             </a>
             <a href="{{ route('admin.produk.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">
                 <i data-lucide="package" class="icon"></i>
                 <span>Produk UMKM</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Produk::count() }}</span>
             </a>
             <a href="{{ route('admin.pesan.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.pesan.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.pesan.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
                 <i data-lucide="mail" class="icon"></i>
                 <span>Pesan Masuk</span>
                 @php $unread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
@@ -135,35 +137,35 @@
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Konten</p>
 
             <a href="{{ route('admin.tentang.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.tentang.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.tentang.*') ? 'active' : '' }}">
                 <i data-lucide="users-2" class="icon"></i>
                 <span>Struktur Desa</span>
             </a>
             <a href="{{ route('admin.budaya.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.budaya.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.budaya.*') ? 'active' : '' }}">
                 <i data-lucide="music-2" class="icon"></i>
                 <span>Budaya Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Budaya::count() }}</span>
             </a>
             <a href="{{ route('admin.galeri.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
                 <i data-lucide="image" class="icon"></i>
                 <span>Galeri Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
             </a>
             <a href="{{ route('admin.berita.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                 <i data-lucide="newspaper" class="icon"></i>
                 <span>Berita Desa</span>
                 <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
             </a>
             <a href="{{ route('admin.pengaturan.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
                 <i data-lucide="settings-2" class="icon"></i>
                 <span>Pengaturan</span>
             </a>
             <a href="{{ route('admin.kelola-admin.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.kelola-admin.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.kelola-admin.*') ? 'active' : '' }}">
                 <i data-lucide="user-plus" class="icon"></i>
                 <span>Kelola Admin</span>
             </a>
@@ -300,4 +302,5 @@
 
     @stack('scripts')
 </body>
+
 </html>
