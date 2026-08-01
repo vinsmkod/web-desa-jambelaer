@@ -219,7 +219,7 @@
                 </a>
 
                 <!-- Desktop Menu -->
-                <nav class="hidden md:flex items-center space-x-6 lg:space-x-7">
+                <nav class="hidden lg:flex items-center space-x-5 xl:space-x-7">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Beranda</a>
                     <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Tentang</a>
                     <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Berita</a>
@@ -231,7 +231,7 @@
                 </nav>
 
                 <!-- CTA -->
-                <div class="hidden md:flex items-center">
+                <div class="hidden lg:flex items-center">
                     <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2.5 px-5">
                         <i data-lucide="phone" class="w-3.5 h-3.5 mr-2"></i>
                         Hubungi Kami
@@ -240,7 +240,7 @@
 
                 <!-- Mobile Toggle -->
                 <button id="mobile-menu-btn" type="button"
-                    class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-stone-600 hover:bg-forest-50 focus:outline-none transition-colors duration-200"
+                    class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-stone-600 hover:bg-forest-50 focus:outline-none transition-colors duration-200"
                     aria-controls="mobile-menu" aria-expanded="false">
                     <i id="hamburger-icon" data-lucide="menu" class="w-6 h-6"></i>
                     <i id="close-icon" data-lucide="x" class="w-6 h-6 hidden"></i>
@@ -249,7 +249,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden border-t border-stone-100 bg-white py-3">
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-stone-100 bg-white py-3 max-h-[calc(100vh-80px)] overflow-y-auto">
             <div class="px-4 space-y-0.5">
                 <a href="{{ route('home') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Beranda</a>
                 <a href="{{ route('tentang') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Tentang</a>
@@ -270,20 +270,18 @@
     </header>
 
     <!-- ══════════════════════════ PAGE CONTENT ══════════════════════════ -->
-    <main class="pt-[110px]">
+    <main class="pt-20 sm:pt-24 lg:pt-[104px]">
         @yield('content')
     </main>
-
-
 
     <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
     <footer class="bg-forest-900 text-white mt-16 rounded-none overflow-hidden">
         <!-- Zone 1: Main Footer Content -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-10 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-white/10">
 
                 <!-- Brand + Tagline -->
-                <div class="lg:col-span-5 space-y-5">
+                <div class="md:col-span-2 lg:col-span-5 space-y-5">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-lg bg-forest-700 border border-forest-600 flex items-center justify-center">
                             <i data-lucide="wheat" class="w-5 h-5 text-sand-300"></i>
@@ -360,7 +358,7 @@
                 </div>
 
                 <!-- Nav Links -->
-                <div class="lg:col-span-3 space-y-4">
+                <div class="md:col-span-1 lg:col-span-3 space-y-4">
                     <h4 class="font-display font-bold text-xs tracking-widest uppercase text-sand-400">Navigasi</h4>
                     <ul class="space-y-2.5">
                         <li><a href="{{ route('home') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Beranda</a></li>
@@ -374,7 +372,7 @@
                 </div>
 
                 <!-- Contact Info -->
-                <div class="lg:col-span-4 space-y-4">
+                <div class="md:col-span-1 lg:col-span-4 space-y-4">
                     <h4 class="font-display font-bold text-xs tracking-widest uppercase text-sand-400">Kontak & Lokasi</h4>
                     <ul class="space-y-4">
                         <li class="flex items-start space-x-3">

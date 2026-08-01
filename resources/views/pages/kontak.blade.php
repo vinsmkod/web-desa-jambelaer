@@ -26,8 +26,8 @@
              KONTAK INFO STRIP
         ══════════════════════════════════════════════════════════ --}}
         <div class="py-10 border-b border-stone-100">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex items-start gap-4 p-5 bg-forest-50 border border-forest-100 rounded-xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex items-start gap-4 p-4 sm:p-5 bg-forest-50 border border-forest-100 rounded-xl">
                     <div class="w-10 h-10 rounded-lg bg-forest-800 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="map-pin" class="w-4 h-4 text-sand-300"></i>
                     </div>
@@ -36,7 +36,7 @@
                         <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">Jl. Raya Jambelaer, Dawuan, Subang 41270</span>
                     </div>
                 </div>
-                <div class="flex items-start gap-4 p-5 bg-sand-50 border border-sand-100 rounded-xl">
+                <div class="flex items-start gap-4 p-4 sm:p-5 bg-sand-50 border border-sand-100 rounded-xl">
                     <div class="w-10 h-10 rounded-lg bg-sand-500 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="phone" class="w-4 h-4 text-white"></i>
                     </div>
@@ -45,7 +45,7 @@
                         <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
                     </div>
                 </div>
-                <div class="flex items-start gap-4 p-5 bg-stone-50 border border-stone-100 rounded-xl">
+                <div class="flex items-start gap-4 p-4 sm:p-5 bg-stone-50 border border-stone-100 rounded-xl">
                     <div class="w-10 h-10 rounded-lg bg-stone-600 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="mail" class="w-4 h-4 text-white"></i>
                     </div>
@@ -54,7 +54,7 @@
                         <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block break-all">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
                     </div>
                 </div>
-                <div class="flex items-start gap-4 p-5 bg-sky-50 border border-sky-100 rounded-xl">
+                <div class="flex items-start gap-4 p-4 sm:p-5 bg-sky-50 border border-sky-100 rounded-xl">
                     <div class="w-10 h-10 rounded-lg bg-sky-600 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="clock" class="w-4 h-4 text-white"></i>
                     </div>

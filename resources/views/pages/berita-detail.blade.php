@@ -6,7 +6,7 @@
 @section('content')
 
 <!-- Header Breadcrumb & Banner -->
-<section class="pt-32 pb-12 bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-950 text-white relative">
+<section class="pt-12 sm:pt-16 pb-10 sm:pb-12 bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-950 text-white relative">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <!-- Breadcrumb -->
         <nav class="flex items-center gap-2 text-xs text-emerald-300/80 mb-2">

@@ -210,7 +210,7 @@
                 <div class="section-divider"></div>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {{-- Letak Geografis --}}
                 <div class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-forest-200 hover:shadow-md transition-all duration-300">
                     <div class="flex items-center gap-3 mb-5 pb-4 border-b border-stone-100">

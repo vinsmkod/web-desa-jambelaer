@@ -13,16 +13,16 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[82vh] items-center gap-8">
 
             {{-- Left: Text Content --}}
-            <div class="relative z-10 py-24 lg:py-20 flex flex-col justify-center">
+            <div class="relative z-10 py-12 sm:py-16 lg:py-20 flex flex-col justify-center">
 
                 {{-- Kop Surat Badge --}}
                 <div class="inline-flex items-center gap-2 mb-6 w-fit">
                     <div class="h-px w-8 bg-sand-400"></div>
-                    <span class="text-[11px] font-bold tracking-[0.2em] uppercase text-sand-400">Portal Resmi · Kec. Dawuan · Kab. Subang</span>
+                    <span class="text-[10px] sm:text-[11px] font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-sand-400">Portal Resmi · Kec. Dawuan · Kab. Subang</span>
                 </div>
 
                 {{-- Headline --}}
-                <h1 class="font-display font-extrabold text-4xl sm:text-5xl xl:text-6xl leading-[1.1] text-white">
+                <h1 class="font-display font-extrabold text-3xl sm:text-5xl xl:text-6xl leading-[1.1] text-white">
                     Desa Jambelaer,<br>
                     <span class="text-sand-300">Harmoni Alam</span><br>
                     <span class="text-white/60">& Budaya Sunda</span>
@@ -34,12 +34,12 @@
                 </p>
 
                 {{-- CTA --}}
-                <div class="mt-8 flex flex-col sm:flex-row gap-3 w-fit">
-                    <a href="{{ route('tentang') }}" class="btn-primary group">
+                <div class="mt-8 flex flex-col sm:flex-row gap-3 w-full sm:w-fit">
+                    <a href="{{ route('tentang') }}" class="btn-primary group w-full sm:w-auto text-center justify-center">
                         Profil Desa
                         <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform"></i>
                     </a>
-                    <a href="{{ route('umkm') }}" class="btn-secondary !border-white/20 !text-white/70 hover:!bg-white/10 hover:!text-white hover:!border-white/30">
+                    <a href="{{ route('umkm') }}" class="btn-secondary !border-white/20 !text-white/70 hover:!bg-white/10 hover:!text-white hover:!border-white/30 w-full sm:w-auto text-center justify-center">
                         Produk UMKM
                     </a>
                 </div>

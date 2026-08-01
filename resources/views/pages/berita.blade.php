@@ -4,7 +4,7 @@
 @section('meta_desc', 'Kumpulan berita resmi, pengumuman publik, dan warta kegiatan terkini dari Pemerintah Desa Jambelaer, Subang.')
 
 @section('content')
-<div class="pt-28 pb-24 bg-gradient-to-b from-ivory to-white">
+<div class="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-gradient-to-b from-ivory to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- ── Section Header ───────────────────────────────────────────── -->

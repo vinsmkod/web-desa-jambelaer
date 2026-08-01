@@ -77,97 +77,12 @@
                 </div>
             </div>
             @empty
-            {{-- Fallback Destinasi 1: Curug Cipeuteuy --}}
-            <div class="wisata-card card-village overflow-hidden flex flex-col h-full" data-category="alam">
-                <div class="relative aspect-16/10 overflow-hidden bg-slate-100 flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80" alt="Curug Cipeuteuy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                    <span class="absolute top-4 left-4 text-[10px] font-bold text-forest-800 bg-forest-50 border border-forest-200/60 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                        Wisata Alam
-                    </span>
+            <div class="sm:col-span-2 lg:col-span-3 text-center py-16 bg-stone-50 rounded-2xl border border-stone-100">
+                <div class="w-14 h-14 mx-auto rounded-full bg-forest-50 text-forest-700 flex items-center justify-center mb-3">
+                    <i data-lucide="map-pin-off" class="w-7 h-7"></i>
                 </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="flex items-center gap-1 text-[11px] text-sand-500 font-semibold uppercase tracking-wider">
-                        <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
-                        <span>HTM: Rp 10.000</span>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-forest-900 mt-2 line-clamp-1">Curug Cipeuteuy</h3>
-                    <p class="text-stone-500 text-sm font-light leading-relaxed mt-2 line-clamp-2">Air terjun alami dengan air pegunungan yang sangat jernih dan dikelilingi hutan pinus yang asri.</p>
-                    <div class="flex items-center gap-1.5 text-xs text-stone-400 mt-4">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-stone-300 flex-shrink-0"></i>
-                        <span class="truncate">Dusun Cikondang, Desa Jambelaer</span>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between mt-auto">
-                        <span class="text-xs text-stone-400 font-medium flex items-center gap-1">
-                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> 08:00 - 17:00 WIB
-                        </span>
-                        <a href="#" class="inline-flex items-center text-xs font-bold text-forest-700 hover:text-forest-900 group">
-                            Lihat Detail 
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Fallback Destinasi 2: Kebun Teh Jambelaer --}}
-            <div class="wisata-card card-village overflow-hidden flex flex-col h-full" data-category="alam">
-                <div class="relative aspect-16/10 overflow-hidden bg-slate-100 flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1555899434-94d1368aa7af?auto=format&fit=crop&w=800&q=80" alt="Kebun Teh" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                    <span class="absolute top-4 left-4 text-[10px] font-bold text-forest-800 bg-forest-50 border border-forest-200/60 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                        Wisata Alam
-                    </span>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="flex items-center gap-1 text-[11px] text-sand-500 font-semibold uppercase tracking-wider">
-                        <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
-                        <span>HTM: Gratis</span>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-forest-900 mt-2 line-clamp-1">Perkebunan Teh Hijau</h3>
-                    <p class="text-stone-500 text-sm font-light leading-relaxed mt-2 line-clamp-2">Hamparan bukit kebun teh hijau yang menyejukkan mata dengan udara pagi yang sangat segar.</p>
-                    <div class="flex items-center gap-1.5 text-xs text-stone-400 mt-4">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-stone-300 flex-shrink-0"></i>
-                        <span class="truncate">Dusun Babakan, Desa Jambelaer</span>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between mt-auto">
-                        <span class="text-xs text-stone-400 font-medium flex items-center gap-1">
-                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> 24 Jam
-                        </span>
-                        <a href="#" class="inline-flex items-center text-xs font-bold text-forest-700 hover:text-forest-900 group">
-                            Lihat Detail 
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Fallback Destinasi 3: Kampung Adat Sunda --}}
-            <div class="wisata-card card-village overflow-hidden flex flex-col h-full" data-category="budaya">
-                <div class="relative aspect-16/10 overflow-hidden bg-slate-100 flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80" alt="Kampung Budaya" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
-                    <span class="absolute top-4 left-4 text-[10px] font-bold text-forest-800 bg-forest-50 border border-forest-200/60 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                        Wisata Budaya
-                    </span>
-                </div>
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="flex items-center gap-1 text-[11px] text-sand-500 font-semibold uppercase tracking-wider">
-                        <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
-                        <span>HTM: Sukarela</span>
-                    </div>
-                    <h3 class="font-display font-bold text-xl text-forest-900 mt-2 line-clamp-1">Kampung Restorasi Budaya</h3>
-                    <p class="text-stone-500 text-sm font-light leading-relaxed mt-2 line-clamp-2">Pusat pelestarian adat istiadat, kerajinan anyaman bambu, dan pertunjukan seni musik tradisional Sunda.</p>
-                    <div class="flex items-center gap-1.5 text-xs text-stone-400 mt-4">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-stone-300 flex-shrink-0"></i>
-                        <span class="truncate">Kampung Gede, Desa Jambelaer</span>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between mt-auto">
-                        <span class="text-xs text-stone-400 font-medium flex items-center gap-1">
-                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> 09:00 - 16:00 WIB
-                        </span>
-                        <a href="#" class="inline-flex items-center text-xs font-bold text-forest-700 hover:text-forest-900 group">
-                            Lihat Detail 
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1"></i>
-                        </a>
-                    </div>
-                </div>
+                <h3 class="font-display font-bold text-lg text-stone-800">Belum Ada Destinasi Wisata</h3>
+                <p class="text-stone-500 text-sm mt-1">Data destinasi wisata belum tersedia di database saat ini.</p>
             </div>
             @endforelse
         </div>
