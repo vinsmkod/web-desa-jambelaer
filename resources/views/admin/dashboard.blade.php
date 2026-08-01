@@ -35,8 +35,8 @@
 
             <div class="flex items-center gap-3 flex-wrap flex-shrink-0">
                 <div class="hidden sm:block text-right mr-2">
-                    <p class="text-xs text-white/50 font-light">{{ now()->translatedFormat('l, d F Y') }}</p>
-                    <p class="text-sm font-mono font-bold text-amber-300">{{ now()->format('H:i') }} WIB</p>
+                    <p class="text-xs text-white/60 font-medium">{{ now()->translatedFormat('l, d F Y') }}</p>
+                    <p class="text-sm font-mono font-bold text-amber-300 tracking-wider" id="live-clock">{{ now()->format('H:i:s') }} WIB</p>
                 </div>
                 <a href="{{ route('home') }}" target="_blank"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-all border border-white/20 backdrop-blur-sm shadow-xs">
@@ -469,5 +469,18 @@
             }
         });
     });
+
+    // Real-time clock update (WIB)
+    function updateDashboardClock() {
+        const now = new Date();
+        // Convert to Asia/Jakarta time (UTC+7)
+        const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const timeString = new Intl.DateTimeFormat('en-GB', options).format(now).replace(/:/g, ':');
+        const clockEl = document.getElementById('live-clock');
+        if (clockEl) {
+            clockEl.textContent = timeString + ' WIB';
+        }
+    }
+    setInterval(updateDashboardClock, 1000);
 </script>
 @endpush

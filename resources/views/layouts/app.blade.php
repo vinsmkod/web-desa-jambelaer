@@ -267,14 +267,14 @@
                 </div>
             </div>
         </div>
-        </div>
-        </div>
     </header>
 
     <!-- ══════════════════════════ PAGE CONTENT ══════════════════════════ -->
-    <main class="pt-[96px]">
+    <main class="pt-[110px]">
         @yield('content')
     </main>
+
+
 
     <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
     <footer class="bg-forest-900 text-white mt-16 rounded-none overflow-hidden">

@@ -31,13 +31,19 @@ class DashboardController extends Controller
         $pesan_terbaru   = Pesan::latest()->take(5)->get();
         $produk_terbaru  = Produk::latest()->take(5)->get();
 
-        // Chart data: pesan per hari 7 hari terakhir
+        // Chart data: pesan per hari 7 hari terakhir — single query
+        $startDate = now()->subDays(6)->startOfDay();
+        $rawChart  = Pesan::selectRaw('DATE(created_at) as tgl, COUNT(*) as total')
+            ->where('created_at', '>=', $startDate)
+            ->groupBy('tgl')
+            ->pluck('total', 'tgl');
+
         $chart_labels = [];
         $chart_data   = [];
         for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
+            $date           = now()->subDays($i);
             $chart_labels[] = $date->translatedFormat('D');
-            $chart_data[]   = Pesan::whereDate('created_at', $date->toDateString())->count();
+            $chart_data[]   = $rawChart[$date->toDateString()] ?? 0;
         }
 
         return view('admin.dashboard', compact(

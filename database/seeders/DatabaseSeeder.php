@@ -7,6 +7,7 @@ use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\Budaya;
 use App\Models\Berita;
+use App\Models\Wisata;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -305,6 +306,84 @@ class DatabaseSeeder extends Seeder
 
         foreach ($beritaList as $br) {
             Berita::updateOrCreate(['slug' => $br['slug']], $br);
+        }
+
+        // ── Wisata ──────────────────────────────────────────────────────────
+        $wisataList = [
+            [
+                'nama'             => 'Curug Cipeuteuy',
+                'slug'             => 'curug-cipeuteuy',
+                'kategori'         => 'alam',
+                'ringkasan'        => 'Air terjun alami dengan air pegunungan yang sangat jernih dan dikelilingi hutan pinus yang asri.',
+                'deskripsi'        => "Curug Cipeuteuy adalah salah satu permata tersembunyi Desa Jambelaer yang menawarkan keindahan air terjun alami setinggi kurang lebih 15 meter. Air yang mengalir berasal langsung dari sumber mata air pegunungan Subang yang bersih dan jernih sepanjang tahun.\n\nLokasinya yang masih asri dikelilingi pepohonan pinus dan rerumputan hijau menjadikan suasana di sekitar curug sangat sejuk dan menyegarkan. Pengunjung dapat menikmati pemandangan alam, berendam di kolam alami, atau sekadar berfoto dengan latar belakang air terjun yang indah.\n\nUntuk mencapai curug, pengunjung perlu berjalan kaki sekitar 20–30 menit menyusuri jalan setapak di antara kebun dan hutan kecil. Pemandu lokal tersedia bagi yang membutuhkan panduan perjalanan.",
+                'alamat'           => 'Dusun Cikondang, Desa Jambelaer',
+                'maps_iframe'      => null,
+                'gambar'           => 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=1200&q=80',
+                'harga_tiket'      => 'Rp 10.000',
+                'jam_operasional'  => '08:00 - 17:00 WIB',
+                'urutan'           => 1,
+                'is_active'        => true,
+            ],
+            [
+                'nama'             => 'Perkebunan Teh Hijau',
+                'slug'             => 'perkebunan-teh-hijau',
+                'kategori'         => 'alam',
+                'ringkasan'        => 'Hamparan bukit kebun teh hijau yang menyejukkan mata dengan udara pagi yang sangat segar dan pemandangan indah.',
+                'deskripsi'        => "Perkebunan Teh Hijau Jambelaer membentang luas di lereng bukit desa dengan panorama berbukit-bukit yang memesona. Hamparan tanaman teh yang tertata rapi menjadi latar belakang foto yang sangat populer di kalangan wisatawan alam.\n\nPada pagi hari, kabut tipis menyelimuti perkebunan menciptakan suasana yang magis dan romantis. Pengunjung dapat menyaksikan langsung proses petik teh oleh para petani lokal, belajar cara penyortiran daun teh, hingga mencicipi teh hijau segar yang baru dipetik.\n\nKawasan perkebunan juga menyediakan jalur trekking ringan yang cocok untuk keluarga. Warung kecil di pinggir kebun menjual minuman teh hangat dan camilan tradisional.",
+                'alamat'           => 'Dusun Babakan, Desa Jambelaer',
+                'maps_iframe'      => null,
+                'gambar'           => 'https://images.unsplash.com/photo-1555899434-94d1368aa7af?auto=format&fit=crop&w=1200&q=80',
+                'harga_tiket'      => 'Gratis',
+                'jam_operasional'  => '24 Jam',
+                'urutan'           => 2,
+                'is_active'        => true,
+            ],
+            [
+                'nama'             => 'Kampung Restorasi Budaya',
+                'slug'             => 'kampung-restorasi-budaya',
+                'kategori'         => 'budaya',
+                'ringkasan'        => 'Pusat pelestarian adat istiadat, kerajinan anyaman bambu, dan pertunjukan seni musik tradisional Sunda.',
+                'deskripsi'        => "Kampung Restorasi Budaya adalah inisiatif warga Desa Jambelaer untuk melestarikan kekayaan budaya dan tradisi leluhur Sunda yang mulai tergerus zaman. Di sini, pengunjung dapat menyaksikan dan belajar langsung berbagai kesenian tradisional.\n\nKegiatannya meliputi workshop anyaman bambu oleh pengrajin sepuh, pertunjukan tari jaipongan, musik degung dan kecapi suling, serta pengenalan upacara adat Sunda seperti Mapag Sri dan Ruwatan Bumi.\n\nPengunjung juga dapat mencicipi kuliner tradisional Sunda yang dimasak menggunakan tungku kayu bakar, seperti nasi liwet, lalapan segar, dan sambal terasi khas desa. Tersedia paket kunjungan rombongan untuk sekolah dan instansi.",
+                'alamat'           => 'Kampung Gede, Desa Jambelaer',
+                'maps_iframe'      => null,
+                'gambar'           => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
+                'harga_tiket'      => 'Sukarela',
+                'jam_operasional'  => '09:00 - 16:00 WIB',
+                'urutan'           => 3,
+                'is_active'        => true,
+            ],
+            [
+                'nama'             => 'Sawah Terasering Indah',
+                'slug'             => 'sawah-terasering-indah',
+                'kategori'         => 'alam',
+                'ringkasan'        => 'Pemandangan sawah terasering berlapis yang memesona, sangat indah saat pagi hari dengan latar pegunungan.',
+                'deskripsi'        => "Sawah Terasering Indah Jambelaer adalah salah satu spot fotografi terbaik yang dimiliki desa. Petak-petak sawah yang tertata berlapis mengikuti kontur bukit menciptakan pola geometris alami yang sangat memukau, terutama saat padi sedang menghijau atau menguning.\n\nMoment terbaik mengunjungi lokasi ini adalah saat pagi hari ketika matahari terbit menyinari hamparan sawah dan pegunungan di kejauhan. Kabut pagi yang menggantung rendah menambah nuansa dramatis dan puitis.\n\nPetani setempat dengan senang hati berbagi cerita tentang sistem pertanian organik tradisional yang telah diwariskan turun-temurun. Pengunjung juga dapat mencoba pengalaman membajak sawah dengan cara tradisional.",
+                'alamat'           => 'Dusun Ciawi, Desa Jambelaer',
+                'maps_iframe'      => null,
+                'gambar'           => 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
+                'harga_tiket'      => 'Gratis',
+                'jam_operasional'  => '06:00 - 18:00 WIB',
+                'urutan'           => 4,
+                'is_active'        => true,
+            ],
+            [
+                'nama'             => 'Warung Kuliner Tradisional',
+                'slug'             => 'warung-kuliner-tradisional',
+                'kategori'         => 'kuliner',
+                'ringkasan'        => 'Menikmati cita rasa masakan khas Sunda otentik dengan bahan-bahan segar langsung dari ladang dan kebun warga desa.',
+                'deskripsi'        => "Wisata kuliner di Desa Jambelaer mengajak pengunjung merasakan kenikmatan masakan Sunda otentik yang dimasak langsung menggunakan bahan-bahan segar dari kebun dan ladang warga desa.\n\nMenu unggulan yang wajib dicoba antara lain: nasi liwet kukus dalam dandang bambu, pepes ikan mas bumbu rempah lokal, sayur asem segar dengan belimbing wuluh, lalapan aneka daun segar disertai sambal terasi bakar, hingga minuman tradisional seperti bandrek jahe dan bajigur aren.\n\nSuasana makan di pondok bambu di tepi sawah dengan pemandangan alam terbuka menjadi pengalaman tersendiri yang tak terlupakan. Tersedia paket makan keluarga dan rombongan dengan harga terjangkau.",
+                'alamat'           => 'Pusat Desa Jambelaer',
+                'maps_iframe'      => null,
+                'gambar'           => 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80',
+                'harga_tiket'      => 'Mulai Rp 25.000',
+                'jam_operasional'  => '07:00 - 20:00 WIB',
+                'urutan'           => 5,
+                'is_active'        => true,
+            ],
+        ];
+
+        foreach ($wisataList as $w) {
+            Wisata::updateOrCreate(['slug' => $w['slug']], $w);
         }
     }
 }

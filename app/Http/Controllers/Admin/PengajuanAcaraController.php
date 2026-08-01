@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pesan;
-use App\Models\Budaya;
 use Illuminate\Http\Request;
 
 class PengajuanAcaraController extends Controller
@@ -68,17 +67,13 @@ class PengajuanAcaraController extends Controller
     // Publikasikan acara
     public function publikasiAcara(Pesan $pesan, Request $request)
     {
-        // Ensure it's a pengajuan_acara and status is disetujui
+        // Pastikan hanya pengajuan acara yang disetujui yang bisa dipublikasikan
         if ($pesan->jenis_pesan !== 'pengajuan_acara' || $pesan->status !== 'disetujui') {
             return back()->with('error', 'Hanya pengajuan acara yang disetujui yang dapat dipublikasikan.');
         }
 
         try {
-            // Update pesan flag
             $pesan->update(['dipublikasikan' => true]);
-
-            // Bersihkan jika ada entri di budaya dengan kategori 'Acara Desa'
-            Budaya::where('title', $pesan->nama_acara)->where('kategori', 'Acara Desa')->delete();
 
             return back()->with('success', 'Acara berhasil dipublikasikan ke halaman agenda acara.');
         } catch (\Exception $e) {

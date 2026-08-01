@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class AdminManagementController extends Controller
@@ -29,7 +30,6 @@ class AdminManagementController extends Controller
 
     /**
      * Mendaftarkan admin baru ke dalam tabel users.
-     * Menggunakan validasi ketat untuk mencegah registrasi jika password tidak cocok atau tidak memenuhi kriteria.
      */
     public function store(Request $request)
     {
@@ -60,5 +60,75 @@ class AdminManagementController extends Controller
 
         return redirect()->route('admin.kelola-admin.index')
             ->with('success', 'Admin baru berhasil didaftarkan!');
+    }
+
+    /**
+     * Menampilkan form edit data admin / reset password.
+     */
+    public function edit(User $admin)
+    {
+        return view('admin.kelola-admin.edit', compact('admin'));
+    }
+
+    /**
+     * Memperbarui data admin atau mereset password.
+     */
+    public function update(Request $request, User $admin)
+    {
+        $rules = [
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($admin->id)],
+        ];
+
+        $messages = [
+            'name.required'      => 'Nama admin wajib diisi.',
+            'name.max'           => 'Nama admin maksimal 255 karakter.',
+            'email.required'     => 'Email wajib diisi.',
+            'email.email'        => 'Format email tidak valid.',
+            'email.unique'       => 'Email ini sudah digunakan oleh admin lain.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ];
+
+        if ($request->filled('password')) {
+            $rules['password'] = [
+                'string',
+                Password::min(8)->letters()->numbers(),
+                'confirmed'
+            ];
+        }
+
+        $request->validate($rules, $messages);
+
+        $admin->name  = $request->name;
+        $admin->email = $request->email;
+
+        if ($request->filled('password')) {
+            $admin->password = Hash::make($request->password);
+        }
+
+        $admin->save();
+
+        return redirect()->route('admin.kelola-admin.index')
+            ->with('success', 'Data administrator (' . $admin->name . ') berhasil diperbarui!');
+    }
+
+    /**
+     * Menghapus akun admin.
+     */
+    public function destroy(User $admin)
+    {
+        if ($admin->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif.');
+        }
+
+        if (User::count() <= 1) {
+            return back()->with('error', 'Sistem harus memiliki minimal 1 administrator aktif.');
+        }
+
+        $name = $admin->name;
+        $admin->delete();
+
+        return redirect()->route('admin.kelola-admin.index')
+            ->with('success', 'Akun administrator "' . $name . '" berhasil dihapus.');
     }
 }

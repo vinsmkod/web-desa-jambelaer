@@ -8,7 +8,7 @@
 {{-- ══════════════════════════════════════════════════════════════════
      PAGE HEADER BANNER
 ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-6 shadow-sm">
+<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="{{ asset('uploads/img/beranda.jpeg') }}"
          alt="Galeri Desa Jambelaer" class="w-full h-full object-cover opacity-70">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-forest-900/20"></div>

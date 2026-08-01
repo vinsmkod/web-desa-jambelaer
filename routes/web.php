@@ -250,7 +250,10 @@ Route::get('/berita', function () {
 // Berita – Detail Artikel
 Route::get('/berita/{slug}', function ($slug) {
     $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
-    $berita->increment('views');
+    // Hanya hitung views dari pengunjung publik, bukan admin yang sedang login
+    if (!auth()->check()) {
+        $berita->increment('views');
+    }
 
     $rekomendasi = Berita::where('is_published', true)
         ->where('id', '!=', $berita->id)
@@ -318,9 +321,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Berita CRUD
         Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
 
-        // Kelola Admin (Hanya Tambah & Lihat)
+        // Kelola Admin CRUD
         Route::get('/kelola-admin', [AdminManagementController::class, 'index'])->name('kelola-admin.index');
         Route::get('/kelola-admin/create', [AdminManagementController::class, 'create'])->name('kelola-admin.create');
         Route::post('/kelola-admin', [AdminManagementController::class, 'store'])->name('kelola-admin.store');
+        Route::get('/kelola-admin/{admin}/edit', [AdminManagementController::class, 'edit'])->name('kelola-admin.edit');
+        Route::put('/kelola-admin/{admin}', [AdminManagementController::class, 'update'])->name('kelola-admin.update');
+        Route::delete('/kelola-admin/{admin}', [AdminManagementController::class, 'destroy'])->name('kelola-admin.destroy');
     });
 });

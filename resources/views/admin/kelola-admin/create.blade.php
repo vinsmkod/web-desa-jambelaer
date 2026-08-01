@@ -13,10 +13,6 @@
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
             Kembali ke Daftar Admin
         </a>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-            <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
-            Aksi Edit & Hapus Dinonaktifkan
-        </span>
     </div>
 
     <!-- Main Form Card -->

@@ -35,6 +35,7 @@ class BeritaController extends Controller
     {
         $request->validate([
             'judul'        => ['required', 'string', 'max:255'],
+            'kategori'     => ['required', 'string', 'in:' . implode(',', array_keys(Berita::kategoriList()))],
             'penulis'      => ['required', 'string', 'max:100'],
             'ringkasan'    => ['nullable', 'string', 'max:500'],
             'konten'       => ['required', 'string'],
@@ -65,7 +66,7 @@ class BeritaController extends Controller
         Berita::create([
             'judul'        => $request->judul,
             'slug'         => $slug,
-            'kategori'     => 'umum',
+            'kategori'     => $request->kategori,
             'penulis'      => $request->penulis,
             'ringkasan'    => $request->ringkasan ?: Str::limit(strip_tags($request->konten), 150),
             'konten'       => $request->konten,
@@ -93,6 +94,7 @@ class BeritaController extends Controller
     {
         $request->validate([
             'judul'        => ['required', 'string', 'max:255'],
+            'kategori'     => ['required', 'string', 'in:' . implode(',', array_keys(Berita::kategoriList()))],
             'penulis'      => ['required', 'string', 'max:100'],
             'ringkasan'    => ['nullable', 'string', 'max:500'],
             'konten'       => ['required', 'string'],
@@ -126,6 +128,7 @@ class BeritaController extends Controller
         }
 
         $berita->judul        = $request->judul;
+        $berita->kategori     = $request->kategori;
         $berita->penulis      = $request->penulis;
         $berita->ringkasan    = $request->ringkasan ?: Str::limit(strip_tags($request->konten), 150);
         $berita->konten       = $request->konten;

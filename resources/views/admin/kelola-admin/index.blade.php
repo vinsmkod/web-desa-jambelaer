@@ -2,7 +2,7 @@
 
 @section('title', 'Kelola Admin')
 @section('page_title', 'Kelola Admin')
-@section('page_subtitle', 'Mendaftarkan dan melihat daftar administrator sistem')
+@section('page_subtitle', 'Mendaftarkan, mengedit, dan mereset password administrator sistem')
 
 @section('content')
 <div class="space-y-6">
@@ -15,7 +15,7 @@
             </div>
             <div>
                 <h2 class="text-base font-bold text-slate-900">Daftar Administrator Sistem</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Admin yang aktif dapat **mendaftarkan admin baru** dan melihat daftar akun administrator terdaftar.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Admin dapat mendaftarkan admin baru, mengedit data, atau mereset password admin lain jika lupa password.</p>
             </div>
         </div>
         <a href="{{ route('admin.kelola-admin.create') }}" class="btn-primary flex-shrink-0 text-xs py-2.5 px-4">
@@ -36,9 +36,9 @@
                     <p class="text-xs text-slate-400">Total {{ $admins->count() }} akun administrator aktif</p>
                 </div>
             </div>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 w-fit">
-                <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
-                Fitur Edit & Hapus Dinonaktifkan
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 w-fit">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                Akses Kelola Admin Aktif
             </span>
         </div>
 
@@ -81,10 +81,25 @@
                             {{ $admin->created_at ? $admin->created_at->translatedFormat('d M Y, H:i') : '-' }}
                         </td>
                         <td class="py-4 px-4 text-right">
-                            <span class="inline-flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200" title="Aksi ubah & hapus tidak diperbolehkan">
-                                <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
-                                Terkunci
-                            </span>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ route('admin.kelola-admin.edit', $admin->id) }}"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-forest-50 text-forest-700 border border-forest-200 text-xs font-semibold hover:bg-forest-100 transition-all"
+                                   title="Edit Data & Reset Password">
+                                    <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+                                    <span>Edit / Reset Pass</span>
+                                </a>
+
+                                @if($admin->id !== auth()->id() && $admins->count() > 1)
+                                <form action="{{ route('admin.kelola-admin.destroy', $admin->id) }}" method="POST"
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin {{ $admin->name }}?')" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1.5 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all" title="Hapus Admin">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty

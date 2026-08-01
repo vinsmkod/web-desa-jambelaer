@@ -34,11 +34,13 @@ class Pesan extends Model
     ];
 
     /**
-     * Hapus otomatis pengajuan acara yang tanggalnya sudah melewati hari ini (expired/lewat hari)
+     * Hapus otomatis pengajuan acara yang sudah disetujui & tanggalnya sudah lewat.
+     * Acara berstatus 'menunggu' atau 'ditolak' tetap disimpan sebagai history.
      */
     public static function cleanupExpiredAcara()
     {
         static::where('jenis_pesan', 'pengajuan_acara')
+            ->where('status', 'disetujui')
             ->whereNotNull('tanggal_acara')
             ->whereDate('tanggal_acara', '<', now()->toDateString())
             ->delete();
