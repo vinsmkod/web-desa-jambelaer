@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PengajuanAcaraController;
 use App\Http\Controllers\Admin\GaleriController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\BeritaController;
+use App\Http\Controllers\Admin\WisataController;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
@@ -20,6 +21,7 @@ use App\Models\Budaya;
 use App\Models\Galeri;
 use App\Models\Pesan;
 use App\Models\Berita;
+use App\Models\Wisata;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
@@ -165,6 +167,23 @@ Route::get('/budaya/{id}', function ($id) {
     return view('pages.budaya-detail', compact('budaya', 'rekomendasi'));
 })->name('budaya.detail');
 
+// Wisata
+Route::get('/wisata', function () {
+    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
+    $kategoriList = Wisata::kategoriList();
+    return view('pages.wisata', compact('wisatas', 'kategoriList'));
+})->name('wisata');
+
+Route::get('/wisata/{slug}', function ($slug) {
+    $wisata = Wisata::where('slug', $slug)->where('is_active', true)->firstOrFail();
+    $rekomendasi = Wisata::where('is_active', true)
+        ->where('id', '!=', $wisata->id)
+        ->orderBy('urutan')
+        ->take(3)
+        ->get();
+    return view('pages.wisata-detail', compact('wisata', 'rekomendasi'));
+})->name('wisata.detail');
+
 // Galeri – Daftar foto galeri desa
 Route::get('/galeri', function () {
     $galeris      = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
@@ -292,6 +311,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Budaya CRUD
         Route::resource('budaya', BudayaController::class);
+
+        // Wisata CRUD
+        Route::resource('wisata', WisataController::class)->parameters(['wisata' => 'wisata']);
 
         // Berita CRUD
         Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);

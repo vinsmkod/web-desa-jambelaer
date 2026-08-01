@@ -147,6 +147,12 @@
                 <span>Budaya Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Budaya::count() }}</span>
             </a>
+            <a href="{{ route('admin.wisata.index') }}"
+               class="sidebar-link {{ request()->routeIs('admin.wisata.*') ? 'active' : '' }}">
+                <i data-lucide="compass" class="icon"></i>
+                <span>Wisata Desa</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Wisata::count() }}</span>
+            </a>
             <a href="{{ route('admin.galeri.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
                 <i data-lucide="image" class="icon"></i>
