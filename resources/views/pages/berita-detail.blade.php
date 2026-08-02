@@ -14,13 +14,8 @@
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             <a href="{{ route('berita') }}" class="hover:text-white transition-colors">Berita</a>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-            <span class="text-slate-300 truncate max-w-xs">{{ $berita->kategori_label }}</span>
+            <span class="text-slate-300 truncate max-w-xs">{{ Str::limit($berita->judul, 30) }}</span>
         </nav>
-
-        <!-- Category Badge -->
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-800/80 text-emerald-300 border border-emerald-700/50">
-            {{ $berita->kategori_label }}
-        </span>
 
         <!-- Article Title -->
         <h1 class="font-display font-extrabold text-2xl sm:text-4xl text-white leading-tight tracking-tight">
@@ -108,9 +103,6 @@
                                 <img src="{{ $rek->gambar_url }}" alt="{{ $rek->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             </div>
                             <div class="flex-1 min-w-0 space-y-1">
-                                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 block">
-                                    {{ $rek->kategori_label }}
-                                </span>
                                 <h4 class="font-semibold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
                                     {{ $rek->judul }}
                                 </h4>

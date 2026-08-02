@@ -291,6 +291,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             lucide.createIcons();
+
+            // Auto-logout jika admin tidak aktif (idle)
+            const timeoutMinutes = {{ (int) env('ADMIN_SESSION_TIMEOUT', 15) }};
+            const timeoutMs = timeoutMinutes * 60 * 1000;
+            let idleTimer;
+
+            function resetIdleTimer() {
+                clearTimeout(idleTimer);
+                idleTimer = setTimeout(function() {
+                    window.location.reload();
+                }, timeoutMs);
+            }
+
+            ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(evt) {
+                window.addEventListener(evt, resetIdleTimer, { passive: true });
+            });
+
+            resetIdleTimer();
         });
 
         function toggleSidebar() {

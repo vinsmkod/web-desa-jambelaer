@@ -72,7 +72,7 @@
                     <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
                         <span class="text-lg font-extrabold font-display text-sand-700">{{ $product->price }}</span>
                         @php
-                            $rawWa = $product->no_whatsapp_umkm ?: \App\Models\Pengaturan::get('sosmed_whatsapp', \App\Models\Pengaturan::get('kontak_telp', ''));
+                            $rawWa = $product->no_whatsapp_umkm ?: \App\Models\Pengaturan::get('sosmed_whatsapp', \App\Models\Pengaturan::get('desa_telepon', ''));
                             $waClean = preg_replace('/[^0-9]/', '', $rawWa);
                             if (str_starts_with($waClean, '0')) {
                                 $waClean = '62' . substr($waClean, 1);

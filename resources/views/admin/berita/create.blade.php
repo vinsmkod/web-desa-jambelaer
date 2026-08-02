@@ -76,27 +76,6 @@
                 @enderror
             </div>
 
-            <!-- Kategori Berita -->
-            <div>
-                <label for="kategori" class="form-label">Kategori Berita <span class="text-red-500">*</span></label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i data-lucide="tag" class="w-5 h-5"></i>
-                    </div>
-                    <select name="kategori" id="kategori" required
-                        class="form-input !pl-12 @error('kategori') border-red-400 @enderror">
-                        @foreach(App\Models\Berita::kategoriList() as $key => $label)
-                            <option value="{{ $key }}" {{ old('kategori', 'pengumuman') === $key ? 'selected' : '' }}>
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                @error('kategori')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
             <!-- Upload Gambar Berita -->
             <div>
                 <label for="gambar" class="form-label">Foto Utama / Banner Berita <span class="text-slate-400 font-normal text-xs">(Opsional, max 3MB)</span></label>

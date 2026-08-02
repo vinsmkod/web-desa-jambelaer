@@ -10,12 +10,12 @@
 ══════════════════════════════════════════════════════════════════ --}}
 <div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="{{ asset('uploads/img/sawah.jpeg') }}"
-        alt="Desa Jambelaer" class="w-full h-full object-cover opacity-70">
-    <div class="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-forest-900/20"></div>
+        alt="Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Tentang Kami</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Mengenal Desa Jambelaer</h1>
-        <p class="text-sm text-white/50 mt-2 font-light max-w-md">Kecamatan Dawuan, Kabupaten Subang, Jawa Barat</p>
+        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Kecamatan Dawuan, Kabupaten Subang, Jawa Barat</p>
     </div>
 </div>
 
@@ -407,14 +407,14 @@
         {{-- ══════════════════════════════════════════════════════════
              PETA LOKASI
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-16 reveal-on-scroll">
-            <div class="text-center mb-10">
+        <div class="py-14 reveal-on-scroll">
+            <div class="text-center mb-8">
                 <span class="section-label">Peta Wilayah</span>
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Lokasi Kantor Desa</h2>
                 <div class="section-divider"></div>
             </div>
 
-            <div class="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm max-w-4xl mx-auto">
+            <div class="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm max-w-5xl mx-auto">
                 <div class="h-80 sm:h-[420px] rounded-xl overflow-hidden">
                     <iframe
                         src="{{ !empty($mapsUrl) ? $mapsUrl : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.262529813204!2d107.6761505!3d-6.6124570!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sid!2sid!4v1720894000000!5m2!1sid!2sid' }}"

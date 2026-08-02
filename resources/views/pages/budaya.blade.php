@@ -10,12 +10,12 @@
 ══════════════════════════════════════════════════════════════════ --}}
 <div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="{{ asset('uploads/img/budaya.webp') }}"
-        alt="Budaya Sunda Desa Jambelaer" class="w-full h-full object-cover opacity-70">
-    <div class="absolute inset-0 bg-gradient-to-t from-forest-900/80 to-forest-900/20"></div>
+        alt="Budaya Sunda Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Kearifan Sunda</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Pelestarian Seni & Tradisi</h1>
-        <p class="text-sm text-white/50 mt-2 font-light max-w-md">Merawat tradisi leluhur sebagai pilar identitas dan falsafah hidup</p>
+        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Merawat tradisi leluhur sebagai pilar identitas dan falsafah hidup</p>
     </div>
 </div>
 

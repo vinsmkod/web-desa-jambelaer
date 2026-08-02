@@ -4,18 +4,23 @@
 @section('meta_desc', 'Kumpulan berita resmi, pengumuman publik, dan warta kegiatan terkini dari Pemerintah Desa Jambelaer, Subang.')
 
 @section('content')
-<div class="pt-10 sm:pt-14 pb-16 sm:pb-24 bg-gradient-to-b from-ivory to-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- ── Section Header ───────────────────────────────────────────── -->
-        <div class="text-center max-w-3xl mx-auto mb-10 reveal-on-scroll">
-            <span class="text-xs font-bold tracking-widest uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Warta Resmi Desa</span>
-            <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-emerald-950 mt-3">Berita &amp; Kabar Desa Jambelaer</h1>
-            <p class="mt-4 text-slate-500 font-light text-sm sm:text-base">
-                Dapatkan informasi transparan mengenai program pembangunan, kegiatan kemasyarakatan, pengumuman penting, dan warta terbaru desa.
-            </p>
-            <div class="w-16 h-1 bg-gradient-to-r from-emerald-800 to-amber-600 mx-auto mt-4 rounded-full"></div>
-        </div>
+{{-- ══════════════════════════════════════════════════════════════════
+     PAGE HEADER BANNER
+══════════════════════════════════════════════════════════════════ --}}
+<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
+    <img src="{{ asset('uploads/img/beranda.jpeg') }}"
+         alt="Berita Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Warta Resmi Desa</span>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Berita & Kabar Desa</h1>
+        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Informasi resmi program pembangunan, kegiatan masyarakat, dan pengumuman desa</p>
+    </div>
+</div>
+
+<div class="bg-white pb-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <!-- ── News Cards Grid ────────────────────────────────────────── -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-on-scroll">
             @forelse($beritas as $item)

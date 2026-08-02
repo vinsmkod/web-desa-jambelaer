@@ -15,7 +15,6 @@ class Berita extends Model
     protected $fillable = [
         'judul',
         'slug',
-        'kategori',
         'ringkasan',
         'konten',
         'gambar',
@@ -50,35 +49,6 @@ class Berita extends Model
 
         // Gambar fallback default Unsplash berkualitas tinggi
         return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80';
-    }
-
-    /**
-     * Label kategori yang ramah dibaca.
-     */
-    public function getKategoriLabelAttribute(): string
-    {
-        return match($this->kategori) {
-            'pemerintahan'    => 'Pemerintahan',
-            'pembangunan'     => 'Pembangunan',
-            'kegiatan_warga'  => 'Kegiatan Warga',
-            'pengumuman'      => 'Pengumuman',
-            'informasi_publik'=> 'Informasi Publik',
-            default           => ucfirst(str_replace('_', ' ', $this->kategori)),
-        };
-    }
-
-    /**
-     * Daftar opsi kategori berita.
-     */
-    public static function kategoriList(): array
-    {
-        return [
-            'pemerintahan'     => 'Pemerintahan',
-            'pembangunan'      => 'Pembangunan',
-            'kegiatan_warga'   => 'Kegiatan Warga',
-            'pengumuman'       => 'Pengumuman',
-            'informasi_publik' => 'Informasi Publik',
-        ];
     }
     /**
      * Override route model binding parameter name.

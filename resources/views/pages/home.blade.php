@@ -16,9 +16,15 @@
             <div class="relative z-10 py-12 sm:py-16 lg:py-20 flex flex-col justify-center">
 
                 {{-- Kop Surat Badge --}}
-                <div class="inline-flex items-center gap-2 mb-6 w-fit">
-                    <div class="h-px w-8 bg-sand-400"></div>
-                    <span class="text-[10px] sm:text-[11px] font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-sand-400">Portal Resmi · Kec. Dawuan · Kab. Subang</span>
+                <div class="mb-6 space-y-1">
+                    <div class="inline-flex items-center gap-2 w-fit">
+                        <div class="h-px w-8 bg-sand-400"></div>
+                        <span class="text-[10px] sm:text-[11px] font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase text-sand-400">WEBSITE RESMI PEMERINTAH DESA</span>
+                    </div>
+                    <div class="pl-10">
+                        <span class="block text-base sm:text-lg font-bold text-white tracking-wide">Desa Jambelaer</span>
+                        <span class="block text-xs sm:text-sm text-sand-300 font-medium tracking-wide">Kecamatan Dawuan • Kabupaten Subang</span>
+                    </div>
                 </div>
 
                 {{-- Headline --}}

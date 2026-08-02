@@ -250,9 +250,13 @@ Route::get('/berita', function () {
 // Berita – Detail Artikel
 Route::get('/berita/{slug}', function ($slug) {
     $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
-    // Hanya hitung views dari pengunjung publik, bukan admin yang sedang login
-    if (!auth()->check()) {
+
+    // Hitung views hanya dari pengunjung publik & cegah manipulasi spam refresh dalam 1 sesi
+    $sessionKey = 'viewed_berita_' . $berita->id;
+    if (!auth()->check() && !session()->has($sessionKey)) {
         $berita->increment('views');
+        $berita->views++; // Update angka views di memori agar langsung sesuai pada halaman
+        session()->put($sessionKey, true);
     }
 
     $rekomendasi = Berita::where('is_published', true)

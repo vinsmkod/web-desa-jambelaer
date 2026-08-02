@@ -16,6 +16,24 @@ class AdminAuth
                 ->with('error', 'Silakan login terlebih dahulu.');
         }
 
+        // Durasi timeout tidak aktif dalam menit (Default: 15 menit)
+        $timeoutMinutes = (int) env('ADMIN_SESSION_TIMEOUT', 15);
+        $timeoutSeconds = $timeoutMinutes * 60;
+        $lastActivity   = session('admin_last_activity');
+
+        if ($lastActivity && (time() - $lastActivity) > $timeoutSeconds) {
+            Auth::logout();
+            $request->session()->forget('admin_last_activity');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login')
+                ->with('error', "Sesi Anda telah berakhir karena tidak aktif selama {$timeoutMinutes} menit. Silakan login kembali.");
+        }
+
+        // Perbarui waktu aktivitas terakhir untuk request ini
+        session(['admin_last_activity' => time()]);
+
         return $next($request);
     }
 }

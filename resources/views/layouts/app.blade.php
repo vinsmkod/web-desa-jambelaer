@@ -214,7 +214,7 @@
                     </div>
                     <div class="leading-tight">
                         <span class="font-display font-extrabold text-base sm:text-lg tracking-tight text-forest-900 block leading-none">DESA JAMBELAER</span>
-                        <span class="text-[10px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5">Kec. Dawuan · Kab. Subang</span>
+                        <span class="text-[10px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5">Kecamatan Dawuan • Kabupaten Subang</span>
                     </div>
                 </a>
 
@@ -381,7 +381,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Alamat</span>
-                                <span class="text-sm text-white/60 font-light leading-relaxed">Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270</span>
+                                <span class="text-sm text-white/60 font-light leading-relaxed">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270') }}</span>
                             </div>
                         </li>
                         <li class="flex items-start space-x-3">
@@ -390,7 +390,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Telepon</span>
-                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
+                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
                             </div>
                         </li>
                         <li class="flex items-start space-x-3">
@@ -399,7 +399,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Email</span>
-                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
+                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
                             </div>
                         </li>
                         <li class="flex items-start space-x-3">
@@ -408,7 +408,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Jam Layanan</span>
-                                <span class="text-sm text-white/60 font-light">Sen – Jum: 08.00 – 15.30 WIB</span>
+                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin – Jumat: 08:00 – 15:30 WIB') }}</span>
                             </div>
                         </li>
                     </ul>

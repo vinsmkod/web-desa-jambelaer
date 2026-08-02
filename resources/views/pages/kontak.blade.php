@@ -10,12 +10,12 @@
 ══════════════════════════════════════════════════════════════════ --}}
 <div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-         alt="Kantor Desa Jambelaer" class="w-full h-full object-cover opacity-70">
-    <div class="absolute inset-0 bg-gradient-to-t from-forest-900 to-forest-900/50"></div>
+        alt="Kantor Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+    <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Layanan Informasi</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Hubungi Kantor Desa</h1>
-        <p class="text-sm text-white/50 mt-2 font-light max-w-md">Kami siap melayani pertanyaan, aspirasi, dan keperluan Anda</p>
+        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Kami siap melayani pertanyaan, aspirasi, dan keperluan Anda</p>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] font-bold tracking-widest uppercase text-forest-600 block">Alamat</span>
-                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">Jl. Raya Jambelaer, Dawuan, Subang 41270</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang 41270') }}</span>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-4 sm:p-5 bg-sand-50 border border-sand-100 rounded-xl">
@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] font-bold tracking-widest uppercase text-sand-600 block">Telepon</span>
-                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-4 sm:p-5 bg-stone-50 border border-stone-100 rounded-xl">
@@ -51,7 +51,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] font-bold tracking-widest uppercase text-stone-500 block">Email</span>
-                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block break-all">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block break-all">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
                     </div>
                 </div>
                 <div class="flex items-start gap-4 p-4 sm:p-5 bg-sky-50 border border-sky-100 rounded-xl">
@@ -60,7 +60,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] font-bold tracking-widest uppercase text-sky-600 block">Jam Layanan</span>
-                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">Sen–Jum: 08.00–15.30 WIB</span>
+                        <span class="text-sm text-stone-700 font-medium leading-snug mt-1 block">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin – Jumat: 08:00 – 15:30 WIB') }}</span>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Alamat Lengkap</span>
-                                <span class="text-sm text-white/70 font-light mt-1 block leading-relaxed">Jl. Raya Jambelaer No. 12, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block leading-relaxed">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer No. 12, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270') }}</span>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -94,7 +94,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Telepon / Fax</span>
-                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('kontak_telp', '(0260) 123456') }}</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -103,7 +103,7 @@
                             </div>
                             <div>
                                 <span class="text-[10px] text-sand-500 font-bold tracking-widest uppercase block">Email Resmi</span>
-                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('kontak_email', 'info@jambelaer-subang.desa.id') }}</span>
+                                <span class="text-sm text-white/70 font-light mt-1 block">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
                             </div>
                         </div>
                     </div>
@@ -135,20 +135,20 @@
                 <div class="bg-sand-50 border border-sand-100 rounded-xl p-6">
                     <h3 class="font-display font-bold text-sm text-forest-900 mb-4">Media Sosial Resmi Desa</h3>
                     @php
-                        $kIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
-                        $kYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
-                        $kTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
+                    $kIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
+                    $kYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
+                    $kTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
                     @endphp
                     <div class="flex flex-wrap gap-2">
                         @if($kIg)
                         <a href="{{ str_starts_with($kIg, 'http') ? $kIg : 'https://'.$kIg }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-pink-300 hover:text-pink-600 transition-all">
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-pink-300 hover:text-pink-600 transition-all">
                             <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
                         </a>
                         @endif
                         @if($kYt)
                         <a href="{{ str_starts_with($kYt, 'http') ? $kYt : 'https://'.$kYt }}" target="_blank" rel="noopener"
-                           class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-red-300 hover:text-red-600 transition-all">
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-stone-200 text-sm text-stone-700 hover:border-red-300 hover:text-red-600 transition-all">
                             <i data-lucide="youtube" class="w-4 h-4"></i> YouTube
                         </a>
                         @endif
@@ -217,11 +217,13 @@
                                 transition: border-color 0.2s, box-shadow 0.2s;
                                 appearance: none;
                             }
+
                             .input-village:focus {
                                 border-color: #1a4731;
-                                box-shadow: 0 0 0 3px rgba(26,71,49,0.08);
+                                box-shadow: 0 0 0 3px rgba(26, 71, 49, 0.08);
                                 background: #ffffff;
                             }
+
                             .label-float {
                                 position: absolute;
                                 left: 16px;
@@ -233,7 +235,10 @@
                                 color: #a8a29e;
                                 pointer-events: none;
                             }
-                            .input-wrap { position: relative; }
+
+                            .input-wrap {
+                                position: relative;
+                            }
                         </style>
 
                         {{-- Jenis Pesan --}}
@@ -335,14 +340,14 @@
         {{-- ══════════════════════════════════════════════════════════
              MAPS
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-10 border-t border-stone-100 reveal-on-scroll delay-100">
+        <div class="py-14 border-t border-stone-100 reveal-on-scroll delay-100">
             <div class="text-center mb-8">
                 <span class="section-label">Peta Lokasi</span>
-                <h2 class="font-display font-extrabold text-2xl text-forest-900 mt-3">Temukan Kami di Sini</h2>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Temukan Kami di Sini</h2>
                 <div class="section-divider"></div>
             </div>
-            <div class="bg-white border border-stone-200 rounded-xl p-3 shadow-sm max-w-5xl mx-auto">
-                <div class="h-80 sm:h-96 rounded-lg overflow-hidden">
+            <div class="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm max-w-5xl mx-auto">
+                <div class="h-80 sm:h-[420px] rounded-xl overflow-hidden">
                     <iframe
                         src="{{ !empty($mapsUrl) ? $mapsUrl : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.262529813204!2d107.6761755!3d-6.612457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sid!2sid!4v1720894000000!5m2!1sid!2sid' }}"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
@@ -352,7 +357,7 @@
                 <div class="flex items-center gap-3 px-3 pt-3 pb-1">
                     <i data-lucide="map-pin" class="w-4 h-4 text-forest-600 flex-shrink-0"></i>
                     <span class="text-xs text-stone-500 font-light">Jl. Raya Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
-                    <a href="https://maps.google.com" target="_blank" class="ml-auto text-[11px] text-forest-700 font-semibold hover:text-forest-500 whitespace-nowrap flex items-center gap-1">
+                    <a href="https://maps.google.com/?q=Kantor+Desa+Jambelaer" target="_blank" class="ml-auto text-[11px] text-forest-700 font-semibold hover:text-forest-500 whitespace-nowrap flex items-center gap-1">
                         Buka Maps <i data-lucide="external-link" class="w-3 h-3"></i>
                     </a>
                 </div>
@@ -398,12 +403,14 @@
 
     function hideAllDynamicFields() {
         [fieldEmail, fieldWhatsapp, fieldSubject, fieldEmailKerjaSama,
-         fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
-         fieldLokasiPeserta, fieldMessage].forEach(f => f.classList.add('hidden'));
+            fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
+            fieldLokasiPeserta, fieldMessage
+        ].forEach(f => f.classList.add('hidden'));
 
         [inputEmail, inputWhatsapp, inputSubject, inputEmailKS, inputInstansi,
-         inputNamaAcara, inputTanggalAcara, inputWaktuAcara,
-         inputLokasiAcara, inputJumlahPeserta, inputMessage].forEach(inp => {
+            inputNamaAcara, inputTanggalAcara, inputWaktuAcara,
+            inputLokasiAcara, inputJumlahPeserta, inputMessage
+        ].forEach(inp => {
             inp.removeAttribute('required');
             inp.disabled = true;
         });
@@ -480,41 +487,50 @@
         btnText.textContent = 'Mengirim...';
 
         fetch(form.action, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-            body: new FormData(form)
-        })
-        .then(response => {
-            return response.json().then(data => {
-                if (!response.ok) {
-                    if (data.errors && typeof data.errors === 'object') {
-                        const errorMsgs = Object.values(data.errors).flat();
-                        throw new Error(errorMsgs.join('<br>'));
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new FormData(form)
+            })
+            .then(response => {
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        if (data.errors && typeof data.errors === 'object') {
+                            const errorMsgs = Object.values(data.errors).flat();
+                            throw new Error(errorMsgs.join('<br>'));
+                        }
+                        throw new Error(data.message || 'Terjadi kesalahan saat memproses data.');
                     }
-                    throw new Error(data.message || 'Terjadi kesalahan saat memproses data.');
-                }
-                return data;
+                    return data;
+                });
+            })
+            .then(data => {
+                successBox.classList.remove('hidden');
+                form.reset();
+                updateFormFields();
+                successBox.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            })
+            .catch(err => {
+                errorBox.classList.remove('hidden');
+                const errors = err.message.split('<br>');
+                errors.forEach(errMsg => {
+                    const li = document.createElement('li');
+                    li.textContent = errMsg;
+                    errorList.appendChild(li);
+                });
+                submitBtn.disabled = false;
+                btnText.textContent = originalBtnText;
+                lucide.createIcons();
+                errorBox.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
             });
-        })
-        .then(data => {
-            successBox.classList.remove('hidden');
-            form.reset();
-            updateFormFields();
-            successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        })
-        .catch(err => {
-            errorBox.classList.remove('hidden');
-            const errors = err.message.split('<br>');
-            errors.forEach(errMsg => {
-                const li = document.createElement('li');
-                li.textContent = errMsg;
-                errorList.appendChild(li);
-            });
-            submitBtn.disabled = false;
-            btnText.textContent = originalBtnText;
-            lucide.createIcons();
-            errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
     });
 
     updateFormFields();
