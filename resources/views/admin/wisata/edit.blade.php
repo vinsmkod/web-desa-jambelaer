@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div class="max-w-3xl">
+<div class="max-w-3xl pb-12">
     <div class="mb-5">
         <a href="{{ route('admin.wisata.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
@@ -37,7 +37,7 @@
                     <select name="kategori" class="form-input" required>
                         <option value="" disabled>Pilih Kategori</option>
                         @foreach($categories as $key => $label)
-                            <option value="{{ $key }}" {{ old('kategori', $wisata->kategori) === $key ? 'selected' : '' }}>{{ $label }}</option>
+                        <option value="{{ $key }}" {{ old('kategori', $wisata->kategori) === $key ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
                     @error('kategori') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
@@ -78,8 +78,8 @@
 
             <div>
                 <label class="form-label">Embed Google Maps (Iframe/URL)</label>
-                <textarea name="maps_iframe" rows="3" class="form-input resize-none" placeholder="Masukkan kode <iframe> embed map dari Google Maps atau link lokasinya...">{{ old('maps_iframe', $wisata->maps_iframe) }}</textarea>
-                <p class="text-[11px] text-slate-500 mt-1">Caranya: Buka Google Maps > Cari lokasi > Klik "Bagikan" > Klik "Sematkan peta" (Embed a map) > Salin seluruh tag HTML `<iframe>` lalu tempel di sini.</p>
+                <textarea name="maps_iframe" rows="3" class="form-input resize-none" placeholder="Masukkan kode &lt;iframe&gt; embed map dari Google Maps atau link lokasinya...">{{ old('maps_iframe', $wisata->maps_iframe) }}</textarea>
+                <p class="text-[11px] text-slate-500 mt-1">Caranya: Buka Google Maps &gt; Cari lokasi &gt; Klik "Bagikan" &gt; Klik "Sematkan peta" (Embed a map) &gt; Salin seluruh tag HTML <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-700">&lt;iframe&gt;</code> lalu tempel di sini.</p>
                 @error('maps_iframe') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -107,38 +107,38 @@
                 <p class="form-label">Pratinjau Gambar:</p>
                 <img id="img-preview" src="{{ $wisata->gambar_url }}" alt="Pratinjau Foto" class="w-full max-h-64 object-cover rounded-xl border border-slate-200 shadow-md">
             </div>
-        </div>
 
-        <div class="flex items-center justify-end gap-3 pb-8">
-            <a href="{{ route('admin.wisata.index') }}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-600 transition-colors">
-                Batal
-            </a>
-            <button type="submit" class="btn-primary">
-                <i data-lucide="save" class="w-4 h-4"></i>
-                Simpan Perubahan
-            </button>
+            <!-- Action Buttons Inside Card -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-slate-100 mt-6">
+                <a href="{{ route('admin.wisata.index') }}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 border border-slate-200 hover:border-slate-600 transition-colors">
+                    Batal
+                </a>
+                <button type="submit" class="btn-primary">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    Simpan Destinasi Wisata
+                </button>
+            </div>
         </div>
     </form>
 </div>
-
 @endsection
 
-@push('scripts')
-<script>
-    function previewImg(event) {
-        const preview = document.getElementById('img-preview');
-        const container = document.getElementById('preview-container');
-        
-        if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                container.classList.remove('hidden');
+        @push('scripts')
+        <script>
+            function previewImg(event) {
+                const preview = document.getElementById('img-preview');
+                const container = document.getElementById('preview-container');
+
+                if (event.target.files && event.target.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        container.classList.remove('hidden');
+                    }
+
+                    reader.readAsDataURL(event.target.files[0]);
+                }
             }
-            
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    }
-</script>
-@endpush
+        </script>
+        @endpush

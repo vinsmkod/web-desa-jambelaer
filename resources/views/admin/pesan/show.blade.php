@@ -93,9 +93,51 @@
                         <p class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-2">Subjek Pengaduan</p>
                         <p class="text-slate-800 font-semibold">{{ $pesan->subject }}</p>
                     </div>
-                    <div>
+                    <div class="pb-4 border-b border-slate-100">
                         <p class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-2">Isi Pengaduan</p>
                         <div class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap bg-slate-50 rounded-xl p-4 border border-slate-200">{{ $pesan->message }}</div>
+                    </div>
+
+                    {{-- Foto Bukti --}}
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-3 flex items-center gap-2">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                            Foto Bukti
+                        </p>
+                        @if($pesan->foto_bukti)
+                            <div class="relative group inline-block cursor-pointer" onclick="openLightbox('{{ \Illuminate\Support\Facades\Storage::url($pesan->foto_bukti) }}')">
+                                <img
+                                    src="{{ \Illuminate\Support\Facades\Storage::url($pesan->foto_bukti) }}"
+                                    alt="Foto bukti pengaduan dari {{ $pesan->name }}"
+                                    class="w-full max-w-sm rounded-xl border border-slate-200 object-cover shadow-sm hover:shadow-md transition-shadow"
+                                    style="max-height: 280px;"
+                                >
+                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-xl transition-colors flex items-center justify-center pointer-events-none">
+                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow">
+                                        <i data-lucide="zoom-in" class="w-5 h-5 text-slate-700"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 mt-3">
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($pesan->foto_bukti) }}"
+                                   download
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all">
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    Unduh Foto
+                                </a>
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($pesan->foto_bukti) }}"
+                                   target="_blank"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                    Buka di Tab Baru
+                                </a>
+                            </div>
+                        @else
+                            <div class="flex items-center gap-2 text-sm text-slate-400 bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
+                                <i data-lucide="image-off" class="w-4 h-4"></i>
+                                <span>Tidak ada foto bukti dilampirkan</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -167,6 +209,42 @@
 .badge-sky { @apply inline-flex items-center px-2.5 py-1 rounded-lg bg-cyan-600/20 text-cyan-400 font-semibold text-xs; }
 </style>
 
+{{-- Lightbox Overlay --}}
+@if($pesan->jenis_pesan === 'pengaduan' && $pesan->foto_bukti)
+<div id="lightbox" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4" onclick="closeLightbox()">
+    <div class="relative max-w-4xl max-h-full" onclick="event.stopPropagation()">
+        <img id="lightbox-img" src="" alt="Foto bukti pengaduan" class="max-w-full max-h-[88vh] rounded-2xl shadow-2xl object-contain">
+        <button onclick="closeLightbox()" class="absolute -top-4 -right-4 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-lg hover:bg-slate-100 transition-colors">
+            <i data-lucide="x" class="w-4 h-4 text-slate-700"></i>
+        </button>
+    </div>
+</div>
+@endif
+
 @endsection
+
+@push('scripts')
+<script>
+function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    document.getElementById('lightbox-img').src = src;
+    lb.classList.remove('hidden');
+    lb.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    lucide.createIcons();
+}
+function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    lb.classList.add('hidden');
+    lb.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+</script>
+@endpush
 
 

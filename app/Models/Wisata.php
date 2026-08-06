@@ -34,23 +34,23 @@ class Wisata extends Model
 
     /**
      * URL Gambar Wisata dengan fallback default.
+     * Controller menyimpan path sebagai string absolut (/uploads/wisata/xxx) atau URL eksternal.
      */
     public function getGambarUrlAttribute(): string
     {
         if ($this->gambar) {
+            // Jika URL penuh (http/https), langsung gunakan
             if (filter_var($this->gambar, FILTER_VALIDATE_URL)) {
                 return $this->gambar;
             }
-            if (file_exists(public_path('uploads/wisata/' . basename($this->gambar)))) {
-                return asset('uploads/wisata/' . basename($this->gambar));
-            }
+            // Jika path lokal, cek keberadaan file di folder public
             if (file_exists(public_path($this->gambar))) {
                 return asset($this->gambar);
             }
         }
 
         // Fallback default Unsplash image
-        return "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80";
+        return 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80';
     }
 
     /**

@@ -13,18 +13,29 @@ class PengajuanAcaraController extends Controller
     {
         Pesan::cleanupExpiredAcara();
 
+        // Hanya tampilkan yang belum diarsipkan (acara aktif & yang menunggu/ditolak)
         $pengajuan = Pesan::where('jenis_pesan', 'pengajuan_acara')
+            ->where(function($q) {
+                $q->whereNull('is_archived')->orWhere('is_archived', false);
+            })
+            ->latest()
+            ->get();
+
+        // Arsip — acara yang sudah lewat
+        $arsip = Pesan::where('jenis_pesan', 'pengajuan_acara')
+            ->where('is_archived', true)
             ->latest()
             ->get();
 
         $stats = [
-            'total' => $pengajuan->count(),
-            'menunggu' => $pengajuan->where('status', 'menunggu')->count(),
+            'total'     => $pengajuan->count(),
+            'menunggu'  => $pengajuan->where('status', 'menunggu')->count(),
             'disetujui' => $pengajuan->where('status', 'disetujui')->count(),
-            'ditolak' => $pengajuan->where('status', 'ditolak')->count(),
+            'ditolak'   => $pengajuan->where('status', 'ditolak')->count(),
+            'arsip'     => $arsip->count(),
         ];
 
-        return view('admin.pengajuan-acara.index', compact('pengajuan', 'stats'));
+        return view('admin.pengajuan-acara.index', compact('pengajuan', 'arsip', 'stats'));
     }
 
     public function show(Pesan $pesan)
@@ -39,9 +50,12 @@ class PengajuanAcaraController extends Controller
 
     public function updateStatus(Pesan $pesan, Request $request)
     {
-        // Ensure it's a pengajuan_acara
+        // Pastikan ini pengajuan_acara dan belum diarsipkan
         if ($pesan->jenis_pesan !== 'pengajuan_acara') {
             abort(404);
+        }
+        if ($pesan->is_archived) {
+            return back()->with('error', 'Pengajuan acara yang sudah diarsipkan tidak dapat diubah statusnya.');
         }
 
         $validated = $request->validate([
@@ -56,9 +70,9 @@ class PengajuanAcaraController extends Controller
         }
 
         $statusLabel = [
-            'menunggu' => 'Menunggu',
+            'menunggu'  => 'Menunggu',
             'disetujui' => 'Disetujui',
-            'ditolak' => 'Ditolak',
+            'ditolak'   => 'Ditolak',
         ];
 
         return back()->with('success', 'Status pengajuan acara berhasil diubah menjadi ' . $statusLabel[$validated['status']] . '.');

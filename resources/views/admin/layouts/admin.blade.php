@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id" class="min-h-screen">
 
 <head>
     <meta charset="UTF-8">
@@ -92,7 +92,7 @@
     @stack('head')
 </head>
 
-<body class="h-full bg-slate-50 text-slate-800 font-sans antialiased flex">
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased flex">
 
     <!-- ══════════════ SIDEBAR ══════════════ -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[220px] bg-white border-r border-slate-200 flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-sm">
@@ -126,7 +126,7 @@
             <a href="{{ route('admin.pesan.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pesan.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
                 <i data-lucide="mail" class="icon"></i>
-                <span>Pesan Masuk</span>
+                <span>Layanan Publik</span>
                 @php $unread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
                 @if($unread > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unread }}</span>
@@ -224,7 +224,7 @@
 
             <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 ml-auto">
                 <!-- Notif bell / Mail -->
-                <a href="{{ route('admin.pesan.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Pesan Masuk">
+                <a href="{{ route('admin.pesan.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Layanan Publik">
                     <i data-lucide="mail" class="w-4 h-4"></i>
                     @if(\App\Models\Pesan::where('is_read', false)->count() > 0)
                     <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-white"></span>

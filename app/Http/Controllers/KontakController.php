@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pesan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class KontakController extends Controller
 {
@@ -33,6 +34,7 @@ class KontakController extends Controller
                     'no_whatsapp' => ['required', 'string', 'max:20'],
                     'subject'     => ['required', 'string', 'max:255'],
                     'message'     => ['required', 'string'],
+                    'foto_bukti'  => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
                 ]);
                 break;
 
@@ -88,6 +90,12 @@ class KontakController extends Controller
         if ($jenisPesan === 'pengajuan_acara' && isset($data['deskripsi_acara'])) {
             $data['message'] = $data['deskripsi_acara'];
             $data['subject'] = 'Pengajuan Acara: ' . $data['nama_acara'];
+        }
+
+        // Handle upload foto bukti (pengaduan only)
+        if ($jenisPesan === 'pengaduan' && $request->hasFile('foto_bukti') && $request->file('foto_bukti')->isValid()) {
+            $path = $request->file('foto_bukti')->store('foto-bukti', 'public');
+            $data['foto_bukti'] = $path;
         }
 
         $pesan = Pesan::create($data);

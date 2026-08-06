@@ -5,21 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pesan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PesanController extends Controller
 {
     public function index(Request $request)
     {
-        // Stats selalu dari semua data
-        $allPesan = Pesan::all();
-        $grouped  = $allPesan->groupBy('jenis_pesan');
-
+        // Hitung statistik dengan query agregat (COUNT) bukan load semua data ke memory
         $stats = [
-            'total'           => $allPesan->count(),
-            'pertanyaan_umum' => $grouped->get('pertanyaan_umum', collect())->count(),
-            'pengaduan'       => $grouped->get('pengaduan', collect())->count(),
-            'kerja_sama'      => $grouped->get('kerja_sama', collect())->count(),
-            'pengajuan_acara' => $grouped->get('pengajuan_acara', collect())->count(),
+            'total'           => Pesan::count(),
+            'pertanyaan_umum' => Pesan::where('jenis_pesan', 'pertanyaan_umum')->count(),
+            'pengaduan'       => Pesan::where('jenis_pesan', 'pengaduan')->count(),
+            'kerja_sama'      => Pesan::where('jenis_pesan', 'kerja_sama')->count(),
+            'pengajuan_acara' => Pesan::where('jenis_pesan', 'pengajuan_acara')->count(),
         ];
 
         // Paginated data with optional jenis filter
@@ -54,6 +52,11 @@ class PesanController extends Controller
 
     public function destroy(Pesan $pesan)
     {
+        // Hapus foto bukti dari storage jika ada
+        if ($pesan->foto_bukti) {
+            Storage::disk('public')->delete($pesan->foto_bukti);
+        }
+
         $pesan->delete();
         return redirect()->route('admin.pesan.index')
             ->with('success', 'Pesan berhasil dihapus.');

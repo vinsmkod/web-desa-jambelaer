@@ -199,7 +199,7 @@
                         </div>
                     </div>
 
-                    <form id="contact-form" method="POST" action="{{ route('kontak.store') }}" class="space-y-4">
+                    <form id="contact-form" method="POST" action="{{ route('kontak.store') }}" enctype="multipart/form-data" class="space-y-4">
                         @csrf
 
                         {{-- Style umum input --}}
@@ -239,6 +239,51 @@
                             .input-wrap {
                                 position: relative;
                             }
+
+                            /* === Upload Foto Bukti === */
+                            .upload-drop-zone {
+                                border: 2px dashed #e7e5e4;
+                                border-radius: 10px;
+                                padding: 20px 16px;
+                                background: #fdfaf5;
+                                cursor: pointer;
+                                transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                gap: 8px;
+                                text-align: center;
+                            }
+                            .upload-drop-zone:hover,
+                            .upload-drop-zone.dragover {
+                                border-color: #1a4731;
+                                background: #f0f7f3;
+                                box-shadow: 0 0 0 3px rgba(26, 71, 49, 0.08);
+                            }
+                            .upload-drop-zone.has-file {
+                                border-color: #1a4731;
+                                border-style: solid;
+                                background: #f0f7f3;
+                            }
+                            .upload-drop-zone.error {
+                                border-color: #dc2626;
+                                background: #fef2f2;
+                            }
+                            .upload-preview {
+                                width: 80px;
+                                height: 80px;
+                                object-fit: cover;
+                                border-radius: 8px;
+                                border: 1px solid #d6d3d1;
+                                display: none;
+                            }
+                            .upload-error-msg {
+                                font-size: 0.72rem;
+                                color: #dc2626;
+                                font-weight: 600;
+                                margin-top: 4px;
+                                display: none;
+                            }
                         </style>
 
                         {{-- Jenis Pesan --}}
@@ -260,16 +305,21 @@
                             <input id="f-name" name="name" type="text" required placeholder="" class="input-village pt-7">
                         </div>
 
-                        {{-- WhatsApp (Pertanyaan Umum) --}}
+                        {{-- Input master tersembunyi — satu-satunya yang dikirim ke server --}}
+                        <input type="hidden" id="f-wa-master" name="no_whatsapp" value="">
+
+                        {{-- WhatsApp (Pertanyaan Umum) — type=tel, hanya visible saat pertanyaan_umum --}}
                         <div id="field-email" class="hidden input-wrap">
                             <label class="label-float" for="f-email">Nomor WhatsApp</label>
-                            <input id="f-email" name="no_whatsapp" type="tel" placeholder="" class="input-village pt-7">
+                            <input id="f-email" name="no_whatsapp_tel" type="tel" placeholder="" class="input-village pt-7"
+                                   oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
-                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara) --}}
+                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara) — type=text --}}
                         <div id="field-whatsapp" class="hidden input-wrap">
                             <label class="label-float" for="f-whatsapp">Nomor WhatsApp</label>
-                            <input id="f-whatsapp" name="no_whatsapp" type="text" placeholder="" class="input-village pt-7">
+                            <input id="f-whatsapp" name="no_whatsapp_txt" type="text" placeholder="" class="input-village pt-7"
+                                   oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
                         {{-- Subjek --}}
@@ -324,6 +374,30 @@
                         <div id="field-message" class="hidden input-wrap">
                             <label id="label-message" class="label-float" for="f-msg">Isi Pesan</label>
                             <textarea id="f-msg" name="message" rows="4" placeholder="" class="input-village pt-7 resize-none"></textarea>
+                        </div>
+
+                        {{-- Upload Foto Bukti (Pengaduan only) --}}
+                        <div id="field-foto-bukti" class="hidden">
+                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">Upload Foto Bukti <span class="text-stone-300 normal-case tracking-normal font-normal">(Opsional)</span></p>
+                            <div id="upload-drop-zone" class="upload-drop-zone" onclick="document.getElementById('f-foto-bukti').click()">
+                                <img id="upload-preview" class="upload-preview" alt="Preview foto bukti">
+                                <div id="upload-placeholder">
+                                    <div class="w-10 h-10 rounded-full bg-forest-50 border border-forest-100 flex items-center justify-center mx-auto mb-2">
+                                        <i data-lucide="image-plus" class="w-5 h-5 text-forest-600"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-stone-600">Klik atau seret foto ke sini</p>
+                                    <p class="text-xs text-stone-400 font-light mt-0.5">Format: JPG, PNG, WEBP &bull; Maks. 5 MB</p>
+                                </div>
+                                <div id="upload-file-info" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-forest-600"></i>
+                                    <span id="upload-file-name"></span>
+                                    <button type="button" id="upload-remove-btn" onclick="event.stopPropagation(); clearFotoBukti()" class="ml-auto text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
+                                        <i data-lucide="x" class="w-3 h-3"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="upload-error-msg" class="upload-error-msg"></p>
+                            <input type="file" id="f-foto-bukti" name="foto_bukti" accept="image/jpeg,image/png,image/webp" class="hidden">
                         </div>
 
                         {{-- Submit --}}
@@ -386,6 +460,7 @@
     const fieldTanggalWaktu = document.getElementById('field-tanggal-waktu');
     const fieldLokasiPeserta = document.getElementById('field-lokasi-peserta');
     const fieldMessage = document.getElementById('field-message');
+    const fieldFotoBukti = document.getElementById('field-foto-bukti');
 
     const inputEmail = document.getElementById('f-email');
     const inputWhatsapp = document.getElementById('f-whatsapp');
@@ -401,10 +476,95 @@
     const labelSubject = document.getElementById('label-subject');
     const labelMessage = document.getElementById('label-message');
 
+    // === Upload Foto Bukti ===
+    const inputFotoBukti = document.getElementById('f-foto-bukti');
+    const uploadDropZone = document.getElementById('upload-drop-zone');
+    const uploadPreview = document.getElementById('upload-preview');
+    const uploadPlaceholder = document.getElementById('upload-placeholder');
+    const uploadFileInfo = document.getElementById('upload-file-info');
+    const uploadFileName = document.getElementById('upload-file-name');
+    const uploadErrorMsg = document.getElementById('upload-error-msg');
+
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    const MAX_SIZE_MB = 5;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+    function setUploadError(msg) {
+        uploadDropZone.classList.add('error');
+        uploadDropZone.classList.remove('has-file');
+        uploadErrorMsg.textContent = msg;
+        uploadErrorMsg.style.display = 'block';
+        uploadPreview.style.display = 'none';
+        uploadPlaceholder.style.display = 'flex';
+        uploadFileInfo.classList.add('hidden');
+        inputFotoBukti.value = '';
+    }
+
+    function clearFotoBukti() {
+        inputFotoBukti.value = '';
+        uploadPreview.src = '';
+        uploadPreview.style.display = 'none';
+        uploadPlaceholder.style.display = 'flex';
+        uploadFileInfo.classList.add('hidden');
+        uploadDropZone.classList.remove('has-file', 'error');
+        uploadErrorMsg.style.display = 'none';
+        lucide.createIcons();
+    }
+
+    function handleFotoFile(file) {
+        uploadErrorMsg.style.display = 'none';
+        uploadDropZone.classList.remove('error');
+
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            setUploadError('Format file tidak didukung. Gunakan JPG, PNG, atau WEBP.');
+            return;
+        }
+        if (file.size > MAX_SIZE_BYTES) {
+            setUploadError('Ukuran file melebihi batas ' + MAX_SIZE_MB + ' MB.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadPreview.src = e.target.result;
+            uploadPreview.style.display = 'block';
+            uploadPlaceholder.style.display = 'none';
+            uploadFileInfo.classList.remove('hidden');
+            uploadFileName.textContent = file.name;
+            uploadDropZone.classList.add('has-file');
+            lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    inputFotoBukti.addEventListener('change', function() {
+        if (this.files && this.files[0]) handleFotoFile(this.files[0]);
+    });
+
+    uploadDropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    uploadDropZone.addEventListener('dragleave', function() {
+        this.classList.remove('dragover');
+    });
+    uploadDropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            // Sync ke input file supaya FormData ikut
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            inputFotoBukti.files = dt.files;
+            handleFotoFile(file);
+        }
+    });
+
     function hideAllDynamicFields() {
         [fieldEmail, fieldWhatsapp, fieldSubject, fieldEmailKerjaSama,
             fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
-            fieldLokasiPeserta, fieldMessage
+            fieldLokasiPeserta, fieldMessage, fieldFotoBukti
         ].forEach(f => f.classList.add('hidden'));
 
         [inputEmail, inputWhatsapp, inputSubject, inputEmailKS, inputInstansi,
@@ -413,7 +573,15 @@
         ].forEach(inp => {
             inp.removeAttribute('required');
             inp.disabled = true;
+            inp.value = ''; // Reset nilai agar tidak ada sisa data yang tertinggal
         });
+
+        // Reset master hidden input saat semua field disembunyikan
+        const waMaster = document.getElementById('f-wa-master');
+        if (waMaster) waMaster.value = '';
+
+        // Reset upload foto bukti
+        clearFotoBukti();
     }
 
     function showFieldWithRequired(field, input) {
@@ -442,6 +610,7 @@
             inputMessage.name = 'message';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Isi Pengaduan';
+            fieldFotoBukti.classList.remove('hidden');
             btnText.textContent = 'Kirim Pengaduan';
         } else if (jenisPesan === 'kerja_sama') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);

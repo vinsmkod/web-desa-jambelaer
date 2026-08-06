@@ -93,10 +93,18 @@
                         <i data-lucide="map" class="w-5 h-5 text-forest-800"></i> Peta Lokasi Destinasi
                     </h3>
                     <div class="rounded-2xl overflow-hidden shadow-sm border border-stone-200 aspect-video w-full relative">
-                        @if(str_contains($wisata->maps_iframe, '<iframe'))
-                            {!! $wisata->maps_iframe !!}
-                        @else
-                            <iframe class="w-full h-full border-0" src="{{ $wisata->maps_iframe }}" allowfullscreen="" loading="lazy"></iframe>
+                        @php
+                            $mapsData = $wisata->maps_iframe;
+                            $isIframe = str_contains($mapsData, '<iframe');
+                            $isSafeUrl = str_starts_with($mapsData, 'http') &&
+                                         (str_contains($mapsData, 'google.com/maps') ||
+                                          str_contains($mapsData, 'maps.google.com'));
+                        @endphp
+                        @if($isIframe)
+                            {{-- Data sudah disanitasi oleh SecurityHelper saat disimpan --}}
+                            {!! $mapsData !!}
+                        @elseif($isSafeUrl)
+                            <iframe class="w-full h-full border-0" src="{{ $mapsData }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         @endif
                     </div>
                 </div>

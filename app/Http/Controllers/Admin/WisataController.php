@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\SecurityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Wisata;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class WisataController extends Controller
             'ringkasan' => $request->ringkasan,
             'deskripsi' => $request->deskripsi,
             'alamat' => $request->alamat,
-            'maps_iframe' => $request->maps_iframe,
+            'maps_iframe' => SecurityHelper::sanitizeMapsIframe($request->maps_iframe),
             'gambar' => $imgPath,
             'harga_tiket' => $request->harga_tiket,
             'jam_operasional' => $request->jam_operasional,
@@ -124,7 +125,7 @@ class WisataController extends Controller
             'ringkasan' => $request->ringkasan,
             'deskripsi' => $request->deskripsi,
             'alamat' => $request->alamat,
-            'maps_iframe' => $request->maps_iframe,
+            'maps_iframe' => SecurityHelper::sanitizeMapsIframe($request->maps_iframe),
             'gambar' => $imgPath,
             'harga_tiket' => $request->harga_tiket,
             'jam_operasional' => $request->jam_operasional,
