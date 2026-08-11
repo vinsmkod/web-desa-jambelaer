@@ -438,11 +438,8 @@
                                     <label class="label-float">Kategori Produk</label>
                                     <select id="f-jenis-produk-umkm" name="jenis_produk_umkm" class="input-village pt-7 cursor-pointer">
                                         <option value="">— Pilih Kategori —</option>
-                                        <option value="Makanan">Makanan & Minuman</option>
-                                        <option value="Kerajinan">Kerajinan Tangan</option>
-                                        <option value="Pertanian">Pertanian & Perkebunan</option>
-                                        <option value="Fashion">Fashion & Tekstil</option>
-                                        <option value="Lainnya">Lainnya</option>
+                                        <option value="Makanan">Makanan</option>
+                                        <option value="Kerajinan">Kerajinan</option>
                                     </select>
                                     <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
                                 </div>

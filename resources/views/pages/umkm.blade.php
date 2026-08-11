@@ -27,7 +27,6 @@
             <button class="filter-btn active px-5 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase transition-all duration-300 bg-forest-800 text-white shadow-sm border border-forest-800" data-filter="all">Semua</button>
             <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase transition-all duration-300 bg-white text-stone-600 border border-stone-200 hover:border-forest-300" data-filter="makanan">Makanan</button>
             <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase transition-all duration-300 bg-white text-stone-600 border border-stone-200 hover:border-forest-300" data-filter="kerajinan">Kerajinan</button>
-            <button class="filter-btn px-5 py-2.5 rounded-full text-xs font-bold tracking-wide uppercase transition-all duration-300 bg-white text-stone-600 border border-stone-200 hover:border-forest-300" data-filter="pertanian">Pertanian</button>
         </div>
 
         {{-- ── Products Grid ── --}}

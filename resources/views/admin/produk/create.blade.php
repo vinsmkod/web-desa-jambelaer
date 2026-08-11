@@ -41,11 +41,8 @@
                     <select name="badge" required class="form-input">
                         @php $reqBadge = strtolower(request('badge', '')); @endphp
                         <option value="">Pilih Badge</option>
-                        <option value="Pertanian" {{ old('badge', request('badge')) === 'Pertanian' || $reqBadge === 'pertanian' ? 'selected' : '' }}>Pertanian</option>
                         <option value="Makanan" {{ old('badge', request('badge')) === 'Makanan' || $reqBadge === 'makanan' ? 'selected' : '' }}>Makanan</option>
                         <option value="Kerajinan" {{ old('badge', request('badge')) === 'Kerajinan' || $reqBadge === 'kerajinan' ? 'selected' : '' }}>Kerajinan</option>
-                        <option value="Minuman" {{ old('badge', request('badge')) === 'Minuman' || $reqBadge === 'minuman' ? 'selected' : '' }}>Minuman</option>
-                        <option value="Lainnya" {{ old('badge', request('badge')) === 'Lainnya' || $reqBadge === 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                     </select>
                     @error('badge') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -76,7 +73,7 @@
                 <label class="form-label">Kategori Filter *</label>
                 <div class="flex flex-wrap gap-3 mt-1">
                     @php $reqCat = strtolower(request('badge', 'makanan')); @endphp
-                    @foreach(['pertanian','makanan','kerajinan','minuman','lainnya'] as $cat)
+                    @foreach(['makanan','kerajinan'] as $cat)
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="category[]" value="{{ $cat }}"
                             {{ in_array($cat, old('category', [$reqCat])) ? 'checked' : '' }}

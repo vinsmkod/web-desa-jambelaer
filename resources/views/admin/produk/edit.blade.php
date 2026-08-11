@@ -39,7 +39,7 @@
                 <div>
                     <label class="form-label">Badge / Jenis *</label>
                     <select name="badge" required class="form-input">
-                        @foreach(['Pertanian','Makanan','Kerajinan','Minuman','Lainnya'] as $b)
+                        @foreach(['Makanan','Kerajinan'] as $b)
                         <option value="{{ $b }}" {{ old('badge', $produk->badge) === $b ? 'selected' : '' }}>{{ $b }}</option>
                         @endforeach
                     </select>
@@ -70,7 +70,7 @@
             <div>
                 <label class="form-label">Kategori Filter *</label>
                 <div class="flex flex-wrap gap-3 mt-1">
-                    @foreach(['pertanian','makanan','kerajinan','minuman','lainnya'] as $cat)
+                    @foreach(['makanan','kerajinan'] as $cat)
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="category[]" value="{{ $cat }}"
                             {{ in_array($cat, old('category', $produk->category ?? [])) ? 'checked' : '' }}
