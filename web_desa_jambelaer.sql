@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 09 Agu 2026 pada 15.33
+-- Waktu pembuatan: 11 Agu 2026 pada 11.42
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -86,7 +86,7 @@ INSERT INTO `budaya` (`id`, `kategori`, `title`, `excerpt`, `desc`, `img`, `urut
 CREATE TABLE `galeri` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `judul` varchar(255) NOT NULL,
-  `kategori` enum('kegiatan_desa','acara_desa','budaya_desa') NOT NULL DEFAULT 'kegiatan_desa',
+  `kategori` enum('kegiatan_desa','acara_desa','umkm','budaya_desa','dokumentasi') NOT NULL DEFAULT 'kegiatan_desa',
   `foto` varchar(255) NOT NULL,
   `deskripsi` text DEFAULT NULL,
   `tanggal_publikasi` date DEFAULT NULL,
@@ -140,7 +140,11 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (18, '2026_07_29_000002_fix_sosmed_settings_keys', 8),
 (19, '2026_07_31_000001_create_wisata_table', 9),
 (20, '2026_08_05_113605_add_foto_bukti_to_pesan_table', 10),
-(21, '2026_08_06_113936_add_is_archived_to_pesan_table', 10);
+(21, '2026_08_06_113936_add_is_archived_to_pesan_table', 10),
+(22, '2026_08_09_add_daftar_umkm_to_pesan_table', 11),
+(23, '2026_08_09_add_dokumen_lampiran_to_pesan_table', 12),
+(24, '2026_08_10_add_umkm_extra_fields_to_pesan_table', 13),
+(25, '2026_08_10_add_isi_produk_umkm_to_pesan_table', 14);
 
 -- --------------------------------------------------------
 
@@ -187,16 +191,16 @@ INSERT INTO `pengaturan` (`id`, `key`, `value`, `label`, `group`, `created_at`, 
 (11, 'stat_luas', '2.500,366', 'Luas Wilayah (Ha)', 'statistik', '2026-07-20 17:01:23', '2026-07-28 18:11:57'),
 (12, 'stat_penduduk', '4850', 'Jumlah Penduduk (Jiwa)', 'statistik', '2026-07-20 17:01:23', '2026-07-20 17:01:23'),
 (13, 'stat_umkm', '35', 'Pelaku UMKM', 'statistik', '2026-07-20 17:01:23', '2026-07-20 17:01:23'),
-(15, 'sosmed_instagram', '#', 'Instagram Desa', 'sosmed', '2026-07-20 17:01:23', '2026-07-31 20:14:35'),
-(16, 'sosmed_youtube', '#', 'YouTube Desa', 'sosmed', '2026-07-20 17:01:23', '2026-07-20 17:01:23'),
+(15, 'sosmed_instagram', 'https://www.instagram.com/desa_jambelaer/', 'Instagram Desa', 'sosmed', '2026-07-20 17:01:23', '2026-08-10 05:43:44'),
+(16, 'sosmed_youtube', '', 'YouTube Desa', 'sosmed', '2026-07-20 17:01:23', '2026-08-10 05:43:44'),
 (34, 'stat_kk', '1250', 'Jumlah Kepala Keluarga', 'statistik', '2026-07-20 19:23:31', '2026-07-20 19:23:31'),
 (35, 'stat_rtrw', '24', 'Jumlah RT/RW', 'statistik', '2026-07-20 19:23:31', '2026-07-20 19:23:31'),
 (36, 'stat_dusun', '4', 'Jumlah Dusun', 'statistik', '2026-07-20 19:23:31', '2026-07-20 19:23:31'),
 (37, 'maps_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.2770633860905!2d107.67617547499373!3d-6.612456993381583!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6db1dfea3%3A0xc0f3970f1ff4dff9!2sKantor%20Desa%20Jambelaer!5e0!3m2!1sen!2sid!4v1785331994623!5m2!1sen!2sid', 'Google Maps Embed URL', 'peta', '2026-07-20 19:23:31', '2026-07-29 06:34:38'),
-(38, 'sosmed_tiktok', 'https://www.tiktok.com/@saharr_4869', 'TikTok Desa', 'sosmed', '2026-07-20 19:23:31', '2026-07-29 06:36:57'),
+(38, 'sosmed_tiktok', '', 'TikTok Desa', 'sosmed', '2026-07-20 19:23:31', '2026-08-10 05:43:44'),
 (40, 'kades_nama', 'Karno, S.E', 'Nama Kepala Desa & Gelar', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:25:56'),
 (41, 'kades_jabatan', 'Kepala Desa Jambelaer', 'Jabatan Kepala Desa', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:19:38'),
-(42, 'kades_foto', '/uploads/kades/kades_1785288356_plJmPI.jpeg', 'URL Foto Kepala Desa', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:25:56'),
+(42, 'kades_foto', '/uploads/kades/kades_1786284621_KIoREj.jpeg', 'URL Foto Kepala Desa', 'sambutan', '2026-07-28 18:19:38', '2026-08-09 14:10:21'),
 (43, 'sambutan_judul', 'Sambutan Kepala Desa', 'Judul Sambutan', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:19:38'),
 (44, 'sambutan_quote', 'Assalamu\'alaikum Wr. Wb. Atas nama Pemerintah Desa Jambelaer, kami menyambut kehadiran Anda di portal resmi kami dengan penuh rasa syukur dan kebanggaan.', 'Kutipan Pembuka (Quote)', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:19:38'),
 (45, 'sambutan_teks', 'Kami berkomitmen untuk terus membangun desa yang mandiri, sejahtera, dan berdaya saing dengan menjunjung tinggi nilai-nilai budaya lokal yang telah diwariskan leluhur. Dengan semangat gotong royong dan kebersamaan, kami yakin Desa Jambelaer akan terus maju dan berkembang.\r\n\r\nKami mengundang seluruh masyarakat, perantau, dan mitra usaha untuk berkolaborasi membangun desa yang kita cintai bersama. Portal ini hadir sebagai jembatan informasi yang terbuka bagi semua.', 'Isi Lengkap Teks Sambutan', 'sambutan', '2026-07-28 18:19:38', '2026-07-28 18:25:56'),
@@ -215,10 +219,23 @@ CREATE TABLE `pesan` (
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT 0,
-  `jenis_pesan` enum('pertanyaan_umum','pengaduan','kerja_sama','pengajuan_acara') NOT NULL DEFAULT 'pertanyaan_umum',
+  `jenis_pesan` enum('pertanyaan_umum','pengaduan','kerja_sama','pengajuan_acara','daftar_umkm') NOT NULL DEFAULT 'pertanyaan_umum',
   `status` enum('menunggu','disetujui','ditolak') NOT NULL DEFAULT 'menunggu' COMMENT 'Status pengajuan (khususnya untuk pengajuan acara)',
   `dipublikasikan` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Apakah acara sudah dipublikasikan ke halaman budaya',
   `is_archived` tinyint(1) NOT NULL DEFAULT 0,
+  `nama_umkm` varchar(255) DEFAULT NULL,
+  `jenis_produk_umkm` varchar(255) DEFAULT NULL,
+  `alamat_umkm_daftar` text DEFAULT NULL,
+  `deskripsi_umkm` text DEFAULT NULL,
+  `foto_produk` varchar(255) DEFAULT NULL,
+  `jam_operasional_umkm` varchar(255) DEFAULT NULL,
+  `instagram_umkm` varchar(255) DEFAULT NULL,
+  `isi_produk_umkm` varchar(255) DEFAULT NULL,
+  `berat_bersih_umkm` varchar(255) DEFAULT NULL,
+  `harga_produk_umkm` varchar(255) DEFAULT NULL,
+  `ketersediaan_umkm` varchar(255) DEFAULT NULL,
+  `sertifikasi_umkm` varchar(255) DEFAULT NULL,
+  `dokumen_lampiran` varchar(255) DEFAULT NULL,
   `no_whatsapp` varchar(255) DEFAULT NULL,
   `nama_instansi` varchar(255) DEFAULT NULL,
   `nama_acara` varchar(255) DEFAULT NULL,
@@ -236,8 +253,10 @@ CREATE TABLE `pesan` (
 -- Dumping data untuk tabel `pesan`
 --
 
-INSERT INTO `pesan` (`id`, `name`, `email`, `subject`, `message`, `is_read`, `jenis_pesan`, `status`, `dipublikasikan`, `is_archived`, `no_whatsapp`, `nama_instansi`, `nama_acara`, `tanggal_acara`, `waktu_acara`, `lokasi_acara`, `jumlah_peserta`, `deskripsi_acara`, `foto_bukti`, `created_at`, `updated_at`) VALUES
-(3, 'Sahar Dwi Anugrah', '-', 'Pengaduan Jalan', 'Selamat Siang Bapak/Ibu, Saya ingin melaporkan terkait jalanan di desa A, yang minim penerangan', 1, 'pengaduan', 'menunggu', 0, 0, '6281324768193', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 00:59:44', '2026-07-24 00:59:53');
+INSERT INTO `pesan` (`id`, `name`, `email`, `subject`, `message`, `is_read`, `jenis_pesan`, `status`, `dipublikasikan`, `is_archived`, `nama_umkm`, `jenis_produk_umkm`, `alamat_umkm_daftar`, `deskripsi_umkm`, `foto_produk`, `jam_operasional_umkm`, `instagram_umkm`, `isi_produk_umkm`, `berat_bersih_umkm`, `harga_produk_umkm`, `ketersediaan_umkm`, `sertifikasi_umkm`, `dokumen_lampiran`, `no_whatsapp`, `nama_instansi`, `nama_acara`, `tanggal_acara`, `waktu_acara`, `lokasi_acara`, `jumlah_peserta`, `deskripsi_acara`, `foto_bukti`, `created_at`, `updated_at`) VALUES
+(3, 'Sahar Dwi Anugrah', '-', 'Pengaduan Jalan', 'Selamat Siang Bapak/Ibu, Saya ingin melaporkan terkait jalanan di desa A, yang minim penerangan', 1, 'pengaduan', 'menunggu', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '6281324768193', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 00:59:44', '2026-07-24 00:59:53'),
+(4, 'Asep', 'sahargntg@gmail.com', 'Kerja Sama', 'sHD VBv sh', 1, 'kerja_sama', 'menunggu', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'dokumen-lampiran/LNhsds76SCcfFiwHnOUNppHnZfGNvNPGIXkViu3Z.pdf', '081324768193', 'Subang Creative Hub', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-09 14:02:09', '2026-08-09 14:02:32'),
+(5, 'Asep', '-', 'Pendaftaran UMKM: Opak Pak Asep', 'daefae', 1, 'daftar_umkm', 'menunggu', 0, 0, 'Opak Pak Asep', 'makanan', 'Kp. Melong', 'daefae', 'foto-produk/0DkRLpv5mYqikjMoht2qVJUu7kssCfozx3Eo7Vh8.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '081324768193', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-10 02:05:34', '2026-08-10 02:05:48');
 
 -- --------------------------------------------------------
 
@@ -305,7 +324,7 @@ CREATE TABLE `struktur_desa` (
 --
 
 INSERT INTO `struktur_desa` (`id`, `nama`, `jabatan`, `foto`, `urutan`, `created_at`, `updated_at`) VALUES
-(1, 'Karno, S.E', 'Kepala Desa', '/uploads/struktur/struktur_1784592313_WhatsApp Image 2026-07-18 at 07.28.09.jpeg', 1, '2026-07-20 17:05:13', '2026-07-25 00:29:16'),
+(1, 'Karno, S.E', 'Kepala Desa', '/uploads/struktur/struktur_1786284584_CMvuZef2.jpeg', 1, '2026-07-20 17:05:13', '2026-08-09 14:09:44'),
 (2, 'Dadang Koswara', 'Sekretaris Desa', '/uploads/struktur/struktur_1784592472_WhatsApp Image 2026-07-18 at 07.28.10.jpeg', 2, '2026-07-20 17:07:52', '2026-07-25 00:29:16'),
 (3, 'Andy Irawan, S.E', 'Kaur. Keuangan', '/uploads/struktur/struktur_1784592609_WhatsApp Image 2026-07-18 at 07.28.08.jpeg', 5, '2026-07-20 17:10:09', '2026-07-25 00:29:16'),
 (4, 'Rohamin', 'Kaur. Umum & Perencanaan', '/uploads/struktur/struktur_1784592743_WhatsApp Image 2026-07-18 at 07.28.10 (1).jpeg', 6, '2026-07-20 17:12:23', '2026-07-25 00:29:16'),
@@ -339,7 +358,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin Desa Jambelaer', 'admin@jambelaer.id', NULL, '$2y$12$WVZGmZEwM9zsL6XrZztNpe6dGpowA3C5Qo.dBbdyCDe8Rt1u9flnq', 'ectAkFxPDvnwCkemVGyIRswZn2PZsBFq7Kj2GeZFzyLS5xI2eqjZ14qnrwBa', '2026-07-20 17:01:23', '2026-07-31 20:14:35'),
+(1, 'Admin Desa Jambelaer', 'admin@jambelaer.id', NULL, '$2y$12$WVZGmZEwM9zsL6XrZztNpe6dGpowA3C5Qo.dBbdyCDe8Rt1u9flnq', 'FhBElnVldFIMgOgGavb9OGmC1Gnk4iAbyafaAbSmxUpVOklRubrRoR5H4xLI', '2026-07-20 17:01:23', '2026-07-31 20:14:35'),
 (2, 'Sahar Dwi Anugrah', 'saharanugrah123@gmail.com', NULL, '$2y$12$4m58JWy2UHyyAWn1PtjbkOj0G4GgLKd2YOKCR6w.i7h4LrGCIO7Ou', 'SmNM6EL0IgpZ3LxAdNNs3l871yGJVXPYZBh9UdYfCvMiH2ix4DOn7vYdQBMs', '2026-07-28 18:49:41', '2026-07-31 20:51:37');
 
 -- --------------------------------------------------------
@@ -365,6 +384,13 @@ CREATE TABLE `wisata` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data untuk tabel `wisata`
+--
+
+INSERT INTO `wisata` (`id`, `nama`, `slug`, `kategori`, `ringkasan`, `deskripsi`, `alamat`, `maps_iframe`, `gambar`, `harga_tiket`, `jam_operasional`, `urutan`, `is_active`, `created_at`, `updated_at`) VALUES
+(6, 'Wisata Eco Brick', 'wisata-eco-brick', 'alam', 'Wisata Eco Brick merupakan destinasi alam yang mengajak pengunjung mengenal pengelolaan sampah plastik melalui pembuatan ecobrick. Tempat ini menjadi sarana belajar sekaligus meningkatkan kepedulian terhadap lingkungan.', 'Wisata Eco Brick merupakan destinasi alam yang mengajak pengunjung mengenal pengelolaan sampah plastik melalui pembuatan ecobrick. Tempat ini menjadi sarana belajar sekaligus meningkatkan kepedulian terhadap lingkungan.', 'Jl. Genteng, Desa Jambelaer', NULL, '/uploads/wisata/wisata_1786296157_6a78b75d2daf9.jpeg', 'Gratis', '08:00 - 17:00 WIB', 1, 1, '2026-08-09 17:22:37', '2026-08-09 17:23:13');
 
 --
 -- Indexes for dumped tables
@@ -467,7 +493,7 @@ ALTER TABLE `galeri`
 -- AUTO_INCREMENT untuk tabel `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT untuk tabel `pengaturan`
@@ -479,7 +505,7 @@ ALTER TABLE `pengaturan`
 -- AUTO_INCREMENT untuk tabel `pesan`
 --
 ALTER TABLE `pesan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `produk`
@@ -503,7 +529,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `wisata`
 --
 ALTER TABLE `wisata`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
