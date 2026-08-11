@@ -58,10 +58,6 @@
                         alt="beranda"
                         class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-6 right-6 text-right">
-                        <span class="block text-[9px] text-white/50 tracking-widest uppercase font-semibold">Milangkala Desa</span>
-                        <span class="block text-xs text-white/80 font-light mt-0.5">Milangkala Desa Jambelaer</span>
-                    </div>
                 </div>
             </div>
 
