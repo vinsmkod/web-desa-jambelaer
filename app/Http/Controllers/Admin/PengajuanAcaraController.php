@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pesan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengajuanAcaraController extends Controller
 {
@@ -100,6 +101,10 @@ class PengajuanAcaraController extends Controller
     {
         if ($pesan->jenis_pesan !== 'pengajuan_acara') {
             abort(404);
+        }
+
+        if ($pesan->dokumen_lampiran) {
+            Storage::disk('public')->delete($pesan->dokumen_lampiran);
         }
 
         $nama = $pesan->nama_acara;

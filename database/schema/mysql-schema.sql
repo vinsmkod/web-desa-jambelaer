@@ -47,7 +47,7 @@ DROP TABLE IF EXISTS `galeri`;
 CREATE TABLE `galeri` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `judul` varchar(255) NOT NULL,
-  `kategori` enum('kegiatan_desa','acara_desa','umkm','budaya_desa','dokumentasi') NOT NULL DEFAULT 'kegiatan_desa',
+  `kategori` enum('kegiatan_desa','acara_desa','budaya_desa') NOT NULL DEFAULT 'kegiatan_desa',
   `foto` varchar(255) NOT NULL,
   `deskripsi` text DEFAULT NULL,
   `tanggal_publikasi` date DEFAULT NULL,

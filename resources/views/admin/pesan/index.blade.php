@@ -26,13 +26,15 @@
                 'pengaduan'       => ['label' => 'Pengaduan',       'icon' => 'alert-triangle', 'count' => $stats['pengaduan'],       'color' => 'red'],
                 'kerja_sama'      => ['label' => 'Kerja Sama',      'icon' => 'handshake',      'count' => $stats['kerja_sama'],      'color' => 'cyan'],
                 'pengajuan_acara' => ['label' => 'Pengajuan Acara', 'icon' => 'calendar-check', 'count' => $stats['pengajuan_acara'], 'color' => 'amber'],
+                'daftar_umkm'     => ['label' => 'Pendaftaran UMKM','icon' => 'store',          'count' => $stats['daftar_umkm'],     'color' => 'emerald'],
             ];
             $colorMap = [
-                'forest' => ['active' => 'border-forest-600 text-forest-700', 'hover' => 'hover:border-forest-600 hover:text-forest-700'],
-                'sky'    => ['active' => 'border-sky-500 text-sky-700',       'hover' => 'hover:border-sky-500 hover:text-sky-700'],
-                'red'    => ['active' => 'border-red-500 text-red-600',       'hover' => 'hover:border-red-500 hover:text-red-600'],
-                'cyan'   => ['active' => 'border-cyan-500 text-cyan-700',     'hover' => 'hover:border-cyan-500 hover:text-cyan-700'],
-                'amber'  => ['active' => 'border-amber-500 text-amber-700',   'hover' => 'hover:border-amber-500 hover:text-amber-700'],
+                'forest'  => ['active' => 'border-forest-600 text-forest-700', 'hover' => 'hover:border-forest-600 hover:text-forest-700'],
+                'sky'     => ['active' => 'border-sky-500 text-sky-700',       'hover' => 'hover:border-sky-500 hover:text-sky-700'],
+                'red'     => ['active' => 'border-red-500 text-red-600',       'hover' => 'hover:border-red-500 hover:text-red-600'],
+                'cyan'    => ['active' => 'border-cyan-500 text-cyan-700',     'hover' => 'hover:border-cyan-500 hover:text-cyan-700'],
+                'amber'   => ['active' => 'border-amber-500 text-amber-700',   'hover' => 'hover:border-amber-500 hover:text-amber-700'],
+                'emerald' => ['active' => 'border-emerald-500 text-emerald-700', 'hover' => 'hover:border-emerald-500 hover:text-emerald-700'],
             ];
         @endphp
 
@@ -97,6 +99,7 @@
                                 'pengaduan'       => 'bg-red-50 text-red-600 border-red-200',
                                 'kerja_sama'      => 'bg-cyan-50 text-cyan-700 border-cyan-200',
                                 'pengajuan_acara' => 'bg-amber-50 text-amber-700 border-amber-200',
+                                'daftar_umkm'     => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                                 default           => 'bg-slate-50 text-slate-600 border-slate-200',
                             };
                             $jenisLabel = match($p->jenis_pesan) {
@@ -104,6 +107,7 @@
                                 'pengaduan'       => 'Pengaduan',
                                 'kerja_sama'      => 'Kerja Sama',
                                 'pengajuan_acara' => 'Pengajuan Acara',
+                                'daftar_umkm'     => 'Daftar UMKM',
                                 default           => $p->jenis_pesan,
                             };
                         @endphp

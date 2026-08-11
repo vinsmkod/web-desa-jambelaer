@@ -27,7 +27,21 @@ class Pesan extends Model
         'deskripsi_acara',
         'foto_bukti',
         'is_archived',
+        // Pendaftaran UMKM
+        'nama_umkm',
+        'jenis_produk_umkm',
+        'alamat_umkm_daftar',
+        'deskripsi_umkm',
+        'foto_produk',
+        'jam_operasional_umkm',
+        'instagram_umkm',
+        'isi_produk_umkm',
+        'harga_produk_umkm',
+        'ketersediaan_umkm',
+        'sertifikasi_umkm',
+        'dokumen_lampiran',
     ];
+
 
     protected $casts = [
         'is_read'        => 'boolean',

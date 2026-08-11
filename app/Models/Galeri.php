@@ -34,9 +34,7 @@ class Galeri extends Model
         return match($this->kategori) {
             'kegiatan_desa' => 'Kegiatan Desa',
             'acara_desa'    => 'Acara Desa',
-            'umkm'          => 'UMKM',
             'budaya_desa'   => 'Budaya Desa',
-            'dokumentasi'   => 'Dokumentasi',
             default         => ucfirst($this->kategori),
         };
     }
@@ -49,9 +47,7 @@ class Galeri extends Model
         return [
             'kegiatan_desa' => 'Kegiatan Desa',
             'acara_desa'    => 'Acara Desa',
-            'umkm'          => 'UMKM',
             'budaya_desa'   => 'Budaya Desa',
-            'dokumentasi'   => 'Dokumentasi',
         ];
     }
 }

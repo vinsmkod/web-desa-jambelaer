@@ -55,7 +55,7 @@
     <div class="fixed inset-0 pointer-events-none overflow-hidden">
         <!-- Background Hero Image Blur -->
         <div class="absolute inset-0 bg-cover bg-center opacity-15 filter blur-sm scale-105"
-             style="background-image: url('{{ asset('uploads/img/sawah.jpeg') }}');"></div>
+            style="background-image: url('{{ asset('uploads/img/sawah.jpeg') }}');"></div>
 
         <!-- Radial Gradients & Glow Blobs -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-forest-800/40 via-forest-600/10 to-transparent blur-3xl rounded-full"></div>
@@ -71,8 +71,8 @@
             <div class="inline-flex p-2 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 shadow-xl">
                 <div class="w-11 h-11 rounded-xl bg-forest-800 flex items-center justify-center overflow-hidden p-1 shadow-inner">
                     <img src="{{ asset('uploads/img/DESA_JAMBELAER.png') }}"
-                         alt="Logo Desa Jambelaer"
-                         class="w-full h-full object-contain">
+                        alt="Logo Desa Jambelaer"
+                        class="w-full h-full object-contain">
                 </div>
             </div>
             <div>
@@ -124,7 +124,7 @@
                             <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                         </span>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus
-                            class="form-input-custom" placeholder="admin@jambelaer.desa.id" autocomplete="email">
+                            class="form-input-custom" placeholder="Masukan Username" autocomplete="email">
                     </div>
                 </div>
 
@@ -140,7 +140,7 @@
                             <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                         </span>
                         <input id="password-input" type="password" name="password" required
-                            class="form-input-custom !pr-10" placeholder="••••••••" autocomplete="current-password">
+                            class="form-input-custom !pr-10" placeholder="Masukan Password" autocomplete="current-password">
                         <button type="button" onclick="togglePassword()"
                             class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
                             title="Tampilkan / Sembunyikan Password">

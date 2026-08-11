@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Galeri Desa')
-@section('meta_desc', 'Dokumentasi kegiatan, acara, potensi UMKM, budaya, dan pembangunan Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
+@section('meta_desc', 'Dokumentasi kegiatan, acara, budaya, dan pembangunan Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
 
 @section('content')
 

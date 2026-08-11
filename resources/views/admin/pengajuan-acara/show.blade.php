@@ -86,12 +86,57 @@
             </div>
 
             {{-- Deskripsi Acara --}}
-            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden mb-6">
                 <div class="px-6 py-4 border-b border-slate-100 bg-slate-100/30">
                     <h3 class="text-sm font-bold text-white uppercase tracking-wider">Deskripsi Acara</h3>
                 </div>
                 <div class="px-6 py-5">
                     <div class="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap bg-slate-100/50 rounded-xl p-4 border border-slate-200">{{ $pesan->deskripsi_acara }}</div>
+                </div>
+            </div>
+
+            {{-- Dokumen Lampiran Resmi (PDF) --}}
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden mb-6">
+                <div class="px-6 py-4 border-b border-slate-100 bg-slate-100/30 flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4 text-rose-500"></i>
+                        Dokumen Surat / Proposal Acara (PDF)
+                    </h3>
+                    @if($pesan->dokumen_lampiran)
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 uppercase tracking-wider">Dokumen Resmi Terlampir</span>
+                    @endif
+                </div>
+                <div class="px-6 py-5">
+                    @if($pesan->dokumen_lampiran)
+                        <div class="flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <div class="w-10 h-10 rounded-lg bg-rose-100 flex items-center justify-center text-rose-600 flex-shrink-0 font-bold text-xs">
+                                PDF
+                            </div>
+                            <div class="flex-grow overflow-hidden">
+                                <p class="text-sm font-semibold text-slate-800 truncate">Proposal_Acara_{{ Str::slug($pesan->nama_acara) }}.pdf</p>
+                                <p class="text-xs text-slate-400">Surat Permohonan / Proposal Resmi &bull; Siap Verifikasi Administrasi</p>
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($pesan->dokumen_lampiran) }}"
+                                   target="_blank"
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 transition-all shadow-sm">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                    Buka PDF
+                                </a>
+                                <a href="{{ \Illuminate\Support\Facades\Storage::url($pesan->dokumen_lampiran) }}"
+                                   download
+                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs text-slate-600 hover:bg-slate-100 font-semibold transition-all">
+                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                    Unduh
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="flex items-center gap-2 text-sm text-slate-400 bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
+                            <i data-lucide="file-x" class="w-4 h-4"></i>
+                            <span>Pemohon tidak melampirkan proposal PDF.</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

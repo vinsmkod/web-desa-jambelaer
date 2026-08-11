@@ -25,7 +25,7 @@ class GaleriController extends Controller
     {
         $data = $request->validate([
             'judul'             => ['required', 'string', 'max:255'],
-            'kategori'          => ['required', 'string', 'in:kegiatan_desa,acara_desa,umkm,budaya_desa,dokumentasi'],
+            'kategori'          => ['required', 'string', 'in:kegiatan_desa,acara_desa,budaya_desa'],
             'foto'              => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'deskripsi'         => ['nullable', 'string'],
             'tanggal_publikasi' => ['nullable', 'date'],
@@ -64,7 +64,7 @@ class GaleriController extends Controller
     {
         $data = $request->validate([
             'judul'             => ['required', 'string', 'max:255'],
-            'kategori'          => ['required', 'string', 'in:kegiatan_desa,acara_desa,umkm,budaya_desa,dokumentasi'],
+            'kategori'          => ['required', 'string', 'in:kegiatan_desa,acara_desa,budaya_desa'],
             'foto'              => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:3072'],
             'deskripsi'         => ['nullable', 'string'],
             'tanggal_publikasi' => ['nullable', 'date'],

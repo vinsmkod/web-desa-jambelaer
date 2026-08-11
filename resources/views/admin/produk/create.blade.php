@@ -17,13 +17,13 @@
             <div class="grid sm:grid-cols-2 gap-5">
                 <div>
                     <label class="form-label">Nama Produk *</label>
-                    <input type="text" name="title" value="{{ old('title') }}" required
+                    <input type="text" name="title" value="{{ old('title', request('title')) }}" required
                         class="form-input" placeholder="cth: Gula Aren Cetak Murni">
                     @error('title') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="form-label">Nama Produsen / UMKM *</label>
-                    <input type="text" name="producer" value="{{ old('producer') }}" required
+                    <input type="text" name="producer" value="{{ old('producer', request('producer')) }}" required
                         class="form-input" placeholder="cth: KWT Melati Lestari">
                     @error('producer') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -32,19 +32,20 @@
             <div class="grid sm:grid-cols-2 gap-5">
                 <div>
                     <label class="form-label">Harga *</label>
-                    <input type="text" name="price" value="{{ old('price') }}" required
+                    <input type="text" name="price" value="{{ old('price', request('price')) }}" required
                         class="form-input" placeholder="cth: Rp 15.000 / kg">
                     @error('price') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="form-label">Badge / Jenis *</label>
                     <select name="badge" required class="form-input">
+                        @php $reqBadge = strtolower(request('badge', '')); @endphp
                         <option value="">Pilih Badge</option>
-                        <option value="Pertanian" {{ old('badge') === 'Pertanian'  ? 'selected' : '' }}>Pertanian</option>
-                        <option value="Makanan" {{ old('badge') === 'Makanan'    ? 'selected' : '' }}>Makanan</option>
-                        <option value="Kerajinan" {{ old('badge') === 'Kerajinan'  ? 'selected' : '' }}>Kerajinan</option>
-                        <option value="Minuman" {{ old('badge') === 'Minuman'    ? 'selected' : '' }}>Minuman</option>
-                        <option value="Lainnya" {{ old('badge') === 'Lainnya'    ? 'selected' : '' }}>Lainnya</option>
+                        <option value="Pertanian" {{ old('badge', request('badge')) === 'Pertanian' || $reqBadge === 'pertanian' ? 'selected' : '' }}>Pertanian</option>
+                        <option value="Makanan" {{ old('badge', request('badge')) === 'Makanan' || $reqBadge === 'makanan' ? 'selected' : '' }}>Makanan</option>
+                        <option value="Kerajinan" {{ old('badge', request('badge')) === 'Kerajinan' || $reqBadge === 'kerajinan' ? 'selected' : '' }}>Kerajinan</option>
+                        <option value="Minuman" {{ old('badge', request('badge')) === 'Minuman' || $reqBadge === 'minuman' ? 'selected' : '' }}>Minuman</option>
+                        <option value="Lainnya" {{ old('badge', request('badge')) === 'Lainnya' || $reqBadge === 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                     </select>
                     @error('badge') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -74,10 +75,11 @@
             <div>
                 <label class="form-label">Kategori Filter *</label>
                 <div class="flex flex-wrap gap-3 mt-1">
+                    @php $reqCat = strtolower(request('badge', 'makanan')); @endphp
                     @foreach(['pertanian','makanan','kerajinan','minuman','lainnya'] as $cat)
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="category[]" value="{{ $cat }}"
-                            {{ in_array($cat, old('category', [])) ? 'checked' : '' }}
+                            {{ in_array($cat, old('category', [$reqCat])) ? 'checked' : '' }}
                             class="w-4 h-4 rounded border-slate-200 bg-slate-100 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
                         <span class="text-sm text-slate-300 capitalize">{{ $cat }}</span>
                     </label>
@@ -105,13 +107,13 @@
             <div class="grid sm:grid-cols-2 gap-5">
                 <div>
                     <label class="form-label">Nama Pemilik UMKM</label>
-                    <input type="text" name="nama_pemilik" value="{{ old('nama_pemilik') }}"
+                    <input type="text" name="nama_pemilik" value="{{ old('nama_pemilik', request('nama_pemilik')) }}"
                         class="form-input" placeholder="cth: Ibu Suryani">
                     @error('nama_pemilik') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="form-label">Nomor WhatsApp UMKM</label>
-                    <input type="text" name="no_whatsapp_umkm" value="{{ old('no_whatsapp_umkm') }}"
+                    <input type="text" name="no_whatsapp_umkm" value="{{ old('no_whatsapp_umkm', request('no_whatsapp_umkm')) }}"
                         class="form-input" placeholder="cth: 081234567890">
                     @error('no_whatsapp_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -120,13 +122,13 @@
             <div class="grid sm:grid-cols-2 gap-5">
                 <div>
                     <label class="form-label">Jam Operasional</label>
-                    <input type="text" name="jam_operasional" value="{{ old('jam_operasional') }}"
+                    <input type="text" name="jam_operasional" value="{{ old('jam_operasional', request('jam_operasional')) }}"
                         class="form-input" placeholder="cth: Senin - Sabtu (08.00 - 17.00 WIB)">
                     @error('jam_operasional') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="form-label">Instagram (Opsional)</label>
-                    <input type="text" name="instagram_umkm" value="{{ old('instagram_umkm') }}"
+                    <input type="text" name="instagram_umkm" value="{{ old('instagram_umkm', request('instagram_umkm')) }}"
                         class="form-input" placeholder="cth: @umkmjambelaer">
                     @error('instagram_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -135,13 +137,13 @@
             <div>
                 <label class="form-label">Alamat Lengkap UMKM</label>
                 <textarea name="alamat_umkm" rows="2" class="form-input resize-none"
-                    placeholder="cth: RT 04/RW 02, Dusun Jambelaer I, Desa Jambelaer">{{ old('alamat_umkm') }}</textarea>
+                    placeholder="cth: RT 04/RW 02, Dusun Jambelaer I, Desa Jambelaer">{{ old('alamat_umkm', request('alamat_umkm')) }}</textarea>
                 @error('alamat_umkm') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="form-label">Link Marketplace (Opsional)</label>
-                <input type="url" name="link_marketplace" value="{{ old('link_marketplace') }}"
+                <input type="url" name="link_marketplace" value="{{ old('link_marketplace', request('link_marketplace')) }}"
                     class="form-input" placeholder="cth: https://shopee.co.id/namatoko">
                 @error('link_marketplace') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
@@ -154,14 +156,14 @@
             <div>
                 <label class="form-label">Deskripsi Singkat *</label>
                 <textarea name="desc_short" rows="2" required class="form-input"
-                    placeholder="Deskripsi singkat yang tampil di kartu produk...">{{ old('desc_short') }}</textarea>
+                    placeholder="Deskripsi singkat yang tampil di kartu produk...">{{ old('desc_short', request('desc_short')) }}</textarea>
                 @error('desc_short') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="form-label">Deskripsi Lengkap *</label>
                 <textarea name="desc_long" rows="5" required class="form-input"
-                    placeholder="Deskripsi lengkap yang tampil di halaman detail produk...">{{ old('desc_long') }}</textarea>
+                    placeholder="Deskripsi lengkap yang tampil di halaman detail produk...">{{ old('desc_long', request('desc_long')) }}</textarea>
                 @error('desc_long') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
@@ -176,12 +178,22 @@
                 </button>
             </div>
             <div id="details-container" class="space-y-3">
-                @php $oldDetails = old('detail_keys', ['Berat Bersih', 'Kemasan', 'Masa Simpan', 'Sertifikasi', 'Ketersediaan']); @endphp
-                @foreach($oldDetails as $i => $key)
+                @php
+                    $defaultKeys = ['Harga', 'Isi', 'Ketersediaan', 'Sertifikasi'];
+                    $defaultValues = [
+                        request('price', ''),
+                        request('isi', request('berat', '')),
+                        request('ketersediaan', 'Tersedia'),
+                        request('sertifikasi', '')
+                    ];
+                    $oldDetailsKeys = old('detail_keys', $defaultKeys);
+                    $oldDetailsValues = old('detail_values', $defaultValues);
+                @endphp
+                @foreach($oldDetailsKeys as $i => $key)
                 <div class="flex gap-3 detail-row">
                     <input type="text" name="detail_keys[]" value="{{ $key }}"
                         class="form-input flex-1" placeholder="Nama spesifikasi">
-                    <input type="text" name="detail_values[]" value="{{ old('detail_values.'.$i, '') }}"
+                    <input type="text" name="detail_values[]" value="{{ isset($oldDetailsValues[$i]) ? $oldDetailsValues[$i] : '' }}"
                         class="form-input flex-1" placeholder="Nilai">
                     <button type="button" onclick="removeRow(this)"
                         class="w-10 h-10 flex items-center justify-center rounded-xl text-slate-600 hover:text-red-400 hover:bg-red-600/10 transition-all flex-shrink-0">

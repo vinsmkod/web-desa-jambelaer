@@ -66,6 +66,8 @@
             </div>
         </div>
 
+
+
         {{-- ══════════════════════════════════════════════════════════
              FORM + INFO PANEL
         ══════════════════════════════════════════════════════════ --}}
@@ -254,21 +256,25 @@
                                 gap: 8px;
                                 text-align: center;
                             }
+
                             .upload-drop-zone:hover,
                             .upload-drop-zone.dragover {
                                 border-color: #1a4731;
                                 background: #f0f7f3;
                                 box-shadow: 0 0 0 3px rgba(26, 71, 49, 0.08);
                             }
+
                             .upload-drop-zone.has-file {
                                 border-color: #1a4731;
                                 border-style: solid;
                                 background: #f0f7f3;
                             }
+
                             .upload-drop-zone.error {
                                 border-color: #dc2626;
                                 background: #fef2f2;
                             }
+
                             .upload-preview {
                                 width: 80px;
                                 height: 80px;
@@ -277,6 +283,7 @@
                                 border: 1px solid #d6d3d1;
                                 display: none;
                             }
+
                             .upload-error-msg {
                                 font-size: 0.72rem;
                                 color: #dc2626;
@@ -295,8 +302,9 @@
                                 <option value="pengaduan">Pengaduan</option>
                                 <option value="kerja_sama">Kerja Sama</option>
                                 <option value="pengajuan_acara">Pengajuan Acara</option>
+                                <option value="daftar_umkm">Daftarkan UMKM</option>
                             </select>
-                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
+                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-pointer-events-none text-stone-400"></i>
                         </div>
 
                         {{-- Nama Lengkap --}}
@@ -312,14 +320,14 @@
                         <div id="field-email" class="hidden input-wrap">
                             <label class="label-float" for="f-email">Nomor WhatsApp</label>
                             <input id="f-email" name="no_whatsapp_tel" type="tel" placeholder="" class="input-village pt-7"
-                                   oninput="document.getElementById('f-wa-master').value=this.value">
+                                oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
                         {{-- WhatsApp (Pengaduan/Kerjasama/Acara) — type=text --}}
                         <div id="field-whatsapp" class="hidden input-wrap">
                             <label class="label-float" for="f-whatsapp">Nomor WhatsApp</label>
                             <input id="f-whatsapp" name="no_whatsapp_txt" type="text" placeholder="" class="input-village pt-7"
-                                   oninput="document.getElementById('f-wa-master').value=this.value">
+                                oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
                         {{-- Subjek --}}
@@ -381,12 +389,12 @@
                             <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">Upload Foto Bukti <span class="text-stone-300 normal-case tracking-normal font-normal">(Opsional)</span></p>
                             <div id="upload-drop-zone" class="upload-drop-zone" onclick="document.getElementById('f-foto-bukti').click()">
                                 <img id="upload-preview" class="upload-preview" alt="Preview foto bukti">
-                                <div id="upload-placeholder">
+                                <div id="upload-placeholder" class="flex flex-col items-center text-center w-full">
                                     <div class="w-10 h-10 rounded-full bg-forest-50 border border-forest-100 flex items-center justify-center mx-auto mb-2">
                                         <i data-lucide="image-plus" class="w-5 h-5 text-forest-600"></i>
                                     </div>
                                     <p class="text-sm font-semibold text-stone-600">Klik atau seret foto ke sini</p>
-                                    <p class="text-xs text-stone-400 font-light mt-0.5">Format: JPG, PNG, WEBP &bull; Maks. 5 MB</p>
+                                    <p class="text-xs text-stone-400 font-light mt-1">Format: JPG, PNG, WEBP &bull; Maks. 5 MB</p>
                                 </div>
                                 <div id="upload-file-info" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
                                     <i data-lucide="check-circle" class="w-4 h-4 text-forest-600"></i>
@@ -398,6 +406,169 @@
                             </div>
                             <p id="upload-error-msg" class="upload-error-msg"></p>
                             <input type="file" id="f-foto-bukti" name="foto_bukti" accept="image/jpeg,image/png,image/webp" class="hidden">
+                        </div>
+
+                        {{-- ═══ UMKM Registration Fields (daftar_umkm only) ═══ --}}
+
+                        {{-- Banner info UMKM --}}
+                        <div id="field-umkm-banner" class="hidden p-4 bg-sand-50 border border-sand-100 rounded-xl flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-sand-500 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="store" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-sand-800">Pendaftaran UMKM ke Website Desa</p>
+                                <p class="text-xs text-sand-700/70 font-light mt-0.5">Isi data usaha Anda dengan lengkap. Tim desa akan memverifikasi dan menghubungi Anda dalam 3–5 hari kerja sebelum ditampilkan.</p>
+                            </div>
+                        </div>
+
+                        {{-- 1. INFORMASI PENGELOLA UMKM --}}
+                        <div id="field-group-pengelola-umkm" class="hidden space-y-4 pt-2">
+                            <div class="flex items-center gap-2 border-b border-stone-200 pb-2">
+                                <i data-lucide="store" class="w-4 h-4 text-forest-700"></i>
+                                <h4 class="font-display font-bold text-sm text-stone-800">Informasi Pengelola UMKM</h4>
+                            </div>
+
+                            <div id="field-nama-umkm" class="input-wrap">
+                                <label class="label-float" for="f-nama-umkm">Nama Usaha / UMKM</label>
+                                <input id="f-nama-umkm" name="nama_umkm" type="text" placeholder="" class="input-village pt-7">
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div id="field-jenis-produk-umkm" class="input-wrap">
+                                    <label class="label-float">Kategori Produk</label>
+                                    <select id="f-jenis-produk-umkm" name="jenis_produk_umkm" class="input-village pt-7 cursor-pointer">
+                                        <option value="">— Pilih Kategori —</option>
+                                        <option value="Makanan">Makanan & Minuman</option>
+                                        <option value="Kerajinan">Kerajinan Tangan</option>
+                                        <option value="Pertanian">Pertanian & Perkebunan</option>
+                                        <option value="Fashion">Fashion & Tekstil</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
+                                </div>
+
+                                <div id="field-jam-operasional-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-jam-operasional-umkm">Jam Operasional</label>
+                                    <input id="f-jam-operasional-umkm" name="jam_operasional_umkm" type="text" placeholder="cth: Senin-Minggu (06:00-17:00)" class="input-village pt-7">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div id="field-instagram-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-instagram-umkm">Instagram (Opsional)</label>
+                                    <input id="f-instagram-umkm" name="instagram_umkm" type="text" placeholder="cth: @opak_ibu.ninin" class="input-village pt-7">
+                                </div>
+
+                                <div id="field-alamat-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-alamat-umkm">Alamat Usaha</label>
+                                    <input id="f-alamat-umkm" name="alamat_umkm_daftar" type="text" placeholder="" class="input-village pt-7">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 2. TENTANG PRODUK --}}
+                        <div id="field-group-tentang-produk" class="hidden space-y-4 pt-2">
+                            <div class="flex items-center gap-2 border-b border-stone-200 pb-2">
+                                <i data-lucide="info" class="w-4 h-4 text-forest-700"></i>
+                                <h4 class="font-display font-bold text-sm text-stone-800">Tentang Produk</h4>
+                            </div>
+
+                            <div id="field-deskripsi-umkm" class="input-wrap">
+                                <label class="label-float" for="f-deskripsi-umkm">Cerita Singkat Produk / Usaha</label>
+                                <textarea id="f-deskripsi-umkm" name="deskripsi_umkm" rows="3" placeholder="" class="input-village pt-7 resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        {{-- 3. SPESIFIKASI PRODUK --}}
+                        <div id="field-group-spesifikasi-produk" class="hidden space-y-4 pt-2">
+                            <div class="flex items-center gap-2 border-b border-stone-200 pb-2">
+                                <i data-lucide="list-checks" class="w-4 h-4 text-forest-700"></i>
+                                <h4 class="font-display font-bold text-sm text-stone-800">Spesifikasi Produk</h4>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div id="field-harga-produk-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-harga-produk-umkm">Harga Produk</label>
+                                    <input id="f-harga-produk-umkm" name="harga_produk_umkm" type="text" placeholder="cth: 12.000 / Bungkus" class="input-village pt-7">
+                                </div>
+
+                                <div id="field-isi-produk-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-isi-produk-umkm">Isi / Berat Bersih</label>
+                                    <input id="f-isi-produk-umkm" name="isi_produk_umkm" type="text" placeholder="cth: 200 gram / bungkus" class="input-village pt-7">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div id="field-ketersediaan-umkm" class="input-wrap">
+                                    <label class="label-float">Ketersediaan Produk</label>
+                                    <select id="f-ketersediaan-umkm" name="ketersediaan_umkm" class="input-village pt-7 cursor-pointer">
+                                        <option value="Tersedia">Tersedia</option>
+                                        <option value="Pre-Order">Pre-Order</option>
+                                        <option value="Stok Terbatas">Stok Terbatas</option>
+                                    </select>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
+                                </div>
+
+                                <div id="field-sertifikasi-umkm" class="input-wrap">
+                                    <label class="label-float" for="f-sertifikasi-umkm">Sertifikasi (Opsional)</label>
+                                    <input id="f-sertifikasi-umkm" name="sertifikasi_umkm" type="text" placeholder="cth: Halal / P-IRT / NIB" class="input-village pt-7">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Upload Foto Produk (daftar_umkm only) --}}
+                        <div id="field-foto-produk" class="hidden">
+                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">Foto Produk <span class="text-stone-300 normal-case tracking-normal font-normal">(Opsional, maks. 5 MB)</span></p>
+                            <div id="upload-drop-zone-produk" class="upload-drop-zone" onclick="document.getElementById('f-foto-produk').click()">
+                                <img id="upload-preview-produk" class="upload-preview" alt="Preview foto produk">
+                                <div id="upload-placeholder-produk" class="flex flex-col items-center text-center w-full">
+                                    <div class="w-10 h-10 rounded-full bg-sand-50 border border-sand-100 flex items-center justify-center mx-auto mb-2">
+                                        <i data-lucide="image-plus" class="w-5 h-5 text-sand-600"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-stone-600">Klik atau seret foto produk ke sini</p>
+                                    <p class="text-xs text-stone-400 font-light mt-1">Format: JPG, PNG, WEBP &bull; Maks. 5 MB</p>
+                                </div>
+                                <div id="upload-file-info-produk" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-forest-600"></i>
+                                    <span id="upload-file-name-produk"></span>
+                                    <button type="button" onclick="event.stopPropagation(); clearFotoProduk()" class="ml-auto text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
+                                        <i data-lucide="x" class="w-3 h-3"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="upload-error-msg-produk" class="upload-error-msg"></p>
+                            <input type="file" id="f-foto-produk" name="foto_produk" accept="image/jpeg,image/png,image/webp" class="hidden">
+                        </div>
+
+                        {{-- Upload Dokumen Lampiran Resmi (PDF) (Kerja Sama & Pengajuan Acara) --}}
+                        <div id="field-dokumen-lampiran" class="hidden">
+                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">
+                                <span id="label-dokumen-title">Lampiran Proposal / Surat Resmi (PDF)</span>
+                                <span class="text-stone-300 normal-case tracking-normal font-normal">(Opsional, maks. 10 MB)</span>
+                            </p>
+                            <div id="upload-drop-zone-dokumen" class="upload-drop-zone" onclick="document.getElementById('f-dokumen-lampiran').click()">
+                                <div id="upload-placeholder-dokumen" class="flex flex-col items-center text-center w-full">
+                                    <div class="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-2">
+                                        <i data-lucide="file-text" class="w-5 h-5 text-rose-600"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-stone-600">Klik atau seret file PDF ke sini</p>
+                                    <p class="text-xs text-stone-400 font-light mt-1">Surat Permohonan / Proposal Resmi &bull; Format: PDF (Maks. 10 MB)</p>
+                                </div>
+                                <div id="upload-file-info-dokumen" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
+                                    <div class="w-8 h-8 rounded bg-rose-100 flex items-center justify-center flex-shrink-0 text-rose-700">
+                                        <i data-lucide="file-check-2" class="w-4 h-4"></i>
+                                    </div>
+                                    <div class="text-left overflow-hidden">
+                                        <span id="upload-file-name-dokumen" class="font-semibold block truncate text-stone-800 max-w-[200px] sm:max-w-xs"></span>
+                                        <span id="upload-file-size-dokumen" class="text-xs text-stone-400 font-normal"></span>
+                                    </div>
+                                    <button type="button" onclick="event.stopPropagation(); clearDokumenLampiran()" class="ml-auto text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
+                                        <i data-lucide="x" class="w-3 h-3"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="upload-error-msg-dokumen" class="upload-error-msg"></p>
+                            <input type="file" id="f-dokumen-lampiran" name="dokumen_lampiran" accept="application/pdf" class="hidden">
                         </div>
 
                         {{-- Submit --}}
@@ -461,6 +632,29 @@
     const fieldLokasiPeserta = document.getElementById('field-lokasi-peserta');
     const fieldMessage = document.getElementById('field-message');
     const fieldFotoBukti = document.getElementById('field-foto-bukti');
+
+    // UMKM Registration Fields
+    const fieldUmkmBanner = document.getElementById('field-umkm-banner');
+    const fieldGroupPengelola = document.getElementById('field-group-pengelola-umkm');
+    const fieldGroupTentang = document.getElementById('field-group-tentang-produk');
+    const fieldGroupSpesifikasi = document.getElementById('field-group-spesifikasi-produk');
+    const fieldNamaUmkm = document.getElementById('field-nama-umkm');
+    const fieldJenisProdukUmkm = document.getElementById('field-jenis-produk-umkm');
+    const fieldAlamatUmkm = document.getElementById('field-alamat-umkm');
+    const fieldDeskripsiUmkm = document.getElementById('field-deskripsi-umkm');
+    const fieldFotoProduk = document.getElementById('field-foto-produk');
+
+    const inputNamaUmkm = document.getElementById('f-nama-umkm');
+    const inputJenisProdukUmkm = document.getElementById('f-jenis-produk-umkm');
+    const inputAlamatUmkm = document.getElementById('f-alamat-umkm');
+    const inputDeskripsiUmkm = document.getElementById('f-deskripsi-umkm');
+    const inputJamOperasionalUmkm = document.getElementById('f-jam-operasional-umkm');
+    const inputInstagramUmkm = document.getElementById('f-instagram-umkm');
+    const inputIsiProdukUmkm = document.getElementById('f-isi-produk-umkm');
+    const inputBeratBersihUmkm = document.getElementById('f-berat-bersih-umkm');
+    const inputHargaProdukUmkm = document.getElementById('f-harga-produk-umkm');
+    const inputKetersediaanUmkm = document.getElementById('f-ketersediaan-umkm');
+    const inputSertifikasiUmkm = document.getElementById('f-sertifikasi-umkm');
 
     const inputEmail = document.getElementById('f-email');
     const inputWhatsapp = document.getElementById('f-whatsapp');
@@ -561,27 +755,205 @@
         }
     });
 
+    // === Upload Foto Produk (daftar_umkm) ===
+    const inputFotoProduk = document.getElementById('f-foto-produk');
+    const uploadDropZoneProduk = document.getElementById('upload-drop-zone-produk');
+    const uploadPreviewProduk = document.getElementById('upload-preview-produk');
+    const uploadPlaceholderProduk = document.getElementById('upload-placeholder-produk');
+    const uploadFileInfoProduk = document.getElementById('upload-file-info-produk');
+    const uploadFileNameProduk = document.getElementById('upload-file-name-produk');
+    const uploadErrorMsgProduk = document.getElementById('upload-error-msg-produk');
+
+    function setUploadErrorProduk(msg) {
+        uploadDropZoneProduk.classList.add('error');
+        uploadDropZoneProduk.classList.remove('has-file');
+        uploadErrorMsgProduk.textContent = msg;
+        uploadErrorMsgProduk.style.display = 'block';
+        uploadPreviewProduk.style.display = 'none';
+        uploadPlaceholderProduk.style.display = 'flex';
+        uploadFileInfoProduk.classList.add('hidden');
+        inputFotoProduk.value = '';
+    }
+
+    function clearFotoProduk() {
+        inputFotoProduk.value = '';
+        uploadPreviewProduk.src = '';
+        uploadPreviewProduk.style.display = 'none';
+        uploadPlaceholderProduk.style.display = 'flex';
+        uploadFileInfoProduk.classList.add('hidden');
+        uploadDropZoneProduk.classList.remove('has-file', 'error');
+        uploadErrorMsgProduk.style.display = 'none';
+        lucide.createIcons();
+    }
+
+    function handleFotoProdukFile(file) {
+        uploadErrorMsgProduk.style.display = 'none';
+        uploadDropZoneProduk.classList.remove('error');
+
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            setUploadErrorProduk('Format file tidak didukung. Gunakan JPG, PNG, atau WEBP.');
+            return;
+        }
+        if (file.size > MAX_SIZE_BYTES) {
+            setUploadErrorProduk('Ukuran file melebihi batas ' + MAX_SIZE_MB + ' MB.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadPreviewProduk.src = e.target.result;
+            uploadPreviewProduk.style.display = 'block';
+            uploadPlaceholderProduk.style.display = 'none';
+            uploadFileInfoProduk.classList.remove('hidden');
+            uploadFileNameProduk.textContent = file.name;
+            uploadDropZoneProduk.classList.add('has-file');
+            lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    inputFotoProduk.addEventListener('change', function() {
+        if (this.files && this.files[0]) handleFotoProdukFile(this.files[0]);
+    });
+
+    uploadDropZoneProduk.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    uploadDropZoneProduk.addEventListener('dragleave', function() {
+        this.classList.remove('dragover');
+    });
+    uploadDropZoneProduk.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            inputFotoProduk.files = dt.files;
+            handleFotoProdukFile(file);
+        }
+    });
+    // === Upload Dokumen Lampiran (PDF) ===
+    const inputDokumenLampiran = document.getElementById('f-dokumen-lampiran');
+    const uploadDropZoneDokumen = document.getElementById('upload-drop-zone-dokumen');
+    const uploadPlaceholderDokumen = document.getElementById('upload-placeholder-dokumen');
+    const uploadFileInfoDokumen = document.getElementById('upload-file-info-dokumen');
+    const uploadFileNameDokumen = document.getElementById('upload-file-name-dokumen');
+    const uploadFileSizeDokumen = document.getElementById('upload-file-size-dokumen');
+    const uploadErrorMsgDokumen = document.getElementById('upload-error-msg-dokumen');
+    const fieldDokumenLampiran = document.getElementById('field-dokumen-lampiran');
+    const labelDokumenTitle = document.getElementById('label-dokumen-title');
+
+    const MAX_DOC_SIZE_MB = 10;
+    const MAX_DOC_SIZE_BYTES = MAX_DOC_SIZE_MB * 1024 * 1024;
+
+    function setUploadErrorDokumen(msg) {
+        uploadDropZoneDokumen.classList.add('error');
+        uploadDropZoneDokumen.classList.remove('has-file');
+        uploadErrorMsgDokumen.textContent = msg;
+        uploadErrorMsgDokumen.style.display = 'block';
+        uploadPlaceholderDokumen.style.display = 'flex';
+        uploadFileInfoDokumen.classList.add('hidden');
+        inputDokumenLampiran.value = '';
+    }
+
+    function clearDokumenLampiran() {
+        inputDokumenLampiran.value = '';
+        uploadPlaceholderDokumen.style.display = 'flex';
+        uploadFileInfoDokumen.classList.add('hidden');
+        uploadDropZoneDokumen.classList.remove('has-file', 'error');
+        uploadErrorMsgDokumen.style.display = 'none';
+        lucide.createIcons();
+    }
+
+    function handleDokumenFile(file) {
+        uploadErrorMsgDokumen.style.display = 'none';
+        uploadDropZoneDokumen.classList.remove('error');
+
+        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+            setUploadErrorDokumen('Format file tidak didukung. Harus berformat PDF.');
+            return;
+        }
+        if (file.size > MAX_DOC_SIZE_BYTES) {
+            setUploadErrorDokumen('Ukuran file melebihi batas ' + MAX_DOC_SIZE_MB + ' MB.');
+            return;
+        }
+
+        const sizeKb = (file.size / 1024).toFixed(1);
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        const displaySize = file.size > 1024 * 1024 ? `${sizeMb} MB` : `${sizeKb} KB`;
+
+        uploadPlaceholderDokumen.style.display = 'none';
+        uploadFileInfoDokumen.classList.remove('hidden');
+        uploadFileNameDokumen.textContent = file.name;
+        uploadFileSizeDokumen.textContent = displaySize;
+        uploadDropZoneDokumen.classList.add('has-file');
+        lucide.createIcons();
+    }
+
+    inputDokumenLampiran.addEventListener('change', function() {
+        if (this.files && this.files[0]) handleDokumenFile(this.files[0]);
+    });
+
+    uploadDropZoneDokumen.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    uploadDropZoneDokumen.addEventListener('dragleave', function() {
+        this.classList.remove('dragover');
+    });
+    uploadDropZoneDokumen.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            inputDokumenLampiran.files = dt.files;
+            handleDokumenFile(file);
+        }
+    });
+
     function hideAllDynamicFields() {
         [fieldEmail, fieldWhatsapp, fieldSubject, fieldEmailKerjaSama,
             fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
-            fieldLokasiPeserta, fieldMessage, fieldFotoBukti
-        ].forEach(f => f.classList.add('hidden'));
+            fieldLokasiPeserta, fieldMessage, fieldFotoBukti,
+            // UMKM fields
+            fieldUmkmBanner, fieldGroupPengelola, fieldGroupTentang, fieldGroupSpesifikasi, fieldFotoProduk,
+            // Dokumen PDF lampiran
+            fieldDokumenLampiran
+        ].forEach(f => {
+            if (f) f.classList.add('hidden');
+        });
 
         [inputEmail, inputWhatsapp, inputSubject, inputEmailKS, inputInstansi,
             inputNamaAcara, inputTanggalAcara, inputWaktuAcara,
-            inputLokasiAcara, inputJumlahPeserta, inputMessage
+            inputLokasiAcara, inputJumlahPeserta, inputMessage,
+            // UMKM inputs
+            inputNamaUmkm, inputAlamatUmkm, inputDeskripsiUmkm,
+            inputJamOperasionalUmkm, inputInstagramUmkm, inputIsiProdukUmkm,
+            inputHargaProdukUmkm, inputKetersediaanUmkm, inputSertifikasiUmkm
         ].forEach(inp => {
-            inp.removeAttribute('required');
-            inp.disabled = true;
-            inp.value = ''; // Reset nilai agar tidak ada sisa data yang tertinggal
+            if (inp) {
+                inp.removeAttribute('required');
+                inp.disabled = true;
+                inp.value = ''; // Reset nilai agar tidak ada sisa data yang tertinggal
+            }
         });
+
+        // Reset select UMKM (tidak perlu disabled, tapi reset value)
+        if (inputJenisProdukUmkm) inputJenisProdukUmkm.value = '';
+        if (inputKetersediaanUmkm) inputKetersediaanUmkm.value = 'Tersedia';
 
         // Reset master hidden input saat semua field disembunyikan
         const waMaster = document.getElementById('f-wa-master');
         if (waMaster) waMaster.value = '';
 
-        // Reset upload foto bukti
+        // Reset upload foto bukti, foto produk, & dokumen lampiran
         clearFotoBukti();
+        clearFotoProduk();
+        clearDokumenLampiran();
     }
 
     function showFieldWithRequired(field, input) {
@@ -619,6 +991,9 @@
             inputMessage.name = 'message';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Isi Pesan Kerja Sama';
+            // Tampilkan lampiran PDF dokumen proposal kerja sama
+            fieldDokumenLampiran.classList.remove('hidden');
+            labelDokumenTitle.textContent = 'Proposal / Surat Kerja Sama Resmi (PDF)';
             btnText.textContent = 'Kirim Kerja Sama';
         } else if (jenisPesan === 'pengajuan_acara') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
@@ -632,7 +1007,29 @@
             inputMessage.name = 'deskripsi_acara';
             showFieldWithRequired(fieldMessage, inputMessage);
             labelMessage.textContent = 'Deskripsi Acara';
+            // Tampilkan lampiran PDF dokumen pengajuan acara
+            fieldDokumenLampiran.classList.remove('hidden');
+            labelDokumenTitle.textContent = 'Proposal / Surat Permohonan Acara (PDF)';
             btnText.textContent = 'Kirim Pengajuan';
+        } else if (jenisPesan === 'daftar_umkm') {
+            showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
+            if (fieldUmkmBanner) fieldUmkmBanner.classList.remove('hidden');
+            if (fieldGroupPengelola) fieldGroupPengelola.classList.remove('hidden');
+            if (fieldGroupTentang) fieldGroupTentang.classList.remove('hidden');
+            if (fieldGroupSpesifikasi) fieldGroupSpesifikasi.classList.remove('hidden');
+
+            if (inputNamaUmkm) { inputNamaUmkm.disabled = false; inputNamaUmkm.setAttribute('required', 'required'); }
+            if (inputJenisProdukUmkm) { inputJenisProdukUmkm.disabled = false; inputJenisProdukUmkm.setAttribute('required', 'required'); }
+            if (inputAlamatUmkm) { inputAlamatUmkm.disabled = false; inputAlamatUmkm.setAttribute('required', 'required'); }
+            if (inputDeskripsiUmkm) { inputDeskripsiUmkm.disabled = false; inputDeskripsiUmkm.setAttribute('required', 'required'); }
+
+            // Opsional extra fields
+            [inputJamOperasionalUmkm, inputInstagramUmkm, inputIsiProdukUmkm, inputHargaProdukUmkm, inputKetersediaanUmkm, inputSertifikasiUmkm].forEach(inp => {
+                if (inp) inp.disabled = false;
+            });
+
+            if (fieldFotoProduk) fieldFotoProduk.classList.remove('hidden');
+            btnText.textContent = 'Kirim Pendaftaran UMKM';
         } else {
             submitBtn.disabled = true;
             btnText.textContent = 'Pilih Jenis Pesan';

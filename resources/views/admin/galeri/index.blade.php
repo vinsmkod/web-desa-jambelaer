@@ -2,7 +2,7 @@
 
 @section('title', 'Galeri Desa')
 @section('page_title', 'Kelola Galeri Desa')
-@section('page_subtitle', 'Tambah, edit, dan hapus foto kegiatan, budaya, UMKM, serta pembangunan desa')
+@section('page_subtitle', 'Tambah, edit, dan hapus foto kegiatan, acara, serta budaya desa')
 
 @section('content')
 <div class="space-y-6">

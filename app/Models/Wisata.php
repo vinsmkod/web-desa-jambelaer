@@ -62,8 +62,6 @@ class Wisata extends Model
             'alam' => 'Wisata Alam',
             'budaya' => 'Wisata Budaya',
             'kuliner' => 'Wisata Kuliner',
-            'buatan' => 'Wisata Buatan',
-            'religi' => 'Wisata Religi',
             default => ucfirst($this->kategori),
         };
     }
@@ -77,8 +75,6 @@ class Wisata extends Model
             'alam' => 'Wisata Alam',
             'budaya' => 'Wisata Budaya',
             'kuliner' => 'Wisata Kuliner',
-            'buatan' => 'Wisata Buatan',
-            'religi' => 'Wisata Religi',
         ];
     }
 }

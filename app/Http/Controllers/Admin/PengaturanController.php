@@ -58,13 +58,12 @@ class PengaturanController extends Controller
 
         // Handle upload foto kades
         if ($request->hasFile('kades_foto_file')) {
-            $file = $request->file('kades_foto_file');
-
-            // Validasi file upload
+            // Validasi file upload SEBELUM mengakses file
             $request->validate([
                 'kades_foto_file' => ['image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
             ]);
 
+            $file = $request->file('kades_foto_file');
             $filename = 'kades_' . time() . '_' . Str::random(6) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/kades'), $filename);
             $inputs['kades_foto'] = '/uploads/kades/' . $filename;

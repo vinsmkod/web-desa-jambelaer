@@ -2,7 +2,7 @@
 
 @section('title', 'Tambah Foto Galeri')
 @section('page_title', 'Tambah Foto Galeri')
-@section('page_subtitle', 'Unggah foto kegiatan, acara, UMKM, budaya, atau dokumentasi desa')
+@section('page_subtitle', 'Unggah foto kegiatan, acara, atau budaya desa')
 
 @section('content')
 <div class="max-w-3xl">

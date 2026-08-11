@@ -18,6 +18,7 @@ class PesanController extends Controller
             'pengaduan'       => Pesan::where('jenis_pesan', 'pengaduan')->count(),
             'kerja_sama'      => Pesan::where('jenis_pesan', 'kerja_sama')->count(),
             'pengajuan_acara' => Pesan::where('jenis_pesan', 'pengajuan_acara')->count(),
+            'daftar_umkm'     => Pesan::where('jenis_pesan', 'daftar_umkm')->count(),
         ];
 
         // Paginated data with optional jenis filter
@@ -52,9 +53,15 @@ class PesanController extends Controller
 
     public function destroy(Pesan $pesan)
     {
-        // Hapus foto bukti dari storage jika ada
+        // Hapus foto bukti/produk/dokumen dari storage jika ada
         if ($pesan->foto_bukti) {
             Storage::disk('public')->delete($pesan->foto_bukti);
+        }
+        if ($pesan->foto_produk) {
+            Storage::disk('public')->delete($pesan->foto_produk);
+        }
+        if ($pesan->dokumen_lampiran) {
+            Storage::disk('public')->delete($pesan->dokumen_lampiran);
         }
 
         $pesan->delete();
