@@ -15,7 +15,7 @@ class TentangController extends Controller
      */
     private function resequence()
     {
-        $items = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
+        $items = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
         foreach ($items as $index => $item) {
             if ($item->urutan != ($index + 1)) {
                 $item->update(['urutan' => $index + 1]);
@@ -26,7 +26,7 @@ class TentangController extends Controller
     public function index()
     {
         // Tidak memanggil resequence() di sini agar tidak ada N query UPDATE setiap halaman dibuka
-        $strukturList = StrukturDesa::orderBy('urutan')->orderBy('id')->paginate(5);
+        $strukturList = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->paginate(5);
         $nextUrutan   = (StrukturDesa::max('urutan') ?? 0) + 1;
 
         return view('admin.tentang.index', compact('strukturList', 'nextUrutan'));

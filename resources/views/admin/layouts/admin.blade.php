@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') – Panel Admin Desa Jambelaer</title>
     <meta name="description" content="Panel Admin Desa Jambelaer">
+    <!-- Blokir indexing halaman admin oleh mesin pencari -->
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="googlebot" content="noindex, nofollow">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -110,7 +110,7 @@ class BeritaController extends Controller
             $slug = Str::slug($request->judul);
             $originalSlug = $slug;
             $count = 1;
-            while (Berita::where('slug', $slug)->where('id', '!=', $berita->id)->exists()) {
+            while (Berita::where('slug', $slug)->where('berita_id', '!=', $berita->berita_id)->exists()) {
                 $slug = "{$originalSlug}-{$count}";
                 $count++;
             }

@@ -1,7 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Tentang Kami')
-@section('meta_desc', 'Kenali lebih dekat Desa Jambelaer – sejarah, profil, visi & misi, serta sambutan hangat kepala desa Kecamatan Dawuan, Kabupaten Subang.')
+@section('title', 'Profil Desa Jambelaer | Kecamatan Dawuan, Kabupaten Subang')
+@section('meta_desc', 'Profil lengkap Desa Jambelaer – sejarah desa, visi misi, sambutan kepala desa, potensi wilayah, dan struktur pemerintahan desa di Kecamatan Dawuan, Kabupaten Subang, Jawa Barat.')
+@section('og_image', asset('uploads/img/sawah.jpeg'))
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Profil Desa Jambelaer",
+      "item": "{{ config('app.url') }}/tentang-kami"
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -10,7 +34,8 @@
 ══════════════════════════════════════════════════════════════════ --}}
 <div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="{{ asset('uploads/img/sawah.jpeg') }}"
-        alt="Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+        alt="Hamparan sawah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang" class="w-full h-full object-cover opacity-60"
+        width="1200" height="400" loading="eager">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Tentang Kami</span>
@@ -388,8 +413,8 @@
 
             {{-- Jajaran Grid --}}
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-                @foreach($jajaranDesa as $anggota)
-                <div class="group card-village p-5 text-center">
+                @foreach($jajaranDesa as $index => $anggota)
+                <div class="group card-village p-5 text-center reveal-fade-up" style="transition-delay: {{ ($index % 4) * 75 }}ms">
                     <div class="relative mb-4 inline-block">
                         <img src="{{ $anggota->foto ? asset($anggota->foto) : 'https://ui-avatars.com/api/?name='.urlencode($anggota->nama).'&background=1a4731&color=fff&size=200' }}"
                             alt="{{ $anggota->nama }}"

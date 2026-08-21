@@ -118,7 +118,7 @@
                 {{-- Actions --}}
                 <div class="flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
                     <button type="button"
-                        onclick="openEditModal({{ $anggota->id }}, '{{ addslashes($anggota->nama) }}', '{{ addslashes($anggota->jabatan) }}', {{ $anggota->urutan }}, '{{ $anggota->foto ? asset($anggota->foto) : '' }}')"
+                        onclick="openEditModal({{ $anggota->struktur_desa_id }}, '{{ addslashes($anggota->nama) }}', '{{ addslashes($anggota->jabatan) }}', {{ $anggota->urutan }}, '{{ $anggota->foto ? asset($anggota->foto) : '' }}')"
                         class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-forest-50 hover:text-forest-700 transition-all"
                         title="Edit Anggota">
                         <i data-lucide="pencil" class="w-4 h-4"></i>

@@ -101,13 +101,13 @@
                         <!-- Aksi -->
                         <td class="py-4 px-4 text-right whitespace-nowrap">
                             <div class="flex items-center justify-end gap-1.5">
-                                <a href="{{ route('admin.berita.edit', $item->id) }}"
+                                <a href="{{ route('admin.berita.edit', $item->berita_id) }}"
                                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-forest-50 hover:text-forest-700 transition-all"
                                     title="Edit Berita">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </a>
 
-                                <form action="{{ route('admin.berita.destroy', $item->id) }}" method="POST" class="delete-form">
+                                <form action="{{ route('admin.berita.destroy', $item->berita_id) }}" method="POST" class="delete-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button"

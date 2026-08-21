@@ -1,7 +1,53 @@
 @extends('layouts.app')
 
-@section('title', $product->title)
-@section('meta_desc', $product->desc_short)
+@section('title', $product->title . ' | UMKM Desa Jambelaer')
+@section('meta_desc', Str::limit($product->desc_short ?: ($product->producer . ' – Produk UMKM Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.'), 155))
+@section('og_image', $product->img_url)
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "name": {{ json_encode($product->producer ?: $product->title) }},
+      "description": {{ json_encode(Str::limit($product->desc_short ?: $product->desc_long, 200)) }},
+      "image": {{ json_encode($product->img_url) }},
+      "url": "{{ config('app.url') }}/umkm/{{ $product->slug }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": {{ json_encode($product->alamat_umkm ?: 'Desa Jambelaer') }},
+        "addressLocality": "Kecamatan Dawuan",
+        "addressRegion": "Kabupaten Subang",
+        "addressCountry": "ID"
+      },
+      @if($product->no_whatsapp_umkm)
+      "telephone": {{ json_encode($product->no_whatsapp_umkm) }},
+      @endif
+      @if($product->jam_operasional)
+      "openingHours": {{ json_encode($product->jam_operasional) }},
+      @endif
+      "areaServed": "Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang",
+      "priceRange": {{ json_encode($product->price ?: 'Hubungi penjual') }}
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+        { "@type": "ListItem", "position": 2, "name": "UMKM", "item": "{{ config('app.url') }}/umkm" },
+        @if($product->jenis)
+        { "@type": "ListItem", "position": 3, "name": {{ json_encode($product->jenis_label ?? ucfirst($product->jenis)) }}, "item": "{{ config('app.url') }}/umkm/jenis/{{ $product->jenis }}" },
+        { "@type": "ListItem", "position": 4, "name": {{ json_encode($product->title) }}, "item": "{{ config('app.url') }}/umkm/{{ $product->slug }}" }
+        @else
+        { "@type": "ListItem", "position": 3, "name": {{ json_encode($product->title) }}, "item": "{{ config('app.url') }}/umkm/{{ $product->slug }}" }
+        @endif
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="pt-24 pb-24 bg-stone-50/50">
@@ -27,8 +73,9 @@
             {{-- ── Left: Image ── --}}
             <div class="lg:col-span-5 space-y-6 reveal-on-scroll">
                 <div class="relative rounded-xl overflow-hidden shadow-sm border border-stone-200 bg-white">
-                    <img src="{{ $product->img }}" alt="{{ $product->title }}"
-                         class="w-full h-80 lg:h-[420px] object-cover">
+                    <img src="{{ $product->img }}" alt="Produk {{ $product->title }} dari UMKM {{ $product->producer ?? 'Desa Jambelaer' }}"
+                         class="w-full h-80 lg:h-[420px] object-cover"
+                         loading="eager" width="600" height="420">
                     <span class="absolute top-4 left-4 px-2.5 py-1 rounded text-[10px] font-extrabold tracking-wider uppercase shadow-sm
                         {{ $product->badge === 'Makanan' ? 'bg-amber-50 border border-amber-100 text-amber-800' : ($product->badge === 'Kerajinan' ? 'bg-violet-50 border border-violet-100 text-violet-800' : 'bg-forest-50 border border-forest-100 text-forest-900') }}">
                         {{ $product->badge }}
@@ -43,8 +90,9 @@
                         @foreach($allProducts->take(4) as $p)
                         <a href="{{ route('umkm.detail', $p->slug) }}"
                            class="group flex items-center gap-3 p-2.5 bg-white rounded-lg border border-stone-200 hover:border-forest-200 hover:shadow-sm transition-all">
-                            <img src="{{ $p->img }}" alt="{{ $p->title }}"
-                                 class="w-12 h-12 object-cover rounded flex-shrink-0">
+                            <img src="{{ $p->img }}" alt="Produk {{ $p->title }} UMKM Desa Jambelaer"
+                                 class="w-12 h-12 object-cover rounded flex-shrink-0"
+                                 loading="lazy" width="48" height="48">
                             <div class="min-w-0">
                                 <p class="text-xs font-bold text-stone-800 truncate group-hover:text-forest-700 transition-colors">{{ $p->title }}</p>
                                 <p class="text-xs text-sand-700 font-bold mt-0.5">{{ $p->price }}</p>

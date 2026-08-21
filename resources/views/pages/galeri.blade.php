@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Galeri Desa')
-@section('meta_desc', 'Dokumentasi kegiatan, acara, budaya, dan pembangunan Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
+@section('title', 'Galeri Foto Desa Jambelaer | Dokumentasi Kegiatan Desa')
+@section('meta_desc', 'Dokumentasi foto kegiatan, acara, budaya, dan pembangunan Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Saksikan momen dan aktivitas warga desa.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+    { "@type": "ListItem", "position": 2, "name": "Galeri Desa Jambelaer", "item": "{{ config('app.url') }}/galeri" }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -37,15 +50,18 @@
         </div>
 
         {{-- ── Gallery Grid ── --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-on-scroll delay-100">
-            @forelse($galeris as $g)
-            <div class="gallery-item bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-md hover:border-forest-200 transition-all duration-300 flex flex-col group"
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($galeris as $index => $g)
+            <div class="gallery-item bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-md hover:border-forest-200 transition-all duration-300 flex flex-col group reveal-fade-up"
+                 style="transition-delay: {{ ($index % 3) * 100 }}ms"
                  data-category="{{ $g->kategori }}">
                 <div class="relative h-56 overflow-hidden bg-stone-50">
-                    <img src="{{ $g->foto }}" alt="{{ $g->judul }}"
-                         class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500">
+                    <img src="{{ $g->foto_url }}"
+                         alt="{{ $g->judul }} – Foto {{ $g->kategori_label }} Desa Jambelaer"
+                         class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                         loading="lazy" width="400" height="225">
                     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                        <a href="{{ route('galeri.detail', $g->id) }}"
+                        <a href="{{ route('galeri.detail', $g->slug ?: $g->galeri_id) }}"
                            class="inline-flex items-center text-xs font-bold text-white bg-forest-800/90 hover:bg-forest-700 px-4 py-2 rounded transition-all">
                             Lihat Foto <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1.5 text-sand-300"></i>
                         </a>
@@ -70,7 +86,7 @@
                             <i data-lucide="calendar" class="w-3.5 h-3.5 mr-1.5 text-sand-500"></i>
                             {{ $g->tanggal_publikasi ? $g->tanggal_publikasi->translatedFormat('d M Y') : $g->created_at->translatedFormat('d M Y') }}
                         </span>
-                        <a href="{{ route('galeri.detail', $g->id) }}" class="text-forest-700 font-bold hover:underline flex items-center gap-0.5">
+                        <a href="{{ route('galeri.detail', $g->slug ?: $g->galeri_id) }}" class="text-forest-700 font-bold hover:underline flex items-center gap-0.5">
                             Detail <i data-lucide="arrow-right" class="w-3 h-3"></i>
                         </a>
                     </div>

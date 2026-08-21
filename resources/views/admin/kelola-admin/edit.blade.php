@@ -42,7 +42,7 @@
         </div>
         @endif
 
-        <form action="{{ route('admin.kelola-admin.update', $admin->id) }}" method="POST" autocomplete="off" class="space-y-5">
+        <form action="{{ route('admin.kelola-admin.update', $admin->user_id) }}" method="POST" autocomplete="off" class="space-y-5">
             @csrf
             @method('PUT')
 

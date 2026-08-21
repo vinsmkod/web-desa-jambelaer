@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KontakController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProdukController;
@@ -25,6 +26,9 @@ use App\Models\Wisata;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
+// Sitemap XML — harus diakses sebelum route lain agar tidak tertutup wildcard
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
 // Home
 Route::get('/', function () {
     $settings = [
@@ -41,14 +45,14 @@ Route::get('/', function () {
 // Tentang Kami
 Route::get('/tentang-kami', function () {
     $settings  = Pengaturan::all()->keyBy('key');
-    $struktur  = StrukturDesa::orderBy('urutan')->orderBy('id')->get();
+    $struktur  = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
     $mapsUrl   = Pengaturan::get('maps_embed_url', '');
     return view('pages.tentang', compact('settings', 'struktur', 'mapsUrl'));
 })->name('tentang');
 
 // UMKM – Daftar produk (grouped by jenis)
 Route::get('/umkm', function () {
-    $products           = Produk::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
+    $products           = Produk::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->get();
     $jenisGroups        = $products->whereNotNull('jenis')->groupBy('jenis');
     $individualProducts = $products->filter(fn ($p) => is_null($p->jenis));
     return view('pages.umkm', compact('products', 'jenisGroups', 'individualProducts'));
@@ -59,7 +63,7 @@ Route::get('/umkm/jenis/{jenis}', function ($jenis) {
     $producers = Produk::where('is_active', true)
         ->where('jenis', $jenis)
         ->orderBy('urutan')
-        ->orderBy('id')
+        ->orderBy('produk_id')
         ->get();
     if ($producers->isEmpty()) abort(404);
     $jenisLabel = $producers->first()->jenis_label ?? ucfirst($jenis);
@@ -75,42 +79,53 @@ Route::get('/umkm/{slug}', function ($slug) {
 
 // Budaya
 Route::get('/budaya', function () {
-    $budayas = Budaya::orderBy('urutan')->orderBy('id')->get();
+    $budayas = Budaya::orderBy('urutan')->orderBy('budaya_id')->get();
     return view('pages.budaya', compact('budayas'));
 })->name('budaya');
 
-// Budaya Detail
-Route::get('/budaya/{id}', function ($id) {
-    $budaya = Budaya::find($id);
+// Budaya Detail — SEO-friendly slug URL
+Route::get('/budaya/{slug}', function ($slug) {
+    // Jika parameter adalah angka (ID lama), redirect 301 ke slug baru
+    if (is_numeric($slug)) {
+        $budaya = Budaya::find((int)$slug);
+        if ($budaya && $budaya->slug) {
+            return redirect()->route('budaya.detail', $budaya->slug, 301);
+        }
+        abort(404);
+    }
 
+    // Cari berdasarkan slug
+    $budaya = Budaya::where('slug', $slug)->first();
+
+    // Fallback: jika database budaya kosong, gunakan data statis
     if (!$budaya && Budaya::count() === 0) {
         $fallbacks = [
-            1 => [
-                'id' => 1,
+            'ruwatan-bumi-hajat-bumi' => [
+                'id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi',
                 'title' => 'Ruwatan Bumi (Hajat Bumi)',
                 'kategori' => 'Upacara Adat',
                 'excerpt' => 'Upacara adat tanda syukur hasil bumi pertanian desa yang melimpah.',
                 'desc' => 'Tradisi Ruwatan Bumi (atau Hajat Bumi) diadakan setahun sekali setelah panen raya sebagai wujud syukur masyarakat Desa Jambelaer kepada Tuhan Yang Maha Esa atas kelimpahan hasil bumi pertanian. Upacara adat diisi dengan mengarak tumpeng besar, doa bersama para sepuh desa, pagelaran wayang golek, serta saling bertukar hidangan makanan antar tetangga untuk mempererat silaturahmi gotong royong.',
                 'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80',
             ],
-            2 => [
-                'id' => 2,
+            'kesenian-sisingaan' => [
+                'id' => 2, 'slug' => 'kesenian-sisingaan',
                 'title' => 'Kesenian Sisingaan',
                 'kategori' => 'Seni Pertunjukan',
                 'excerpt' => 'Atraksi budaya khas Subang pemacu semangat kebersamaan rakyat.',
-                'desc' => 'Kesenian Sisingaan adalah pertunjukan boneka singa raksasa khas Kabupaten Subang yang ditunggangi anak-anak lalu diusung oleh para pemuda gagah sambil menari mengikuti irama tabuhan kendang pencak silat. Pertunjukan ini sering dijumpai dalam upacara khitanan anak atau perayaan hari besar desa (Milangkala), melambangkan semangat persatuan, patriotisme, dan sukacita kebersamaan warga.',
+                'desc' => 'Kesenian Sisingaan adalah pertunjukan boneka singa raksasa khas Kabupaten Subang yang ditunggangi anak-anak lalu diusung oleh para pemuda gagah sambil menari mengikuti irama tabuhan kendang pencak silat.',
                 'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
             ],
-            3 => [
-                'id' => 3,
+            'pencak-silat-tradisional' => [
+                'id' => 3, 'slug' => 'pencak-silat-tradisional',
                 'title' => 'Pencak Silat Tradisional',
                 'kategori' => 'Seni Bela Diri',
                 'excerpt' => 'Pelatihan fisik dan spiritual bela diri Sunda yang menjunjung persaudaraan.',
-                'desc' => 'Sebagai bentuk pelestarian bela diri warisan Sunda, Desa Jambelaer memiliki padepokan pencak silat lokal tempat berkumpulnya pemuda untuk melatih ketahanan fisik, konsentrasi mental, dan kehalusan budi pekerti. Dengan iringan musik terompet Sunda dan kendang, gerakan jurus silat diperagakan dalam pergelaran milangkala desa.',
+                'desc' => 'Sebagai bentuk pelestarian bela diri warisan Sunda, Desa Jambelaer memiliki padepokan pencak silat lokal tempat berkumpulnya pemuda untuk melatih ketahanan fisik, konsentrasi mental, dan kehalusan budi pekerti.',
                 'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
             ],
-            4 => [
-                'id' => 4,
+            'milangkala-karnaval-desa' => [
+                'id' => 4, 'slug' => 'milangkala-karnaval-desa',
                 'title' => 'Milangkala & Karnaval Desa',
                 'kategori' => 'Festival Tahunan',
                 'excerpt' => 'Peringatan hari lahir desa yang diramaikan pawai budaya kreasi warga.',
@@ -119,8 +134,8 @@ Route::get('/budaya/{id}', function ($id) {
             ],
         ];
 
-        if (isset($fallbacks[$id])) {
-            $budaya = (object) $fallbacks[$id];
+        if (isset($fallbacks[$slug])) {
+            $budaya = (object) $fallbacks[$slug];
         }
     }
 
@@ -130,38 +145,17 @@ Route::get('/budaya/{id}', function ($id) {
 
     $rekomendasi = [];
     if (Budaya::count() > 0) {
-        $rekomendasi = Budaya::where('id', '!=', $budaya->id ?? $id)->orderBy('urutan')->take(3)->get();
+        $rekomendasi = Budaya::where('slug', '!=', $slug)->orderBy('urutan')->take(3)->get();
     } else {
-        $fallbacks = [
-            1 => [
-                'id' => 1,
-                'title' => 'Ruwatan Bumi',
-                'kategori' => 'Upacara Adat',
-                'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80',
-            ],
-            2 => [
-                'id' => 2,
-                'title' => 'Seni Sisingaan',
-                'kategori' => 'Seni Pertunjukan',
-                'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-            ],
-            3 => [
-                'id' => 3,
-                'title' => 'Pencak Silat',
-                'kategori' => 'Seni Bela Diri',
-                'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
-            ],
-            4 => [
-                'id' => 4,
-                'title' => 'Milangkala Desa',
-                'kategori' => 'Festival Tahunan',
-                'img_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-            ],
+        // Fallback rekomendasi statis
+        $allFallbacks = [
+            'ruwatan-bumi-hajat-bumi' => (object)['id'=>1,'slug'=>'ruwatan-bumi-hajat-bumi','title'=>'Ruwatan Bumi','kategori'=>'Upacara Adat','img_url'=>'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=400&q=80','excerpt'=>'Upacara adat tanda syukur hasil bumi.'],
+            'kesenian-sisingaan'      => (object)['id'=>2,'slug'=>'kesenian-sisingaan','title'=>'Seni Sisingaan','kategori'=>'Seni Pertunjukan','img_url'=>'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80','excerpt'=>'Atraksi budaya khas Subang.'],
+            'pencak-silat-tradisional'=> (object)['id'=>3,'slug'=>'pencak-silat-tradisional','title'=>'Pencak Silat','kategori'=>'Seni Bela Diri','img_url'=>'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80','excerpt'=>'Bela diri Sunda warisan budaya.'],
+            'milangkala-karnaval-desa'=> (object)['id'=>4,'slug'=>'milangkala-karnaval-desa','title'=>'Milangkala Desa','kategori'=>'Festival Tahunan','img_url'=>'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80','excerpt'=>'Peringatan hari lahir desa.'],
         ];
-        unset($fallbacks[$id]);
-        $rekomendasi = array_map(function($item) {
-            return (object) $item;
-        }, array_values($fallbacks));
+        unset($allFallbacks[$slug]);
+        $rekomendasi = array_values($allFallbacks);
     }
 
     return view('pages.budaya-detail', compact('budaya', 'rekomendasi'));
@@ -169,7 +163,7 @@ Route::get('/budaya/{id}', function ($id) {
 
 // Wisata
 Route::get('/wisata', function () {
-    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
+    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->get();
     $kategoriList = Wisata::kategoriList();
     return view('pages.wisata', compact('wisatas', 'kategoriList'));
 })->name('wisata');
@@ -177,7 +171,7 @@ Route::get('/wisata', function () {
 Route::get('/wisata/{slug}', function ($slug) {
     $wisata = Wisata::where('slug', $slug)->where('is_active', true)->firstOrFail();
     $rekomendasi = Wisata::where('is_active', true)
-        ->where('id', '!=', $wisata->id)
+        ->where('wisata_id', '!=', $wisata->wisata_id)
         ->orderBy('urutan')
         ->take(3)
         ->get();
@@ -186,20 +180,31 @@ Route::get('/wisata/{slug}', function ($slug) {
 
 // Galeri – Daftar foto galeri desa
 Route::get('/galeri', function () {
-    $galeris      = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('id')->get();
+    $galeris      = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->get();
     $kategoriList = Galeri::kategoriList();
     return view('pages.galeri', compact('galeris', 'kategoriList'));
 })->name('galeri');
 
-// Galeri – Detail foto
-Route::get('/galeri/{id}', function ($id) {
-    $foto    = Galeri::where('is_active', true)->findOrFail($id);
+// Galeri – Detail foto SEO-friendly slug
+Route::get('/galeri/{slug}', function ($slug) {
+    // Jika parameter berupa angka (ID lama), redirect 301 ke URL slug baru
+    if (is_numeric($slug)) {
+        $foto = Galeri::where('is_active', true)->find((int)$slug);
+        if ($foto && $foto->slug) {
+            return redirect()->route('galeri.detail', $foto->slug, 301);
+        }
+        if (!$foto) abort(404);
+    } else {
+        $foto = Galeri::where('slug', $slug)->where('is_active', true)->firstOrFail();
+    }
+
     $lainnya = Galeri::where('is_active', true)
-        ->where('id', '!=', $id)
+        ->where('galeri_id', '!=', $foto->galeri_id)
         ->where('kategori', $foto->kategori)
         ->orderBy('urutan')
         ->take(6)
         ->get();
+
     return view('pages.galeri-detail', compact('foto', 'lainnya'));
 })->name('galeri.detail');
 
@@ -242,7 +247,7 @@ Route::get('/acara', function () {
 // Berita – Portal Berita Publik
 Route::get('/berita', function () {
     $featuredBerita = Berita::where('is_published', true)->orderBy('published_at', 'desc')->first();
-    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->orderBy('id', 'desc')->paginate(9);
+    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->orderBy('berita_id', 'desc')->paginate(9);
 
     return view('pages.berita', compact('beritas', 'featuredBerita'));
 })->name('berita');
@@ -252,7 +257,7 @@ Route::get('/berita/{slug}', function ($slug) {
     $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
 
     // Hitung views hanya dari pengunjung publik & cegah manipulasi spam refresh dalam 1 sesi
-    $sessionKey = 'viewed_berita_' . $berita->id;
+    $sessionKey = 'viewed_berita_' . $berita->berita_id;
     if (!auth()->check() && !session()->has($sessionKey)) {
         $berita->increment('views');
         $berita->views++; // Update angka views di memori agar langsung sesuai pada halaman
@@ -260,7 +265,7 @@ Route::get('/berita/{slug}', function ($slug) {
     }
 
     $rekomendasi = Berita::where('is_published', true)
-        ->where('id', '!=', $berita->id)
+        ->where('berita_id', '!=', $berita->berita_id)
         ->orderBy('published_at', 'desc')
         ->take(4)
         ->get();

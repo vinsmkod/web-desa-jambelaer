@@ -1,7 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Berita & Informasi')
-@section('meta_desc', 'Kumpulan berita resmi, pengumuman publik, dan warta kegiatan terkini dari Pemerintah Desa Jambelaer, Subang.')
+@section('title', 'Berita Desa Jambelaer | Informasi dan Kegiatan Desa')
+@section('meta_desc', 'Kumpulan berita resmi, pengumuman publik, dan warta kegiatan terkini dari Pemerintah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Berita Desa Jambelaer",
+      "item": "{{ config('app.url') }}/berita"
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -10,7 +33,8 @@
 ══════════════════════════════════════════════════════════════════ --}}
 <div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
     <img src="{{ asset('uploads/img/beranda.jpeg') }}"
-         alt="Berita Desa Jambelaer" class="w-full h-full object-cover opacity-60">
+         alt="Portal Berita Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang" class="w-full h-full object-cover opacity-60"
+         width="1200" height="400" loading="eager">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Warta Resmi Desa</span>
@@ -22,14 +46,15 @@
 <div class="bg-white pb-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <!-- ── News Cards Grid ────────────────────────────────────────── -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-on-scroll">
-            @forelse($beritas as $item)
-            <article class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200/80 flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @forelse($beritas as $index => $item)
+            <article class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200/80 flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 reveal-fade-up" style="transition-delay: {{ ($index % 3) * 100 }}ms">
                 <div>
                     <!-- Image -->
                     <div class="relative aspect-video overflow-hidden bg-slate-100">
-                        <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }} - Berita Desa Jambelaer"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy" width="400" height="225">
                     </div>
 
                     <!-- Content Body -->

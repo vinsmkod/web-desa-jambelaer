@@ -1,7 +1,70 @@
 @extends('layouts.app')
 
-@section('title', $berita->judul . ' - Berita Desa Jambelaer')
-@section('meta_desc', Str::limit(strip_tags($berita->ringkasan ?: $berita->konten), 160))
+@section('title', $berita->judul . ' | Berita Desa Jambelaer')
+@section('meta_desc', Str::limit(strip_tags($berita->ringkasan ?: $berita->konten), 155))
+@section('og_type', 'article')
+@section('og_image', $berita->gambar_url)
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsArticle",
+      "headline": {{ json_encode($berita->judul) }},
+      "description": {{ json_encode(Str::limit(strip_tags($berita->ringkasan ?: $berita->konten), 200)) }},
+      "image": {{ json_encode($berita->gambar_url) }},
+      "author": {
+        "@type": "Person",
+        "name": {{ json_encode($berita->penulis) }}
+      },
+      "publisher": {
+        "@type": "GovernmentOrganization",
+        "name": "Pemerintah Desa Jambelaer",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{ config('app.url') }}/uploads/img/DESA_JAMBELAER.png"
+        }
+      },
+      "datePublished": "{{ $berita->published_at ? $berita->published_at->toIso8601String() : $berita->created_at->toIso8601String() }}",
+      "dateModified": "{{ $berita->updated_at->toIso8601String() }}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ config('app.url') }}/berita/{{ $berita->slug }}"
+      },
+      "url": "{{ config('app.url') }}/berita/{{ $berita->slug }}",
+      "inLanguage": "id-ID",
+      "articleSection": "Berita Desa",
+      "keywords": "Desa Jambelaer, {{ $berita->judul }}, berita desa, Kecamatan Dawuan, Kabupaten Subang"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ config('app.url') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Berita Desa Jambelaer",
+          "item": "{{ config('app.url') }}/berita"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ json_encode(Str::limit($berita->judul, 60)) }},
+          "item": "{{ config('app.url') }}/berita/{{ $berita->slug }}"
+        }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -9,7 +72,7 @@
 <section class="pt-12 sm:pt-16 pb-10 sm:pb-12 bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-950 text-white relative">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <!-- Breadcrumb -->
-        <nav class="flex items-center gap-2 text-xs text-emerald-300/80 mb-2">
+        <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs text-emerald-300/80 mb-2">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Home</a>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
             <a href="{{ route('berita') }}" class="hover:text-white transition-colors">Berita</a>
@@ -53,7 +116,10 @@
             <div class="lg:col-span-8 space-y-8">
                 <!-- Main Featured Image -->
                 <div class="rounded-3xl overflow-hidden shadow-xl border border-slate-100 bg-slate-100 aspect-video">
-                    <img src="{{ $berita->gambar_url }}" alt="{{ $berita->judul }}" class="w-full h-full object-cover">
+                    <img src="{{ $berita->gambar_url }}"
+                         alt="{{ $berita->judul }} - Ilustrasi Berita Desa Jambelaer"
+                         class="w-full h-full object-cover"
+                         loading="eager" width="800" height="450">
                 </div>
 
                 @if($berita->ringkasan)
@@ -100,7 +166,9 @@
                         @forelse($rekomendasi as $rek)
                         <a href="{{ route('berita.detail', $rek->slug) }}" class="flex gap-3 group">
                             <div class="w-20 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
-                                <img src="{{ $rek->gambar_url }}" alt="{{ $rek->judul }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ $rek->gambar_url }}" alt="{{ $rek->judul }} - Berita Desa Jambelaer"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                     loading="lazy" width="80" height="64">
                             </div>
                             <div class="flex-1 min-w-0 space-y-1">
                                 <h4 class="font-semibold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">

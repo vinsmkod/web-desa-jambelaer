@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -12,6 +13,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $primaryKey = 'user_id';
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +48,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    /**
+     * Pesan-pesan yang terhubung dengan user ini.
+     *
+     * Catatan: Mayoritas pesan berasal dari masyarakat umum (tanpa login),
+     * sehingga user_id pada pesan umumnya NULL. Relasi ini berguna untuk
+     * keperluan traceability jika admin yang sedang login mengirim pesan.
+     */
+    public function pesan(): HasMany
+    {
+        return $this->hasMany(Pesan::class);
     }
 }

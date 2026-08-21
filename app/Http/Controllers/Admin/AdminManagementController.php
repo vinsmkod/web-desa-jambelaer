@@ -77,7 +77,7 @@ class AdminManagementController extends Controller
     {
         $rules = [
             'name'  => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($admin->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($admin->user_id, 'user_id')],
         ];
 
         $messages = [
@@ -117,7 +117,7 @@ class AdminManagementController extends Controller
      */
     public function destroy(User $admin)
     {
-        if ($admin->id === auth()->id()) {
+        if ($admin->user_id === auth()->id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif.');
         }
 

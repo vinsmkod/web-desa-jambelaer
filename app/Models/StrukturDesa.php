@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StrukturDesa extends Model
 {
     protected $table = 'struktur_desa';
+    protected $primaryKey = 'struktur_desa_id';
 
     protected $fillable = ['nama', 'jabatan', 'foto', 'urutan'];
 

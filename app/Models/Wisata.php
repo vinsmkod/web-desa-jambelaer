@@ -11,6 +11,7 @@ class Wisata extends Model
     use HasFactory;
 
     protected $table = 'wisata';
+    protected $primaryKey = 'wisata_id';
 
     protected $fillable = [
         'nama',

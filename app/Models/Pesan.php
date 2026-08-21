@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pesan extends Model
 {
     protected $table = 'pesan';
+    protected $primaryKey = 'pesan_id';
 
     protected $fillable = [
+        'user_id',   // nullable — diisi jika pengirim adalah admin yang sedang login
         'name',
         'email',
         'subject',
@@ -50,6 +54,33 @@ class Pesan extends Model
         'tanggal_acara'  => 'date',
     ];
 
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    /**
+     * User (admin) yang terhubung dengan pesan ini.
+     *
+     * Nullable: mayoritas pesan dikirim oleh masyarakat umum tanpa akun,
+     * sehingga user_id akan NULL untuk pesan-pesan tersebut.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Produk UMKM yang berasal dari pengajuan pesan ini.
+     *
+     * Berlaku untuk pesan dengan jenis_pesan = 'daftar_umkm' yang sudah
+     * disetujui dan datanya dipindahkan menjadi produk oleh admin.
+     * Nullable: tidak semua pesan menghasilkan produk.
+     */
+    public function produk(): HasOne
+    {
+        return $this->hasOne(Produk::class, 'pesan_id', 'pesan_id');
+    }
+
+    // ── Business Logic ───────────────────────────────────────────────────────
+
     /**
      * Arsipkan pengajuan acara yang sudah disetujui & tanggalnya sudah lewat.
      * Menggunakan flag 'is_archived' agar histori acara tidak hilang permanen.
@@ -67,4 +98,3 @@ class Pesan extends Model
             ->update(['is_archived' => true, 'dipublikasikan' => false]);
     }
 }
-

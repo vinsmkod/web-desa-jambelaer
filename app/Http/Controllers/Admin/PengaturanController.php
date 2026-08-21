@@ -37,7 +37,7 @@ class PengaturanController extends Controller
     {
         $settings = Pengaturan::where('group', '!=', 'tentang')
             ->orderBy('group')
-            ->orderBy('id')
+            ->orderBy('pengaturan_id')
             ->get()
             ->groupBy('group');
 

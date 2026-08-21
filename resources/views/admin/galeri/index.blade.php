@@ -61,12 +61,12 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-1.5">
-                                <a href="{{ route('admin.galeri.edit', $item->id) }}"
+                                <a href="{{ route('admin.galeri.edit', $item->galeri_id) }}"
                                    class="w-8 h-8 rounded-lg text-slate-400 hover:bg-forest-50 hover:text-forest-700 flex items-center justify-center transition-all"
                                    title="Edit">
                                     <i data-lucide="edit" class="w-4 h-4"></i>
                                 </a>
-                                <form action="{{ route('admin.galeri.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto ini?')">
+                                <form action="{{ route('admin.galeri.destroy', $item->galeri_id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto ini?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-all" title="Hapus">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>

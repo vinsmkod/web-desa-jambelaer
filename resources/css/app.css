@@ -39,22 +39,60 @@ html {
 }
 
 /* Scroll reveal utility classes */
-.reveal-on-scroll {
+.reveal-on-scroll,
+.reveal-fade-up {
     opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(28px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
 }
 
-.reveal-on-scroll.active {
+.reveal-fade-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-fade-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-zoom-in {
+    opacity: 0;
+    transform: scale(0.93);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-fade-in {
+    opacity: 0;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity;
+}
+
+.reveal-on-scroll.active,
+.reveal-fade-up.active,
+.reveal-fade-left.active,
+.reveal-fade-right.active,
+.reveal-zoom-in.active,
+.reveal-fade-in.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0) scale(1);
 }
 
 /* Delay classes for scroll reveal */
+.delay-50  { transition-delay: 50ms; }
 .delay-100 { transition-delay: 100ms; }
+.delay-150 { transition-delay: 150ms; }
 .delay-200 { transition-delay: 200ms; }
+.delay-250 { transition-delay: 250ms; }
 .delay-300 { transition-delay: 300ms; }
 .delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
 
 /* Custom background patterns */
 .bg-grid-pattern {

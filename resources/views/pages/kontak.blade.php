@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Kontak')
-@section('meta_desc', 'Hubungi Kantor Desa Jambelaer, Dawuan, Subang. Kirim pertanyaan, atau permintaan kemitraan UMKM melalui formulir kontak resmi kami.')
+@section('title', 'Kontak Desa Jambelaer | Hubungi Pemerintah Desa')
+@section('meta_desc', 'Hubungi Kantor Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Kirim pertanyaan, laporan, atau permintaan layanan publik melalui formulir kontak resmi desa.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+    { "@type": "ListItem", "position": 2, "name": "Kontak Desa Jambelaer", "item": "{{ config('app.url') }}/kontak" }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 

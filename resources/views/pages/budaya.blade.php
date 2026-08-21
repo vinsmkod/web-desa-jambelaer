@@ -1,7 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Budaya')
-@section('meta_desc', 'Kenali kekayaan seni dan tradisi budaya Desa Jambelaer – Ruwatan Bumi, Sisingaan, Pencak Silat, dan Karnaval Milangkala tahunan.')
+@section('title', 'Budaya Desa Jambelaer | Kesenian dan Tradisi Lokal')
+@section('meta_desc', 'Kenali kekayaan seni dan tradisi budaya Desa Jambelaer – Ruwatan Bumi, Sisingaan, Pencak Silat, dan Karnaval Milangkala khas Kecamatan Dawuan, Kabupaten Subang.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Budaya Desa Jambelaer",
+      "item": "{{ config('app.url') }}/budaya"
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -29,9 +52,9 @@
         </div>
 
         <!-- Culture Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal-on-scroll delay-100">
-            @forelse($budayas as $b)
-            <a href="{{ route('budaya.detail', $b->id) }}" class="group relative overflow-hidden rounded-xl h-[420px] shadow-sm border border-stone-200 block transition-all duration-300 hover:border-forest-300 hover:shadow-md">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @forelse($budayas as $index => $b)
+            <a href="{{ route('budaya.detail', $b->slug ?: $b->budaya_id) }}" class="group relative overflow-hidden rounded-xl h-[420px] shadow-sm border border-stone-200 block transition-all duration-300 hover:border-forest-300 hover:shadow-md reveal-fade-up" style="transition-delay: {{ ($index % 4) * 80 }}ms">
                 <img src="{{ $b->img_url }}"
                     alt="{{ $b->title }}" class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-forest-900/40 to-transparent flex flex-col justify-end p-6">

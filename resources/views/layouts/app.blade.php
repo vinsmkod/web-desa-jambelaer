@@ -4,13 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Website Resmi Desa Jambelaer') - Kecamatan Dawuan, Subang</title>
-    <meta name="description" content="@yield('meta_desc', 'Portal Resmi Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Temukan informasi tentang profil desa, kebudayaan lokal, produk UMKM unggulan, dan kontak kami.')">
+
+    @php
+        // ── SEO Globals ─────────────────────────────────────────────────────
+        $siteName    = 'Sistem Informasi Desa Jambelaer';
+        $siteUrl     = config('app.url', 'https://desajambelaer.sainzlab.my.id');
+        $defaultImg  = $siteUrl . '/' . ltrim(asset('uploads/img/DESA_JAMBELAER.png'), '/');
+        // Normalize default image URL (avoid double domain)
+        $defaultImg  = $siteUrl . '/uploads/img/DESA_JAMBELAER.png';
+
+        $pageTitle   = trim(View::yieldContent('title'));
+        $metaDesc    = trim(View::yieldContent('meta_desc'));
+        $ogImage     = trim(View::yieldContent('og_image'));
+        $ogType      = trim(View::yieldContent('og_type'))   ?: 'website';
+        $metaRobots  = trim(View::yieldContent('meta_robots')) ?: 'index, follow';
+
+        // Build final title
+        if ($pageTitle) {
+            $fullTitle = $pageTitle . ' | ' . $siteName;
+        } else {
+            $fullTitle = $siteName . ' — Portal Resmi Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang';
+        }
+
+        // Build canonical URL (use section if provided, else current URL without query)
+        $canonical   = trim(View::yieldContent('canonical'));
+        if (!$canonical) {
+            $canonical = url(parse_url(request()->getRequestUri(), PHP_URL_PATH));
+        }
+
+        // Build description
+        if (!$metaDesc) {
+            $metaDesc = 'Portal resmi Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat. Informasi profil desa, berita, UMKM, wisata, budaya, galeri, dan layanan publik desa.';
+        }
+
+        // OG Image fallback
+        if (!$ogImage) {
+            $ogImage = $defaultImg;
+        }
+    @endphp
+
+    <!-- Primary Meta Tags -->
+    <title>{{ $fullTitle }}</title>
+    <meta name="description" content="{{ Str::limit($metaDesc, 160) }}">
+    <meta name="robots" content="{{ $metaRobots }}">
+    <meta name="language" content="Indonesian">
+    <meta name="author" content="Pemerintah Desa Jambelaer">
+    <meta name="geo.region" content="ID-JB">
+    <meta name="geo.placename" content="Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat">
+
+    <!-- hreflang -->
+    <link rel="alternate" hreflang="id" href="{{ $canonical }}">
+    <link rel="alternate" hreflang="x-default" href="{{ $canonical }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ $canonical }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type"         content="{{ $ogType }}">
+    <meta property="og:site_name"    content="{{ $siteName }}">
+    <meta property="og:url"          content="{{ $canonical }}">
+    <meta property="og:title"        content="{{ $fullTitle }}">
+    <meta property="og:description" content="{{ Str::limit($metaDesc, 200) }}">
+    <meta property="og:image"        content="{{ $ogImage }}">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale"       content="id_ID">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="{{ $fullTitle }}">
+    <meta name="twitter:description" content="{{ Str::limit($metaDesc, 200) }}">
+    <meta name="twitter:image"       content="{{ $ogImage }}">
+    <meta name="twitter:site"        content="@DesaJambelaer">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Animate On Scroll (AOS) CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <!-- Tailwind CSS v4 Play CDN -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
@@ -58,17 +134,58 @@
         ::-webkit-scrollbar-thumb  { background: #c9a06a; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #b88a48; }
 
-        /* ── Reveal Animation ── */
-        .reveal-on-scroll {
+        /* ── Reveal & Animate on Scroll ── */
+        .reveal-on-scroll,
+        .reveal-fade-up {
             opacity: 0;
             transform: translateY(28px);
-            transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
-                        transform 0.7s cubic-bezier(0.16,1,0.3,1);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
-        .reveal-on-scroll.active { opacity: 1; transform: translateY(0); }
+        .reveal-fade-left {
+            opacity: 0;
+            transform: translateX(-32px);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-fade-right {
+            opacity: 0;
+            transform: translateX(32px);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-zoom-in {
+            opacity: 0;
+            transform: scale(0.93);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-fade-in {
+            opacity: 0;
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity;
+        }
+        .reveal-on-scroll.active,
+        .reveal-fade-up.active,
+        .reveal-fade-left.active,
+        .reveal-fade-right.active,
+        .reveal-zoom-in.active,
+        .reveal-fade-in.active {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+        .delay-50  { transition-delay: 50ms; }
         .delay-100 { transition-delay: 100ms; }
+        .delay-150 { transition-delay: 150ms; }
         .delay-200 { transition-delay: 200ms; }
+        .delay-250 { transition-delay: 250ms; }
         .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
 
         /* ── Navbar Active Underline ── */
         .nav-link-active {
@@ -198,12 +315,15 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     @stack('head')
+
+    <!-- Structured Data / JSON-LD (per-page schema) -->
+    @stack('schema')
 </head>
 
 <body class="font-sans text-stone-800 paper-bg antialiased overflow-x-hidden">
 
     <!-- ══════════════════════════ NAVBAR ══════════════════════════ -->
-    <header id="main-header" class="fixed top-0 left-0 w-full z-50 bg-white border-b border-stone-200 transition-shadow duration-300">
+    <header id="main-header" role="banner" class="fixed top-0 left-0 w-full z-50 bg-white border-b border-stone-200 transition-shadow duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-18 py-3">
 
@@ -219,7 +339,7 @@
                 </a>
 
                 <!-- Desktop Menu -->
-                <nav class="hidden lg:flex items-center space-x-5 xl:space-x-7">
+                <nav role="navigation" aria-label="Menu Utama" class="hidden lg:flex items-center space-x-5 xl:space-x-7">
                     <a href="{{ route('home') }}" class="{{ request()->routeIs('home')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Beranda</a>
                     <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Tentang</a>
                     <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Berita</a>
@@ -249,7 +369,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t border-stone-100 bg-white py-3 max-h-[calc(100vh-80px)] overflow-y-auto">
+        <nav id="mobile-menu" role="navigation" aria-label="Menu Mobile" class="hidden lg:hidden border-t border-stone-100 bg-white py-3 max-h-[calc(100vh-80px)] overflow-y-auto">
             <div class="px-4 space-y-0.5">
                 <a href="{{ route('home') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Beranda</a>
                 <a href="{{ route('tentang') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Tentang</a>
@@ -266,16 +386,16 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
 
     <!-- ══════════════════════════ PAGE CONTENT ══════════════════════════ -->
-    <main class="pt-20 sm:pt-24 lg:pt-[104px]">
+    <main role="main" class="pt-20 sm:pt-24 lg:pt-[104px]">
         @yield('content')
     </main>
 
     <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
-    <footer class="bg-forest-900 text-white mt-16 rounded-none overflow-hidden">
+    <footer role="contentinfo" class="bg-forest-900 text-white mt-16 rounded-none overflow-hidden">
         <!-- Zone 1: Main Footer Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-white/10">
@@ -476,8 +596,8 @@
                 closeIcon.classList.toggle('hidden');
             });
 
-            // Scroll Reveal
-            const revealEls = document.querySelectorAll('.reveal-on-scroll');
+            // Scroll Reveal Observer for all .reveal-* elements
+            const revealEls = document.querySelectorAll('.reveal-on-scroll, .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-zoom-in, .reveal-fade-in, [data-aos]');
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -487,8 +607,8 @@
                     }
                 });
             }, {
-                threshold: 0.12,
-                rootMargin: '0px 0px -40px 0px'
+                threshold: 0.08,
+                rootMargin: '0px 0px -30px 0px'
             });
 
             revealEls.forEach(el => observer.observe(el));
@@ -537,6 +657,22 @@
                     if (t < 1) requestAnimationFrame(update);
                     else el.textContent = targetAttr;
                 })(start);
+            }
+        });
+    </script>
+
+    <!-- AOS Library JS -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 750,
+                    easing: 'ease-out-cubic',
+                    once: true,
+                    offset: 40,
+                    delay: 50,
+                });
             }
         });
     </script>

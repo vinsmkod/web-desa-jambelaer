@@ -63,7 +63,7 @@
                                 <div>
                                     <div class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                         {{ $admin->name }}
-                                        @if($admin->id === auth()->id())
+                                        @if($admin->user_id === auth()->id())
                                             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-forest-50 text-forest-700 border border-forest-200">Anda</span>
                                         @endif
                                     </div>
@@ -82,15 +82,15 @@
                         </td>
                         <td class="py-4 px-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.kelola-admin.edit', $admin->id) }}"
+                                <a href="{{ route('admin.kelola-admin.edit', $admin->user_id) }}"
                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-forest-50 text-forest-700 border border-forest-200 text-xs font-semibold hover:bg-forest-100 transition-all"
                                    title="Edit Data & Reset Password">
                                     <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
                                     <span>Edit / Reset Pass</span>
                                 </a>
 
-                                @if($admin->id !== auth()->id() && $admins->count() > 1)
-                                <form action="{{ route('admin.kelola-admin.destroy', $admin->id) }}" method="POST"
+                                @if($admin->user_id !== auth()->id() && $admins->count() > 1)
+                                <form action="{{ route('admin.kelola-admin.destroy', $admin->user_id) }}" method="POST"
                                       onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun admin {{ $admin->name }}?')" class="inline-block">
                                     @csrf
                                     @method('DELETE')

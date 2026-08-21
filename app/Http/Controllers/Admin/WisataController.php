@@ -13,7 +13,7 @@ class WisataController extends Controller
     public function index()
     {
         $wisataList = Wisata::orderBy('urutan')
-            ->orderBy('id')
+            ->orderBy('wisata_id')
             ->paginate(5)
             ->withQueryString();
 
@@ -113,7 +113,7 @@ class WisataController extends Controller
             $slug = Str::slug($request->nama);
             $originalSlug = $slug;
             $count = 1;
-            while (Wisata::where('slug', $slug)->where('id', '!=', $wisata->id)->exists()) {
+            while (Wisata::where('slug', $slug)->where('wisata_id', '!=', $wisata->wisata_id)->exists()) {
                 $slug = $originalSlug . '-' . $count++;
             }
         }

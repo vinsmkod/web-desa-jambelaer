@@ -1,2 +1,24 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Block admin & private areas
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/*
+
+# Block authentication pages
+Disallow: /login
+Disallow: /logout
+
+# Block storage & private files
+Disallow: /storage/app/
+Disallow: /storage/logs/
+
+# Allow public assets (CSS, JS, images, uploads)
+Allow: /uploads/
+Allow: /build/
+Allow: /css/
+Allow: /js/
+
+# Sitemap
+Sitemap: https://desajambelaer.sainzlab.my.id/sitemap.xml

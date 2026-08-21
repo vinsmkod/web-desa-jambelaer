@@ -11,8 +11,8 @@ class ProdukController extends Controller
 {
     public function index(Request $request)
     {
-        $allProduk = Produk::orderBy('urutan')->orderBy('id')->get();
-        $produk    = Produk::orderBy('urutan')->orderBy('id')->paginate(5)->withQueryString();
+        $allProduk = Produk::orderBy('urutan')->orderBy('produk_id')->get();
+        $produk    = Produk::orderBy('urutan')->orderBy('produk_id')->paginate(5)->withQueryString();
         return view('admin.produk.index', compact('produk', 'allProduk'));
     }
 

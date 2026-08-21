@@ -1,7 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Wisata Desa')
-@section('meta_desc', 'Jelajahi keindahan alam, budaya, kuliner, dan pesona pariwisata Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
+@section('title', 'Wisata Desa Jambelaer | Destinasi Wisata Kabupaten Subang')
+@section('meta_desc', 'Jelajahi keindahan alam, budaya, kuliner, dan pesona pariwisata Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Temukan destinasi wisata lokal yang autentik.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Wisata Desa Jambelaer",
+      "item": "{{ config('app.url') }}/wisata"
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -45,9 +68,9 @@
         {{-- ══════════════════════════════════════════════════════════════════
              WISATA GRID
              ══════════════════════════════════════════════════════════════════ --}}
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 reveal-on-scroll delay-100" id="wisata-grid">
-            @forelse($wisatas as $w)
-            <div class="wisata-card card-village overflow-hidden flex flex-col h-full" data-category="{{ $w->kategori }}">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" id="wisata-grid">
+            @forelse($wisatas as $index => $w)
+            <div class="wisata-card card-village overflow-hidden flex flex-col h-full reveal-fade-up" style="transition-delay: {{ ($index % 3) * 100 }}ms" data-category="{{ $w->kategori }}">
                 <div class="relative aspect-16/10 overflow-hidden bg-slate-100 flex-shrink-0">
                     <img src="{{ $w->gambar_url }}" alt="{{ $w->nama }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
                     <span class="absolute top-4 left-4 text-[10px] font-bold text-forest-800 bg-forest-50 border border-forest-200/60 px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">

@@ -1,7 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'UMKM')
-@section('meta_desc', 'Temukan produk UMKM unggulan Desa Jambelaer – opak, gula aren, beras organik, keripik singkong, dan kerajinan bambu buatan warga lokal.')
+@section('title', 'UMKM Desa Jambelaer | Produk Lokal Kecamatan Dawuan, Subang')
+@section('meta_desc', 'Temukan produk UMKM unggulan Desa Jambelaer – opak, gula aren, beras organik, keripik singkong, dan kerajinan bambu buatan warga lokal Kecamatan Dawuan, Kabupaten Subang.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Beranda",
+      "item": "{{ config('app.url') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "UMKM Desa Jambelaer",
+      "item": "{{ config('app.url') }}/umkm"
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 
@@ -87,7 +110,7 @@
             {{-- Individual Product Cards --}}
             @foreach($individualProducts as $product)
             <a href="{{ route('umkm.detail', $product->slug) }}"
-                id="produk-{{ $product->id }}"
+                id="produk-{{ $product->produk_id }}"
                 class="product-card group bg-white border border-stone-200 rounded-xl overflow-hidden flex flex-col transition-all duration-300 hover:border-forest-300 hover:shadow-md hover:-translate-y-1"
                 data-category="{{ implode(',', $product->category) }}"
                 style="transition: opacity .3s, transform .3s;">

@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="max-w-3xl">
-    <form action="{{ route('admin.galeri.update', $galeri->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.galeri.update', $galeri->galeri_id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf @method('PUT')
 
         <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">

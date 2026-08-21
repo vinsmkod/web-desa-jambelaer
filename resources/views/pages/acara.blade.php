@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Acara Desa')
-@section('meta_desc', 'Lihat agenda, festival, rapat warga, dan acara kemasyarakatan yang diselenggarakan di Desa Jambelaer, Dawuan, Subang.')
+@section('title', 'Agenda & Acara Desa Jambelaer | Kecamatan Dawuan, Subang')
+@section('meta_desc', 'Lihat agenda, festival, rapat warga, dan acara kemasyarakatan yang diselenggarakan di Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Ajukan acara desa Anda di sini.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+    { "@type": "ListItem", "position": 2, "name": "Agenda Desa Jambelaer", "item": "{{ config('app.url') }}/acara" }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 

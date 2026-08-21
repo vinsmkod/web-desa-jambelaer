@@ -1,28 +1,70 @@
 @extends('layouts.app')
 
-@section('title', $wisata->nama)
-@section('meta_desc', $wisata->ringkasan)
+@section('title', $wisata->nama . ' | Wisata Desa Jambelaer')
+@section('meta_desc', Str::limit($wisata->ringkasan ?: ($wisata->nama . ' – Destinasi wisata di Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.'), 155))
+@section('og_type', 'place')
+@section('og_image', $wisata->gambar_url)
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TouristAttraction",
+      "name": {{ json_encode($wisata->nama) }},
+      "description": {{ json_encode(Str::limit($wisata->ringkasan ?: $wisata->deskripsi, 300)) }},
+      "image": {{ json_encode($wisata->gambar_url) }},
+      "url": "{{ config('app.url') }}/wisata/{{ $wisata->slug }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": {{ json_encode($wisata->alamat ?: 'Desa Jambelaer') }},
+        "addressLocality": "Kecamatan Dawuan",
+        "addressRegion": "Kabupaten Subang",
+        "addressCountry": "ID"
+      },
+      "touristType": {{ json_encode($wisata->kategori_label) }},
+      "isAccessibleForFree": {{ $wisata->harga_tiket && strtolower($wisata->harga_tiket) !== 'gratis' ? 'false' : 'true' }},
+      "containedInPlace": {
+        "@type": "AdministrativeArea",
+        "name": "Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+        { "@type": "ListItem", "position": 2, "name": "Wisata", "item": "{{ config('app.url') }}/wisata" },
+        { "@type": "ListItem", "position": 3, "name": {{ json_encode($wisata->nama) }}, "item": "{{ config('app.url') }}/wisata/{{ $wisata->slug }}" }
+      ]
+    }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="pt-24 pb-20 bg-stone-50/50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Breadcrumb / Back Navigation -->
-        <div class="mb-6">
-            <a href="{{ route('wisata') }}" class="inline-flex items-center gap-2 text-xs font-bold tracking-wide uppercase text-forest-800 hover:text-forest-650 transition-colors">
-                <i data-lucide="arrow-left" class="w-4 h-4 text-sand-500"></i>
-                Kembali ke Wisata
-            </a>
-        </div>
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="Breadcrumb" class="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-stone-500">
+            <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0 text-stone-300" aria-hidden="true"></i>
+            <a href="{{ route('wisata') }}" class="hover:text-forest-800 transition-colors">Wisata</a>
+            <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0 text-stone-300" aria-hidden="true"></i>
+            <span class="text-forest-800 font-semibold truncate max-w-xs" aria-current="page">{{ $wisata->nama }}</span>
+        </nav>
 
         <!-- Main Article Container -->
         <article class="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
             
             <!-- Hero Image Banner -->
             <div class="h-64 sm:h-96 relative">
-                <img src="{{ $wisata->gambar_url }}" 
-                     alt="{{ $wisata->nama }}" 
-                     class="w-full h-full object-cover">
+                <img src="{{ $wisata->gambar_url }}"
+                     alt="{{ $wisata->nama }} – Destinasi Wisata Desa Jambelaer, Kabupaten Subang"
+                     class="w-full h-full object-cover"
+                     loading="eager" width="800" height="500">
                 <!-- Dark gradient overlay for modern look -->
                 <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-forest-900/30 to-transparent"></div>
                 
@@ -139,9 +181,10 @@
                 <a href="{{ route('wisata.detail', $rek->slug) }}" 
                    class="group bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
                     <div class="h-40 relative overflow-hidden">
-                        <img src="{{ $rek->gambar_url }}" 
-                             alt="{{ $rek->nama }}" 
-                             class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500">
+                        <img src="{{ $rek->gambar_url }}"
+                             alt="{{ $rek->nama }} – Wisata Desa Jambelaer"
+                             class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                             loading="lazy" width="300" height="160">
                         <div class="absolute inset-0 bg-gradient-to-t from-forest-950/70 to-transparent"></div>
                         <span class="absolute top-2.5 left-2.5 text-[9px] font-bold text-forest-800 bg-sand-200 px-2 py-0.5 rounded uppercase tracking-wide">
                             {{ $rek->kategori_label }}

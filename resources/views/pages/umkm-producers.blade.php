@@ -1,7 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Produsen ' . $jenisLabel . ' – Desa Jambelaer')
-@section('meta_desc', 'Daftar produsen ' . $jenisLabel . ' dari Desa Jambelaer. Temukan produk ' . $jenisLabel . ' asli buatan warga lokal dengan harga terjangkau.')
+@section('title', $jenisLabel . ' Desa Jambelaer | UMKM Kecamatan Dawuan')
+@section('meta_desc', 'Daftar produsen ' . $jenisLabel . ' dari Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Temukan produk ' . $jenisLabel . ' asli buatan warga lokal berkualitas.')
+
+@push('schema')
+<script type="application/ld+json">
+{
+  "@@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Beranda", "item": "{{ config('app.url') }}" },
+    { "@type": "ListItem", "position": 2, "name": "UMKM", "item": "{{ config('app.url') }}/umkm" },
+    { "@type": "ListItem", "position": 3, "name": "{{ $jenisLabel }}", "item": "{{ config('app.url') }}/umkm/jenis/{{ $jenis }}" }
+  ]
+}
+</script>
+@endpush
 
 @section('content')
 <div class="pt-24 pb-24 bg-stone-50/50">
@@ -37,7 +51,7 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 reveal-on-scroll delay-100">
             @foreach($producers as $index => $product)
             <a href="{{ route('umkm.detail', $product->slug) }}"
-               id="produsen-{{ $product->id }}"
+               id="produsen-{{ $product->produk_id }}"
                class="group relative overflow-hidden rounded-xl bg-white border border-stone-200 hover:border-forest-200 hover:shadow-md flex flex-col transition-all duration-300 hover:-translate-y-1">
 
                 {{-- Image --}}
