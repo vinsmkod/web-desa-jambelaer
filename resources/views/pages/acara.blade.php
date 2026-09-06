@@ -19,16 +19,24 @@
 @section('content')
 
 {{-- ══════════════════════════════════════════════════════════════════
-     PAGE HEADER BANNER
+     PAGE HEADER BANNER & BREADCRUMB
 ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
+        <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
+        <span class="text-forest-800 font-semibold">Agenda Acara</span>
+    </nav>
+</div>
+
+<div class="relative h-60 sm:h-72 lg:h-80 overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 shadow-sm">
     <img src="{{ asset('uploads/img/beranda.jpeg') }}"
         alt="Agenda Warga Desa Jambelaer" class="w-full h-full object-cover opacity-60">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Agenda Warga</span>
-        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Agenda & Acara Desa</h1>
-        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Jadwal kegiatan kemasyarakatan, rapat warga, pertunjukan seni budaya, dan festival komunitas</p>
+        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Agenda Publik</span>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Agenda & Acara Desa</h1>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Jadwal kegiatan kemasyarakatan, rapat warga, pertunjukan seni budaya, dan festival komunitas</p>
     </div>
 </div>
 
@@ -98,16 +106,30 @@
             <div class="bg-white rounded-xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group h-full hover:border-forest-200">
                 <!-- Event Card Banner -->
                 <div class="relative h-44 bg-forest-900 flex flex-col items-center justify-center overflow-hidden flex-shrink-0">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(196,154,79,0.1),transparent_60%)]"></div>
+                    @php
+                        $posterUrl = null;
+                        if ($a->foto_bukti) {
+                            $posterUrl = (str_starts_with($a->foto_bukti, 'http') || str_starts_with($a->foto_bukti, '/'))
+                                ? asset($a->foto_bukti)
+                                : \Illuminate\Support\Facades\Storage::url($a->foto_bukti);
+                        }
+                    @endphp
 
-                    <div class="flex flex-col items-center text-center px-4 relative z-10">
-                        <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-sand-300 mb-3 border border-white/10 shadow-inner group-hover:scale-105 transition-transform duration-300">
-                            <i data-lucide="calendar" class="w-6 h-6"></i>
+                    @if($posterUrl)
+                        <img src="{{ $posterUrl }}" alt="{{ $a->nama_acara }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-forest-950/40 to-forest-950/10"></div>
+                    @else
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(196,154,79,0.1),transparent_60%)]"></div>
+
+                        <div class="flex flex-col items-center text-center px-4 relative z-10">
+                            <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-sand-300 mb-3 border border-white/10 shadow-inner group-hover:scale-105 transition-transform duration-300">
+                                <i data-lucide="calendar" class="w-6 h-6"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-white/50 uppercase tracking-widest">Agenda Desa</span>
                         </div>
-                        <span class="text-[10px] font-bold text-white/50 uppercase tracking-widest">Agenda Desa</span>
-                    </div>
+                    @endif
 
-                    <div class="absolute top-3 left-3">
+                    <div class="absolute top-3 left-3 z-10">
                         @if($a->tanggal_acara && $a->tanggal_acara->isToday())
                         <span class="text-[9px] font-bold tracking-wider uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded shadow-sm inline-flex items-center gap-1">
                             <span class="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse"></span> Sesi Hari Ini
@@ -166,7 +188,7 @@
                         </div>
                         @endif
 
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $a->no_whatsapp) }}"
+                        <a href="{{ \App\Helpers\WhatsAppHelper::url($a->no_whatsapp, "Halo panitia {$a->nama_acara}, saya mendapatkan informasi dari Website Desa Jambelaer dan ingin bertanya mengenai kegiatan ini.") }}"
                             target="_blank"
                             class="w-8 h-8 rounded bg-forest-50 border border-forest-100 hover:bg-forest-800 hover:text-white flex items-center justify-center text-forest-800 transition-colors"
                             title="Hubungi WhatsApp Penyelenggara">

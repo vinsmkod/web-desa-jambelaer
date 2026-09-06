@@ -21,7 +21,7 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">
             <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
                 <div class="w-8 h-8 rounded-lg bg-emerald-600/20 flex items-center justify-center text-emerald-400">
-                    <i data-lucide="music-4" class="w-4 h-4"></i>
+                    <i data-lucide="music" class="w-4 h-4"></i>
                 </div>
                 <h2 class="font-display font-bold text-slate-900 text-sm">Informasi Budaya</h2>
             </div>

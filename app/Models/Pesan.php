@@ -41,9 +41,13 @@ class Pesan extends Model
         'instagram_umkm',
         'isi_produk_umkm',
         'harga_produk_umkm',
+        'berat_bersih_umkm',
         'ketersediaan_umkm',
         'sertifikasi_umkm',
+        'sertifikat_halal',
         'dokumen_lampiran',
+        // Admin fields
+        'catatan_admin',   // catatan internal admin untuk pesan, pengajuan acara, dll.
     ];
 
 

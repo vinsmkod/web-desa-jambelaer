@@ -19,16 +19,24 @@
 @section('content')
 
 {{-- ══════════════════════════════════════════════════════════════════
-     PAGE HEADER BANNER
+     PAGE HEADER BANNER & BREADCRUMB
 ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
+        <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
+        <span class="text-forest-800 font-semibold">Layanan & Kontak</span>
+    </nav>
+</div>
+
+<div class="relative h-60 sm:h-72 lg:h-80 overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 shadow-sm">
     <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
         alt="Kantor Desa Jambelaer" class="w-full h-full object-cover opacity-60">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Layanan Informasi</span>
-        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Hubungi Kantor Desa</h1>
-        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Kami siap melayani pertanyaan, aspirasi, dan keperluan Anda</p>
+        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Pelayanan Terpadu</span>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Layanan & Kontak Desa</h1>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Sampaikan pertanyaan, pengaduan lingkungan, kerja sama, pengajuan acara, atau pendaftaran UMKM</p>
     </div>
 </div>
 
@@ -82,9 +90,110 @@
 
 
         {{-- ══════════════════════════════════════════════════════════
+             5 SERVICE CARDS — Pusat Pilihan Layanan
+        ══════════════════════════════════════════════════════════ --}}
+        <div id="layanan-hub" class="py-12 border-b border-stone-100 reveal-on-scroll">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="section-label">Pilihan Layanan Digital</span>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-2.5">Pilih Kategori Permohonan / Aspirasi</h2>
+                <p class="mt-2 text-stone-500 font-light text-sm">Klik salah satu jenis layanan di bawah untuk mengisi formulir yang sesuai secara instan.</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {{-- 1. Pertanyaan Umum --}}
+                <div onclick="selectServiceType('pertanyaan_umum')" class="card-village p-5 flex flex-col justify-between hover:border-forest-500 hover:shadow-md cursor-pointer group transition-all duration-300">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-forest-50 text-forest-800 flex items-center justify-center mb-4 group-hover:bg-forest-800 group-hover:text-white transition-all">
+                            <i data-lucide="help-circle" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pertanyaan Umum</h3>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed">
+                            Sampaikan pertanyaan mengenai informasi dan pelayanan Desa Jambelaer.
+                        </p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-forest-800 group-hover:text-forest-600">
+                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    </div>
+                </div>
+
+                {{-- 2. Pengaduan Masyarakat --}}
+                <div onclick="selectServiceType('pengaduan')" class="card-village p-5 flex flex-col justify-between hover:border-rose-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center mb-4 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pengaduan Masyarakat</h3>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed">
+                            Sampaikan laporan atau pengaduan terkait kondisi dan pelayanan di desa.
+                        </p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-rose-700 group-hover:text-rose-900">
+                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    </div>
+                </div>
+
+                {{-- 3. Kerja Sama --}}
+                <div onclick="selectServiceType('kerja_sama')" class="card-village p-5 flex flex-col justify-between hover:border-sand-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-sand-50 text-sand-700 flex items-center justify-center mb-4 group-hover:bg-sand-500 group-hover:text-white transition-all">
+                            <i data-lucide="handshake" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Kerja Sama</h3>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed">
+                            Ajukan permohonan kerja sama dengan Pemerintah Desa Jambelaer.
+                        </p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-sand-700 group-hover:text-sand-900">
+                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    </div>
+                </div>
+
+                {{-- 4. Pengajuan Acara --}}
+                <div onclick="selectServiceType('pengajuan_acara')" class="card-village p-5 flex flex-col justify-between hover:border-teal-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-4 group-hover:bg-teal-700 group-hover:text-white transition-all">
+                            <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pengajuan Acara</h3>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed">
+                            Ajukan permohonan kegiatan atau acara yang berkaitan dengan desa.
+                        </p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-teal-700 group-hover:text-teal-900">
+                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    </div>
+                </div>
+
+                {{-- 5. Pendaftaran UMKM --}}
+                <div onclick="selectServiceType('daftar_umkm')" class="card-village p-5 flex flex-col justify-between hover:border-amber-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 group-hover:bg-amber-600 group-hover:text-white transition-all">
+                            <i data-lucide="store" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pendaftaran UMKM</h3>
+                        <p class="text-xs text-stone-500 font-light leading-relaxed">
+                            Daftarkan usaha dan produk UMKM masyarakat Desa Jambelaer.
+                        </p>
+                    </div>
+                    <div class="pt-4 flex items-center text-xs font-bold text-amber-700 group-hover:text-amber-900">
+                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Hidden Anchor Targets for Footer & External links --}}
+        <div id="form-pertanyaan" class="scroll-mt-24"></div>
+        <div id="form-pengaduan" class="scroll-mt-24"></div>
+        <div id="form-kerjasama" class="scroll-mt-24"></div>
+        <div id="form-acara" class="scroll-mt-24"></div>
+        <div id="form-umkm" class="scroll-mt-24"></div>
+
+        {{-- ══════════════════════════════════════════════════════════
              FORM + INFO PANEL
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-14 grid lg:grid-cols-12 gap-10 items-start reveal-on-scroll">
+        <div id="form-section" class="py-14 grid lg:grid-cols-12 gap-10 items-start reveal-on-scroll scroll-mt-20">
 
             {{-- Left: Info Panel --}}
             <div class="lg:col-span-5 space-y-5">
@@ -317,7 +426,7 @@
                                 <option value="pengajuan_acara">Pengajuan Acara</option>
                                 <option value="daftar_umkm">Daftarkan UMKM</option>
                             </select>
-                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-pointer-events-none text-stone-400"></i>
+                            <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
                         </div>
 
                         {{-- Nama Lengkap --}}
@@ -336,7 +445,7 @@
                                 oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
-                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara) — type=text --}}
+                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara/UMKM) — type=text --}}
                         <div id="field-whatsapp" class="hidden input-wrap">
                             <label class="label-float" for="f-whatsapp">Nomor WhatsApp</label>
                             <input id="f-whatsapp" name="no_whatsapp_txt" type="text" placeholder="" class="input-village pt-7"
@@ -550,22 +659,51 @@
                             <input type="file" id="f-foto-produk" name="foto_produk" accept="image/jpeg,image/png,image/webp" class="hidden">
                         </div>
 
-                        {{-- Upload Dokumen Lampiran Resmi (PDF) (Kerja Sama & Pengajuan Acara) --}}
-                        <div id="field-dokumen-lampiran" class="hidden">
-                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">
-                                <span id="label-dokumen-title">Lampiran Proposal / Surat Resmi (PDF)</span>
-                                <span class="text-stone-300 normal-case tracking-normal font-normal">(Opsional, maks. 10 MB)</span>
-                            </p>
-                            <div id="upload-drop-zone-dokumen" class="upload-drop-zone" onclick="document.getElementById('f-dokumen-lampiran').click()">
-                                <div id="upload-placeholder-dokumen" class="flex flex-col items-center text-center w-full">
-                                    <div class="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-2">
-                                        <i data-lucide="file-text" class="w-5 h-5 text-rose-600"></i>
+                        {{-- Upload Sertifikat Halal PDF (daftar_umkm only) --}}
+                        <div id="field-sertifikat-halal" class="hidden">
+                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-2">Sertifikat Halal <span class="text-stone-300 normal-case tracking-normal font-normal">(PDF, Opsional, maks. 5 MB)</span></p>
+                            <div id="upload-drop-zone-halal" class="upload-drop-zone" onclick="document.getElementById('f-sertifikat-halal').click()">
+                                <div id="upload-placeholder-halal" class="flex flex-col items-center text-center w-full">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-2">
+                                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i>
                                     </div>
                                     <p class="text-sm font-semibold text-stone-600">Klik atau seret file PDF ke sini</p>
-                                    <p class="text-xs text-stone-400 font-light mt-1">Surat Permohonan / Proposal Resmi &bull; Format: PDF (Maks. 10 MB)</p>
+                                    <p class="text-xs text-stone-400 font-light mt-1">Sertifikat Halal dari MUI / BPJPH &bull; Format: PDF (Maks. 5 MB)</p>
+                                </div>
+                                <div id="upload-file-info-halal" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
+                                    <div class="w-8 h-8 rounded bg-emerald-100 flex items-center justify-center flex-shrink-0 text-emerald-700">
+                                        <i data-lucide="file-check-2" class="w-4 h-4"></i>
+                                    </div>
+                                    <div class="text-left overflow-hidden">
+                                        <span id="upload-file-name-halal" class="font-semibold block truncate text-stone-800 max-w-[200px] sm:max-w-xs"></span>
+                                        <span id="upload-file-size-halal" class="text-xs text-stone-400 font-normal"></span>
+                                    </div>
+                                    <button type="button" onclick="event.stopPropagation(); clearSertifikatHalal()" class="ml-auto text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
+                                        <i data-lucide="x" class="w-3 h-3"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                            <p id="upload-error-msg-halal" class="upload-error-msg"></p>
+                            <input type="file" id="f-sertifikat-halal" name="sertifikat_halal" accept="application/pdf" class="hidden">
+                        </div>
+
+                        {{-- Upload Dokumen Lampiran (digunakan bersama: Kerja Sama, Pengajuan Acara) --}}
+                        <div id="field-dokumen-lampiran" class="hidden">
+                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1">
+                                <span id="label-dokumen-title">Lampiran Proposal / Surat Resmi</span>
+                                <span id="label-dokumen-required" class="text-stone-300 normal-case tracking-normal font-normal ml-1">(Opsional, maks. 10 MB)</span>
+                            </p>
+                            <p id="label-dokumen-helper" class="text-[11px] text-stone-400 font-light mb-2">Unggah surat permohonan atau proposal resmi dalam format PDF.</p>
+                            <div id="upload-drop-zone-dokumen" class="upload-drop-zone" onclick="document.getElementById('f-dokumen-lampiran').click()">
+                                <div id="upload-placeholder-dokumen" class="flex flex-col items-center text-center w-full">
+                                    <div class="w-10 h-10 rounded-full bg-forest-50 border border-forest-100 flex items-center justify-center mx-auto mb-2" id="upload-icon-dokumen">
+                                        <i data-lucide="file-text" class="w-5 h-5 text-forest-600"></i>
+                                    </div>
+                                    <p class="text-sm font-semibold text-stone-600">Klik atau seret file ke sini</p>
+                                    <p id="upload-format-dokumen" class="text-xs text-stone-400 font-light mt-1">Format: PDF &bull; Maks. 10 MB</p>
                                 </div>
                                 <div id="upload-file-info-dokumen" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
-                                    <div class="w-8 h-8 rounded bg-rose-100 flex items-center justify-center flex-shrink-0 text-rose-700">
+                                    <div class="w-8 h-8 rounded bg-forest-100 flex items-center justify-center flex-shrink-0 text-forest-700">
                                         <i data-lucide="file-check-2" class="w-4 h-4"></i>
                                     </div>
                                     <div class="text-left overflow-hidden">
@@ -608,7 +746,6 @@
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
-                </div>
                 <div class="flex items-center gap-3 px-3 pt-3 pb-1">
                     <i data-lucide="map-pin" class="w-4 h-4 text-forest-600 flex-shrink-0"></i>
                     <span class="text-xs text-stone-500 font-light">Jl. Raya Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
@@ -653,6 +790,7 @@
     const fieldAlamatUmkm = document.getElementById('field-alamat-umkm');
     const fieldDeskripsiUmkm = document.getElementById('field-deskripsi-umkm');
     const fieldFotoProduk = document.getElementById('field-foto-produk');
+    const fieldSertifikatHalal = document.getElementById('field-sertifikat-halal');
 
     const inputNamaUmkm = document.getElementById('f-nama-umkm');
     const inputJenisProdukUmkm = document.getElementById('f-jenis-produk-umkm');
@@ -844,6 +982,86 @@
             handleFotoProdukFile(file);
         }
     });
+
+    // === Upload Sertifikat Halal (PDF, daftar_umkm) ===
+    const inputSertifikatHalal     = document.getElementById('f-sertifikat-halal');
+    const uploadDropZoneHalal      = document.getElementById('upload-drop-zone-halal');
+    const uploadPlaceholderHalal   = document.getElementById('upload-placeholder-halal');
+    const uploadFileInfoHalal      = document.getElementById('upload-file-info-halal');
+    const uploadFileNameHalal      = document.getElementById('upload-file-name-halal');
+    const uploadFileSizeHalal      = document.getElementById('upload-file-size-halal');
+    const uploadErrorMsgHalal      = document.getElementById('upload-error-msg-halal');
+
+    const MAX_HALAL_SIZE_MB    = 5;
+    const MAX_HALAL_SIZE_BYTES = MAX_HALAL_SIZE_MB * 1024 * 1024;
+
+    function setUploadErrorHalal(msg) {
+        uploadDropZoneHalal.classList.add('error');
+        uploadDropZoneHalal.classList.remove('has-file');
+        uploadErrorMsgHalal.textContent = msg;
+        uploadErrorMsgHalal.style.display = 'block';
+        uploadPlaceholderHalal.style.display = 'flex';
+        uploadFileInfoHalal.classList.add('hidden');
+        inputSertifikatHalal.value = '';
+    }
+
+    function clearSertifikatHalal() {
+        inputSertifikatHalal.value = '';
+        uploadPlaceholderHalal.style.display = 'flex';
+        uploadFileInfoHalal.classList.add('hidden');
+        uploadDropZoneHalal.classList.remove('has-file', 'error');
+        uploadErrorMsgHalal.style.display = 'none';
+        lucide.createIcons();
+    }
+
+    function handleSertifikatHalalFile(file) {
+        uploadErrorMsgHalal.style.display = 'none';
+        uploadDropZoneHalal.classList.remove('error');
+
+        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+            setUploadErrorHalal('Format file tidak didukung. Harus berformat PDF.');
+            return;
+        }
+        if (file.size > MAX_HALAL_SIZE_BYTES) {
+            setUploadErrorHalal('Ukuran file melebihi batas ' + MAX_HALAL_SIZE_MB + ' MB.');
+            return;
+        }
+
+        const sizeKb = (file.size / 1024).toFixed(1);
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        const displaySize = file.size > 1024 * 1024 ? `${sizeMb} MB` : `${sizeKb} KB`;
+
+        uploadPlaceholderHalal.style.display = 'none';
+        uploadFileInfoHalal.classList.remove('hidden');
+        uploadFileNameHalal.textContent = file.name;
+        uploadFileSizeHalal.textContent = displaySize;
+        uploadDropZoneHalal.classList.add('has-file');
+        lucide.createIcons();
+    }
+
+    inputSertifikatHalal.addEventListener('change', function() {
+        if (this.files && this.files[0]) handleSertifikatHalalFile(this.files[0]);
+    });
+
+    uploadDropZoneHalal.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+    uploadDropZoneHalal.addEventListener('dragleave', function() {
+        this.classList.remove('dragover');
+    });
+    uploadDropZoneHalal.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            inputSertifikatHalal.files = dt.files;
+            handleSertifikatHalalFile(file);
+        }
+    });
+
     // === Upload Dokumen Lampiran (PDF) ===
     const inputDokumenLampiran = document.getElementById('f-dokumen-lampiran');
     const uploadDropZoneDokumen = document.getElementById('upload-drop-zone-dokumen');
@@ -881,10 +1099,14 @@
         uploadErrorMsgDokumen.style.display = 'none';
         uploadDropZoneDokumen.classList.remove('error');
 
-        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+        const allowedPdf = ['application/pdf'];
+        const isPdf = allowedPdf.includes(file.type) || file.name.toLowerCase().endsWith('.pdf');
+
+        if (!isPdf) {
             setUploadErrorDokumen('Format file tidak didukung. Harus berformat PDF.');
             return;
         }
+
         if (file.size > MAX_DOC_SIZE_BYTES) {
             setUploadErrorDokumen('Ukuran file melebihi batas ' + MAX_DOC_SIZE_MB + ' MB.');
             return;
@@ -931,6 +1153,7 @@
             fieldLokasiPeserta, fieldMessage, fieldFotoBukti,
             // UMKM fields
             fieldUmkmBanner, fieldGroupPengelola, fieldGroupTentang, fieldGroupSpesifikasi, fieldFotoProduk,
+            fieldSertifikatHalal,
             // Dokumen PDF lampiran
             fieldDokumenLampiran
         ].forEach(f => {
@@ -960,9 +1183,10 @@
         const waMaster = document.getElementById('f-wa-master');
         if (waMaster) waMaster.value = '';
 
-        // Reset upload foto bukti, foto produk, & dokumen lampiran
+        // Reset upload foto bukti, foto produk, sertifikat halal & dokumen lampiran
         clearFotoBukti();
         clearFotoProduk();
+        clearSertifikatHalal();
         clearDokumenLampiran();
     }
 
@@ -1003,7 +1227,13 @@
             labelMessage.textContent = 'Isi Pesan Kerja Sama';
             // Tampilkan lampiran PDF dokumen proposal kerja sama
             fieldDokumenLampiran.classList.remove('hidden');
-            labelDokumenTitle.textContent = 'Proposal / Surat Kerja Sama Resmi (PDF)';
+            labelDokumenTitle.textContent = 'Proposal / Surat Kerja Sama Resmi';
+            const lhKS = document.getElementById('label-dokumen-helper');
+            if (lhKS) lhKS.textContent = 'Unggah surat permohonan atau proposal resmi dalam format PDF.';
+            const lrKS = document.getElementById('label-dokumen-required');
+            if (lrKS) lrKS.textContent = '(Opsional, maks. 10 MB)';
+            const fmKS = document.getElementById('upload-format-dokumen');
+            if (fmKS) fmKS.textContent = 'Format: PDF • Maks. 10 MB';
             btnText.textContent = 'Kirim Kerja Sama';
         } else if (jenisPesan === 'pengajuan_acara') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
@@ -1019,7 +1249,13 @@
             labelMessage.textContent = 'Deskripsi Acara';
             // Tampilkan lampiran PDF dokumen pengajuan acara
             fieldDokumenLampiran.classList.remove('hidden');
-            labelDokumenTitle.textContent = 'Proposal / Surat Permohonan Acara (PDF)';
+            labelDokumenTitle.textContent = 'Proposal / Surat Permohonan Acara';
+            const lhAc = document.getElementById('label-dokumen-helper');
+            if (lhAc) lhAc.textContent = 'Unggah surat permohonan atau proposal resmi dalam format PDF.';
+            const lrAc = document.getElementById('label-dokumen-required');
+            if (lrAc) lrAc.textContent = '(Opsional, maks. 10 MB)';
+            const fmAc = document.getElementById('upload-format-dokumen');
+            if (fmAc) fmAc.textContent = 'Format: PDF • Maks. 10 MB';
             btnText.textContent = 'Kirim Pengajuan';
         } else if (jenisPesan === 'daftar_umkm') {
             showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
@@ -1039,6 +1275,7 @@
             });
 
             if (fieldFotoProduk) fieldFotoProduk.classList.remove('hidden');
+            if (fieldSertifikatHalal) fieldSertifikatHalal.classList.remove('hidden');
             btnText.textContent = 'Kirim Pendaftaran UMKM';
         } else {
             submitBtn.disabled = true;
@@ -1108,6 +1345,40 @@
                 });
             });
     });
+
+    // ── Global Service Selection Handler ─────────────────────────────
+    window.selectServiceType = function(type) {
+        if (!jenisPesanSelect) return;
+        jenisPesanSelect.value = type;
+        updateFormFields();
+        const formSection = document.getElementById('form-section');
+        if (formSection) {
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                const firstInput = document.getElementById('f-name');
+                if (firstInput) firstInput.focus();
+            }, 500);
+        }
+    };
+
+    // Auto-detect URL query parameter or hash on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramJenis = urlParams.get('jenis');
+    const hash = window.location.hash;
+
+    const hashMap = {
+        '#form-pertanyaan': 'pertanyaan_umum',
+        '#form-pengaduan': 'pengaduan',
+        '#form-kerjasama': 'kerja_sama',
+        '#form-acara': 'pengajuan_acara',
+        '#form-umkm': 'daftar_umkm',
+    };
+
+    if (paramJenis && ['pertanyaan_umum', 'pengaduan', 'kerja_sama', 'pengajuan_acara', 'daftar_umkm'].includes(paramJenis)) {
+        jenisPesanSelect.value = paramJenis;
+    } else if (hash && hashMap[hash]) {
+        jenisPesanSelect.value = hashMap[hash];
+    }
 
     updateFormFields();
 </script>

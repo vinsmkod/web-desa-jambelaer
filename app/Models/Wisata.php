@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Wisata extends Model
@@ -14,6 +15,7 @@ class Wisata extends Model
     protected $primaryKey = 'wisata_id';
 
     protected $fillable = [
+        'created_by',
         'nama',
         'slug',
         'kategori',
@@ -78,4 +80,15 @@ class Wisata extends Model
             'kuliner' => 'Wisata Kuliner',
         ];
     }
+
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    /**
+     * User/Admin yang membuat destinasi wisata ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
 }
+

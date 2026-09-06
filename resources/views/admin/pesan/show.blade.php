@@ -345,6 +345,7 @@
                     {{-- Tombol Tambah ke Katalog UMKM Desa --}}
                     @php
                         $createUrl = route('admin.produk.create') . '?' . http_build_query([
+                            'pesan_id' => $pesan->pesan_id,
                             'title' => $pesan->nama_umkm,
                             'producer' => $pesan->nama_umkm,
                             'nama_pemilik' => $pesan->name,
@@ -379,7 +380,13 @@
         {{-- Actions --}}
         @php
             $hasEmail = !empty($pesan->email) && $pesan->email !== '-' && filter_var($pesan->email, FILTER_VALIDATE_EMAIL);
-            $hasWa = !empty($pesan->no_whatsapp) && $pesan->no_whatsapp !== '-';
+            $hasWa    = !empty($pesan->no_whatsapp) && $pesan->no_whatsapp !== '-';
+            $waMsg = match($pesan->jenis_pesan) {
+                'pengaduan'  => \App\Helpers\WhatsAppHelper::msgPengaduanKePemohon($pesan),
+                'kerja_sama' => \App\Helpers\WhatsAppHelper::msgKerjaSamaKePemohon($pesan),
+                default      => "Halo Bapak/Ibu {$pesan->name},\n\nKami dari Pemerintah Desa Jambelaer menindaklanjuti pesan Anda mengenai: {$pesan->subject}.\n\nTerima kasih.",
+            };
+            $waUrl = \App\Helpers\WhatsAppHelper::url($pesan->no_whatsapp ?? '', $waMsg);
         @endphp
         <div class="px-6 py-4 border-t border-slate-200 flex items-center gap-3">
             <a href="{{ route('admin.pesan.index') }}"
@@ -395,15 +402,13 @@
                 Balas via Email
             </a>
             @if($hasWa)
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $pesan->no_whatsapp) }}?text=Halo%20{{ urlencode($pesan->name) }}" target="_blank"
-               class="btn-secondary">
+            <a href="{{ $waUrl }}" target="_blank" class="btn-secondary">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
                 WhatsApp
             </a>
             @endif
             @elseif($hasWa)
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $pesan->no_whatsapp) }}?text=Halo%20{{ urlencode($pesan->name) }}" target="_blank"
-               class="btn-primary">
+            <a href="{{ $waUrl }}" target="_blank" class="btn-primary">
                 <i data-lucide="message-circle" class="w-4 h-4"></i>
                 Balas via WhatsApp
             </a>

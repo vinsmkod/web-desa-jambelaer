@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BeritaController extends Controller
 {
@@ -63,6 +64,7 @@ class BeritaController extends Controller
         }
 
         Berita::create([
+            'created_by'   => Auth::id(),
             'judul'        => $request->judul,
             'slug'         => $slug,
             'penulis'      => $request->penulis,

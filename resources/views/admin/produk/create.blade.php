@@ -9,6 +9,7 @@
 <div class="max-w-3xl">
     <form method="POST" action="{{ route('admin.produk.store') }}" class="space-y-6" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="pesan_id" value="{{ old('pesan_id', request('pesan_id')) }}">
 
         {{-- Basic Info --}}
         <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5">

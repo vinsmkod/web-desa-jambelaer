@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TentangController extends Controller
 {
@@ -85,10 +86,11 @@ class TentangController extends Controller
         $urutan    = ($request->filled('urutan') && $request->urutan > 0) ? $request->urutan : ($maxUrutan + 1);
 
         StrukturDesa::create([
-            'nama'    => $request->nama,
-            'jabatan' => $request->jabatan,
-            'foto'    => $fotoPath,
-            'urutan'  => $urutan,
+            'created_by' => Auth::id(),
+            'nama'       => $request->nama,
+            'jabatan'    => $request->jabatan,
+            'foto'       => $fotoPath,
+            'urutan'     => $urutan,
         ]);
 
         $this->resequence();

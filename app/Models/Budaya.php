@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Budaya extends Model
@@ -10,7 +11,7 @@ class Budaya extends Model
     protected $table = 'budaya';
     protected $primaryKey = 'budaya_id';
 
-    protected $fillable = ['kategori', 'title', 'slug', 'excerpt', 'desc', 'img', 'urutan'];
+    protected $fillable = ['created_by', 'kategori', 'title', 'slug', 'excerpt', 'desc', 'img', 'urutan'];
 
     /**
      * Auto-generate slug saat menyimpan jika slug kosong.
@@ -84,4 +85,15 @@ class Budaya extends Model
         $identifier = $this->slug ?: $this->budaya_id;
         return url('/budaya/' . $identifier);
     }
+
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    /**
+     * User/Admin yang membuat data budaya ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
 }
+

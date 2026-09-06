@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Budaya;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BudayaController extends Controller
 {
@@ -39,12 +40,13 @@ class BudayaController extends Controller
         }
 
         Budaya::create([
-            'kategori' => $request->kategori,
-            'title'    => $request->title,
-            'excerpt'  => $request->excerpt,
-            'desc'     => $request->desc,
-            'img'      => $imgPath,
-            'urutan'   => $request->urutan ?? 0,
+            'created_by' => Auth::id(),
+            'kategori'   => $request->kategori,
+            'title'      => $request->title,
+            'excerpt'    => $request->excerpt,
+            'desc'       => $request->desc,
+            'img'        => $imgPath,
+            'urutan'     => $request->urutan ?? 0,
         ]);
 
         return redirect()->route('admin.budaya.index')->with('success', 'Budaya baru berhasil ditambahkan!');

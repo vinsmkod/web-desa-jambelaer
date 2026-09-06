@@ -29,16 +29,24 @@
 @section('content')
 
 {{-- ══════════════════════════════════════════════════════════════════
-     PAGE HEADER BANNER
-     ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
+     PAGE HEADER BANNER & BREADCRUMB
+══════════════════════════════════════════════════════════════════ --}}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
+        <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
+        <span class="text-forest-800 font-semibold">Wisata Desa</span>
+    </nav>
+</div>
+
+<div class="relative h-60 sm:h-72 lg:h-80 overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 shadow-sm">
     <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80"
          alt="Wisata Alam Desa Jambelaer" class="w-full h-full object-cover opacity-60">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Eksplorasi Desa</span>
-        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Destinasi Pariwisata</h1>
-        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Temukan keindahan tersembunyi, tradisi lokal, dan kuliner khas Desa Jambelaer</p>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Destinasi Pariwisata</h1>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Temukan keindahan alam pedesaan, inovasi lingkungan, dan kehangatan warga Desa Jambelaer</p>
     </div>
 </div>
 

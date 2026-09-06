@@ -75,6 +75,7 @@ class KontakController extends Controller
                     'harga_produk_umkm'    => ['nullable', 'string', 'max:255'],
                     'ketersediaan_umkm'    => ['nullable', 'string', 'max:255'],
                     'sertifikasi_umkm'     => ['nullable', 'string', 'max:255'],
+                    'sertifikat_halal'     => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
                 ]);
                 break;
         }
@@ -133,7 +134,13 @@ class KontakController extends Controller
             $data['foto_produk'] = $path;
         }
 
-        // Handle upload dokumen lampiran PDF (kerja_sama & pengajuan_acara)
+        // Handle upload sertifikat halal PDF (daftar_umkm only)
+        if ($jenisPesan === 'daftar_umkm' && $request->hasFile('sertifikat_halal') && $request->file('sertifikat_halal')->isValid()) {
+            $path = $request->file('sertifikat_halal')->store('sertifikat-halal', 'public');
+            $data['sertifikat_halal'] = $path;
+        }
+
+        // Handle upload dokumen lampiran PDF (kerja_sama, pengajuan_acara)
         if (in_array($jenisPesan, ['kerja_sama', 'pengajuan_acara']) && $request->hasFile('dokumen_lampiran') && $request->file('dokumen_lampiran')->isValid()) {
             $path = $request->file('dokumen_lampiran')->store('dokumen-lampiran', 'public');
             $data['dokumen_lampiran'] = $path;

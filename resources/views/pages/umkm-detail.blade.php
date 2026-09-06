@@ -179,13 +179,9 @@
                         </div>
                         @endif
                         @if($product->no_whatsapp_umkm)
-                        @php
-                            $cardWa = preg_replace('/[^0-9]/', '', $product->no_whatsapp_umkm);
-                            if (str_starts_with($cardWa, '0')) $cardWa = '62' . substr($cardWa, 1);
-                        @endphp
                         <div>
                             <span class="text-stone-400 font-medium block">Nomor WhatsApp</span>
-                            <a href="https://wa.me/{{ $cardWa }}?text={{ $msg }}" target="_blank" class="text-forest-700 font-bold hover:underline block mt-0.5">
+                            <a href="{{ \App\Helpers\WhatsAppHelper::url($product->no_whatsapp_umkm, \App\Helpers\WhatsAppHelper::msgUmkm($product)) }}" target="_blank" class="text-forest-700 font-bold hover:underline block mt-0.5">
                                 {{ $product->no_whatsapp_umkm }}
                             </a>
                         </div>

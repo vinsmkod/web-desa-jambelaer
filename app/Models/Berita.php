@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Berita extends Model
@@ -14,6 +15,7 @@ class Berita extends Model
     protected $primaryKey = 'berita_id';
 
     protected $fillable = [
+        'created_by',
         'judul',
         'slug',
         'ringkasan',
@@ -51,9 +53,20 @@ class Berita extends Model
         // Gambar fallback default Unsplash berkualitas tinggi
         return 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80';
     }
+    // ── Relationships ────────────────────────────────────────────────────────
+    
+    /**
+     * User/Admin yang membuat berita ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
+
     /**
      * Catatan: Frontend menggunakan query manual `where('slug', $slug)`,
      * bukan Route Model Binding, sehingga getRouteKeyName() tidak diperlukan.
      * Admin resource binding menggunakan 'id' secara default (sudah benar).
      */
 }
+

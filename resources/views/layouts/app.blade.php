@@ -187,7 +187,7 @@
         .delay-400 { transition-delay: 400ms; }
         .delay-500 { transition-delay: 500ms; }
 
-        /* ── Navbar Active Underline ── */
+        /* ── Navbar Link Styles ── */
         .nav-link-active {
             color: #1a4731;
             font-weight: 600;
@@ -197,8 +197,7 @@
             content: '';
             position: absolute;
             bottom: -4px;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             height: 2px;
             background: #b88a48;
             border-radius: 99px;
@@ -213,8 +212,7 @@
             content: '';
             position: absolute;
             bottom: -4px;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             height: 2px;
             background: transparent;
             border-radius: 99px;
@@ -222,6 +220,100 @@
         }
         .nav-link-hover:hover { color: #1a4731; }
         .nav-link-hover:hover::after { background: #b88a48; }
+
+        /* ── Navbar Dropdown ── */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            color: #57534e;
+            font-weight: 500;
+            font-size: 0.875rem;
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            transition: color 0.2s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0 0 4px 0;
+            position: relative;
+        }
+        .nav-dropdown-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0; right: 0;
+            height: 2px;
+            background: transparent;
+            border-radius: 99px;
+            transition: background 0.2s;
+        }
+        .nav-dropdown-btn:hover { color: #1a4731; }
+        .nav-dropdown-btn:hover::after { background: #b88a48; }
+        .nav-dropdown-btn.dd-active { color: #1a4731; font-weight: 600; }
+        .nav-dropdown-btn.dd-active::after { background: #b88a48; }
+        .nav-dropdown-btn .dd-chev {
+            width: 13px; height: 13px;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .nav-dropdown.open .nav-dropdown-btn .dd-chev { transform: rotate(180deg); }
+
+        .nav-dropdown-panel {
+            position: absolute;
+            top: calc(100% + 14px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+            min-width: 210px;
+            background: #ffffff;
+            border: 1px solid #e7e5e4;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+            padding: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+            z-index: 200;
+        }
+        .nav-dropdown.open .nav-dropdown-panel {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+        }
+        .nav-dropdown-panel a {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 12px;
+            border-radius: 9px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #44403c;
+            transition: background 0.15s, color 0.15s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-dropdown-panel a:hover { background: #f0f9f3; color: #1a4731; }
+        .nav-dropdown-panel .dp-icon {
+            width: 26px; height: 26px;
+            border-radius: 7px;
+            background: #f0f9f3;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; color: #1a4731;
+        }
+        .nav-dropdown-panel a:hover .dp-icon { background: #d6efdf; }
+        .dp-divider { height: 1px; background: #f5f5f4; margin: 4px 6px; }
+
+        /* ── Mobile Accordion ── */
+        .mob-acc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.28s cubic-bezier(0.4,0,0.2,1);
+        }
+        .mob-acc-body.open { max-height: 300px; }
+        .mob-acc-chev { transition: transform 0.22s; }
+        .mob-acc-chev.open { transform: rotate(180deg); }
 
         /* ── Section Label Pill ── */
         .section-label {
@@ -325,36 +417,86 @@
     <!-- ══════════════════════════ NAVBAR ══════════════════════════ -->
     <header id="main-header" role="banner" class="fixed top-0 left-0 w-full z-50 bg-white border-b border-stone-200 transition-shadow duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-18 py-3">
+            <div class="flex items-center justify-between h-16 lg:h-[68px]">
 
                 <!-- Brand -->
-                <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+                <a href="{{ route('home') }}" class="flex items-center space-x-2.5 group flex-shrink-0">
+                    <div class="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
                         <img src="{{ asset('uploads/img/DESA_JAMBELAER.png') }}" alt="Logo Desa Jambelaer" class="w-full h-full object-cover">
                     </div>
                     <div class="leading-tight">
-                        <span class="font-display font-extrabold text-base sm:text-lg tracking-tight text-forest-900 block leading-none">DESA JAMBELAER</span>
-                        <span class="text-[10px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5">Kecamatan Dawuan • Kabupaten Subang</span>
+                        <span class="font-display font-extrabold text-sm sm:text-base tracking-tight text-forest-900 block leading-none">DESA JAMBELAER</span>
+                        <span class="text-[9px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5 hidden sm:block">Kec. Dawuan · Kab. Subang</span>
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
-                <nav role="navigation" aria-label="Menu Utama" class="hidden lg:flex items-center space-x-5 xl:space-x-7">
-                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Beranda</a>
-                    <a href="{{ route('tentang') }}" class="{{ request()->routeIs('tentang') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Tentang</a>
-                    <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Berita</a>
-                    <a href="{{ route('umkm') }}" class="{{ request()->routeIs('umkm*')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">UMKM</a>
-                    <a href="{{ route('wisata') }}" class="{{ request()->routeIs('wisata*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Wisata</a>
-                    <a href="{{ route('budaya') }}" class="{{ request()->routeIs('budaya*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Budaya</a>
-                    <a href="{{ route('galeri') }}" class="{{ request()->routeIs('galeri*')  ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Galeri</a>
-                    <a href="{{ route('acara') }}" class="{{ request()->routeIs('acara')    ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1">Acara</a>
+                <!-- Desktop Navigation -->
+                <nav role="navigation" aria-label="Menu Utama" class="hidden lg:flex items-center gap-0.5 xl:gap-1">
+
+                    {{-- Beranda --}}
+                    <a href="{{ route('home') }}"
+                       class="{{ request()->routeIs('home') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
+                        Beranda
+                    </a>
+
+                    {{-- Tentang Desa --}}
+                    <a href="{{ route('tentang') }}"
+                       class="{{ request()->routeIs('tentang*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
+                        Tentang Desa
+                    </a>
+
+                    {{-- Informasi Dropdown --}}
+                    <div class="nav-dropdown" id="dd-informasi">
+                        <button type="button" id="dd-informasi-btn"
+                            class="nav-dropdown-btn {{ request()->routeIs('berita*', 'acara') ? 'dd-active' : '' }}"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="panel-informasi">
+                            Informasi
+                            <svg class="dd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div id="panel-informasi" class="nav-dropdown-panel" role="menu">
+                            <a href="{{ route('berita') }}" role="menuitem">
+                                <span class="dp-icon"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i></span>Berita Desa
+                            </a>
+                            <a href="{{ route('acara') }}" role="menuitem">
+                                <span class="dp-icon"><i data-lucide="calendar" class="w-3.5 h-3.5"></i></span>Kegiatan &amp; Acara
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Potensi Desa Dropdown --}}
+                    <div class="nav-dropdown" id="dd-potensi">
+                        <button type="button" id="dd-potensi-btn"
+                            class="nav-dropdown-btn {{ request()->routeIs('umkm*', 'budaya*', 'wisata*') ? 'dd-active' : '' }}"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="panel-potensi">
+                            Potensi Desa
+                            <svg class="dd-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div id="panel-potensi" class="nav-dropdown-panel" role="menu">
+                            <a href="{{ route('umkm') }}" role="menuitem">
+                                <span class="dp-icon"><i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i></span>UMKM Desa
+                            </a>
+                            <div class="dp-divider"></div>
+                            <a href="{{ route('budaya') }}" role="menuitem">
+                                <span class="dp-icon"><i data-lucide="music" class="w-3.5 h-3.5"></i></span>Budaya &amp; Tradisi
+                            </a>
+                            <a href="{{ route('wisata') }}" role="menuitem">
+                                <span class="dp-icon"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i></span>Wisata Desa
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Galeri --}}
+                    <a href="{{ route('galeri') }}"
+                       class="{{ request()->routeIs('galeri*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
+                        Galeri
+                    </a>
                 </nav>
 
-                <!-- CTA -->
+                <!-- Desktop Primary CTA -->
                 <div class="hidden lg:flex items-center">
-                    <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2.5 px-5">
-                        <i data-lucide="phone" class="w-3.5 h-3.5 mr-2"></i>
-                        Hubungi Kami
+                    <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2 px-5 gap-1.5 {{ request()->routeIs('kontak') ? '!bg-forest-700 !border-forest-700 ring-2 ring-forest-300' : '' }}">
+                        <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
+                        Layanan Masyarakat
                     </a>
                 </div>
 
@@ -369,20 +511,63 @@
         </div>
 
         <!-- Mobile Menu -->
-        <nav id="mobile-menu" role="navigation" aria-label="Menu Mobile" class="hidden lg:hidden border-t border-stone-100 bg-white py-3 max-h-[calc(100vh-80px)] overflow-y-auto">
-            <div class="px-4 space-y-0.5">
-                <a href="{{ route('home') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Beranda</a>
-                <a href="{{ route('tentang') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Tentang</a>
-                <a href="{{ route('berita') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Berita</a>
-                <a href="{{ route('umkm') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">UMKM</a>
-                <a href="{{ route('wisata') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Wisata</a>
-                <a href="{{ route('budaya') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Budaya</a>
-                <a href="{{ route('galeri') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Galeri</a>
-                <a href="{{ route('acara') }}" class="flex items-center px-4 py-3 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">Acara</a>
-                <div class="pt-3 pb-1 px-1">
-                    <a href="{{ route('kontak') }}" class="btn-primary w-full justify-center text-[11px] py-3">
-                        <i data-lucide="phone" class="w-3.5 h-3.5 mr-2"></i>
-                        Hubungi Kami
+        <nav id="mobile-menu" role="navigation" aria-label="Menu Mobile"
+             class="hidden lg:hidden border-t border-stone-100 bg-white max-h-[calc(100vh-64px)] overflow-y-auto">
+            <div class="px-3 py-2 space-y-0.5">
+
+                {{-- Beranda --}}
+                <a href="{{ route('home') }}"
+                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('home') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                    <i data-lucide="home" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Beranda
+                </a>
+
+                {{-- Tentang Desa --}}
+                <a href="{{ route('tentang') }}"
+                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('tentang*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                    <i data-lucide="landmark" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Tentang Desa
+                </a>
+
+                {{-- Informasi Accordion --}}
+                <div>
+                    <button type="button" id="mob-informasi-btn" aria-expanded="false"
+                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('berita*', 'acara') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                        <span class="flex items-center"><i data-lucide="newspaper" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Informasi</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 mob-acc-chev" id="mob-informasi-chev"></i>
+                    </button>
+                    <div class="mob-acc-body" id="mob-informasi-body">
+                        <div class="pl-9 pr-2 pb-1 space-y-0.5">
+                            <a href="{{ route('berita') }}" class="block px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-forest-50 hover:text-forest-800 transition-all">Berita Desa</a>
+                            <a href="{{ route('acara') }}" class="block px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-forest-50 hover:text-forest-800 transition-all">Kegiatan &amp; Acara</a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Potensi Desa Accordion --}}
+                <div>
+                    <button type="button" id="mob-potensi-btn" aria-expanded="false"
+                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('umkm*', 'budaya*', 'wisata*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                        <span class="flex items-center"><i data-lucide="sprout" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Potensi Desa</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 mob-acc-chev" id="mob-potensi-chev"></i>
+                    </button>
+                    <div class="mob-acc-body" id="mob-potensi-body">
+                        <div class="pl-9 pr-2 pb-1 space-y-0.5">
+                            <a href="{{ route('umkm') }}" class="block px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-forest-50 hover:text-forest-800 transition-all">UMKM Desa</a>
+                            <a href="{{ route('budaya') }}" class="block px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-forest-50 hover:text-forest-800 transition-all">Budaya &amp; Tradisi</a>
+                            <a href="{{ route('wisata') }}" class="block px-3 py-2 rounded-lg text-sm text-stone-600 hover:bg-forest-50 hover:text-forest-800 transition-all">Wisata Desa</a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Galeri --}}
+                <a href="{{ route('galeri') }}"
+                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('galeri*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                    <i data-lucide="image" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Galeri
+                </a>
+
+                {{-- CTA --}}
+                <div class="pt-2 pb-2 px-1">
+                    <a href="{{ route('kontak') }}" class="btn-primary w-full justify-center text-[11px] py-2.5 gap-2">
+                        <i data-lucide="headphones" class="w-4 h-4"></i>Layanan Masyarakat
                     </a>
                 </div>
             </div>
@@ -390,157 +575,137 @@
     </header>
 
     <!-- ══════════════════════════ PAGE CONTENT ══════════════════════════ -->
-    <main role="main" class="pt-20 sm:pt-24 lg:pt-[104px]">
+    <main role="main" class="pt-16 lg:pt-[68px]">
         @yield('content')
     </main>
 
-    <!-- ══════════════════════════ FOOTER ══════════════════════════ -->
-    <footer role="contentinfo" class="bg-forest-900 text-white mt-16 rounded-none overflow-hidden">
-        <!-- Zone 1: Main Footer Content -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-white/10">
+    <footer role="contentinfo" class="bg-forest-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
 
-                <!-- Brand + Tagline -->
-                <div class="md:col-span-2 lg:col-span-5 space-y-5">
+            <!-- Main Footer Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6 pb-10 border-b border-white/10">
+
+                <!-- Col 1: Brand -->
+                <div class="sm:col-span-2 lg:col-span-4 space-y-4">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-lg bg-forest-700 border border-forest-600 flex items-center justify-center">
                             <i data-lucide="wheat" class="w-5 h-5 text-sand-300"></i>
                         </div>
                         <div>
-                            <span class="font-display font-extrabold text-base text-white block leading-tight">Pemerintah Desa Jambelaer</span>
-                            <span class="text-[10px] text-sand-400 tracking-widest uppercase">Kecamatan Dawuan · Kabupaten Subang</span>
+                            <span class="font-display font-extrabold text-sm text-white block leading-tight">Pemerintah Desa Jambelaer</span>
+                            <span class="text-[10px] text-sand-400 tracking-widest uppercase">Kec. Dawuan · Kab. Subang · Jawa Barat</span>
                         </div>
                     </div>
-                    <p class="text-sm text-white/50 leading-relaxed max-w-sm font-light">
-                        Portal layanan dan profil resmi Desa Jambelaer. Memajukan desa melalui digitalisasi potensi pariwisata, budaya lokal, dan produk UMKM unggulan daerah.
+                    <p class="text-sm text-white/50 leading-relaxed font-light max-w-xs">
+                        Portal layanan dan profil resmi Desa Jambelaer. Memajukan desa melalui digitalisasi potensi budaya lokal, pariwisata, dan UMKM unggulan.
                     </p>
                     <!-- Social Icons -->
                     @php
-                    $footerIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
-                    $footerYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
-                    $footerTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
+                        $footerIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
+                        $footerYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
+                        $footerTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
                     @endphp
-                    <div class="flex items-center flex-wrap gap-2 pt-1">
-
+                    <div class="flex items-center gap-2 pt-1">
                         @if($footerIg)
                         <a href="{{ str_starts_with($footerIg, 'http') ? $footerIg : 'https://'.$footerIg }}" target="_blank" rel="noopener" title="Instagram Desa"
                             class="w-8 h-8 rounded border border-white/10 bg-white/5 flex items-center justify-center hover:bg-pink-600 hover:border-pink-600 transition-all text-white/60 hover:text-white">
-                            {{-- Instagram SVG (Lucide @latest removed this icon) --}}
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
                         </a>
                         @else
                         <span class="w-8 h-8 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/20" title="Instagram belum diatur">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
                         </span>
                         @endif
 
                         @if($footerYt)
                         <a href="{{ str_starts_with($footerYt, 'http') ? $footerYt : 'https://'.$footerYt }}" target="_blank" rel="noopener" title="YouTube Desa"
                             class="w-8 h-8 rounded border border-white/10 bg-white/5 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all text-white/60 hover:text-white">
-                            {{-- YouTube SVG (Lucide @latest removed this icon) --}}
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
                         </a>
                         @else
                         <span class="w-8 h-8 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/20" title="YouTube belum diatur">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
                         </span>
                         @endif
 
                         @if($footerTt)
                         <a href="{{ str_starts_with($footerTt, 'http') ? $footerTt : 'https://'.$footerTt }}" target="_blank" rel="noopener" title="TikTok Desa"
                             class="w-8 h-8 rounded border border-white/10 bg-white/5 flex items-center justify-center hover:bg-stone-700 hover:border-stone-700 transition-all text-white/60 hover:text-white">
-                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
                         </a>
                         @else
                         <span class="w-8 h-8 rounded border border-white/5 bg-white/5 flex items-center justify-center text-white/20" title="TikTok belum diatur">
-                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
-                            </svg>
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
                         </span>
                         @endif
                     </div>
                 </div>
 
-                <!-- Nav Links -->
-                <div class="md:col-span-1 lg:col-span-3 space-y-4">
-                    <h4 class="font-display font-bold text-xs tracking-widest uppercase text-sand-400">Navigasi</h4>
-                    <ul class="space-y-2.5">
-                        <li><a href="{{ route('home') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Beranda</a></li>
-                        <li><a href="{{ route('tentang') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Tentang Kami</a></li>
-                        <li><a href="{{ route('umkm') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>UMKM Desa</a></li>
-                        <li><a href="{{ route('budaya') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Budaya & Seni</a></li>
-                        <li><a href="{{ route('galeri') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Galeri Foto</a></li>
-                        <li><a href="{{ route('acara') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Acara & Kegiatan</a></li>
-                        <li><a href="{{ route('kontak') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-3 h-3"></i>Hubungi Kami</a></li>
+                <!-- Col 2: Navigasi -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Navigasi</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('home') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Beranda</a></li>
+                        <li><a href="{{ route('tentang') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Tentang Desa</a></li>
+                        <li><a href="{{ route('berita') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Berita</a></li>
+                        <li><a href="{{ route('acara') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Kegiatan</a></li>
+                        <li><a href="{{ route('galeri') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Galeri</a></li>
                     </ul>
                 </div>
 
-                <!-- Contact Info -->
-                <div class="md:col-span-1 lg:col-span-4 space-y-4">
-                    <h4 class="font-display font-bold text-xs tracking-widest uppercase text-sand-400">Kontak & Lokasi</h4>
-                    <ul class="space-y-4">
-                        <li class="flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sand-400"></i>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Alamat</span>
-                                <span class="text-sm text-white/60 font-light leading-relaxed">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270') }}</span>
-                            </div>
+                <!-- Col 3: Potensi -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Potensi Desa</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('umkm') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>UMKM</a></li>
+                        <li><a href="{{ route('budaya') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Budaya &amp; Seni</a></li>
+                        <li><a href="{{ route('wisata') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Wisata</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Pelayanan -->
+                <div class="lg:col-span-2 space-y-4">
+                    <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Layanan Publik</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('kontak') }}#form-pertanyaan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pertanyaan Umum</a></li>
+                        <li><a href="{{ route('kontak') }}#form-pengaduan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengaduan Warga</a></li>
+                        <li><a href="{{ route('kontak') }}#form-kerjasama" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Kerja Sama</a></li>
+                        <li><a href="{{ route('kontak') }}#form-acara" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengajuan Acara</a></li>
+                        <li><a href="{{ route('kontak') }}#form-umkm" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pendaftaran UMKM</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 5: Kontak -->
+                <div class="sm:col-span-2 lg:col-span-2 space-y-4">
+                    <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Kontak &amp; Lokasi</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-xs text-white/50 font-light leading-relaxed">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270') }}</span>
                         </li>
-                        <li class="flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i data-lucide="phone" class="w-3.5 h-3.5 text-sand-400"></i>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Telepon</span>
-                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
-                            </div>
+                        <li class="flex items-center gap-2.5">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
+                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
                         </li>
-                        <li class="flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i data-lucide="mail" class="w-3.5 h-3.5 text-sand-400"></i>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Email</span>
-                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
-                            </div>
+                        <li class="flex items-center gap-2.5">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
+                            <span class="text-xs text-white/50 font-light break-all">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
                         </li>
-                        <li class="flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i data-lucide="clock" class="w-3.5 h-3.5 text-sand-400"></i>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-sand-500 font-semibold tracking-wider uppercase block">Jam Layanan</span>
-                                <span class="text-sm text-white/60 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin – Jumat: 08:00 – 15:30 WIB') }}</span>
-                            </div>
+                        <li class="flex items-center gap-2.5">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
+                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin – Jumat: 08:00 – 15:30 WIB') }}</span>
                         </li>
                     </ul>
                 </div>
+
             </div>
 
-            <!-- Bottom Row -->
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30 font-light">
+            <!-- Bottom Bar -->
+            <div class="pt-7 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30 font-light">
                 <p>© {{ date('Y') }} Pemerintah Desa Jambelaer · Kecamatan Dawuan · Kabupaten Subang</p>
                 <div class="flex items-center divide-x divide-white/10 text-white/25">
                     <a href="#" class="hover:text-sand-400 transition-colors pr-4">Kebijakan Privasi</a>
-                    <a href="#" class="hover:text-sand-400 transition-colors px-4">Syarat & Ketentuan</a>
+                    <a href="#" class="hover:text-sand-400 transition-colors px-4">Syarat &amp; Ketentuan</a>
                 </div>
             </div>
         </div>
@@ -582,7 +747,26 @@
                 behavior: 'smooth'
             }));
 
-            // Mobile Menu Toggle
+            // ── Desktop Dropdown ──────────────────────────────────────
+            const dropdowns = document.querySelectorAll('.nav-dropdown');
+            dropdowns.forEach(function(dd) {
+                const btn = dd.querySelector('.nav-dropdown-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = dd.classList.contains('open');
+                    dropdowns.forEach(d => { d.classList.remove('open'); const b = d.querySelector('.nav-dropdown-btn'); if(b) b.setAttribute('aria-expanded','false'); });
+                    if (!isOpen) { dd.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+                });
+            });
+            document.addEventListener('click', function() {
+                dropdowns.forEach(d => { d.classList.remove('open'); const b = d.querySelector('.nav-dropdown-btn'); if(b) b.setAttribute('aria-expanded','false'); });
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { dropdowns.forEach(d => { d.classList.remove('open'); const b = d.querySelector('.nav-dropdown-btn'); if(b) b.setAttribute('aria-expanded','false'); }); }
+            });
+
+            // ── Mobile Menu Toggle ────────────────────────────────────
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const hamburger = document.getElementById('hamburger-icon');
@@ -596,7 +780,23 @@
                 closeIcon.classList.toggle('hidden');
             });
 
-            // Scroll Reveal Observer for all .reveal-* elements
+            // ── Mobile Accordion ─────────────────────────────────────
+            function setupAcc(btnId, bodyId, chevId) {
+                const btn  = document.getElementById(btnId);
+                const body = document.getElementById(bodyId);
+                const chev = document.getElementById(chevId);
+                if (!btn || !body) return;
+                btn.addEventListener('click', function() {
+                    const open = body.classList.contains('open');
+                    body.classList.toggle('open', !open);
+                    if (chev) chev.classList.toggle('open', !open);
+                    btn.setAttribute('aria-expanded', !open);
+                });
+            }
+            setupAcc('mob-informasi-btn', 'mob-informasi-body','mob-informasi-chev');
+            setupAcc('mob-potensi-btn',   'mob-potensi-body',  'mob-potensi-chev');
+
+            // ── Scroll Reveal Observer ────────────────────────────────
             const revealEls = document.querySelectorAll('.reveal-on-scroll, .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-zoom-in, .reveal-fade-in, [data-aos]');
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {

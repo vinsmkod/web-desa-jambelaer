@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class GaleriController extends Controller
@@ -40,8 +41,9 @@ class GaleriController extends Controller
             $data['foto'] = '/uploads/galeri/' . $filename;
         }
 
-        $data['is_active'] = $request->boolean('is_active');
-        $data['urutan']    = $request->input('urutan', 0);
+        $data['created_by'] = Auth::id();
+        $data['is_active']  = $request->boolean('is_active');
+        $data['urutan']     = $request->input('urutan', 0);
 
         Galeri::create($data);
 

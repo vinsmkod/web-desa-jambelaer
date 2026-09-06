@@ -61,6 +61,55 @@ class User extends Authenticatable
      */
     public function pesan(): HasMany
     {
-        return $this->hasMany(Pesan::class);
+        return $this->hasMany(Pesan::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * Berita yang dibuat oleh user/admin ini.
+     */
+    public function berita(): HasMany
+    {
+        return $this->hasMany(Berita::class, 'created_by', 'user_id');
+    }
+
+    /**
+     * Data budaya yang dibuat oleh user/admin ini.
+     */
+    public function budaya(): HasMany
+    {
+        return $this->hasMany(Budaya::class, 'created_by', 'user_id');
+    }
+
+    /**
+     * Destinasi wisata yang dibuat oleh user/admin ini.
+     */
+    public function wisata(): HasMany
+    {
+        return $this->hasMany(Wisata::class, 'created_by', 'user_id');
+    }
+
+    /**
+     * Foto galeri yang dibuat oleh user/admin ini.
+     */
+    public function galeri(): HasMany
+    {
+        return $this->hasMany(Galeri::class, 'created_by', 'user_id');
+    }
+
+    /**
+     * Produk UMKM yang dibuat/dikelola oleh user/admin ini.
+     */
+    public function produk(): HasMany
+    {
+        return $this->hasMany(Produk::class, 'created_by', 'user_id');
+    }
+
+    /**
+     * Anggota struktur desa yang dibuat oleh user/admin ini.
+     */
+    public function strukturDesa(): HasMany
+    {
+        return $this->hasMany(StrukturDesa::class, 'created_by', 'user_id');
     }
 }
+

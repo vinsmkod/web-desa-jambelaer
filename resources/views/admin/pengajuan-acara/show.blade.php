@@ -236,6 +236,10 @@
             Kembali
         </a>
 
+        @php
+            $waMsg = \App\Helpers\WhatsAppHelper::msgPengajuanAcaraKePemohon($pesan);
+            $waUrl = \App\Helpers\WhatsAppHelper::url($pesan->no_whatsapp ?? '', $waMsg);
+        @endphp
         @if($hasEmail)
         <a href="mailto:{{ $pesan->email }}?subject=Re: {{ urlencode($pesan->nama_acara ?? $pesan->subject) }}"
            class="btn-primary">
@@ -243,15 +247,13 @@
             Balas via Email
         </a>
         @if($hasWa)
-        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $pesan->no_whatsapp) }}?text=Halo%20{{ urlencode($pesan->name) }}" target="_blank"
-           class="btn-secondary">
+        <a href="{{ $waUrl }}" target="_blank" class="btn-secondary">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             WhatsApp
         </a>
         @endif
         @elseif($hasWa)
-        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $pesan->no_whatsapp) }}?text=Halo%20{{ urlencode($pesan->name) }}" target="_blank"
-           class="btn-primary">
+        <a href="{{ $waUrl }}" target="_blank" class="btn-primary">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             Balas via WhatsApp
         </a>

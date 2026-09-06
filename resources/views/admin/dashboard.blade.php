@@ -265,7 +265,7 @@
                     <a href="{{ route('admin.tentang.index') }}"
                        class="flex items-center gap-3 w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 transition-all group">
                         <div class="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="users-2" class="w-4 h-4"></i>
+                            <i data-lucide="users" class="w-4 h-4"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-bold leading-tight">Struktur Organisasi</p>

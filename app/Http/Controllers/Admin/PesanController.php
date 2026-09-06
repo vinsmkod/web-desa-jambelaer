@@ -29,7 +29,7 @@ class PesanController extends Controller
             $query->where('jenis_pesan', $activeTab);
         }
 
-        $pesan = $query->paginate(5)->withQueryString();
+        $pesan = $query->paginate(10)->withQueryString();
 
         return view('admin.pesan.index', compact('pesan', 'stats', 'activeTab'));
     }

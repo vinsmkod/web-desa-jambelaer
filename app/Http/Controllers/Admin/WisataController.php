@@ -6,6 +6,7 @@ use App\Helpers\SecurityHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Wisata;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class WisataController extends Controller
@@ -58,6 +59,7 @@ class WisataController extends Controller
         }
 
         Wisata::create([
+            'created_by' => Auth::id(),
             'nama' => $request->nama,
             'slug' => $slug,
             'kategori' => $request->kategori,

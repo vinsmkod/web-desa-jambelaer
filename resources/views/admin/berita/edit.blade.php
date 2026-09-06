@@ -24,7 +24,7 @@
     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
         <div class="flex items-center gap-4 pb-6 mb-2 border-b border-slate-100">
             <div class="w-12 h-12 rounded-2xl bg-forest-800 text-white flex items-center justify-center shadow-xs flex-shrink-0">
-                <i data-lucide="edit-3" class="w-6 h-6 text-amber-300"></i>
+                <i data-lucide="pencil" class="w-6 h-6 text-amber-300"></i>
             </div>
             <div>
                 <h2 class="text-base font-bold text-slate-900">Edit Berita Desa</h2>
@@ -71,7 +71,7 @@
                 <label for="penulis" class="form-label">Penulis / Redaksi <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i data-lucide="user-edit" class="w-5 h-5"></i>
+                        <i data-lucide="user-pen" class="w-5 h-5"></i>
                     </div>
                     <input type="text" name="penulis" id="penulis" value="{{ old('penulis', $berita->penulis) }}" required
                         placeholder="Nama Penulis / Tim Redaksi"

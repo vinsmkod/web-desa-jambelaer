@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ProdukController extends Controller
@@ -24,6 +25,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'pesan_id'         => ['nullable', 'integer', 'exists:pesan,pesan_id'],
             'title'            => ['required', 'string', 'max:255'],
             'producer'         => ['required', 'string', 'max:255'],
             'price'            => ['required', 'string', 'max:100'],
@@ -61,8 +63,9 @@ class ProdukController extends Controller
                 $details[$key] = $detailValues[$i] ?? '';
             }
         }
-        $data['details']   = $details;
-        $data['is_active'] = $request->boolean('is_active');
+        $data['details']    = $details;
+        $data['is_active']  = $request->boolean('is_active');
+        $data['created_by'] = Auth::id();
 
         // Auto-generate unique slug
         $slug = Str::slug($data['title']);

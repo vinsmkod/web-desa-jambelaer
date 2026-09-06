@@ -89,18 +89,25 @@
                         </div>
                     </td>
                     <td class="px-4 py-4">
-                        <p class="font-semibold text-slate-700 {{ !$p->is_read ? 'text-slate-900' : '' }}">{{ $p->name }}</p>
-                        <p class="text-xs text-slate-400">{{ $p->email ?? $p->no_whatsapp ?? '-' }}</p>
+                        <div class="font-semibold text-slate-800">{{ $p->name }}</div>
+                        <div class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                            @if($p->no_whatsapp)
+                            <span class="flex items-center gap-0.5"><i data-lucide="phone" class="w-3 h-3 text-emerald-500"></i>{{ $p->no_whatsapp }}</span>
+                            @endif
+                            @if($p->email && $p->email !== '-')
+                            <span class="flex items-center gap-0.5"><i data-lucide="mail" class="w-3 h-3 text-sky-500"></i>{{ $p->email }}</span>
+                            @endif
+                        </div>
                     </td>
                     <td class="px-4 py-4">
                         @php
                             $jenisClass = match($p->jenis_pesan) {
                                 'pertanyaan_umum' => 'bg-sky-50 text-sky-700 border-sky-200',
-                                'pengaduan'       => 'bg-red-50 text-red-600 border-red-200',
+                                'pengaduan'       => 'bg-red-50 text-red-700 border-red-200',
                                 'kerja_sama'      => 'bg-cyan-50 text-cyan-700 border-cyan-200',
                                 'pengajuan_acara' => 'bg-amber-50 text-amber-700 border-amber-200',
                                 'daftar_umkm'     => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-                                default           => 'bg-slate-50 text-slate-600 border-slate-200',
+                                default           => 'bg-slate-50 text-slate-700 border-slate-200',
                             };
                             $jenisLabel = match($p->jenis_pesan) {
                                 'pertanyaan_umum' => 'Pertanyaan',
@@ -125,15 +132,21 @@
                     </td>
                     <td class="px-4 py-4">
                         @if($p->is_read)
-                        <span class="badge-read">Dibaca</span>
+                            <span class="badge-read">Dibaca</span>
                         @else
-                        <span class="badge-unread">Baru</span>
+                            <span class="badge-unread">Baru</span>
                         @endif
                     </td>
                     <td class="px-5 py-4 text-right">
                         <div class="flex items-center justify-end gap-1.5">
-                            <a href="{{ route('admin.pesan.show', $p) }}"
-                               class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-forest-50 hover:text-forest-700 transition-all" title="Lihat">
+                            @php
+                                $detailRoute = match($p->jenis_pesan) {
+                                    'pengajuan_acara' => route('admin.pengajuan-acara.show', $p),
+                                    default           => route('admin.pesan.show', $p),
+                                };
+                            @endphp
+                            <a href="{{ $detailRoute }}"
+                               class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:bg-forest-50 hover:text-forest-700 transition-all" title="Lihat Detail">
                                 <i data-lucide="eye" class="w-4 h-4"></i>
                             </a>
                             @if(!$p->is_read)

@@ -18,7 +18,11 @@
     <!-- Tailwind CSS v4 -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style type="text/tailwindcss">
+        [x-cloak] { display: none !important; }
         @theme {
             --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
             --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
@@ -89,8 +93,13 @@
         }
     </style>
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons (Local asset with CDN fallback) -->
+    <script src="{{ asset('js/lucide.min.js') }}"></script>
+    <script>
+        if (typeof lucide === 'undefined') {
+            document.write('<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"><\/script>');
+        }
+    </script>
 
     @stack('head')
 </head>
@@ -126,32 +135,32 @@
                 <span>Produk UMKM</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Produk::count() }}</span>
             </a>
+
             <a href="{{ route('admin.pesan.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.pesan.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
                 <i data-lucide="mail" class="icon"></i>
-                <span>Layanan Publik</span>
-                @php $unread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
-                @if($unread > 0)
-                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unread }}</span>
+                <span>Layanan Masyarakat</span>
+                @php $totalUnread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
+                @if($totalUnread > 0)
+                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $totalUnread }}</span>
                 @endif
             </a>
-
 
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Konten</p>
 
             <a href="{{ route('admin.tentang.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.tentang.*') ? 'active' : '' }}">
-                <i data-lucide="users-2" class="icon"></i>
+                <i data-lucide="users" class="icon"></i>
                 <span>Struktur Desa</span>
             </a>
             <a href="{{ route('admin.budaya.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.budaya.*') ? 'active' : '' }}">
-                <i data-lucide="music-2" class="icon"></i>
+                <i data-lucide="music" class="icon"></i>
                 <span>Budaya Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Budaya::count() }}</span>
             </a>
             <a href="{{ route('admin.wisata.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.wisata.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.wisata.*') ? 'active' : '' }}">
                 <i data-lucide="compass" class="icon"></i>
                 <span>Wisata Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Wisata::count() }}</span>
@@ -167,6 +176,20 @@
                 <i data-lucide="newspaper" class="icon"></i>
                 <span>Berita Desa</span>
                 <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
+            </a>
+            <a href="{{ route('admin.acara.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.acara.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
+                <i data-lucide="calendar" class="icon"></i>
+                <span>Agenda Acara</span>
+                @php
+                    $pendingAcara = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'menunggu')->count();
+                    $activeAcara = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'disetujui')->where(function($q){$q->whereNull('is_archived')->orWhere('is_archived', false);})->count();
+                @endphp
+                @if($pendingAcara > 0)
+                    <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $pendingAcara }}</span>
+                @else
+                    <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ $activeAcara }}</span>
+                @endif
             </a>
             <a href="{{ route('admin.pengaturan.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
@@ -292,27 +315,39 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-
-            // Auto-logout jika admin tidak aktif (idle)
-            const timeoutMinutes = {{ (int) env('ADMIN_SESSION_TIMEOUT', 15) }};
-            const timeoutMs = timeoutMinutes * 60 * 1000;
-            let idleTimer;
-
-            function resetIdleTimer() {
-                clearTimeout(idleTimer);
-                idleTimer = setTimeout(function() {
-                    window.location.reload();
-                }, timeoutMs);
+        function initLucideIcons() {
+            if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
             }
+        }
 
-            ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(evt) {
-                window.addEventListener(evt, resetIdleTimer, { passive: true });
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLucideIcons);
+        } else {
+            initLucideIcons();
+        }
+
+        window.addEventListener('load', initLucideIcons);
+
+        // Auto-logout jika admin tidak aktif (idle)
+        const timeoutMinutes = {{ (int) env('ADMIN_SESSION_TIMEOUT', 15) }};
+        const timeoutMs = timeoutMinutes * 60 * 1000;
+        let idleTimer;
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(function() {
+                window.location.reload();
+            }, timeoutMs);
+        }
+
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(evt) {
+            window.addEventListener(evt, resetIdleTimer, {
+                passive: true
             });
-
-            resetIdleTimer();
         });
+
+        resetIdleTimer();
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');

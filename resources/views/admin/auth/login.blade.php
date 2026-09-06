@@ -49,7 +49,12 @@
     </style>
 
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="{{ asset('js/lucide.min.js') }}"></script>
+    <script>
+        if (typeof lucide === 'undefined') {
+            document.write('<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"><\/script>');
+        }
+    </script>
 </head>
 
 <body class="min-h-screen bg-slate-900 font-sans antialiased flex flex-col items-center justify-center py-6 px-4 relative overflow-y-auto selection:bg-forest-500 selection:text-white">

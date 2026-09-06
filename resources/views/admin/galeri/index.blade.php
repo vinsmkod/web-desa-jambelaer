@@ -64,7 +64,7 @@
                                 <a href="{{ route('admin.galeri.edit', $item->galeri_id) }}"
                                    class="w-8 h-8 rounded-lg text-slate-400 hover:bg-forest-50 hover:text-forest-700 flex items-center justify-center transition-all"
                                    title="Edit">
-                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </a>
                                 <form action="{{ route('admin.galeri.destroy', $item->galeri_id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto ini?')">
                                     @csrf @method('DELETE')

@@ -30,17 +30,25 @@
 @section('content')
 
 {{-- ══════════════════════════════════════════════════════════════════
-     PAGE HEADER BANNER
+     PAGE HEADER BANNER & BREADCRUMB
 ══════════════════════════════════════════════════════════════════ --}}
-<div class="relative h-64 sm:h-80 overflow-hidden bg-forest-900 rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-8 sm:mt-10 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
+        <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
+        <span class="text-forest-800 font-semibold">Tentang Kami</span>
+    </nav>
+</div>
+
+<div class="relative h-60 sm:h-72 lg:h-80 overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 shadow-sm">
     <img src="{{ asset('uploads/img/sawah.jpeg') }}"
         alt="Hamparan sawah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang" class="w-full h-full object-cover opacity-60"
         width="1200" height="400" loading="eager">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Tentang Kami</span>
-        <h1 class="font-display font-extrabold text-3xl sm:text-4xl text-white mt-3">Mengenal Desa Jambelaer</h1>
-        <p class="text-sm text-white/70 mt-2 font-light max-w-md">Kecamatan Dawuan, Kabupaten Subang, Jawa Barat</p>
+        <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Profil Desa</span>
+        <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Mengenal Desa Jambelaer</h1>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Kecamatan Dawuan • Kabupaten Subang • Jawa Barat</p>
     </div>
 </div>
 
@@ -50,7 +58,7 @@
         {{-- ══════════════════════════════════════════════════════════
              SEJARAH DESA — Timeline Visual
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-16 border-b border-stone-100 reveal-on-scroll">
+        <div id="sejarah" class="py-16 border-b border-stone-100 reveal-on-scroll scroll-mt-24">
             <div class="grid lg:grid-cols-12 gap-10 items-start">
                 {{-- Left: Label --}}
                 <div class="lg:col-span-4 space-y-4 lg:sticky lg:top-28">
@@ -155,7 +163,7 @@
         {{-- ══════════════════════════════════════════════════════════
              SAMBUTAN KEPALA DESA
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-16 border-b border-stone-100 reveal-on-scroll">
+        <div id="sambutan" class="py-16 border-b border-stone-100 reveal-on-scroll scroll-mt-24">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 {{-- Photo --}}
                 <div class="lg:col-span-4 flex justify-center lg:justify-start">
@@ -228,7 +236,7 @@
         {{-- ══════════════════════════════════════════════════════════
              INFORMASI DESA — 3 Kartu
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-16 border-b border-stone-100 reveal-on-scroll delay-100">
+        <div id="data-desa" class="py-16 border-b border-stone-100 reveal-on-scroll delay-100 scroll-mt-24">
             <div class="text-center mb-10">
                 <span class="section-label">Profil Wilayah</span>
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Informasi Wilayah Desa</h2>
@@ -315,7 +323,7 @@
         {{-- ══════════════════════════════════════════════════════════
              VISI & MISI — Side by Side Panel
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-16 border-b border-stone-100 reveal-on-scroll delay-200">
+        <div id="visi-misi" class="py-16 border-b border-stone-100 reveal-on-scroll delay-200 scroll-mt-24">
             <div class="text-center mb-10">
                 <span class="section-label">Arah Pembangunan</span>
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Visi & Misi Desa</h2>
@@ -376,7 +384,7 @@
         $kepalaDesa = $struktur->first();
         $jajaranDesa = $struktur->slice(1);
         @endphp
-        <div class="py-16 border-b border-stone-100 reveal-on-scroll delay-300">
+        <div id="struktur" class="py-16 border-b border-stone-100 reveal-on-scroll delay-300 scroll-mt-24">
             <div class="text-center mb-12">
                 <span class="section-label">Perangkat Desa</span>
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Struktur Organisasi Desa</h2>
@@ -432,7 +440,7 @@
         {{-- ══════════════════════════════════════════════════════════
              PETA LOKASI
         ══════════════════════════════════════════════════════════ --}}
-        <div class="py-14 reveal-on-scroll">
+        <div id="peta" class="py-14 reveal-on-scroll scroll-mt-24">
             <div class="text-center mb-8">
                 <span class="section-label">Peta Wilayah</span>
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Lokasi Kantor Desa</h2>

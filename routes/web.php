@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\TentangController;
 use App\Http\Controllers\Admin\BudayaController;
 use App\Http\Controllers\Admin\PengajuanAcaraController;
+use App\Http\Controllers\Admin\AcaraController;
 use App\Http\Controllers\Admin\GaleriController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\BeritaController;
@@ -39,7 +40,13 @@ Route::get('/', function () {
         'stat_rtrw'     => Pengaturan::get('stat_rtrw', '24'),
         'stat_dusun'    => Pengaturan::get('stat_dusun', '4'),
     ];
-    return view('pages.home', compact('settings'));
+    $umkms   = Produk::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->take(6)->get();
+    $budayas = Budaya::orderBy('urutan')->orderBy('budaya_id')->take(3)->get();
+    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->take(3)->get();
+    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->take(3)->get();
+    $galeris = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->take(6)->get();
+
+    return view('pages.home', compact('settings', 'umkms', 'budayas', 'wisatas', 'beritas', 'galeris'));
 })->name('home');
 
 // Tentang Kami
@@ -54,7 +61,7 @@ Route::get('/tentang-kami', function () {
 Route::get('/umkm', function () {
     $products           = Produk::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->get();
     $jenisGroups        = $products->whereNotNull('jenis')->groupBy('jenis');
-    $individualProducts = $products->filter(fn ($p) => is_null($p->jenis));
+    $individualProducts = $products->filter(fn($p) => is_null($p->jenis));
     return view('pages.umkm', compact('products', 'jenisGroups', 'individualProducts'));
 })->name('umkm');
 
@@ -101,7 +108,8 @@ Route::get('/budaya/{slug}', function ($slug) {
     if (!$budaya && Budaya::count() === 0) {
         $fallbacks = [
             'ruwatan-bumi-hajat-bumi' => [
-                'id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi',
+                'id' => 1,
+                'slug' => 'ruwatan-bumi-hajat-bumi',
                 'title' => 'Ruwatan Bumi (Hajat Bumi)',
                 'kategori' => 'Upacara Adat',
                 'excerpt' => 'Upacara adat tanda syukur hasil bumi pertanian desa yang melimpah.',
@@ -109,7 +117,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80',
             ],
             'kesenian-sisingaan' => [
-                'id' => 2, 'slug' => 'kesenian-sisingaan',
+                'id' => 2,
+                'slug' => 'kesenian-sisingaan',
                 'title' => 'Kesenian Sisingaan',
                 'kategori' => 'Seni Pertunjukan',
                 'excerpt' => 'Atraksi budaya khas Subang pemacu semangat kebersamaan rakyat.',
@@ -117,7 +126,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
             ],
             'pencak-silat-tradisional' => [
-                'id' => 3, 'slug' => 'pencak-silat-tradisional',
+                'id' => 3,
+                'slug' => 'pencak-silat-tradisional',
                 'title' => 'Pencak Silat Tradisional',
                 'kategori' => 'Seni Bela Diri',
                 'excerpt' => 'Pelatihan fisik dan spiritual bela diri Sunda yang menjunjung persaudaraan.',
@@ -125,12 +135,12 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
             ],
             'milangkala-karnaval-desa' => [
-                'id' => 4, 'slug' => 'milangkala-karnaval-desa',
+                'id' => 4,
+                'slug' => 'milangkala-karnaval-desa',
                 'title' => 'Milangkala & Karnaval Desa',
                 'kategori' => 'Festival Tahunan',
                 'excerpt' => 'Peringatan hari lahir desa yang diramaikan pawai budaya kreasi warga.',
                 'desc' => 'Milangkala atau hari jadi Desa Jambelaer dirayakan meriah setiap tahun dengan karnaval budaya. Setiap dusun bergotong royong membuat hiasan replika hasil bumi, memakai pakaian adat sunda pengantin atau kebaya, serta memamerkan kesenian kreasi masing-masing dusun dalam parade keliling sepanjang jalan desa.',
-                'img_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
             ],
         ];
 
@@ -149,10 +159,10 @@ Route::get('/budaya/{slug}', function ($slug) {
     } else {
         // Fallback rekomendasi statis
         $allFallbacks = [
-            'ruwatan-bumi-hajat-bumi' => (object)['id'=>1,'slug'=>'ruwatan-bumi-hajat-bumi','title'=>'Ruwatan Bumi','kategori'=>'Upacara Adat','img_url'=>'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=400&q=80','excerpt'=>'Upacara adat tanda syukur hasil bumi.'],
-            'kesenian-sisingaan'      => (object)['id'=>2,'slug'=>'kesenian-sisingaan','title'=>'Seni Sisingaan','kategori'=>'Seni Pertunjukan','img_url'=>'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80','excerpt'=>'Atraksi budaya khas Subang.'],
-            'pencak-silat-tradisional'=> (object)['id'=>3,'slug'=>'pencak-silat-tradisional','title'=>'Pencak Silat','kategori'=>'Seni Bela Diri','img_url'=>'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80','excerpt'=>'Bela diri Sunda warisan budaya.'],
-            'milangkala-karnaval-desa'=> (object)['id'=>4,'slug'=>'milangkala-karnaval-desa','title'=>'Milangkala Desa','kategori'=>'Festival Tahunan','img_url'=>'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80','excerpt'=>'Peringatan hari lahir desa.'],
+            'ruwatan-bumi-hajat-bumi' => (object)['id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi', 'title' => 'Ruwatan Bumi', 'kategori' => 'Upacara Adat', 'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Upacara adat tanda syukur hasil bumi.'],
+            'kesenian-sisingaan'      => (object)['id' => 2, 'slug' => 'kesenian-sisingaan', 'title' => 'Seni Sisingaan', 'kategori' => 'Seni Pertunjukan', 'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Atraksi budaya khas Subang.'],
+            'pencak-silat-tradisional' => (object)['id' => 3, 'slug' => 'pencak-silat-tradisional', 'title' => 'Pencak Silat', 'kategori' => 'Seni Bela Diri', 'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Bela diri Sunda warisan budaya.'],
+            'milangkala-karnaval-desa' => (object)['id' => 4, 'slug' => 'milangkala-karnaval-desa', 'title' => 'Milangkala Desa', 'kategori' => 'Festival Tahunan', 'img_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Peringatan hari lahir desa.'],
         ];
         unset($allFallbacks[$slug]);
         $rekomendasi = array_values($allFallbacks);
@@ -215,11 +225,17 @@ Route::get('/kontak', function () {
         'youtube'   => Pengaturan::get('sosmed_youtube', ''),
         'tiktok'    => Pengaturan::get('sosmed_tiktok', ''),
     ];
-    return view('pages.kontak', compact('sosmed'));
+    $mapsUrl = Pengaturan::get('maps_embed_url', '');
+    return view('pages.kontak', compact('sosmed', 'mapsUrl'));
 })->name('kontak');
 
 // Kontak – Submit pesan (simpan ke DB)
 Route::post('/kontak', [KontakController::class, 'store'])->middleware('throttle:6,1')->name('kontak.store');
+
+// Layanan Publik (Aliasing ke pusat layanan /kontak)
+Route::get('/layanan', function () {
+    return redirect()->route('kontak');
+})->name('layanan');
 
 // Acara – Daftar acara yang disetujui & dipublikasikan (Sesi Aktif & Auto-Delete Expired)
 Route::get('/acara', function () {
@@ -301,12 +317,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/pesan/{pesan}/read', [PesanController::class, 'markRead'])->name('pesan.read');
         Route::delete('/pesan/{pesan}', [PesanController::class, 'destroy'])->name('pesan.destroy');
 
-        // Pengajuan Acara
-        Route::get('/pengajuan-acara', [PengajuanAcaraController::class, 'index'])->name('pengajuan-acara.index');
-        Route::get('/pengajuan-acara/{pesan}', [PengajuanAcaraController::class, 'show'])->name('pengajuan-acara.show');
-        Route::patch('/pengajuan-acara/{pesan}/status', [PengajuanAcaraController::class, 'updateStatus'])->name('pengajuan-acara.status');
-        Route::post('/pengajuan-acara/{pesan}/publikasi', [PengajuanAcaraController::class, 'publikasiAcara'])->name('pengajuan-acara.publikasi');
-        Route::delete('/pengajuan-acara/{pesan}', [PengajuanAcaraController::class, 'destroy'])->name('pengajuan-acara.destroy');
+        // Acara & Agenda Desa CRUD
+        Route::resource('acara', AcaraController::class)->parameters(['acara' => 'pesan']);
+        Route::patch('/acara/{pesan}/status', [AcaraController::class, 'updateStatus'])->name('acara.status');
+        Route::post('/acara/{pesan}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('acara.publikasi');
+
+        // Pengajuan Acara Aliases (Mendukung backward compatibility)
+        Route::get('/pengajuan-acara', [AcaraController::class, 'index'])->name('pengajuan-acara.index');
+        Route::get('/pengajuan-acara/{pesan}', [AcaraController::class, 'show'])->name('pengajuan-acara.show');
+        Route::patch('/pengajuan-acara/{pesan}/status', [AcaraController::class, 'updateStatus'])->name('pengajuan-acara.status');
+        Route::post('/pengajuan-acara/{pesan}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('pengajuan-acara.publikasi');
+        Route::delete('/pengajuan-acara/{pesan}', [AcaraController::class, 'destroy'])->name('pengajuan-acara.destroy');
 
         // Pengaturan
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');

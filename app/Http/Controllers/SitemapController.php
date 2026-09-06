@@ -56,13 +56,13 @@ class SitemapController extends Controller
             ->get();
 
         // ── Budaya ─────────────────────────────────────────────────────────────
-        $budayaList = Budaya::select('id', 'slug', 'updated_at')
+        $budayaList = Budaya::select('budaya_id', 'slug', 'updated_at')
             ->orderBy('urutan')
             ->get();
 
         // ── Galeri Aktif ──────────────────────────────────────────────────────
         $galeriList = Galeri::where('is_active', true)
-            ->select('id', 'slug', 'updated_at')
+            ->select('galeri_id', 'slug', 'updated_at')
             ->orderBy('urutan')
             ->get();
 

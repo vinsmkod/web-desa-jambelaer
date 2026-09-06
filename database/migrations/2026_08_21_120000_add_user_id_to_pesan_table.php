@@ -17,18 +17,24 @@ use Illuminate\Support\Facades\Schema;
  * onDelete('set null'):
  * - Jika user (admin) dihapus, pesan tidak ikut terhapus
  * - user_id pada pesan terkait akan di-set ke NULL secara otomatis
+ *
+ * Catatan:
+ * - Primary key tabel users adalah `user_id` (bukan `id` — di-rename via
+ *   migration 2026_08_21_130000_rename_primary_keys_to_custom_id_format).
+ * - Migration ini dijalankan setelah rename, sehingga FK di database aktual
+ *   sudah benar mereferensikan users.user_id.
  */
 return new class extends Migration
 {
     public function up(): void
     {
         Schema::table('pesan', function (Blueprint $table) {
-            // Tambah kolom user_id setelah 'id', nullable karena publik bisa kirim tanpa login
-            $table->unsignedBigInteger('user_id')->nullable()->after('id');
+            // Tambah kolom user_id nullable (FK ke users.user_id) — publik bisa kirim tanpa login
+            $table->unsignedBigInteger('user_id')->nullable()->after('pesan_id');
 
-            // Foreign key ke tabel users
+            // Foreign key ke tabel users (referensi ke PK: users.user_id)
             $table->foreign('user_id')
-                  ->references('id')
+                  ->references('user_id')
                   ->on('users')
                   ->onDelete('set null');
 

@@ -14,6 +14,7 @@ class Produk extends Model
     protected $primaryKey = 'produk_id';
 
     protected $fillable = [
+        'created_by',  // nullable — diisi jika dibuat oleh admin yang sedang login
         'pesan_id',    // nullable — diisi jika produk berasal dari pengajuan UMKM (traceability)
         'slug', 'title', 'producer', 'price', 'badge',
         'category', 'img', 'desc_short', 'desc_long',
@@ -58,6 +59,14 @@ class Produk extends Model
     // ── Relationships ────────────────────────────────────────────────────────
 
     /**
+     * User (admin) yang membuat/mengelola data produk ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
+
+    /**
      * Pesan pengajuan UMKM yang menjadi asal-usul produk ini.
      *
      * Nullable: produk yang dimasukkan langsung oleh admin (tanpa pengajuan)
@@ -68,3 +77,4 @@ class Produk extends Model
         return $this->belongsTo(Pesan::class, 'pesan_id', 'pesan_id');
     }
 }
+

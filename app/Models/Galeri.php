@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Galeri extends Model
@@ -14,6 +15,7 @@ class Galeri extends Model
     protected $primaryKey = 'galeri_id';
 
     protected $fillable = [
+        'created_by',
         'judul',
         'slug',
         'kategori',
@@ -129,4 +131,15 @@ class Galeri extends Model
             'budaya_desa'   => 'Budaya Desa',
         ];
     }
+
+    // ── Relationships ────────────────────────────────────────────────────────
+
+    /**
+     * User/Admin yang membuat foto galeri ini.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'user_id');
+    }
 }
+

@@ -65,7 +65,7 @@
                 <label for="penulis" class="form-label">Penulis / Redaksi <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i data-lucide="user-edit" class="w-5 h-5"></i>
+                        <i data-lucide="user-pen" class="w-5 h-5"></i>
                     </div>
                     <input type="text" name="penulis" id="penulis" value="{{ old('penulis', auth()->user()->name ?? 'Pemerintah Desa Jambelaer') }}" required
                         placeholder="Nama Penulis / Tim Redaksi"
