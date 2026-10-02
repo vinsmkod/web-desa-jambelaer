@@ -492,12 +492,64 @@
                     </a>
                 </nav>
 
-                <!-- Desktop Primary CTA -->
-                <div class="hidden lg:flex items-center">
-                    <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2 px-5 gap-1.5 {{ request()->routeIs('kontak') ? '!bg-forest-700 !border-forest-700 ring-2 ring-forest-300' : '' }}">
+                <!-- Desktop Primary CTA & User Auth -->
+                <div class="hidden lg:flex items-center gap-2">
+                    <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2 px-4 gap-1.5 {{ request()->routeIs('kontak') ? '!bg-forest-700 !border-forest-700 ring-2 ring-forest-300' : '' }}">
                         <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
                         Layanan Masyarakat
                     </a>
+
+                    @guest
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold text-forest-800 hover:bg-forest-50 border border-stone-200 transition-all">
+                            <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+                            Masuk
+                        </a>
+                        <a href="{{ route('register') }}" class="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold bg-sand-500 hover:bg-sand-600 text-forest-950 border border-sand-400 transition-all shadow-xs">
+                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                            Daftar
+                        </a>
+                    @else
+                        {{-- Logged in user dropdown --}}
+                        <div class="nav-dropdown" id="dd-user">
+                            <button type="button" id="dd-user-btn"
+                                class="nav-dropdown-btn !py-1.5 !px-2.5 rounded-xl bg-forest-50 border border-forest-200/80 text-forest-900 font-bold text-xs flex items-center gap-2 hover:bg-forest-100 transition-all"
+                                aria-haspopup="true" aria-expanded="false" aria-controls="panel-user">
+                                <span class="w-5 h-5 rounded-full bg-forest-800 text-white flex items-center justify-center text-[10px] font-bold">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </span>
+                                <span class="max-w-[90px] truncate">{{ Auth::user()->name }}</span>
+                                <svg class="dd-chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                            </button>
+                            <div id="panel-user" class="nav-dropdown-panel !min-w-[200px]" role="menu">
+                                <div class="px-3 py-2 border-b border-stone-100">
+                                    <p class="text-[10px] text-stone-400 uppercase tracking-wider font-semibold">Akun Terhubung</p>
+                                    <p class="text-xs font-bold text-stone-800 truncate mt-0.5">{{ Auth::user()->name }}</p>
+                                    <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold {{ Auth::user()->isAdmin() ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' }}">
+                                        {{ Auth::user()->isAdmin() ? 'Administrator' : 'Masyarakat' }}
+                                    </span>
+                                </div>
+
+                                @if(Auth::user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}" role="menuitem">
+                                    <span class="dp-icon"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i></span>Dashboard Admin
+                                </a>
+                                @endif
+
+                                <a href="{{ route('pengajuan.saya') }}" role="menuitem">
+                                    <span class="dp-icon"><i data-lucide="folder-check" class="w-3.5 h-3.5"></i></span>Pengajuan Saya
+                                </a>
+
+                                <div class="dp-divider"></div>
+
+                                <form action="{{ route('logout') }}" method="POST" class="m-0 p-0">
+                                    @csrf
+                                    <button type="submit" role="menuitem" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 hover:text-rose-700 transition-all text-left">
+                                        <i data-lucide="log-out" class="w-4 h-4"></i>Keluar (Logout)
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endguest
                 </div>
 
                 <!-- Mobile Toggle -->
@@ -563,6 +615,43 @@
                    class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('galeri*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
                     <i data-lucide="image" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Galeri
                 </a>
+
+                {{-- User Section for Mobile --}}
+                <div class="pt-2 pb-2 px-1 border-t border-stone-100 space-y-1">
+                    @guest
+                        <a href="{{ route('login') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
+                            <i data-lucide="log-in" class="w-4 h-4 mr-2.5 text-forest-700"></i>Masuk Akun
+                        </a>
+                        <a href="{{ route('register') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-forest-800 hover:bg-forest-50 transition-all">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2.5 text-sand-600"></i>Daftar Akun Warga
+                        </a>
+                    @else
+                        <div class="px-3 py-2 bg-stone-50 rounded-xl mb-1 text-xs">
+                            <p class="text-stone-400 text-[10px]">Halo,</p>
+                            <p class="font-bold text-stone-800">{{ Auth::user()->name }}</p>
+                            <span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold {{ Auth::user()->isAdmin() ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' }}">
+                                {{ Auth::user()->isAdmin() ? 'Administrator' : 'Masyarakat' }}
+                            </span>
+                        </div>
+
+                        @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4 mr-2.5 text-forest-700"></i>Dashboard Admin
+                        </a>
+                        @endif
+
+                        <a href="{{ route('pengajuan.saya') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
+                            <i data-lucide="folder-check" class="w-4 h-4 mr-2.5 text-forest-700"></i>Pengajuan Saya
+                        </a>
+
+                        <form action="{{ route('logout') }}" method="POST" class="pt-1">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-all text-left">
+                                <i data-lucide="log-out" class="w-4 h-4 mr-2.5"></i>Keluar (Logout)
+                            </button>
+                        </form>
+                    @endguest
+                </div>
 
                 {{-- CTA --}}
                 <div class="pt-2 pb-2 px-1">
@@ -667,11 +756,10 @@
                 <div class="lg:col-span-2 space-y-4">
                     <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Layanan Publik</h4>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('kontak') }}#form-pertanyaan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pertanyaan Umum</a></li>
-                        <li><a href="{{ route('kontak') }}#form-pengaduan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengaduan Warga</a></li>
-                        <li><a href="{{ route('kontak') }}#form-kerjasama" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Kerja Sama</a></li>
-                        <li><a href="{{ route('kontak') }}#form-acara" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengajuan Acara</a></li>
-                        <li><a href="{{ route('kontak') }}#form-umkm" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pendaftaran UMKM</a></li>
+                        <li><a href="{{ route('pengajuan.surat') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengajuan Surat</a></li>
+                        <li><a href="{{ route('kontak') }}?jenis=pertanyaan_umum" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pertanyaan Umum</a></li>
+                        <li><a href="{{ route('kontak') }}?jenis=pengaduan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengaduan Warga</a></li>
+                        <li><a href="{{ route('pengajuan.saya') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pantau Pengajuan</a></li>
                     </ul>
                 </div>
 

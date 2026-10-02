@@ -30,13 +30,13 @@
 </div>
 
 <div class="relative h-60 sm:h-72 lg:h-80 overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 shadow-sm">
-    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
+    <img src="{{ asset('uploads/img/beranda.jpeg') }}"
         alt="Kantor Desa Jambelaer" class="w-full h-full object-cover opacity-60">
     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-900/50 to-forest-900/20"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Pelayanan Terpadu</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Layanan & Kontak Desa</h1>
-        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Sampaikan pertanyaan, pengaduan lingkungan, kerja sama, pengajuan acara, atau pendaftaran UMKM</p>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Pilih salah satu layanan masyarakat Desa Jambelaer secara digital dan terpadu</p>
     </div>
 </div>
 
@@ -87,107 +87,95 @@
             </div>
         </div>
 
-
-
         {{-- ══════════════════════════════════════════════════════════
-             5 SERVICE CARDS — Pusat Pilihan Layanan
+             4 SERVICE CARDS — 4 Modul Layanan Terpisah
         ══════════════════════════════════════════════════════════ --}}
         <div id="layanan-hub" class="py-12 border-b border-stone-100 reveal-on-scroll">
             <div class="text-center max-w-2xl mx-auto mb-10">
                 <span class="section-label">Pilihan Layanan Digital</span>
-                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-2.5">Pilih Kategori Permohonan / Aspirasi</h2>
-                <p class="mt-2 text-stone-500 font-light text-sm">Klik salah satu jenis layanan di bawah untuk mengisi formulir yang sesuai secara instan.</p>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-2.5">Pilih Kategori Layanan Masyarakat</h2>
+                <p class="mt-2 text-stone-500 font-light text-sm">Klik salah satu jenis layanan di bawah untuk membuka formulir mandiri dan persyaratan yang sesuai.</p>
                 <div class="section-divider"></div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                {{-- 1. Pertanyaan Umum --}}
-                <div onclick="selectServiceType('pertanyaan_umum')" class="card-village p-5 flex flex-col justify-between hover:border-forest-500 hover:shadow-md cursor-pointer group transition-all duration-300">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {{-- CARD 1: Pengajuan Pembuatan Surat --}}
+                <a href="{{ route('pengajuan.surat') }}" class="card-village p-6 flex flex-col justify-between hover:border-violet-500 hover:shadow-lg group transition-all duration-300 bg-white">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-forest-50 text-forest-800 flex items-center justify-center mb-4 group-hover:bg-forest-800 group-hover:text-white transition-all">
-                            <i data-lucide="help-circle" class="w-5 h-5"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-violet-50 text-violet-700 flex items-center justify-center mb-4 group-hover:bg-violet-700 group-hover:text-white transition-all shadow-xs">
+                            <i data-lucide="file-text" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pertanyaan Umum</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-violet-700 bg-violet-50 px-2 py-0.5 rounded-md">Administrasi</span>
+                        <h3 class="font-display font-bold text-base text-forest-900 mt-2 mb-1.5 group-hover:text-violet-800 transition-colors">Pengajuan Surat</h3>
                         <p class="text-xs text-stone-500 font-light leading-relaxed">
-                            Sampaikan pertanyaan mengenai informasi dan pelayanan Desa Jambelaer.
+                            Permohonan surat keterangan domisili, usaha (SKU), SKTM, belum menikah, ahli waris, dan surat pernyataan.
                         </p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-forest-800 group-hover:text-forest-600">
-                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    <div class="pt-5 mt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-violet-700 group-hover:text-violet-900">
+                        <span>Buka Formulir</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                </div>
+                </a>
 
-                {{-- 2. Pengaduan Masyarakat --}}
-                <div onclick="selectServiceType('pengaduan')" class="card-village p-5 flex flex-col justify-between hover:border-rose-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                {{-- CARD 2: Pengaduan Masyarakat --}}
+                <a href="{{ route('pengaduan.create') }}" class="card-village p-6 flex flex-col justify-between hover:border-rose-500 hover:shadow-lg group transition-all duration-300 bg-white">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center mb-4 group-hover:bg-rose-600 group-hover:text-white transition-all">
-                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-700 flex items-center justify-center mb-4 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-xs">
+                            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pengaduan Masyarakat</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md">Aspirasi & Laporan</span>
+                        <h3 class="font-display font-bold text-base text-forest-900 mt-2 mb-1.5 group-hover:text-rose-700 transition-colors">Pengaduan Masyarakat</h3>
                         <p class="text-xs text-stone-500 font-light leading-relaxed">
-                            Sampaikan laporan atau pengaduan terkait kondisi dan pelayanan di desa.
+                            Sampaikan laporan fasilitas publik, lingkungan, atau pelayanan desa beserta foto bukti pendukung.
                         </p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-rose-700 group-hover:text-rose-900">
-                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    <div class="pt-5 mt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-rose-700 group-hover:text-rose-900">
+                        <span>Kirim Pengaduan</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                </div>
+                </a>
 
-                {{-- 3. Kerja Sama --}}
-                <div onclick="selectServiceType('kerja_sama')" class="card-village p-5 flex flex-col justify-between hover:border-sand-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                {{-- CARD 3: Pertanyaan Umum --}}
+                <a href="{{ route('pertanyaan-umum.create') }}" class="card-village p-6 flex flex-col justify-between hover:border-sky-500 hover:shadow-lg group transition-all duration-300 bg-white">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-sand-50 text-sand-700 flex items-center justify-center mb-4 group-hover:bg-sand-500 group-hover:text-white transition-all">
-                            <i data-lucide="handshake" class="w-5 h-5"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center mb-4 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-xs">
+                            <i data-lucide="help-circle" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Kerja Sama</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">Informasi Publik</span>
+                        <h3 class="font-display font-bold text-base text-forest-900 mt-2 mb-1.5 group-hover:text-sky-700 transition-colors">Pertanyaan Umum</h3>
                         <p class="text-xs text-stone-500 font-light leading-relaxed">
-                            Ajukan permohonan kerja sama dengan Pemerintah Desa Jambelaer.
+                            Tanyakan seputar informasi administrasi, program desa, atau jam pelayanan secara langsung tanpa berkas.
                         </p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-sand-700 group-hover:text-sand-900">
-                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    <div class="pt-5 mt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-sky-700 group-hover:text-sky-900">
+                        <span>Tulis Pertanyaan</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                </div>
+                </a>
 
-                {{-- 4. Pengajuan Acara --}}
-                <div onclick="selectServiceType('pengajuan_acara')" class="card-village p-5 flex flex-col justify-between hover:border-teal-400 hover:shadow-md cursor-pointer group transition-all duration-300">
+                {{-- CARD 4: Pendaftaran UMKM --}}
+                <a href="{{ route('pendaftaran-umkm.create') }}" class="card-village p-6 flex flex-col justify-between hover:border-emerald-500 hover:shadow-lg group transition-all duration-300 bg-white">
                     <div>
-                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-4 group-hover:bg-teal-700 group-hover:text-white transition-all">
-                            <i data-lucide="calendar-plus" class="w-5 h-5"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4 group-hover:bg-emerald-700 group-hover:text-white transition-all shadow-xs">
+                            <i data-lucide="store" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pengajuan Acara</h3>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Promosi Usaha</span>
+                        <h3 class="font-display font-bold text-base text-forest-900 mt-2 mb-1.5 group-hover:text-emerald-700 transition-colors">Pendaftaran UMKM</h3>
                         <p class="text-xs text-stone-500 font-light leading-relaxed">
-                            Ajukan permohonan kegiatan atau acara yang berkaitan dengan desa.
+                            Daftarkan usaha warga Desa Jambelaer untuk dipromosikan ke katalog produk UMKM resmi website desa.
                         </p>
                     </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-teal-700 group-hover:text-teal-900">
-                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
+                    <div class="pt-5 mt-4 border-t border-stone-100 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-900">
+                        <span>Daftarkan Usaha</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </div>
-                </div>
-
-                {{-- 5. Pendaftaran UMKM --}}
-                <div onclick="selectServiceType('daftar_umkm')" class="card-village p-5 flex flex-col justify-between hover:border-amber-400 hover:shadow-md cursor-pointer group transition-all duration-300">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 group-hover:bg-amber-600 group-hover:text-white transition-all">
-                            <i data-lucide="store" class="w-5 h-5"></i>
-                        </div>
-                        <h3 class="font-display font-bold text-sm text-forest-900 mb-1">Pendaftaran UMKM</h3>
-                        <p class="text-xs text-stone-500 font-light leading-relaxed">
-                            Daftarkan usaha dan produk UMKM masyarakat Desa Jambelaer.
-                        </p>
-                    </div>
-                    <div class="pt-4 flex items-center text-xs font-bold text-amber-700 group-hover:text-amber-900">
-                        Pilih Layanan <i data-lucide="arrow-down" class="w-3.5 h-3.5 ml-1 group-hover:translate-y-0.5 transition-transform"></i>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
 
         {{-- Hidden Anchor Targets for Footer & External links --}}
         <div id="form-pertanyaan" class="scroll-mt-24"></div>
         <div id="form-pengaduan" class="scroll-mt-24"></div>
-        <div id="form-kerjasama" class="scroll-mt-24"></div>
-        <div id="form-acara" class="scroll-mt-24"></div>
         <div id="form-umkm" class="scroll-mt-24"></div>
 
         {{-- ══════════════════════════════════════════════════════════
@@ -283,11 +271,89 @@
                 </div>
             </div>
 
-            {{-- Right: Form --}}
-            <div class="lg:col-span-7">
+            {{-- Right: Form / Auth Required --}}
+            <div class="lg:col-span-7" id="form-section">
+                @guest
+                {{-- State Saat Masyarakat Belum Login: TIDAK Menampilkan Form Input --}}
+                <div class="bg-white border border-stone-200 rounded-2xl p-7 sm:p-10 shadow-sm text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-forest-50 border border-forest-100 text-forest-800 flex items-center justify-center mx-auto mb-5 shadow-xs">
+                        <i data-lucide="lock" class="w-8 h-8"></i>
+                    </div>
+
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full inline-block mb-3">
+                        Autentikasi Diperlukan
+                    </span>
+
+                    <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-950 mb-3">
+                        Masuk untuk Mengakses Layanan
+                    </h2>
+
+                    <p class="text-sm text-stone-600 max-w-lg mx-auto font-light leading-relaxed mb-8">
+                        Seluruh pelayanan masyarakat di Desa Jambelaer terhubung langsung dengan sistem website desa. Untuk mengajukan permohonan layanan dan melacak proses penanganannya secara transparan, silakan masuk ke akun Anda atau daftarkan akun baru terlebih dahulu.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-10 max-w-md mx-auto">
+                        <a href="{{ route('login') }}" class="w-full sm:w-auto btn-primary justify-center text-xs py-3 px-6 gap-2 shadow-sm font-bold">
+                            <i data-lucide="log-in" class="w-4 h-4"></i>
+                            Masuk Akun (Login)
+                        </a>
+                        <a href="{{ route('register') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-stone-300 text-xs font-bold text-stone-700 hover:bg-stone-50 hover:border-forest-600 transition-all shadow-xs">
+                            <i data-lucide="user-plus" class="w-4 h-4 text-forest-700"></i>
+                            Daftar Akun Warga
+                        </a>
+                    </div>
+
+                    {{-- Panduan Layanan yang Tersedia --}}
+                    <div class="border-t border-stone-100 pt-8 text-left">
+                        <p class="text-[11px] font-bold tracking-wider uppercase text-stone-400 mb-4 text-center">
+                            Layanan yang Dapat Diajukan Setelah Masuk:
+                        </p>
+                        <div class="grid sm:grid-cols-3 gap-3.5">
+                            <div class="p-3.5 rounded-xl bg-stone-50/70 border border-stone-200/80 flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-violet-100 text-violet-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-stone-800">Pengajuan Surat</h4>
+                                    <p class="text-[11px] text-stone-500 font-light mt-0.5">Permohonan surat keterangan domisili, usaha, SKTM, dll.</p>
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-stone-50/70 border border-stone-200/80 flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-stone-800">Pertanyaan Umum</h4>
+                                    <p class="text-[11px] text-stone-500 font-light mt-0.5">Konsultasi dan informasi seputar administrasi desa.</p>
+                                </div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-stone-50/70 border border-stone-200/80 flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-stone-800">Pengaduan Masyarakat</h4>
+                                    <p class="text-[11px] text-stone-500 font-light mt-0.5">Aspirasi warga dan keluhan fasilitas umum (+ bukti foto).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
+                {{-- State Saat Masyarakat Sudah Login: Menampilkan Formulir Pengajuan --}}
                 <div class="bg-white border border-stone-200 rounded-xl p-7 sm:p-9 shadow-sm">
-                    <h2 class="font-display font-bold text-xl text-forest-900 mb-1">Kirim Pesan</h2>
-                    <p class="text-sm text-stone-400 font-light mb-7">Isi formulir di bawah ini, kami akan membalas pesan Anda.</p>
+                    <h2 class="font-display font-bold text-xl text-forest-900 mb-1">Kirim Pengajuan Layanan</h2>
+                    <p class="text-sm text-stone-400 font-light mb-5">Isi formulir di bawah ini untuk mengajukan permohonan layanan desa secara resmi.</p>
+
+                    <div class="mb-6 p-3.5 rounded-xl bg-forest-50 border border-forest-100 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2 text-forest-900 font-medium">
+                            <i data-lucide="user-check" class="w-4 h-4 text-forest-700"></i>
+                            <span>Mengajukan sebagai: <strong>{{ Auth::user()->name }}</strong> ({{ Auth::user()->email }})</span>
+                        </div>
+                        <a href="{{ route('pengajuan.saya') }}" class="text-forest-800 hover:text-forest-950 font-bold flex items-center gap-1">
+                            Pengajuan Saya <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                        </a>
+                    </div>
 
                     {{-- Success Alert --}}
                     @if(session('success'))
@@ -420,11 +486,10 @@
                             <label class="label-float">Jenis Pesan</label>
                             <select id="jenis-pesan" name="jenis_pesan" required class="input-village pt-7 cursor-pointer">
                                 <option value="">— Pilih Jenis Pesan —</option>
-                                <option value="pertanyaan_umum">Pertanyaan Umum</option>
-                                <option value="pengaduan">Pengaduan</option>
-                                <option value="kerja_sama">Kerja Sama</option>
-                                <option value="pengajuan_acara">Pengajuan Acara</option>
-                                <option value="daftar_umkm">Daftarkan UMKM</option>
+                                <option value="pengajuan_surat">📄 Pengajuan Surat (Buka Formulir)</option>
+                                <option value="pertanyaan_umum">💬 Pertanyaan Umum</option>
+                                <option value="pengaduan">🚨 Pengaduan Masyarakat</option>
+                                <option value="daftar_umkm">🏪 Pendaftaran UMKM</option>
                             </select>
                             <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-5 pointer-events-none text-stone-400"></i>
                         </div>
@@ -432,7 +497,7 @@
                         {{-- Nama Lengkap --}}
                         <div class="input-wrap">
                             <label class="label-float" for="f-name">Nama Lengkap</label>
-                            <input id="f-name" name="name" type="text" required placeholder="" class="input-village pt-7">
+                            <input id="f-name" name="name" type="text" required placeholder="" value="{{ old('name', Auth::user()->name ?? '') }}" class="input-village pt-7">
                         </div>
 
                         {{-- Input master tersembunyi — satu-satunya yang dikirim ke server --}}
@@ -445,7 +510,7 @@
                                 oninput="document.getElementById('f-wa-master').value=this.value">
                         </div>
 
-                        {{-- WhatsApp (Pengaduan/Kerjasama/Acara/UMKM) — type=text --}}
+                        {{-- WhatsApp (Pengaduan/UMKM) — type=text --}}
                         <div id="field-whatsapp" class="hidden input-wrap">
                             <label class="label-float" for="f-whatsapp">Nomor WhatsApp</label>
                             <input id="f-whatsapp" name="no_whatsapp_txt" type="text" placeholder="" class="input-village pt-7"
@@ -456,48 +521,6 @@
                         <div id="field-subject" class="hidden input-wrap">
                             <label id="label-subject" class="label-float" for="f-subject">Subjek Pesan</label>
                             <input id="f-subject" name="subject" type="text" placeholder="" class="input-village pt-7">
-                        </div>
-
-                        {{-- Email Kerja Sama --}}
-                        <div id="field-email-kerja-sama" class="hidden input-wrap">
-                            <label class="label-float" for="f-email-ks">Alamat Email</label>
-                            <input id="f-email-ks" name="email" type="email" placeholder="" class="input-village pt-7">
-                        </div>
-
-                        {{-- Nama Instansi --}}
-                        <div id="field-nama-instansi" class="hidden input-wrap">
-                            <label class="label-float" for="f-instansi">Nama Instansi / Organisasi</label>
-                            <input id="f-instansi" name="nama_instansi" type="text" placeholder="" class="input-village pt-7">
-                        </div>
-
-                        {{-- Nama Acara --}}
-                        <div id="field-nama-acara" class="hidden input-wrap">
-                            <label class="label-float" for="f-nama-acara">Nama Acara</label>
-                            <input id="f-nama-acara" name="nama_acara" type="text" placeholder="" class="input-village pt-7">
-                        </div>
-
-                        {{-- Tanggal & Waktu --}}
-                        <div id="field-tanggal-waktu" class="hidden grid sm:grid-cols-2 gap-4">
-                            <div class="input-wrap">
-                                <label class="label-float" for="f-tanggal-acara">Tanggal Acara</label>
-                                <input id="f-tanggal-acara" name="tanggal_acara" type="date" class="input-village pt-7">
-                            </div>
-                            <div class="input-wrap">
-                                <label class="label-float" for="f-waktu-acara">Waktu Acara</label>
-                                <input id="f-waktu-acara" name="waktu_acara" type="time" class="input-village pt-7">
-                            </div>
-                        </div>
-
-                        {{-- Lokasi & Peserta --}}
-                        <div id="field-lokasi-peserta" class="hidden grid sm:grid-cols-2 gap-4">
-                            <div class="input-wrap">
-                                <label class="label-float" for="f-lokasi-acara">Lokasi Acara</label>
-                                <input id="f-lokasi-acara" name="lokasi_acara" type="text" placeholder="" class="input-village pt-7">
-                            </div>
-                            <div class="input-wrap">
-                                <label class="label-float" for="f-jumlah-peserta">Perkiraan Peserta</label>
-                                <input id="f-jumlah-peserta" name="jumlah_peserta" type="number" min="1" placeholder="" class="input-village pt-7">
-                            </div>
                         </div>
 
                         {{-- Pesan --}}
@@ -588,7 +611,6 @@
                         {{-- 2. TENTANG PRODUK --}}
                         <div id="field-group-tentang-produk" class="hidden space-y-4 pt-2">
                             <div class="flex items-center gap-2 border-b border-stone-200 pb-2">
-                                <i data-lucide="info" class="w-4 h-4 text-forest-700"></i>
                                 <h4 class="font-display font-bold text-sm text-stone-800">Tentang Produk</h4>
                             </div>
 
@@ -687,38 +709,6 @@
                             <input type="file" id="f-sertifikat-halal" name="sertifikat_halal" accept="application/pdf" class="hidden">
                         </div>
 
-                        {{-- Upload Dokumen Lampiran (digunakan bersama: Kerja Sama, Pengajuan Acara) --}}
-                        <div id="field-dokumen-lampiran" class="hidden">
-                            <p class="text-[10px] font-bold tracking-widest uppercase text-stone-400 mb-1">
-                                <span id="label-dokumen-title">Lampiran Proposal / Surat Resmi</span>
-                                <span id="label-dokumen-required" class="text-stone-300 normal-case tracking-normal font-normal ml-1">(Opsional, maks. 10 MB)</span>
-                            </p>
-                            <p id="label-dokumen-helper" class="text-[11px] text-stone-400 font-light mb-2">Unggah surat permohonan atau proposal resmi dalam format PDF.</p>
-                            <div id="upload-drop-zone-dokumen" class="upload-drop-zone" onclick="document.getElementById('f-dokumen-lampiran').click()">
-                                <div id="upload-placeholder-dokumen" class="flex flex-col items-center text-center w-full">
-                                    <div class="w-10 h-10 rounded-full bg-forest-50 border border-forest-100 flex items-center justify-center mx-auto mb-2" id="upload-icon-dokumen">
-                                        <i data-lucide="file-text" class="w-5 h-5 text-forest-600"></i>
-                                    </div>
-                                    <p class="text-sm font-semibold text-stone-600">Klik atau seret file ke sini</p>
-                                    <p id="upload-format-dokumen" class="text-xs text-stone-400 font-light mt-1">Format: PDF &bull; Maks. 10 MB</p>
-                                </div>
-                                <div id="upload-file-info-dokumen" class="hidden flex items-center gap-2 text-sm text-forest-800 font-medium">
-                                    <div class="w-8 h-8 rounded bg-forest-100 flex items-center justify-center flex-shrink-0 text-forest-700">
-                                        <i data-lucide="file-check-2" class="w-4 h-4"></i>
-                                    </div>
-                                    <div class="text-left overflow-hidden">
-                                        <span id="upload-file-name-dokumen" class="font-semibold block truncate text-stone-800 max-w-[200px] sm:max-w-xs"></span>
-                                        <span id="upload-file-size-dokumen" class="text-xs text-stone-400 font-normal"></span>
-                                    </div>
-                                    <button type="button" onclick="event.stopPropagation(); clearDokumenLampiran()" class="ml-auto text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
-                                        <i data-lucide="x" class="w-3 h-3"></i> Hapus
-                                    </button>
-                                </div>
-                            </div>
-                            <p id="upload-error-msg-dokumen" class="upload-error-msg"></p>
-                            <input type="file" id="f-dokumen-lampiran" name="dokumen_lampiran" accept="application/pdf" class="hidden">
-                        </div>
-
                         {{-- Submit --}}
                         <button id="submit-btn" type="submit" disabled
                             class="w-full btn-primary justify-center h-13 text-[11px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none">
@@ -727,6 +717,7 @@
                         </button>
                     </form>
                 </div>
+                @endguest
             </div>
         </div>
 
@@ -763,62 +754,78 @@
 
 @push('scripts')
 <script>
+    // ── Global Service Selection Handler ─────────────────────────────
+    const isUserLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
+    window.selectServiceType = function(type) {
+        if (type === 'pengajuan_surat') {
+            window.location.href = "{{ route('pengajuan.surat') }}";
+            return;
+        }
+        if (!isUserLoggedIn) {
+            window.location.href = "{{ route('login') }}";
+            return;
+        }
+        const jenisPesanSelect = document.getElementById('jenis-pesan');
+        if (!jenisPesanSelect) return;
+        jenisPesanSelect.value = type;
+        if (typeof updateFormFields === 'function') {
+            updateFormFields();
+        }
+        const formSection = document.getElementById('form-section');
+        if (formSection) {
+            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                const firstInput = document.getElementById('f-name');
+                if (firstInput) firstInput.focus();
+            }, 500);
+        }
+    };
+
     const form = document.getElementById('contact-form');
-    const successBox = document.getElementById('contact-success');
-    const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const jenisPesanSelect = document.getElementById('jenis-pesan');
+    if (form) {
+        const successBox = document.getElementById('contact-success');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const jenisPesanSelect = document.getElementById('jenis-pesan');
 
-    const fieldEmail = document.getElementById('field-email');
-    const fieldWhatsapp = document.getElementById('field-whatsapp');
-    const fieldSubject = document.getElementById('field-subject');
-    const fieldEmailKerjaSama = document.getElementById('field-email-kerja-sama');
-    const fieldNamaInstansi = document.getElementById('field-nama-instansi');
-    const fieldNamaAcara = document.getElementById('field-nama-acara');
-    const fieldTanggalWaktu = document.getElementById('field-tanggal-waktu');
-    const fieldLokasiPeserta = document.getElementById('field-lokasi-peserta');
-    const fieldMessage = document.getElementById('field-message');
-    const fieldFotoBukti = document.getElementById('field-foto-bukti');
+        const fieldEmail = document.getElementById('field-email');
+        const fieldWhatsapp = document.getElementById('field-whatsapp');
+        const fieldSubject = document.getElementById('field-subject');
+        const fieldMessage = document.getElementById('field-message');
+        const fieldFotoBukti = document.getElementById('field-foto-bukti');
 
-    // UMKM Registration Fields
-    const fieldUmkmBanner = document.getElementById('field-umkm-banner');
-    const fieldGroupPengelola = document.getElementById('field-group-pengelola-umkm');
-    const fieldGroupTentang = document.getElementById('field-group-tentang-produk');
-    const fieldGroupSpesifikasi = document.getElementById('field-group-spesifikasi-produk');
-    const fieldNamaUmkm = document.getElementById('field-nama-umkm');
-    const fieldJenisProdukUmkm = document.getElementById('field-jenis-produk-umkm');
-    const fieldAlamatUmkm = document.getElementById('field-alamat-umkm');
-    const fieldDeskripsiUmkm = document.getElementById('field-deskripsi-umkm');
-    const fieldFotoProduk = document.getElementById('field-foto-produk');
-    const fieldSertifikatHalal = document.getElementById('field-sertifikat-halal');
+        // UMKM Registration Fields
+        const fieldUmkmBanner = document.getElementById('field-umkm-banner');
+        const fieldGroupPengelola = document.getElementById('field-group-pengelola-umkm');
+        const fieldGroupTentang = document.getElementById('field-group-tentang-produk');
+        const fieldGroupSpesifikasi = document.getElementById('field-group-spesifikasi-produk');
+        const fieldNamaUmkm = document.getElementById('field-nama-umkm');
+        const fieldJenisProdukUmkm = document.getElementById('field-jenis-produk-umkm');
+        const fieldAlamatUmkm = document.getElementById('field-alamat-umkm');
+        const fieldDeskripsiUmkm = document.getElementById('field-deskripsi-umkm');
+        const fieldFotoProduk = document.getElementById('field-foto-produk');
+        const fieldSertifikatHalal = document.getElementById('field-sertifikat-halal');
 
-    const inputNamaUmkm = document.getElementById('f-nama-umkm');
-    const inputJenisProdukUmkm = document.getElementById('f-jenis-produk-umkm');
-    const inputAlamatUmkm = document.getElementById('f-alamat-umkm');
-    const inputDeskripsiUmkm = document.getElementById('f-deskripsi-umkm');
-    const inputJamOperasionalUmkm = document.getElementById('f-jam-operasional-umkm');
-    const inputInstagramUmkm = document.getElementById('f-instagram-umkm');
-    const inputIsiProdukUmkm = document.getElementById('f-isi-produk-umkm');
-    const inputBeratBersihUmkm = document.getElementById('f-berat-bersih-umkm');
-    const inputHargaProdukUmkm = document.getElementById('f-harga-produk-umkm');
-    const inputKetersediaanUmkm = document.getElementById('f-ketersediaan-umkm');
-    const inputSertifikasiUmkm = document.getElementById('f-sertifikasi-umkm');
+        const inputNamaUmkm = document.getElementById('f-nama-umkm');
+        const inputJenisProdukUmkm = document.getElementById('f-jenis-produk-umkm');
+        const inputAlamatUmkm = document.getElementById('f-alamat-umkm');
+        const inputDeskripsiUmkm = document.getElementById('f-deskripsi-umkm');
+        const inputJamOperasionalUmkm = document.getElementById('f-jam-operasional-umkm');
+        const inputInstagramUmkm = document.getElementById('f-instagram-umkm');
+        const inputIsiProdukUmkm = document.getElementById('f-isi-produk-umkm');
+        const inputBeratBersihUmkm = document.getElementById('f-berat-bersih-umkm');
+        const inputHargaProdukUmkm = document.getElementById('f-harga-produk-umkm');
+        const inputKetersediaanUmkm = document.getElementById('f-ketersediaan-umkm');
+        const inputSertifikasiUmkm = document.getElementById('f-sertifikasi-umkm');
 
-    const inputEmail = document.getElementById('f-email');
-    const inputWhatsapp = document.getElementById('f-whatsapp');
-    const inputSubject = document.getElementById('f-subject');
-    const inputEmailKS = document.getElementById('f-email-ks');
-    const inputInstansi = document.getElementById('f-instansi');
-    const inputNamaAcara = document.getElementById('f-nama-acara');
-    const inputTanggalAcara = document.getElementById('f-tanggal-acara');
-    const inputWaktuAcara = document.getElementById('f-waktu-acara');
-    const inputLokasiAcara = document.getElementById('f-lokasi-acara');
-    const inputJumlahPeserta = document.getElementById('f-jumlah-peserta');
-    const inputMessage = document.getElementById('f-msg');
-    const labelSubject = document.getElementById('label-subject');
-    const labelMessage = document.getElementById('label-message');
+        const inputEmail = document.getElementById('f-email');
+        const inputWhatsapp = document.getElementById('f-whatsapp');
+        const inputSubject = document.getElementById('f-subject');
+        const inputMessage = document.getElementById('f-msg');
+        const labelSubject = document.getElementById('label-subject');
+        const labelMessage = document.getElementById('label-message');
 
-    // === Upload Foto Bukti ===
+        // === Upload Foto Bukti ===
     const inputFotoBukti = document.getElementById('f-foto-bukti');
     const uploadDropZone = document.getElementById('upload-drop-zone');
     const uploadPreview = document.getElementById('upload-preview');
@@ -1062,107 +1069,16 @@
         }
     });
 
-    // === Upload Dokumen Lampiran (PDF) ===
-    const inputDokumenLampiran = document.getElementById('f-dokumen-lampiran');
-    const uploadDropZoneDokumen = document.getElementById('upload-drop-zone-dokumen');
-    const uploadPlaceholderDokumen = document.getElementById('upload-placeholder-dokumen');
-    const uploadFileInfoDokumen = document.getElementById('upload-file-info-dokumen');
-    const uploadFileNameDokumen = document.getElementById('upload-file-name-dokumen');
-    const uploadFileSizeDokumen = document.getElementById('upload-file-size-dokumen');
-    const uploadErrorMsgDokumen = document.getElementById('upload-error-msg-dokumen');
-    const fieldDokumenLampiran = document.getElementById('field-dokumen-lampiran');
-    const labelDokumenTitle = document.getElementById('label-dokumen-title');
-
-    const MAX_DOC_SIZE_MB = 10;
-    const MAX_DOC_SIZE_BYTES = MAX_DOC_SIZE_MB * 1024 * 1024;
-
-    function setUploadErrorDokumen(msg) {
-        uploadDropZoneDokumen.classList.add('error');
-        uploadDropZoneDokumen.classList.remove('has-file');
-        uploadErrorMsgDokumen.textContent = msg;
-        uploadErrorMsgDokumen.style.display = 'block';
-        uploadPlaceholderDokumen.style.display = 'flex';
-        uploadFileInfoDokumen.classList.add('hidden');
-        inputDokumenLampiran.value = '';
-    }
-
-    function clearDokumenLampiran() {
-        inputDokumenLampiran.value = '';
-        uploadPlaceholderDokumen.style.display = 'flex';
-        uploadFileInfoDokumen.classList.add('hidden');
-        uploadDropZoneDokumen.classList.remove('has-file', 'error');
-        uploadErrorMsgDokumen.style.display = 'none';
-        lucide.createIcons();
-    }
-
-    function handleDokumenFile(file) {
-        uploadErrorMsgDokumen.style.display = 'none';
-        uploadDropZoneDokumen.classList.remove('error');
-
-        const allowedPdf = ['application/pdf'];
-        const isPdf = allowedPdf.includes(file.type) || file.name.toLowerCase().endsWith('.pdf');
-
-        if (!isPdf) {
-            setUploadErrorDokumen('Format file tidak didukung. Harus berformat PDF.');
-            return;
-        }
-
-        if (file.size > MAX_DOC_SIZE_BYTES) {
-            setUploadErrorDokumen('Ukuran file melebihi batas ' + MAX_DOC_SIZE_MB + ' MB.');
-            return;
-        }
-
-        const sizeKb = (file.size / 1024).toFixed(1);
-        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-        const displaySize = file.size > 1024 * 1024 ? `${sizeMb} MB` : `${sizeKb} KB`;
-
-        uploadPlaceholderDokumen.style.display = 'none';
-        uploadFileInfoDokumen.classList.remove('hidden');
-        uploadFileNameDokumen.textContent = file.name;
-        uploadFileSizeDokumen.textContent = displaySize;
-        uploadDropZoneDokumen.classList.add('has-file');
-        lucide.createIcons();
-    }
-
-    inputDokumenLampiran.addEventListener('change', function() {
-        if (this.files && this.files[0]) handleDokumenFile(this.files[0]);
-    });
-
-    uploadDropZoneDokumen.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.classList.add('dragover');
-    });
-    uploadDropZoneDokumen.addEventListener('dragleave', function() {
-        this.classList.remove('dragover');
-    });
-    uploadDropZoneDokumen.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file) {
-            const dt = new DataTransfer();
-            dt.items.add(file);
-            inputDokumenLampiran.files = dt.files;
-            handleDokumenFile(file);
-        }
-    });
-
     function hideAllDynamicFields() {
-        [fieldEmail, fieldWhatsapp, fieldSubject, fieldEmailKerjaSama,
-            fieldNamaInstansi, fieldNamaAcara, fieldTanggalWaktu,
-            fieldLokasiPeserta, fieldMessage, fieldFotoBukti,
+        [fieldEmail, fieldWhatsapp, fieldSubject, fieldMessage, fieldFotoBukti,
             // UMKM fields
             fieldUmkmBanner, fieldGroupPengelola, fieldGroupTentang, fieldGroupSpesifikasi, fieldFotoProduk,
-            fieldSertifikatHalal,
-            // Dokumen PDF lampiran
-            fieldDokumenLampiran
+            fieldSertifikatHalal
         ].forEach(f => {
             if (f) f.classList.add('hidden');
         });
 
-        [inputEmail, inputWhatsapp, inputSubject, inputEmailKS, inputInstansi,
-            inputNamaAcara, inputTanggalAcara, inputWaktuAcara,
-            inputLokasiAcara, inputJumlahPeserta, inputMessage,
+        [inputEmail, inputWhatsapp, inputSubject, inputMessage,
             // UMKM inputs
             inputNamaUmkm, inputAlamatUmkm, inputDeskripsiUmkm,
             inputJamOperasionalUmkm, inputInstagramUmkm, inputIsiProdukUmkm,
@@ -1175,7 +1091,7 @@
             }
         });
 
-        // Reset select UMKM (tidak perlu disabled, tapi reset value)
+        // Reset select UMKM
         if (inputJenisProdukUmkm) inputJenisProdukUmkm.value = '';
         if (inputKetersediaanUmkm) inputKetersediaanUmkm.value = 'Tersedia';
 
@@ -1183,11 +1099,10 @@
         const waMaster = document.getElementById('f-wa-master');
         if (waMaster) waMaster.value = '';
 
-        // Reset upload foto bukti, foto produk, sertifikat halal & dokumen lampiran
+        // Reset upload foto bukti, foto produk & sertifikat halal
         clearFotoBukti();
         clearFotoProduk();
         clearSertifikatHalal();
-        clearDokumenLampiran();
     }
 
     function showFieldWithRequired(field, input) {
@@ -1198,6 +1113,14 @@
 
     function updateFormFields() {
         const jenisPesan = jenisPesanSelect.value;
+        if (jenisPesan === 'pengajuan_surat') {
+            window.location.href = "{{ route('pengajuan.surat') }}";
+            return;
+        }
+        if (jenisPesan === 'daftar_umkm') {
+            window.location.href = "{{ route('pendaftaran-umkm.create') }}";
+            return;
+        }
         hideAllDynamicFields();
         submitBtn.disabled = false;
 
@@ -1218,62 +1141,30 @@
             labelMessage.textContent = 'Isi Pengaduan';
             fieldFotoBukti.classList.remove('hidden');
             btnText.textContent = 'Kirim Pengaduan';
-        } else if (jenisPesan === 'kerja_sama') {
-            showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
-            showFieldWithRequired(fieldEmailKerjaSama, inputEmailKS);
-            showFieldWithRequired(fieldNamaInstansi, inputInstansi);
-            inputMessage.name = 'message';
-            showFieldWithRequired(fieldMessage, inputMessage);
-            labelMessage.textContent = 'Isi Pesan Kerja Sama';
-            // Tampilkan lampiran PDF dokumen proposal kerja sama
-            fieldDokumenLampiran.classList.remove('hidden');
-            labelDokumenTitle.textContent = 'Proposal / Surat Kerja Sama Resmi';
-            const lhKS = document.getElementById('label-dokumen-helper');
-            if (lhKS) lhKS.textContent = 'Unggah surat permohonan atau proposal resmi dalam format PDF.';
-            const lrKS = document.getElementById('label-dokumen-required');
-            if (lrKS) lrKS.textContent = '(Opsional, maks. 10 MB)';
-            const fmKS = document.getElementById('upload-format-dokumen');
-            if (fmKS) fmKS.textContent = 'Format: PDF • Maks. 10 MB';
-            btnText.textContent = 'Kirim Kerja Sama';
-        } else if (jenisPesan === 'pengajuan_acara') {
-            showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
-            showFieldWithRequired(fieldNamaAcara, inputNamaAcara);
-            showFieldWithRequired(fieldTanggalWaktu, inputTanggalAcara);
-            inputWaktuAcara.disabled = false;
-            inputWaktuAcara.setAttribute('required', 'required');
-            showFieldWithRequired(fieldLokasiPeserta, inputLokasiAcara);
-            inputJumlahPeserta.disabled = false;
-            inputJumlahPeserta.setAttribute('required', 'required');
-            inputMessage.name = 'deskripsi_acara';
-            showFieldWithRequired(fieldMessage, inputMessage);
-            labelMessage.textContent = 'Deskripsi Acara';
-            // Tampilkan lampiran PDF dokumen pengajuan acara
-            fieldDokumenLampiran.classList.remove('hidden');
-            labelDokumenTitle.textContent = 'Proposal / Surat Permohonan Acara';
-            const lhAc = document.getElementById('label-dokumen-helper');
-            if (lhAc) lhAc.textContent = 'Unggah surat permohonan atau proposal resmi dalam format PDF.';
-            const lrAc = document.getElementById('label-dokumen-required');
-            if (lrAc) lrAc.textContent = '(Opsional, maks. 10 MB)';
-            const fmAc = document.getElementById('upload-format-dokumen');
-            if (fmAc) fmAc.textContent = 'Format: PDF • Maks. 10 MB';
-            btnText.textContent = 'Kirim Pengajuan';
         } else if (jenisPesan === 'daftar_umkm') {
-            showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
+            // Show UMKM banner info
             if (fieldUmkmBanner) fieldUmkmBanner.classList.remove('hidden');
-            if (fieldGroupPengelola) fieldGroupPengelola.classList.remove('hidden');
-            if (fieldGroupTentang) fieldGroupTentang.classList.remove('hidden');
-            if (fieldGroupSpesifikasi) fieldGroupSpesifikasi.classList.remove('hidden');
-
-            if (inputNamaUmkm) { inputNamaUmkm.disabled = false; inputNamaUmkm.setAttribute('required', 'required'); }
-            if (inputJenisProdukUmkm) { inputJenisProdukUmkm.disabled = false; inputJenisProdukUmkm.setAttribute('required', 'required'); }
-            if (inputAlamatUmkm) { inputAlamatUmkm.disabled = false; inputAlamatUmkm.setAttribute('required', 'required'); }
-            if (inputDeskripsiUmkm) { inputDeskripsiUmkm.disabled = false; inputDeskripsiUmkm.setAttribute('required', 'required'); }
-
-            // Opsional extra fields
-            [inputJamOperasionalUmkm, inputInstagramUmkm, inputIsiProdukUmkm, inputHargaProdukUmkm, inputKetersediaanUmkm, inputSertifikasiUmkm].forEach(inp => {
-                if (inp) inp.disabled = false;
-            });
-
+            // Show WA field
+            showFieldWithRequired(fieldWhatsapp, inputWhatsapp);
+            // Show UMKM field groups
+            if (fieldGroupPengelola) {
+                fieldGroupPengelola.classList.remove('hidden');
+                if (inputNamaUmkm) { inputNamaUmkm.disabled = false; inputNamaUmkm.setAttribute('required', 'required'); }
+                if (inputAlamatUmkm) { inputAlamatUmkm.disabled = false; inputAlamatUmkm.setAttribute('required', 'required'); }
+                if (inputJamOperasionalUmkm) inputJamOperasionalUmkm.disabled = false;
+                if (inputInstagramUmkm) inputInstagramUmkm.disabled = false;
+            }
+            if (fieldGroupTentang) {
+                fieldGroupTentang.classList.remove('hidden');
+                if (inputDeskripsiUmkm) { inputDeskripsiUmkm.disabled = false; inputDeskripsiUmkm.setAttribute('required', 'required'); }
+            }
+            if (fieldGroupSpesifikasi) {
+                fieldGroupSpesifikasi.classList.remove('hidden');
+                if (inputHargaProdukUmkm) inputHargaProdukUmkm.disabled = false;
+                if (inputIsiProdukUmkm) inputIsiProdukUmkm.disabled = false;
+                if (inputKetersediaanUmkm) inputKetersediaanUmkm.disabled = false;
+                if (inputSertifikasiUmkm) inputSertifikasiUmkm.disabled = false;
+            }
             if (fieldFotoProduk) fieldFotoProduk.classList.remove('hidden');
             if (fieldSertifikatHalal) fieldSertifikatHalal.classList.remove('hidden');
             btnText.textContent = 'Kirim Pendaftaran UMKM';
@@ -1310,6 +1201,10 @@
             .then(response => {
                 return response.json().then(data => {
                     if (!response.ok) {
+                        if (response.status === 401 && data.redirect) {
+                            window.location.href = data.redirect;
+                            return;
+                        }
                         if (data.errors && typeof data.errors === 'object') {
                             const errorMsgs = Object.values(data.errors).flat();
                             throw new Error(errorMsgs.join('<br>'));
@@ -1320,6 +1215,10 @@
                 });
             })
             .then(data => {
+                if (data && data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
                 successBox.classList.remove('hidden');
                 form.reset();
                 updateFormFields();
@@ -1346,40 +1245,24 @@
             });
     });
 
-    // ── Global Service Selection Handler ─────────────────────────────
-    window.selectServiceType = function(type) {
-        if (!jenisPesanSelect) return;
-        jenisPesanSelect.value = type;
-        updateFormFields();
-        const formSection = document.getElementById('form-section');
-        if (formSection) {
-            formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(() => {
-                const firstInput = document.getElementById('f-name');
-                if (firstInput) firstInput.focus();
-            }, 500);
+        // Auto-detect URL query parameter or hash on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramJenis = urlParams.get('jenis');
+        const hash = window.location.hash;
+
+        const hashMap = {
+            '#form-pertanyaan': 'pertanyaan_umum',
+            '#form-pengaduan': 'pengaduan',
+            '#form-umkm': 'daftar_umkm',
+        };
+
+        if (paramJenis && ['pertanyaan_umum', 'pengaduan', 'daftar_umkm'].includes(paramJenis)) {
+            jenisPesanSelect.value = paramJenis;
+        } else if (hash && hashMap[hash]) {
+            jenisPesanSelect.value = hashMap[hash];
         }
-    };
 
-    // Auto-detect URL query parameter or hash on page load
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramJenis = urlParams.get('jenis');
-    const hash = window.location.hash;
-
-    const hashMap = {
-        '#form-pertanyaan': 'pertanyaan_umum',
-        '#form-pengaduan': 'pengaduan',
-        '#form-kerjasama': 'kerja_sama',
-        '#form-acara': 'pengajuan_acara',
-        '#form-umkm': 'daftar_umkm',
-    };
-
-    if (paramJenis && ['pertanyaan_umum', 'pengaduan', 'kerja_sama', 'pengajuan_acara', 'daftar_umkm'].includes(paramJenis)) {
-        jenisPesanSelect.value = paramJenis;
-    } else if (hash && hashMap[hash]) {
-        jenisPesanSelect.value = hashMap[hash];
+        updateFormFields();
     }
-
-    updateFormFields();
 </script>
 @endpush

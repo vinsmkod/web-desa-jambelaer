@@ -16,7 +16,7 @@ class AdminManagementController extends Controller
      */
     public function index()
     {
-        $admins = User::orderBy('created_at', 'desc')->get();
+        $admins = User::where('role', 'admin')->orderBy('created_at', 'desc')->get();
         return view('admin.kelola-admin.index', compact('admins'));
     }
 
@@ -54,8 +54,9 @@ class AdminManagementController extends Controller
 
         User::create([
             'name'     => $request->name,
-            'email'    => $request->email,
+            'email'    => strtolower(trim($request->email)),
             'password' => Hash::make($request->password),
+            'role'     => 'admin',
         ]);
 
         return redirect()->route('admin.kelola-admin.index')
@@ -121,7 +122,7 @@ class AdminManagementController extends Controller
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif.');
         }
 
-        if (User::count() <= 1) {
+        if (User::where('role', 'admin')->count() <= 1) {
             return back()->with('error', 'Sistem harus memiliki minimal 1 administrator aktif.');
         }
 

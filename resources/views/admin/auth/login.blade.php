@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin – Desa Jambelaer</title>
+    <title>Masuk Sistem – Desa Jambelaer</title>
     <!-- Blokir indexing halaman login oleh mesin pencari -->
     <meta name="robots" content="noindex, nofollow, noarchive">
     <meta name="googlebot" content="noindex, nofollow">
@@ -85,7 +85,7 @@
             </div>
             <div>
                 <h1 class="font-extrabold text-xl text-white tracking-tight">Desa Jambelaer</h1>
-                <p class="text-slate-300 text-[11px] font-medium mt-0.5 tracking-wide uppercase">Portal Administrator Sistem</p>
+                <p class="text-slate-300 text-[11px] font-medium mt-0.5 tracking-wide uppercase">Portal Masuk Sistem & Layanan Desa</p>
             </div>
         </div>
 
@@ -95,7 +95,7 @@
             <!-- Title Inside Card -->
             <div class="mb-4 pb-3 border-b border-slate-100">
                 <h2 class="text-base font-bold text-slate-900 leading-tight">Selamat Datang Kembali</h2>
-                <p class="text-[11px] text-slate-500 mt-0.5">Masukkan kredensial Anda untuk mengakses dashboard</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Masukkan kredensial akun Anda untuk mengakses sistem</p>
             </div>
 
             <!-- Error Alerts -->
@@ -110,6 +110,22 @@
             </div>
             @endif
 
+            <!-- Warning Session Alert -->
+            @if(session('warning'))
+            <div class="flex items-center gap-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs mb-4">
+                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 flex-shrink-0"></i>
+                <span class="font-medium">{{ session('warning') }}</span>
+            </div>
+            @endif
+
+            <!-- Error Session Alert -->
+            @if(session('error'))
+            <div class="flex items-center gap-2.5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs mb-4">
+                <i data-lucide="alert-circle" class="w-4 h-4 text-red-600 flex-shrink-0"></i>
+                <span class="font-medium">{{ session('error') }}</span>
+            </div>
+            @endif
+
             <!-- Success Session Alert -->
             @if(session('success'))
             <div class="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs mb-4">
@@ -119,7 +135,7 @@
             @endif
 
             <!-- Form -->
-            <form method="POST" action="{{ route('admin.login.post') }}" class="space-y-3.5">
+            <form method="POST" action="{{ request()->is('admin*') ? route('admin.login.post') : route('login.post') }}" class="space-y-3.5">
                 @csrf
 
                 <!-- Email Input -->
@@ -132,7 +148,7 @@
                             <i data-lucide="mail" class="w-3.5 h-3.5"></i>
                         </span>
                         <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus
-                            class="form-input-custom" placeholder="Masukan Username" autocomplete="email">
+                            class="form-input-custom" placeholder="Masukan Username / Email" autocomplete="email">
                     </div>
                 </div>
 
@@ -171,13 +187,23 @@
                     <button type="submit"
                         class="w-full flex items-center justify-center gap-2 h-10 rounded-xl font-bold text-xs text-white tracking-wider uppercase btn-gradient shadow-md shadow-forest-800/20 transition-all duration-200 hover:shadow-lg hover:shadow-forest-700/30 active:scale-[0.99]">
                         <i data-lucide="log-in" class="w-4 h-4"></i>
-                        Masuk ke Dashboard
+                        Masuk ke Sistem
                     </button>
+                </div>
+
+                <!-- Citizen Register Link -->
+                <div class="mt-4 pt-3 border-t border-slate-100 text-center">
+                    <p class="text-xs text-slate-600 font-medium">
+                        Belum memiliki akun warga?
+                        <a href="{{ route('register') }}" class="text-forest-700 hover:text-forest-900 font-bold hover:underline transition-colors ml-1">
+                            Daftar Akun Warga
+                        </a>
+                    </p>
                 </div>
             </form>
 
             <!-- Card Footer Info -->
-            <div class="mt-4 pt-3 border-t border-slate-100/80 text-center">
+            <div class="mt-3 text-center">
                 <p class="text-[10px] text-slate-400 font-medium">
                     Sistem Informasi Desa Jambelaer · Subang
                 </p>

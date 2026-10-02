@@ -7,7 +7,6 @@ use App\Models\Budaya;
 use App\Models\Galeri;
 use App\Models\Produk;
 use App\Models\Wisata;
-use App\Models\Pesan;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller

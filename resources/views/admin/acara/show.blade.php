@@ -255,13 +255,11 @@
 
                     @if($pesan->no_whatsapp)
                     <div class="pt-2">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1.5">Kontak WhatsApp</span>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $pesan->no_whatsapp) }}?text=Halo%20{{ urlencode($pesan->name) }},%20terkait%20acara%20'{{ urlencode($pesan->nama_acara) }}'%20di%20Website%20Desa%20Jambelaer..."
-                           target="_blank"
-                           class="inline-flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold hover:bg-emerald-100 transition-all font-mono text-xs">
-                            <i data-lucide="message-square" class="w-4 h-4"></i>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1.5">Kontak Pemohon</span>
+                        <div class="inline-flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-semibold font-mono text-xs">
+                            <i data-lucide="phone" class="w-4 h-4 text-slate-500"></i>
                             {{ $pesan->no_whatsapp }}
-                        </a>
+                        </div>
                     </div>
                     @endif
                 </div>
@@ -274,9 +272,14 @@
                     Ubah Status Verifikasi
                 </h3>
 
-                <form method="POST" action="{{ route('admin.acara.status', $pesan) }}" class="space-y-2">
+                <form method="POST" action="{{ route('admin.acara.status', $pesan) }}" class="space-y-3">
                     @csrf
                     @method('PATCH')
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan / Tanggapan Admin</label>
+                        <textarea name="catatan_admin" rows="2" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-forest-500 focus:outline-hidden" placeholder="Tuliskan catatan atau arahan untuk pemohon...">{{ old('catatan_admin', $pesan->catatan_admin) }}</textarea>
+                    </div>
 
                     <button type="submit" name="status" value="disetujui"
                             class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-xs font-semibold transition-all {{ $pesan->status === 'disetujui' ? 'bg-emerald-50 border-emerald-500 text-emerald-800 shadow-xs' : 'border-slate-200 text-slate-700 hover:bg-slate-50' }}">

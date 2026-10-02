@@ -3,14 +3,23 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\PertanyaanUmumController;
+use App\Http\Controllers\PendaftaranUmkmController;
+use App\Http\Controllers\Auth\MasyarakatAuthController;
+use App\Http\Controllers\PengajuanSayaController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProdukController;
-use App\Http\Controllers\Admin\PesanController;
+use App\Http\Controllers\Admin\PengajuanSuratController as AdminPengajuanSuratController;
+use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
+use App\Http\Controllers\Admin\PertanyaanUmumController as AdminPertanyaanUmumController;
+use App\Http\Controllers\Admin\PendaftaranUmkmController as AdminPendaftaranUmkmController;
+use App\Http\Controllers\Admin\JenisSuratController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\TentangController;
 use App\Http\Controllers\Admin\BudayaController;
-use App\Http\Controllers\Admin\PengajuanAcaraController;
 use App\Http\Controllers\Admin\AcaraController;
 use App\Http\Controllers\Admin\GaleriController;
 use App\Http\Controllers\Admin\AdminManagementController;
@@ -21,7 +30,7 @@ use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use App\Models\Budaya;
 use App\Models\Galeri;
-use App\Models\Pesan;
+use App\Models\AgendaAcara;
 use App\Models\Berita;
 use App\Models\Wisata;
 
@@ -92,7 +101,6 @@ Route::get('/budaya', function () {
 
 // Budaya Detail — SEO-friendly slug URL
 Route::get('/budaya/{slug}', function ($slug) {
-    // Jika parameter adalah angka (ID lama), redirect 301 ke slug baru
     if (is_numeric($slug)) {
         $budaya = Budaya::find((int)$slug);
         if ($budaya && $budaya->slug) {
@@ -101,10 +109,8 @@ Route::get('/budaya/{slug}', function ($slug) {
         abort(404);
     }
 
-    // Cari berdasarkan slug
     $budaya = Budaya::where('slug', $slug)->first();
 
-    // Fallback: jika database budaya kosong, gunakan data statis
     if (!$budaya && Budaya::count() === 0) {
         $fallbacks = [
             'ruwatan-bumi-hajat-bumi' => [
@@ -113,8 +119,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'title' => 'Ruwatan Bumi (Hajat Bumi)',
                 'kategori' => 'Upacara Adat',
                 'excerpt' => 'Upacara adat tanda syukur hasil bumi pertanian desa yang melimpah.',
-                'desc' => 'Tradisi Ruwatan Bumi (atau Hajat Bumi) diadakan setahun sekali setelah panen raya sebagai wujud syukur masyarakat Desa Jambelaer kepada Tuhan Yang Maha Esa atas kelimpahan hasil bumi pertanian. Upacara adat diisi dengan mengarak tumpeng besar, doa bersama para sepuh desa, pagelaran wayang golek, serta saling bertukar hidangan makanan antar tetangga untuk mempererat silaturahmi gotong royong.',
-                'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80',
+                'desc' => 'Tradisi Ruwatan Bumi diadakan setahun sekali setelah panen raya sebagai wujud syukur masyarakat Desa Jambelaer.',
+                'img_url' => asset('uploads/img/budaya.webp'),
             ],
             'kesenian-sisingaan' => [
                 'id' => 2,
@@ -122,8 +128,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'title' => 'Kesenian Sisingaan',
                 'kategori' => 'Seni Pertunjukan',
                 'excerpt' => 'Atraksi budaya khas Subang pemacu semangat kebersamaan rakyat.',
-                'desc' => 'Kesenian Sisingaan adalah pertunjukan boneka singa raksasa khas Kabupaten Subang yang ditunggangi anak-anak lalu diusung oleh para pemuda gagah sambil menari mengikuti irama tabuhan kendang pencak silat.',
-                'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
+                'desc' => 'Kesenian Sisingaan adalah pertunjukan boneka singa raksasa khas Kabupaten Subang.',
+                'img_url' => asset('uploads/img/budaya.webp'),
             ],
             'pencak-silat-tradisional' => [
                 'id' => 3,
@@ -131,8 +137,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'title' => 'Pencak Silat Tradisional',
                 'kategori' => 'Seni Bela Diri',
                 'excerpt' => 'Pelatihan fisik dan spiritual bela diri Sunda yang menjunjung persaudaraan.',
-                'desc' => 'Sebagai bentuk pelestarian bela diri warisan Sunda, Desa Jambelaer memiliki padepokan pencak silat lokal tempat berkumpulnya pemuda untuk melatih ketahanan fisik, konsentrasi mental, dan kehalusan budi pekerti.',
-                'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80',
+                'desc' => 'Bela diri warisan Sunda untuk melatih ketahanan fisik dan kehalusan budi pekerti.',
+                'img_url' => asset('uploads/img/budaya.webp'),
             ],
             'milangkala-karnaval-desa' => [
                 'id' => 4,
@@ -140,7 +146,8 @@ Route::get('/budaya/{slug}', function ($slug) {
                 'title' => 'Milangkala & Karnaval Desa',
                 'kategori' => 'Festival Tahunan',
                 'excerpt' => 'Peringatan hari lahir desa yang diramaikan pawai budaya kreasi warga.',
-                'desc' => 'Milangkala atau hari jadi Desa Jambelaer dirayakan meriah setiap tahun dengan karnaval budaya. Setiap dusun bergotong royong membuat hiasan replika hasil bumi, memakai pakaian adat sunda pengantin atau kebaya, serta memamerkan kesenian kreasi masing-masing dusun dalam parade keliling sepanjang jalan desa.',
+                'desc' => 'Milangkala dirayakan meriah setiap tahun dengan karnaval budaya.',
+                'img_url' => asset('uploads/img/budaya.webp'),
             ],
         ];
 
@@ -157,12 +164,11 @@ Route::get('/budaya/{slug}', function ($slug) {
     if (Budaya::count() > 0) {
         $rekomendasi = Budaya::where('slug', '!=', $slug)->orderBy('urutan')->take(3)->get();
     } else {
-        // Fallback rekomendasi statis
         $allFallbacks = [
-            'ruwatan-bumi-hajat-bumi' => (object)['id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi', 'title' => 'Ruwatan Bumi', 'kategori' => 'Upacara Adat', 'img_url' => 'https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Upacara adat tanda syukur hasil bumi.'],
-            'kesenian-sisingaan'      => (object)['id' => 2, 'slug' => 'kesenian-sisingaan', 'title' => 'Seni Sisingaan', 'kategori' => 'Seni Pertunjukan', 'img_url' => 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Atraksi budaya khas Subang.'],
-            'pencak-silat-tradisional' => (object)['id' => 3, 'slug' => 'pencak-silat-tradisional', 'title' => 'Pencak Silat', 'kategori' => 'Seni Bela Diri', 'img_url' => 'https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Bela diri Sunda warisan budaya.'],
-            'milangkala-karnaval-desa' => (object)['id' => 4, 'slug' => 'milangkala-karnaval-desa', 'title' => 'Milangkala Desa', 'kategori' => 'Festival Tahunan', 'img_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=400&q=80', 'excerpt' => 'Peringatan hari lahir desa.'],
+            'ruwatan-bumi-hajat-bumi' => (object)['id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi', 'title' => 'Ruwatan Bumi', 'kategori' => 'Upacara Adat', 'img_url' => asset('uploads/img/budaya.webp'), 'excerpt' => 'Upacara adat tanda syukur hasil bumi.'],
+            'kesenian-sisingaan'      => (object)['id' => 2, 'slug' => 'kesenian-sisingaan', 'title' => 'Seni Sisingaan', 'kategori' => 'Seni Pertunjukan', 'img_url' => asset('uploads/img/budaya.webp'), 'excerpt' => 'Atraksi budaya khas Subang.'],
+            'pencak-silat-tradisional' => (object)['id' => 3, 'slug' => 'pencak-silat-tradisional', 'title' => 'Pencak Silat', 'kategori' => 'Seni Bela Diri', 'img_url' => asset('uploads/img/budaya.webp'), 'excerpt' => 'Bela diri Sunda warisan budaya.'],
+            'milangkala-karnaval-desa' => (object)['id' => 4, 'slug' => 'milangkala-karnaval-desa', 'title' => 'Milangkala Desa', 'kategori' => 'Festival Tahunan', 'img_url' => asset('uploads/img/budaya.webp'), 'excerpt' => 'Peringatan hari lahir desa.'],
         ];
         unset($allFallbacks[$slug]);
         $rekomendasi = array_values($allFallbacks);
@@ -197,7 +203,6 @@ Route::get('/galeri', function () {
 
 // Galeri – Detail foto SEO-friendly slug
 Route::get('/galeri/{slug}', function ($slug) {
-    // Jika parameter berupa angka (ID lama), redirect 301 ke URL slug baru
     if (is_numeric($slug)) {
         $foto = Galeri::where('is_active', true)->find((int)$slug);
         if ($foto && $foto->slug) {
@@ -218,7 +223,7 @@ Route::get('/galeri/{slug}', function ($slug) {
     return view('pages.galeri-detail', compact('foto', 'lainnya'));
 })->name('galeri.detail');
 
-// Kontak – Form
+// Kontak & Pusat Informasi Layanan Masyarakat
 Route::get('/kontak', function () {
     $sosmed = [
         'instagram' => Pengaturan::get('sosmed_instagram', ''),
@@ -229,30 +234,56 @@ Route::get('/kontak', function () {
     return view('pages.kontak', compact('sosmed', 'mapsUrl'));
 })->name('kontak');
 
-// Kontak – Submit pesan (simpan ke DB)
 Route::post('/kontak', [KontakController::class, 'store'])->middleware('throttle:6,1')->name('kontak.store');
 
-// Layanan Publik (Aliasing ke pusat layanan /kontak)
 Route::get('/layanan', function () {
     return redirect()->route('kontak');
 })->name('layanan');
 
-// Acara – Daftar acara yang disetujui & dipublikasikan (Sesi Aktif & Auto-Delete Expired)
+// ── 4 Modul Layanan Masyarakat Terpisah ───────────────────────────────────────
+
+// 1. Modul Pengajuan Pembuatan Surat (SRS-F-010.1)
+Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'create'])->name('pengajuan.surat');
+Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('pengajuan.surat.store');
+
+// 2. Modul Pengaduan Masyarakat (SRS-F-011.1)
+Route::get('/pengaduan', [PengaduanController::class, 'create'])->name('pengaduan.create');
+Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+
+// 3. Modul Pertanyaan Umum (SRS-F-012.1)
+Route::get('/pertanyaan-umum', [PertanyaanUmumController::class, 'create'])->name('pertanyaan-umum.create');
+Route::post('/pertanyaan-umum', [PertanyaanUmumController::class, 'store'])->name('pertanyaan-umum.store');
+
+// 4. Modul Pendaftaran UMKM (SRS-F-013.1)
+Route::get('/pendaftaran-umkm', [PendaftaranUmkmController::class, 'create'])->name('pendaftaran-umkm.create');
+Route::post('/pendaftaran-umkm', [PendaftaranUmkmController::class, 'store'])->name('pendaftaran-umkm.store');
+
+// ── Autentikasi Masyarakat ───────────────────────────────────────────────────
+Route::get('/login', [MasyarakatAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [MasyarakatAuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
+Route::get('/register', [MasyarakatAuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [MasyarakatAuthController::class, 'register'])->name('register.post');
+Route::post('/logout', [MasyarakatAuthController::class, 'logout'])->name('logout');
+
+// ── Riwayat & Tracking Layanan Masyarakat (Wajib Login) ──────────────────────
+Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function () {
+    Route::get('/pengajuan-saya', [PengajuanSayaController::class, 'index'])->name('pengajuan.saya');
+    Route::get('/pengajuan-saya/{jenis}/{id}', [PengajuanSayaController::class, 'showDetail'])->name('pengajuan.show.detail');
+    Route::get('/pengajuan-saya/{id}', [PengajuanSayaController::class, 'show'])->whereNumber('id')->name('pengajuan.show');
+});
+
+// Acara – Daftar agenda acara desa yang dipublikasikan (Informasi Publik)
 Route::get('/acara', function () {
-    // Hapus otomatis pengajuan acara yang sudah melewati tanggal hari ini
-    Pesan::cleanupExpiredAcara();
+    AgendaAcara::cleanupExpiredAcara();
 
     $today = now()->toDateString();
 
-    $acaras = Pesan::where('jenis_pesan', 'pengajuan_acara')
-        ->where('status', 'disetujui')
-        ->where('dipublikasikan', true)
+    $acaras = AgendaAcara::where('dipublikasikan', true)
         ->whereDate('tanggal_acara', '>=', $today)
         ->orderBy('tanggal_acara', 'asc')
         ->orderBy('waktu_acara', 'asc')
         ->get();
 
-    // Kelompokkan per bulan untuk kalender timeline
     $acaraPerBulan = $acaras->groupBy(function ($a) {
         return $a->tanggal_acara ? $a->tanggal_acara->format('Y-m') : 'unknown';
     });
@@ -272,11 +303,10 @@ Route::get('/berita', function () {
 Route::get('/berita/{slug}', function ($slug) {
     $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
 
-    // Hitung views hanya dari pengunjung publik & cegah manipulasi spam refresh dalam 1 sesi
     $sessionKey = 'viewed_berita_' . $berita->berita_id;
     if (!auth()->check() && !session()->has($sessionKey)) {
         $berita->increment('views');
-        $berita->views++; // Update angka views di memori agar langsung sesuai pada halaman
+        $berita->views++;
         session()->put($sessionKey, true);
     }
 
@@ -289,12 +319,10 @@ Route::get('/berita/{slug}', function ($slug) {
     return view('pages.berita-detail', compact('berita', 'rekomendasi'));
 })->name('berita.detail');
 
-
-
 // ── Admin Routes ─────────────────────────────────────────────────────────────
 
-// Login (public)
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Login (public)
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
 
@@ -305,58 +333,74 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Produk UMKM
+        // 1. Kelola Pengajuan Pembuatan Surat (SRS-F-010)
+        Route::get('/pengajuan-surat', [AdminPengajuanSuratController::class, 'index'])->name('pengajuan-surat.index');
+        Route::get('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'show'])->name('pengajuan-surat.show');
+        Route::patch('/pengajuan-surat/{pengajuanSurat}/status', [AdminPengajuanSuratController::class, 'updateStatus'])->name('pengajuan-surat.status');
+        Route::delete('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'destroy'])->name('pengajuan-surat.destroy');
+
+        // 2. Kelola Pengaduan Masyarakat (SRS-F-011)
+        Route::get('/pengaduan', [AdminPengaduanController::class, 'index'])->name('pengaduan.index');
+        Route::get('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'show'])->name('pengaduan.show');
+        Route::patch('/pengaduan/{pengaduan}/status', [AdminPengaduanController::class, 'updateStatus'])->name('pengaduan.status');
+        Route::delete('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'destroy'])->name('pengaduan.destroy');
+
+        // 3. Kelola Pertanyaan Umum (SRS-F-012)
+        Route::get('/pertanyaan-umum', [AdminPertanyaanUmumController::class, 'index'])->name('pertanyaan-umum.index');
+        Route::get('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'show'])->name('pertanyaan-umum.show');
+        Route::patch('/pertanyaan-umum/{pertanyaanUmum}/status', [AdminPertanyaanUmumController::class, 'updateStatus'])->name('pertanyaan-umum.status');
+        Route::delete('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'destroy'])->name('pertanyaan-umum.destroy');
+
+        // 4. Kelola Pendaftaran UMKM (SRS-F-013)
+        Route::get('/pendaftaran-umkm', [AdminPendaftaranUmkmController::class, 'index'])->name('pendaftaran-umkm.index');
+        Route::get('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'show'])->name('pendaftaran-umkm.show');
+        Route::patch('/pendaftaran-umkm/{pendaftaranUmkm}/status', [AdminPendaftaranUmkmController::class, 'updateStatus'])->name('pendaftaran-umkm.status');
+        Route::post('/pendaftaran-umkm/{pendaftaranUmkm}/publikasikan', [AdminPendaftaranUmkmController::class, 'publikasikan'])->name('pendaftaran-umkm.publikasikan');
+        Route::delete('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'destroy'])->name('pendaftaran-umkm.destroy');
+
+        // Kelola Jenis Surat CRUD
+        Route::resource('jenis-surat', JenisSuratController::class)->names('jenis-surat');
+        Route::patch('/jenis-surat/{jenisSurat}/toggle', [JenisSuratController::class, 'toggleActive'])->name('jenis-surat.toggle');
+
+        // Produk UMKM (SRS-F-005)
         Route::resource('produk', ProdukController::class);
 
-        // Galeri Desa
+        // Galeri Desa (SRS-F-008)
         Route::resource('galeri', GaleriController::class);
 
-        // Pesan
-        Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
-        Route::get('/pesan/{pesan}', [PesanController::class, 'show'])->name('pesan.show');
-        Route::patch('/pesan/{pesan}/read', [PesanController::class, 'markRead'])->name('pesan.read');
-        Route::delete('/pesan/{pesan}', [PesanController::class, 'destroy'])->name('pesan.destroy');
+        // Acara & Agenda Desa CRUD (SRS-F-009)
+        Route::resource('acara', AcaraController::class)->parameters(['acara' => 'acara']);
+        Route::patch('/acara/{acara}/status', [AcaraController::class, 'updateStatus'])->name('acara.status');
+        Route::post('/acara/{acara}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('acara.publikasi');
 
-        // Acara & Agenda Desa CRUD
-        Route::resource('acara', AcaraController::class)->parameters(['acara' => 'pesan']);
-        Route::patch('/acara/{pesan}/status', [AcaraController::class, 'updateStatus'])->name('acara.status');
-        Route::post('/acara/{pesan}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('acara.publikasi');
-
-        // Pengajuan Acara Aliases (Mendukung backward compatibility)
-        Route::get('/pengajuan-acara', [AcaraController::class, 'index'])->name('pengajuan-acara.index');
-        Route::get('/pengajuan-acara/{pesan}', [AcaraController::class, 'show'])->name('pengajuan-acara.show');
-        Route::patch('/pengajuan-acara/{pesan}/status', [AcaraController::class, 'updateStatus'])->name('pengajuan-acara.status');
-        Route::post('/pengajuan-acara/{pesan}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('pengajuan-acara.publikasi');
-        Route::delete('/pengajuan-acara/{pesan}', [AcaraController::class, 'destroy'])->name('pengajuan-acara.destroy');
-
-        // Pengaturan
+        // Pengaturan (SRS-F-002)
         Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
         Route::put('/pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
 
-        // Tentang Kami CRUD
+        // Tentang Kami & Struktur Desa (SRS-F-002 & SRS-F-003)
         Route::get('/tentang', [TentangController::class, 'index'])->name('tentang.index');
         Route::put('/tentang', [TentangController::class, 'update'])->name('tentang.update');
-
-        // Struktur Desa CRUD
         Route::post('/struktur', [TentangController::class, 'strukturStore'])->name('struktur.store');
         Route::put('/struktur/{struktur}', [TentangController::class, 'strukturUpdate'])->name('struktur.update');
         Route::delete('/struktur/{struktur}', [TentangController::class, 'strukturDestroy'])->name('struktur.destroy');
 
-        // Budaya CRUD
+        // Budaya (SRS-F-007)
         Route::resource('budaya', BudayaController::class);
 
-        // Wisata CRUD
+        // Wisata (SRS-F-006)
         Route::resource('wisata', WisataController::class)->parameters(['wisata' => 'wisata']);
 
-        // Berita CRUD
+        // Berita (SRS-F-004)
         Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
 
-        // Kelola Admin CRUD
+        // Kelola Pengguna Admin (SRS-F-014)
         Route::get('/kelola-admin', [AdminManagementController::class, 'index'])->name('kelola-admin.index');
         Route::get('/kelola-admin/create', [AdminManagementController::class, 'create'])->name('kelola-admin.create');
         Route::post('/kelola-admin', [AdminManagementController::class, 'store'])->name('kelola-admin.store');
         Route::get('/kelola-admin/{admin}/edit', [AdminManagementController::class, 'edit'])->name('kelola-admin.edit');
         Route::put('/kelola-admin/{admin}', [AdminManagementController::class, 'update'])->name('kelola-admin.update');
         Route::delete('/kelola-admin/{admin}', [AdminManagementController::class, 'destroy'])->name('kelola-admin.destroy');
+
+
     });
 });

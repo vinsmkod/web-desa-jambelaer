@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Pesan;
+use App\Models\AgendaAcara;
 use App\Models\Produk;
 use App\Models\Pengaturan;
 
@@ -54,47 +54,33 @@ class WhatsAppHelper
     /**
      * Pesan WA admin ke pemohon pengaduan.
      */
-    public static function msgPengaduanKePemohon(Pesan $pesan): string
+    public static function msgPengaduanKePemohon(object $pengaduan): string
     {
-        return "Halo Bapak/Ibu {$pesan->name},\n\n"
+        return "Halo Bapak/Ibu {$pengaduan->nama},\n\n"
             . "Kami dari Pemerintah Desa Jambelaer telah menerima pengaduan Anda.\n\n"
-            . "Subjek   : {$pesan->subject}\n"
-            . "Nomor    : #" . str_pad($pesan->pesan_id, 5, '0', STR_PAD_LEFT) . "\n"
-            . "Status   : " . (($pesan->status ?? 'belum diproses') === 'menunggu' ? 'Belum Diproses' : ucfirst($pesan->status)) . "\n\n"
+            . "Subjek   : {$pengaduan->judul}\n"
+            . "Nomor    : {$pengaduan->nomor_pengaduan}\n"
+            . "Status   : " . ucfirst($pengaduan->status ?? 'diajukan') . "\n\n"
             . "Kami akan segera menindaklanjuti pengaduan Anda.\n\n"
-            . "Terima kasih.";
-    }
-
-    /**
-     * Pesan WA admin ke pemohon kerja sama.
-     */
-    public static function msgKerjaSamaKePemohon(Pesan $pesan): string
-    {
-        return "Halo Bapak/Ibu {$pesan->name},\n\n"
-            . "Kami dari Pemerintah Desa Jambelaer telah menerima pengajuan kerja sama dari:\n\n"
-            . "Instansi : {$pesan->nama_instansi}\n"
-            . "Nama     : {$pesan->name}\n"
-            . "Subjek   : {$pesan->subject}\n\n"
-            . "Tim kami akan segera menghubungi Anda untuk membahas kelanjutan kerja sama.\n\n"
             . "Terima kasih.";
     }
 
     /**
      * Pesan WA admin ke pemohon pengajuan acara.
      */
-    public static function msgPengajuanAcaraKePemohon(Pesan $pesan): string
+    public static function msgPengajuanAcaraKePemohon(AgendaAcara $acara): string
     {
         $statusLabel = [
             'menunggu'  => 'Menunggu Verifikasi',
             'disetujui' => 'Disetujui',
             'ditolak'   => 'Ditolak',
         ];
-        $status = $statusLabel[$pesan->status ?? 'menunggu'] ?? ucfirst($pesan->status ?? 'menunggu');
+        $status = $statusLabel[$acara->status ?? 'menunggu'] ?? ucfirst($acara->status ?? 'menunggu');
 
-        return "Halo Bapak/Ibu {$pesan->name},\n\n"
+        return "Halo Bapak/Ibu {$acara->name},\n\n"
             . "Kami dari Pemerintah Desa Jambelaer menginformasikan perkembangan pengajuan acara Anda.\n\n"
-            . "Nama Acara : {$pesan->nama_acara}\n"
-            . "Tanggal    : " . ($pesan->tanggal_acara ? $pesan->tanggal_acara->translatedFormat('d F Y') : '-') . "\n"
+            . "Nama Acara : {$acara->nama_acara}\n"
+            . "Tanggal    : " . ($acara->tanggal_acara ? $acara->tanggal_acara->translatedFormat('d F Y') : '-') . "\n"
             . "Status     : {$status}\n\n"
             . "Untuk informasi lebih lanjut, silakan hubungi kantor Pemerintah Desa Jambelaer.\n\n"
             . "Terima kasih.";

@@ -16,6 +16,10 @@ class AdminAuth
                 ->with('error', 'Silakan login terlebih dahulu.');
         }
 
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Akses ditolak. Halaman dashboard ini hanya dapat diakses oleh Administrator.');
+        }
+
         // Durasi timeout tidak aktif dalam menit (Default: 15 menit)
         $timeoutMinutes = (int) env('ADMIN_SESSION_TIMEOUT', 15);
         $timeoutSeconds = $timeoutMinutes * 60;

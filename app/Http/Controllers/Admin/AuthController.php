@@ -11,7 +11,10 @@ class AuthController extends Controller
     public function loginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('admin.dashboard');
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('pengajuan.saya');
         }
         return view('admin.auth.login');
     }
@@ -21,13 +24,24 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required'    => 'Alamat email wajib diisi.',
+            'email.email'       => 'Format email tidak valid.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            session(['admin_last_activity' => time()]);
-            return redirect()->intended(route('admin.dashboard'))
-                ->with('success', 'Selamat datang kembali!');
+            $user = Auth::user();
+
+            if ($user->isAdmin()) {
+                session(['admin_last_activity' => time()]);
+                return redirect()->intended(route('admin.dashboard'))
+                    ->with('success', 'Selamat datang kembali, ' . $user->name . ' (Administrator)!');
+            }
+
+            return redirect()->intended(route('pengajuan.saya'))
+                ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 
         return back()->withErrors([

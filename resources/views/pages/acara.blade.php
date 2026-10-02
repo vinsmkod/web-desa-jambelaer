@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Agenda & Acara Desa Jambelaer | Kecamatan Dawuan, Subang')
-@section('meta_desc', 'Lihat agenda, festival, rapat warga, dan acara kemasyarakatan yang diselenggarakan di Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang. Ajukan acara desa Anda di sini.')
+@section('meta_desc', 'Lihat agenda resmi, festival, rapat warga, dan acara kemasyarakatan yang diselenggarakan oleh Pemerintah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang.')
 
 @push('schema')
 <script type="application/ld+json">
@@ -188,11 +188,10 @@
                         </div>
                         @endif
 
-                        <a href="{{ \App\Helpers\WhatsAppHelper::url($a->no_whatsapp, "Halo panitia {$a->nama_acara}, saya mendapatkan informasi dari Website Desa Jambelaer dan ingin bertanya mengenai kegiatan ini.") }}"
-                            target="_blank"
+                        <a href="{{ route('kontak', ['layanan' => 'pertanyaan_umum']) }}"
                             class="w-8 h-8 rounded bg-forest-50 border border-forest-100 hover:bg-forest-800 hover:text-white flex items-center justify-center text-forest-800 transition-colors"
-                            title="Hubungi WhatsApp Penyelenggara">
-                            <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                            title="Tanya Seputar Acara">
+                            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
                 </div>
@@ -203,16 +202,10 @@
                 <div class="w-12 h-12 rounded-lg bg-forest-50 border border-forest-100 text-forest-700 flex items-center justify-center mx-auto mb-5">
                     <i data-lucide="calendar" class="w-6 h-6"></i>
                 </div>
-                <h3 class="font-display font-bold text-base text-stone-800">Belum Ada Acara</h3>
+                <h3 class="font-display font-bold text-base text-stone-800">Belum Ada Agenda Acara</h3>
                 <p class="text-stone-400 font-light text-xs mt-2 max-w-xs mx-auto leading-relaxed">
-                    Saat ini belum ada pengajuan acara warga yang terjadwal. Ingin menyelenggarakan kegiatan?
+                    Saat ini belum ada agenda acara resmi pemerintah desa yang terjadwal.
                 </p>
-                <div class="mt-5">
-                    <a href="{{ route('kontak') }}" class="btn-primary text-[10px] py-2.5 px-5">
-                        Ajukan Acara Baru
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-2"></i>
-                    </a>
-                </div>
             </div>
             @endforelse
         </div>

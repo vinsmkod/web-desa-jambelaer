@@ -73,8 +73,8 @@ class Budaya extends Model
             }
         }
 
-        // Fallback default image
-        return "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=800&q=80";
+        // Fallback default image lokal
+        return asset('uploads/img/budaya.webp');
     }
 
     /**

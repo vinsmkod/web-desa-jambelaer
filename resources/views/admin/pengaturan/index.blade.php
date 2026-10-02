@@ -143,7 +143,7 @@
                                 $imgSrc = asset($imgSrc);
                             }
                         @endphp
-                        <img id="kades-foto-preview" src="{{ $imgSrc ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80' }}"
+                        <img id="kades-foto-preview" src="{{ $imgSrc ?: asset('uploads/img/DESA_JAMBELAER.png') }}"
                              alt="Foto Kades" class="w-16 h-20 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0">
                         <div class="flex-1 min-w-0 space-y-1.5">
                             <label class="block text-xs font-semibold text-slate-700">Upload Foto Baru (Komputer/HP)</label>

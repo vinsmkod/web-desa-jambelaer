@@ -5,15 +5,17 @@ namespace Tests\Feature;
 use App\Models\Berita;
 use App\Models\Budaya;
 use App\Models\Galeri;
-use App\Models\Pesan;
+use App\Models\AgendaAcara;
+use App\Models\PendaftaranUmkm;
 use App\Models\Produk;
 use App\Models\StrukturDesa;
 use App\Models\User;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\CreatesApplication;
 
 class AdminContentRelationshipTest extends \Tests\TestCase
 {
+    use DatabaseTransactions;
     public function test_user_content_relationships_and_foreign_keys(): void
     {
         // 1. Create a test admin user
@@ -89,39 +91,58 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         $this->assertEquals($user->user_id, $galeri->user->user_id);
         $this->assertTrue($user->galeri->contains('galeri_id', $galeri->galeri_id));
 
-        // 6. Test Produk relationship (with and without pesan_id)
-        $pesan = Pesan::create([
-            'user_id'     => $user->user_id,
-            'name'        => 'Warga UMKM',
-            'email'       => 'warga@example.com',
-            'subject'     => 'Pengajuan UMKM',
-            'message'     => 'Pengajuan produk opak',
-            'jenis_pesan' => 'daftar_umkm',
-            'status'      => 'disetujui',
+        // 6. Test PendaftaranUmkm & Produk relationship
+        $pendaftaran = PendaftaranUmkm::create([
+            'nomor_pendaftaran' => 'UMKM-' . uniqid(),
+            'user_id'           => $user->user_id,
+            'nama_usaha'        => 'Usaha Warga Test',
+            'nama_pemilik'      => 'Pak Test',
+            'alamat_usaha'      => 'Dusun Jambelaer',
+            'deskripsi_usaha'   => 'Produksi opak ketan',
+            'produk'            => 'Opak Ketan Asli',
+            'nomor_whatsapp'    => '081234567890',
+            'status'            => 'disetujui',
         ]);
 
         $produk = Produk::create([
-            'created_by'  => $user->user_id,
-            'pesan_id'    => $pesan->pesan_id,
-            'title'       => 'Produk UMKM Test ' . uniqid(),
-            'producer'    => 'Pak Test',
-            'price'       => 'Rp 15.000',
-            'badge'       => 'Makanan',
-            'category'    => ['makanan'],
-            'img'         => '/uploads/produk/test.jpg',
-            'desc_short'  => 'Short desc',
-            'desc_long'   => 'Long desc',
-            'is_active'   => true,
-            'urutan'      => 1,
+            'created_by'          => $user->user_id,
+            'pendaftaran_umkm_id' => $pendaftaran->pendaftaran_umkm_id,
+            'title'               => 'Produk UMKM Test ' . uniqid(),
+            'slug'                => 'produk-umkm-test-' . uniqid(),
+            'producer'            => 'Pak Test',
+            'price'               => 'Rp 15.000',
+            'badge'               => 'Makanan',
+            'category'            => ['makanan'],
+            'img'                 => '/uploads/produk/test.jpg',
+            'desc_short'          => 'Short desc',
+            'desc_long'           => 'Long desc',
+            'is_active'           => true,
+            'urutan'              => 1,
         ]);
 
         $this->assertEquals($user->user_id, $produk->created_by);
-        $this->assertEquals($pesan->pesan_id, $produk->pesan_id);
+        $this->assertEquals($pendaftaran->pendaftaran_umkm_id, $produk->pendaftaran_umkm_id);
         $this->assertInstanceOf(User::class, $produk->user);
-        $this->assertInstanceOf(Pesan::class, $produk->pesan);
+        $this->assertInstanceOf(PendaftaranUmkm::class, $produk->pendaftaranUmkm);
         $this->assertEquals($user->user_id, $produk->user->user_id);
-        $this->assertEquals($pesan->pesan_id, $produk->pesan->pesan_id);
         $this->assertTrue($user->produk->contains('produk_id', $produk->produk_id));
+
+        // 6b. Test AgendaAcara relationship
+        $acara = AgendaAcara::create([
+            'user_id'          => $user->user_id,
+            'nama_acara'       => 'Pentas Seni Desa ' . uniqid(),
+            'tanggal_acara'    => now()->addDays(5)->toDateString(),
+            'waktu_acara'      => '09:00',
+            'lokasi_acara'     => 'Balai Desa Jambelaer',
+            'name'             => 'Panitia Desa',
+            'deskripsi_acara'  => 'Pentas seni tahunan warga.',
+            'dipublikasikan'   => true,
+            'status'           => 'disetujui',
+        ]);
+
+        $this->assertEquals($user->user_id, $acara->user_id);
+        $this->assertInstanceOf(User::class, $acara->user);
+        $this->assertTrue($user->agendaAcara->contains('agenda_acara_id', $acara->agenda_acara_id));
 
         // 7. Test Struktur Desa relationship
         $struktur = StrukturDesa::create([
@@ -159,7 +180,8 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         $wisata->delete();
         $galeri->delete();
         $produk->delete();
-        $pesan->delete();
+        $pendaftaran->delete();
+        $acara->delete();
         $struktur->delete();
     }
 }

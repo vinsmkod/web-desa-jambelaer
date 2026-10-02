@@ -129,21 +129,60 @@
                 <i data-lucide="layout-dashboard" class="icon"></i>
                 <span>Dashboard</span>
             </a>
+            <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-3 pt-2 border-t border-slate-100">Layanan Warga</p>
+
+            <a href="{{ route('admin.pengajuan-surat.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.pengajuan-surat.*') ? 'active' : '' }}">
+                <i data-lucide="file-check" class="icon"></i>
+                <span>Pengajuan Surat</span>
+                @php $unreadSurat = \App\Models\PengajuanSurat::where('status', 'diajukan')->count(); @endphp
+                @if($unreadSurat > 0)
+                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadSurat }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.pengaduan.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}">
+                <i data-lucide="alert-circle" class="icon"></i>
+                <span>Pengaduan Warga</span>
+                @php $unreadAduan = \App\Models\Pengaduan::where('status', 'diajukan')->count(); @endphp
+                @if($unreadAduan > 0)
+                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadAduan }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.pertanyaan-umum.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.pertanyaan-umum.*') ? 'active' : '' }}">
+                <i data-lucide="help-circle" class="icon"></i>
+                <span>Pertanyaan Umum</span>
+                @php $unreadTanya = \App\Models\PertanyaanUmum::where('status', 'terkirim')->count(); @endphp
+                @if($unreadTanya > 0)
+                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadTanya }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.pendaftaran-umkm.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.pendaftaran-umkm.*') ? 'active' : '' }}">
+                <i data-lucide="store" class="icon"></i>
+                <span>Pendaftaran UMKM</span>
+                @php $unreadUmkm = \App\Models\PendaftaranUmkm::where('status', 'menunggu_verifikasi')->count(); @endphp
+                @if($unreadUmkm > 0)
+                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadUmkm }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.jenis-surat.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.jenis-surat.*') ? 'active' : '' }}">
+                <i data-lucide="file-text" class="icon"></i>
+                <span>Kelola Jenis Surat</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\JenisSurat::count() }}</span>
+            </a>
+
             <a href="{{ route('admin.produk.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">
                 <i data-lucide="package" class="icon"></i>
-                <span>Produk UMKM</span>
+                <span>Katalog UMKM</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Produk::count() }}</span>
-            </a>
-
-            <a href="{{ route('admin.pesan.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
-                <i data-lucide="mail" class="icon"></i>
-                <span>Layanan Masyarakat</span>
-                @php $totalUnread = \App\Models\Pesan::where('is_read', false)->count(); @endphp
-                @if($totalUnread > 0)
-                <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $totalUnread }}</span>
-                @endif
             </a>
 
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Konten</p>
@@ -178,18 +217,13 @@
                 <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
             </a>
             <a href="{{ route('admin.acara.index') }}"
-                class="sidebar-link {{ request()->routeIs('admin.acara.*') || request()->routeIs('admin.pengajuan-acara.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.acara.*') ? 'active' : '' }}">
                 <i data-lucide="calendar" class="icon"></i>
                 <span>Agenda Acara</span>
                 @php
-                    $pendingAcara = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'menunggu')->count();
-                    $activeAcara = \App\Models\Pesan::where('jenis_pesan', 'pengajuan_acara')->where('status', 'disetujui')->where(function($q){$q->whereNull('is_archived')->orWhere('is_archived', false);})->count();
+                    $totalAcara = \App\Models\AgendaAcara::where(function($q){$q->whereNull('is_archived')->orWhere('is_archived', false);})->count();
                 @endphp
-                @if($pendingAcara > 0)
-                    <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $pendingAcara }}</span>
-                @else
-                    <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ $activeAcara }}</span>
-                @endif
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ $totalAcara }}</span>
             </a>
             <a href="{{ route('admin.pengaturan.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
@@ -249,10 +283,16 @@
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 ml-auto">
-                <!-- Notif bell / Mail -->
-                <a href="{{ route('admin.pesan.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Layanan Publik">
-                    <i data-lucide="mail" class="w-4 h-4"></i>
-                    @if(\App\Models\Pesan::where('is_read', false)->count() > 0)
+                <!-- Notif bell / Layanan Warga -->
+                @php
+                    $pendingTotal = \App\Models\PengajuanSurat::where('status', 'diajukan')->count() 
+                                  + \App\Models\Pengaduan::where('status', 'diajukan')->count()
+                                  + \App\Models\PertanyaanUmum::where('status', 'terkirim')->count()
+                                  + \App\Models\PendaftaranUmkm::where('status', 'menunggu_verifikasi')->count();
+                @endphp
+                <a href="{{ route('admin.pengajuan-surat.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Layanan Warga ({{ $pendingTotal }} Menunggu)">
+                    <i data-lucide="bell" class="w-4 h-4"></i>
+                    @if($pendingTotal > 0)
                     <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-white"></span>
                     @endif
                 </a>

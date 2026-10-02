@@ -172,7 +172,7 @@
                         <div class="absolute -top-3 -left-3 w-full h-full border-2 border-sand-200 rounded-xl"></div>
                         <div class="relative">
                             @php
-                            $kadesFoto = $settings['kades_foto']->value ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80';
+                            $kadesFoto = $settings['kades_foto']->value ?? asset('uploads/img/DESA_JAMBELAER.png');
                             if ($kadesFoto && !str_starts_with($kadesFoto, 'http') && file_exists(public_path($kadesFoto))) {
                             $kadesFoto = asset($kadesFoto);
                             }

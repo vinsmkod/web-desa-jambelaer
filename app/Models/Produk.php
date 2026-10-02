@@ -14,8 +14,9 @@ class Produk extends Model
     protected $primaryKey = 'produk_id';
 
     protected $fillable = [
-        'created_by',  // nullable — diisi jika dibuat oleh admin yang sedang login
-        'pesan_id',    // nullable — diisi jika produk berasal dari pengajuan UMKM (traceability)
+        'created_by',          // nullable — diisi jika dibuat oleh admin yang sedang login
+        'pendaftaran_umkm_id', // nullable — diisi jika produk berasal dari modul Pendaftaran UMKM baru
+        'pesan_id',            // nullable — diisi jika produk berasal dari pengajuan UMKM lama (legacy)
         'slug', 'title', 'producer', 'price', 'badge',
         'category', 'img', 'desc_short', 'desc_long',
         'details', 'is_active', 'urutan', 'jenis', 'jenis_label',
@@ -67,14 +68,14 @@ class Produk extends Model
     }
 
     /**
-     * Pesan pengajuan UMKM yang menjadi asal-usul produk ini.
-     *
-     * Nullable: produk yang dimasukkan langsung oleh admin (tanpa pengajuan)
-     * tidak akan memiliki pesan asal, sehingga nilai pesan_id = NULL.
+     * Data pendaftaran UMKM yang menjadi asal usul produk ini (modul baru).
      */
-    public function pesan(): BelongsTo
+    public function pendaftaranUmkm(): BelongsTo
     {
-        return $this->belongsTo(Pesan::class, 'pesan_id', 'pesan_id');
+        return $this->belongsTo(PendaftaranUmkm::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
     }
 }
+
+
+
 

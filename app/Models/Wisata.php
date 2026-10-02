@@ -52,8 +52,8 @@ class Wisata extends Model
             }
         }
 
-        // Fallback default Unsplash image
-        return 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80';
+        // Fallback default lokal
+        return asset('uploads/img/DESA_JAMBELAER.png');
     }
 
     /**

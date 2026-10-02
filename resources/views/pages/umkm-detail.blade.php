@@ -119,17 +119,6 @@
                     </p>
                     <div class="mt-5 pt-4 border-t border-stone-100 flex items-center justify-between">
                         <span class="text-lg font-extrabold font-display text-sand-700">{{ $product->price }}</span>
-                        @php
-                            $rawWa = $product->no_whatsapp_umkm ?: \App\Models\Pengaturan::get('sosmed_whatsapp', \App\Models\Pengaturan::get('desa_telepon', ''));
-                            $waClean = preg_replace('/[^0-9]/', '', $rawWa);
-                            if (str_starts_with($waClean, '0')) {
-                                $waClean = '62' . substr($waClean, 1);
-                            }
-                            
-                            $recipientName = $product->nama_pemilik ?: $product->producer;
-                            $greeting = $recipientName ? "Halo {$recipientName}, " : "Halo, ";
-                            $msg = urlencode("{$greeting}saya ingin bertanya mengenai produk \"{$product->title}\" yang ada di website Desa Jambelaer.");
-                        @endphp
                     </div>
                 </div>
 
@@ -180,10 +169,10 @@
                         @endif
                         @if($product->no_whatsapp_umkm)
                         <div>
-                            <span class="text-stone-400 font-medium block">Nomor WhatsApp</span>
-                            <a href="{{ \App\Helpers\WhatsAppHelper::url($product->no_whatsapp_umkm, \App\Helpers\WhatsAppHelper::msgUmkm($product)) }}" target="_blank" class="text-forest-700 font-bold hover:underline block mt-0.5">
+                            <span class="text-stone-400 font-medium block">Kontak Penjual</span>
+                            <span class="text-forest-700 font-bold block mt-0.5">
                                 {{ $product->no_whatsapp_umkm }}
-                            </a>
+                            </span>
                         </div>
                         @endif
                         @if($product->link_marketplace)

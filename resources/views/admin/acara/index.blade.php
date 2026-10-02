@@ -2,7 +2,7 @@
 
 @section('title', 'Agenda & Acara Desa')
 @section('page_title', 'Agenda & Acara Desa')
-@section('page_subtitle', 'Kelola acara resmi pemerintah desa serta kurasi pengajuan acara dari masyarakat')
+@section('page_subtitle', 'Kelola agenda acara resmi pemerintah desa')
 
 @section('content')
 
@@ -14,42 +14,37 @@
         </div>
         <div class="min-w-0">
             <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['total'] }}</p>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Total Acara Aktif</p>
+            <p class="text-xs text-slate-400 mt-1 font-medium">Total Acara</p>
         </div>
     </div>
 
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-xs">
         <div class="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
-            <i data-lucide="building-2" class="w-5 h-5"></i>
+            <i data-lucide="globe" class="w-5 h-5"></i>
         </div>
         <div class="min-w-0">
-            <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['desa'] }}</p>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Dari Pemdes</p>
-        </div>
-    </div>
-
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-xs">
-        <div class="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 flex-shrink-0">
-            <i data-lucide="users" class="w-5 h-5"></i>
-        </div>
-        <div class="min-w-0">
-            <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['pengajuan'] }}</p>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Pengajuan Warga</p>
+            <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['publik'] }}</p>
+            <p class="text-xs text-slate-400 mt-1 font-medium">Tayang di Web</p>
         </div>
     </div>
 
     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-xs">
         <div class="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
-            <i data-lucide="clock" class="w-5 h-5"></i>
+            <i data-lucide="file-edit" class="w-5 h-5"></i>
         </div>
         <div class="min-w-0">
-            <div class="flex items-center gap-1.5">
-                <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['menunggu'] }}</p>
-                @if($stats['menunggu'] > 0)
-                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
-                @endif
-            </div>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Perlu Review</p>
+            <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['draf'] }}</p>
+            <p class="text-xs text-slate-400 mt-1 font-medium">Draf</p>
+        </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 shadow-xs">
+        <div class="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 flex-shrink-0">
+            <i data-lucide="archive" class="w-5 h-5"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-2xl font-black font-display text-slate-900 leading-none">{{ $stats['arsip'] }}</p>
+            <p class="text-xs text-slate-400 mt-1 font-medium">Arsip Lewat</p>
         </div>
     </div>
 </div>
@@ -64,7 +59,7 @@
             @endif
             <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
             <input type="text" name="q" value="{{ $search }}"
-                   placeholder="Cari acara, lokasi, atau panitia..."
+                   placeholder="Cari nama acara, lokasi..."
                    class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
         </form>
 
@@ -80,12 +75,10 @@
     <div class="flex items-center gap-1 overflow-x-auto pt-3 text-xs">
         @php
             $tabList = [
-                'semua'     => ['label' => 'Semua Acara',     'count' => $stats['total']],
-                'desa'      => ['label' => 'Acara Pemdes',    'count' => $stats['desa']],
-                'pengajuan' => ['label' => 'Pengajuan Warga', 'count' => $stats['pengajuan']],
-                'menunggu'  => ['label' => 'Perlu Review',    'count' => $stats['menunggu']],
-                'publik'    => ['label' => 'Tayang di Web',   'count' => $stats['dipublikasikan']],
-                'arsip'     => ['label' => 'Arsip Lewat',     'count' => $stats['arsip']],
+                'semua'  => ['label' => 'Semua Acara',   'count' => $stats['total']],
+                'publik' => ['label' => 'Tayang di Web', 'count' => $stats['publik']],
+                'draf'   => ['label' => 'Draf',          'count' => $stats['draf']],
+                'arsip'  => ['label' => 'Arsip Lewat',   'count' => $stats['arsip']],
             ];
         @endphp
 

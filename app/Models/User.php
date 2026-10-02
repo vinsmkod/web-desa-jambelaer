@@ -25,7 +25,24 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
+
+    /**
+     * Cek apakah user adalah administrator.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Cek apakah user adalah masyarakat.
+     */
+    public function isMasyarakat(): bool
+    {
+        return $this->role === 'masyarakat';
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,15 +70,31 @@ class User extends Authenticatable
     // ── Relationships ────────────────────────────────────────────────────────
 
     /**
-     * Pesan-pesan yang terhubung dengan user ini.
-     *
-     * Catatan: Mayoritas pesan berasal dari masyarakat umum (tanpa login),
-     * sehingga user_id pada pesan umumnya NULL. Relasi ini berguna untuk
-     * keperluan traceability jika admin yang sedang login mengirim pesan.
+     * Agenda acara yang dibuat oleh admin/user ini.
      */
-    public function pesan(): HasMany
+    public function agendaAcara(): HasMany
     {
-        return $this->hasMany(Pesan::class, 'user_id', 'user_id');
+        return $this->hasMany(AgendaAcara::class, 'user_id', 'user_id');
+    }
+
+    public function pengajuanSurat(): HasMany
+    {
+        return $this->hasMany(PengajuanSurat::class, 'user_id', 'user_id');
+    }
+
+    public function pengaduan(): HasMany
+    {
+        return $this->hasMany(Pengaduan::class, 'user_id', 'user_id');
+    }
+
+    public function pertanyaanUmum(): HasMany
+    {
+        return $this->hasMany(PertanyaanUmum::class, 'user_id', 'user_id');
+    }
+
+    public function pendaftaranUmkm(): HasMany
+    {
+        return $this->hasMany(PendaftaranUmkm::class, 'user_id', 'user_id');
     }
 
     /**

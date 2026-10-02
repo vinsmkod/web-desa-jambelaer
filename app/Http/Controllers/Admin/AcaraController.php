@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pesan;
+use App\Models\AgendaAcara;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,16 +12,16 @@ use Illuminate\Support\Str;
 class AcaraController extends Controller
 {
     /**
-     * Tampilkan daftar acara (dari desa & pengajuan masyarakat)
+     * Tampilkan daftar agenda acara desa (Informasi Publik)
      */
     public function index(Request $request)
     {
-        Pesan::cleanupExpiredAcara();
+        AgendaAcara::cleanupExpiredAcara();
 
         $tab = $request->query('tab', 'semua');
         $search = $request->query('q');
 
-        $query = Pesan::where('jenis_pesan', 'pengajuan_acara');
+        $query = AgendaAcara::query();
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -34,37 +34,15 @@ class AcaraController extends Controller
 
         // Filter tab
         switch ($tab) {
-            case 'desa':
-                $query->where(function ($q) {
-                    $q->whereNotNull('user_id')
-                      ->orWhere('name', 'like', '%desa%')
-                      ->orWhere('nama_instansi', 'like', '%desa%');
-                })->where(function ($q) {
-                    $q->whereNull('is_archived')->orWhere('is_archived', false);
-                });
-                break;
-
-            case 'pengajuan':
-                $query->whereNull('user_id')
-                      ->where('name', 'not like', '%desa%')
-                      ->where(function ($q) {
-                          $q->whereNull('nama_instansi')->orWhere('nama_instansi', 'not like', '%desa%');
-                      })
-                      ->where(function ($q) {
-                          $q->whereNull('is_archived')->orWhere('is_archived', false);
-                      });
-                break;
-
-            case 'menunggu':
-                $query->where('status', 'menunggu')
-                      ->where(function ($q) {
-                          $q->whereNull('is_archived')->orWhere('is_archived', false);
-                      });
-                break;
-
             case 'publik':
-                $query->where('status', 'disetujui')
-                      ->where('dipublikasikan', true)
+                $query->where('dipublikasikan', true)
+                      ->where(function ($q) {
+                          $q->whereNull('is_archived')->orWhere('is_archived', false);
+                      });
+                break;
+
+            case 'draf':
+                $query->where('dipublikasikan', false)
                       ->where(function ($q) {
                           $q->whereNull('is_archived')->orWhere('is_archived', false);
                       });
@@ -88,26 +66,22 @@ class AcaraController extends Controller
                         ->withQueryString();
 
         // Hitung statistik untuk cards & tabs
-        $allActive = Pesan::where('jenis_pesan', 'pengajuan_acara')
-            ->where(function ($q) {
-                $q->whereNull('is_archived')->orWhere('is_archived', false);
-            })->get();
+        $activeQuery = AgendaAcara::where(function ($q) {
+            $q->whereNull('is_archived')->orWhere('is_archived', false);
+        });
 
         $stats = [
-            'total'          => $allActive->count(),
-            'desa'           => $allActive->filter(fn ($p) => $p->user_id !== null || str_contains(strtolower($p->name), 'desa') || str_contains(strtolower($p->nama_instansi ?? ''), 'desa'))->count(),
-            'pengajuan'      => $allActive->filter(fn ($p) => $p->user_id === null && !str_contains(strtolower($p->name), 'desa') && !str_contains(strtolower($p->nama_instansi ?? ''), 'desa'))->count(),
-            'menunggu'       => $allActive->where('status', 'menunggu')->count(),
-            'disetujui'      => $allActive->where('status', 'disetujui')->count(),
-            'dipublikasikan' => $allActive->where('dipublikasikan', true)->count(),
-            'arsip'          => Pesan::where('jenis_pesan', 'pengajuan_acara')->where('is_archived', true)->count(),
+            'total'  => (clone $activeQuery)->count(),
+            'publik' => (clone $activeQuery)->where('dipublikasikan', true)->count(),
+            'draf'   => (clone $activeQuery)->where('dipublikasikan', false)->count(),
+            'arsip'  => AgendaAcara::where('is_archived', true)->count(),
         ];
 
         return view('admin.acara.index', compact('acaras', 'stats', 'tab', 'search'));
     }
 
     /**
-     * Form tambah acara desa baru
+     * Form tambah agenda acara desa baru
      */
     public function create()
     {
@@ -115,7 +89,7 @@ class AcaraController extends Controller
     }
 
     /**
-     * Simpan acara desa baru ke database
+     * Simpan agenda acara desa baru ke database
      */
     public function store(Request $request)
     {
@@ -131,14 +105,13 @@ class AcaraController extends Controller
             'deskripsi_acara'  => ['required', 'string'],
             'foto_bukti'       => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
             'dokumen_lampiran' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'status'           => ['nullable', 'in:menunggu,disetujui,ditolak'],
             'dipublikasikan'   => ['nullable'],
             'catatan_admin'    => ['nullable', 'string'],
         ], [
             'nama_acara.required'      => 'Nama acara wajib diisi.',
             'tanggal_acara.required'   => 'Tanggal acara wajib diisi.',
             'lokasi_acara.required'    => 'Lokasi acara wajib diisi.',
-            'name.required'            => 'Nama penyelenggara wajib diisi.',
+            'name.required'            => 'Nama penyelenggara/panitia wajib diisi.',
             'deskripsi_acara.required' => 'Deskripsi acara wajib diisi.',
             'foto_bukti.image'         => 'Poster/Foto acara harus berupa gambar.',
             'dokumen_lampiran.mimes'   => 'Dokumen lampiran harus berformat PDF.',
@@ -158,30 +131,25 @@ class AcaraController extends Controller
 
         $dokumenPath = null;
         if ($request->hasFile('dokumen_lampiran')) {
-            $dokumenPath = $request->file('dokumen_lampiran')->store('pengajuan-acara', 'public');
+            $dokumenPath = $request->file('dokumen_lampiran')->store('agenda-acara', 'public');
         }
 
-        $status = $request->status ?? 'disetujui';
-        $dipublikasikan = ($request->has('dipublikasikan') || $request->dipublikasikan == '1') && $status === 'disetujui';
+        $dipublikasikan = ($request->has('dipublikasikan') || $request->dipublikasikan == '1');
 
-        $pesan = Pesan::create([
+        $acara = AgendaAcara::create([
             'user_id'          => Auth::id(),
-            'name'             => $request->name,
-            'email'            => Auth::user()->email ?? 'info@jambelaer-subang.desa.id',
-            'subject'          => 'Acara: ' . $request->nama_acara,
-            'message'          => $request->deskripsi_acara,
             'nama_acara'       => $request->nama_acara,
             'tanggal_acara'    => $request->tanggal_acara,
             'waktu_acara'      => $request->waktu_acara,
             'lokasi_acara'     => $request->lokasi_acara,
-            'jumlah_peserta'   => $request->jumlah_peserta,
-            'deskripsi_acara'  => $request->deskripsi_acara,
+            'name'             => $request->name,
             'nama_instansi'    => $request->nama_instansi,
             'no_whatsapp'      => $request->no_whatsapp,
+            'jumlah_peserta'   => $request->jumlah_peserta ?: 0,
+            'deskripsi_acara'  => $request->deskripsi_acara,
             'foto_bukti'       => $fotoPath,
             'dokumen_lampiran' => $dokumenPath,
-            'jenis_pesan'      => 'pengajuan_acara',
-            'status'           => $status,
+            'status'           => 'disetujui',
             'dipublikasikan'   => $dipublikasikan,
             'is_read'          => true,
             'is_archived'      => false,
@@ -189,43 +157,31 @@ class AcaraController extends Controller
         ]);
 
         return redirect()->route('admin.acara.index')
-            ->with('success', 'Acara "' . $pesan->nama_acara . '" berhasil ditambahkan ' . ($dipublikasikan ? 'dan langsung dipublikasikan ke website!' : 'sebagai draf.'));
+            ->with('success', 'Agenda Acara "' . $acara->nama_acara . '" berhasil ditambahkan ' . ($dipublikasikan ? 'dan langsung dipublikasikan ke website!' : 'sebagai draf.'));
     }
 
     /**
-     * Tampilkan detail acara
+     * Tampilkan detail agenda acara
      */
-    public function show(Pesan $pesan)
+    public function show(AgendaAcara $acara)
     {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara') {
-            abort(404);
-        }
-
-        $pesan->update(['is_read' => true]);
-        return view('admin.acara.show', compact('pesan'));
+        $acara->update(['is_read' => true]);
+        return view('admin.acara.show', ['acara' => $acara, 'pesan' => $acara]);
     }
 
     /**
-     * Form edit acara
+     * Form edit agenda acara
      */
-    public function edit(Pesan $pesan)
+    public function edit(AgendaAcara $acara)
     {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara') {
-            abort(404);
-        }
-
-        return view('admin.acara.edit', compact('pesan'));
+        return view('admin.acara.edit', ['acara' => $acara, 'pesan' => $acara]);
     }
 
     /**
-     * Perbarui data acara
+     * Perbarui data agenda acara
      */
-    public function update(Request $request, Pesan $pesan)
+    public function update(Request $request, AgendaAcara $acara)
     {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara') {
-            abort(404);
-        }
-
         $request->validate([
             'nama_acara'       => ['required', 'string', 'max:150'],
             'tanggal_acara'    => ['required', 'date'],
@@ -238,7 +194,6 @@ class AcaraController extends Controller
             'deskripsi_acara'  => ['required', 'string'],
             'foto_bukti'       => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
             'dokumen_lampiran' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'status'           => ['required', 'in:menunggu,disetujui,ditolak'],
             'dipublikasikan'   => ['nullable'],
             'catatan_admin'    => ['nullable', 'string'],
         ], [
@@ -251,7 +206,7 @@ class AcaraController extends Controller
             'dokumen_lampiran.mimes'   => 'Dokumen lampiran harus berformat PDF.',
         ]);
 
-        $fotoPath = $pesan->foto_bukti;
+        $fotoPath = $acara->foto_bukti;
         if ($request->hasFile('foto_bukti')) {
             if ($fotoPath) {
                 if (file_exists(public_path($fotoPath))) {
@@ -271,108 +226,87 @@ class AcaraController extends Controller
             $fotoPath = '/uploads/acara/' . $filename;
         }
 
-        $dokumenPath = $pesan->dokumen_lampiran;
+        $dokumenPath = $acara->dokumen_lampiran;
         if ($request->hasFile('dokumen_lampiran')) {
             if ($dokumenPath) {
                 Storage::disk('public')->delete($dokumenPath);
             }
-            $dokumenPath = $request->file('dokumen_lampiran')->store('pengajuan-acara', 'public');
+            $dokumenPath = $request->file('dokumen_lampiran')->store('agenda-acara', 'public');
         }
 
-        $status = $request->status;
-        $dipublikasikan = ($status === 'disetujui') ? ($request->has('dipublikasikan') || $request->dipublikasikan == '1') : false;
+        $dipublikasikan = ($request->has('dipublikasikan') || $request->dipublikasikan == '1');
 
-        $pesan->update([
+        $acara->update([
             'name'             => $request->name,
             'nama_acara'       => $request->nama_acara,
             'tanggal_acara'    => $request->tanggal_acara,
             'waktu_acara'      => $request->waktu_acara,
             'lokasi_acara'     => $request->lokasi_acara,
-            'jumlah_peserta'   => $request->jumlah_peserta,
+            'jumlah_peserta'   => $request->jumlah_peserta ?: 0,
             'deskripsi_acara'  => $request->deskripsi_acara,
-            'message'          => $request->deskripsi_acara,
             'nama_instansi'    => $request->nama_instansi,
             'no_whatsapp'      => $request->no_whatsapp,
             'foto_bukti'       => $fotoPath,
             'dokumen_lampiran' => $dokumenPath,
-            'status'           => $status,
             'dipublikasikan'   => $dipublikasikan,
             'catatan_admin'    => $request->catatan_admin,
         ]);
 
-        return redirect()->route('admin.acara.show', $pesan)
-            ->with('success', 'Data acara "' . $pesan->nama_acara . '" berhasil diperbarui!');
+        return redirect()->route('admin.acara.show', $acara)
+            ->with('success', 'Data agenda acara "' . $acara->nama_acara . '" berhasil diperbarui!');
     }
 
     /**
-     * Hapus acara
+     * Hapus agenda acara
      */
-    public function destroy(Pesan $pesan)
+    public function destroy(AgendaAcara $acara)
     {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara') {
-            abort(404);
-        }
-
-        if ($pesan->foto_bukti) {
-            if (file_exists(public_path($pesan->foto_bukti))) {
-                @unlink(public_path($pesan->foto_bukti));
-            } elseif (Storage::disk('public')->exists($pesan->foto_bukti)) {
-                Storage::disk('public')->delete($pesan->foto_bukti);
+        if ($acara->foto_bukti) {
+            if (file_exists(public_path($acara->foto_bukti))) {
+                @unlink(public_path($acara->foto_bukti));
+            } elseif (Storage::disk('public')->exists($acara->foto_bukti)) {
+                Storage::disk('public')->delete($acara->foto_bukti);
             }
         }
 
-        if ($pesan->dokumen_lampiran) {
-            Storage::disk('public')->delete($pesan->dokumen_lampiran);
+        if ($acara->dokumen_lampiran) {
+            Storage::disk('public')->delete($acara->dokumen_lampiran);
         }
 
-        $nama = $pesan->nama_acara;
-        $pesan->delete();
+        $nama = $acara->nama_acara;
+        $acara->delete();
 
         return redirect()->route('admin.acara.index')
-            ->with('success', 'Acara "' . $nama . '" berhasil dihapus.');
+            ->with('success', 'Agenda Acara "' . $nama . '" berhasil dihapus.');
     }
 
     /**
-     * Ubah status verifikasi (menunggu, disetujui, ditolak)
+     * Toggle status publikasi agenda acara ke website desa
      */
-    public function updateStatus(Pesan $pesan, Request $request)
+    public function publikasiAcara(AgendaAcara $acara, Request $request)
     {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara') {
-            abort(404);
-        }
+        $newStatus = !$acara->dipublikasikan;
+        $acara->update(['dipublikasikan' => $newStatus]);
 
-        $validated = $request->validate([
-            'status' => ['required', 'in:menunggu,disetujui,ditolak'],
+        $msg = $newStatus ? 'Agenda acara berhasil dipublikasikan ke website publik.' : 'Agenda acara ditarik dari publikasi website.';
+        return back()->with('success', $msg);
+    }
+
+    /**
+     * Update status agenda acara (disetujui, menunggu, ditolak)
+     */
+    public function updateStatus(Request $request, AgendaAcara $acara)
+    {
+        $request->validate([
+            'status'        => ['required', 'string', 'in:disetujui,menunggu,ditolak'],
+            'catatan_admin' => ['nullable', 'string'],
         ]);
 
-        $pesan->update(['status' => $validated['status']]);
+        $acara->update([
+            'status'        => $request->status,
+            'catatan_admin' => $request->catatan_admin,
+        ]);
 
-        if ($validated['status'] !== 'disetujui') {
-            $pesan->update(['dipublikasikan' => false]);
-        }
-
-        $statusLabel = [
-            'menunggu'  => 'Menunggu Review',
-            'disetujui' => 'Disetujui',
-            'ditolak'   => 'Ditolak',
-        ];
-
-        return back()->with('success', 'Status acara berhasil diubah menjadi ' . $statusLabel[$validated['status']] . '.');
-    }
-
-    /**
-     * Toggle status publikasi acara ke website desa
-     */
-    public function publikasiAcara(Pesan $pesan, Request $request)
-    {
-        if ($pesan->jenis_pesan !== 'pengajuan_acara' || $pesan->status !== 'disetujui') {
-            return back()->with('error', 'Hanya acara yang disetujui yang dapat dipublikasikan ke publik.');
-        }
-
-        $newStatus = !$pesan->dipublikasikan;
-        $pesan->update(['dipublikasikan' => $newStatus]);
-
-        $msg = $newStatus ? 'Acara berhasil dipublikasikan ke website publik.' : 'Acara ditarik dari publikasi website.';
-        return back()->with('success', $msg);
+        return back()->with('success', 'Status acara berhasil diperbarui.');
     }
 }
