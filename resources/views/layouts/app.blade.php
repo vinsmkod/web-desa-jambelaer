@@ -445,6 +445,12 @@
                         Tentang Desa
                     </a>
 
+                    {{-- Struktur Desa --}}
+                    <a href="{{ route('struktur.desa') }}"
+                       class="{{ request()->routeIs('struktur.desa') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
+                        Struktur Desa
+                    </a>
+
                     {{-- Informasi Dropdown --}}
                     <div class="nav-dropdown" id="dd-informasi">
                         <button type="button" id="dd-informasi-btn"
@@ -577,6 +583,12 @@
                 <a href="{{ route('tentang') }}"
                    class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('tentang*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
                     <i data-lucide="landmark" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Tentang Desa
+                </a>
+
+                {{-- Struktur Desa --}}
+                <a href="{{ route('struktur.desa') }}"
+                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('struktur.desa') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                    <i data-lucide="users" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Struktur Desa
                 </a>
 
                 {{-- Informasi Accordion --}}

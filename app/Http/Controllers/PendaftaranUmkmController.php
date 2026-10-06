@@ -127,4 +127,131 @@ class PendaftaranUmkmController extends Controller
         return redirect()->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
             ->with('success', $successMsg);
     }
+
+    /**
+     * Tampilkan formulir edit pendaftaran UMKM (SRS-F-013.1).
+     * Hanya pemilik pendaftaran yang masih berstatus "Diajukan" yang dapat mengubah data.
+     */
+    public function edit(int $id)
+    {
+        $umkm = PendaftaranUmkm::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $umkm->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pendaftaran UMKM ini.');
+        }
+
+        // Hanya pendaftaran yang belum diproses yang dapat diubah
+        if (!in_array(strtolower($umkm->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
+                ->with('warning', 'Pendaftaran UMKM yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        return view('pages.pengajuan-saya.edit-umkm', compact('umkm'));
+    }
+
+    /**
+     * Perbarui data pendaftaran UMKM milik sendiri yang masih dapat diubah.
+     */
+    public function update(Request $request, int $id)
+    {
+        $umkm = PendaftaranUmkm::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR)
+        if ((int) $umkm->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pendaftaran UMKM ini.');
+        }
+
+        if (!in_array(strtolower($umkm->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
+                ->with('warning', 'Pendaftaran UMKM yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nama_usaha'        => ['required', 'string', 'max:255'],
+            'nama_pemilik'      => ['required', 'string', 'max:255'],
+            'alamat_usaha'      => ['required', 'string', 'max:500'],
+            'deskripsi_usaha'   => ['required', 'string'],
+            'produk'            => ['required', 'string', 'max:255'],
+            'nomor_whatsapp'    => ['required', 'string', 'max:25'],
+            'instagram'         => ['nullable', 'string', 'max:255'],
+            'nib'               => ['nullable'],
+            'sertifikasi_halal' => ['nullable'],
+            'foto_produk'       => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+        ], [
+            'nama_usaha.required'      => 'Nama usaha / UMKM wajib diisi.',
+            'nama_pemilik.required'    => 'Nama pemilik usaha wajib diisi.',
+            'alamat_usaha.required'    => 'Alamat lokasi usaha wajib diisi.',
+            'deskripsi_usaha.required' => 'Deskripsi profil usaha wajib dijelaskan.',
+            'produk.required'          => 'Kategori atau nama produk unggulan wajib diisi.',
+            'nomor_whatsapp.required'  => 'Nomor WhatsApp aktif pemesanan/kontak wajib diisi.',
+            'foto_produk.mimes'        => 'Foto produk harus berformat JPG, PNG, atau WEBP.',
+            'foto_produk.max'          => 'Ukuran foto produk maksimal 5 MB.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Update data tekstual
+        $umkm->nama_usaha      = $request->nama_usaha;
+        $umkm->nama_pemilik    = $request->nama_pemilik;
+        $umkm->alamat_usaha    = $request->alamat_usaha;
+        $umkm->deskripsi_usaha = $request->deskripsi_usaha;
+        $umkm->produk          = $request->produk;
+        $umkm->nomor_whatsapp  = $request->nomor_whatsapp;
+        $umkm->instagram       = $request->instagram;
+
+        // NIB & Sertifikasi Halal bisa berupa teks nomor maupun berkas; berkas baru menggantikan yang lama.
+        // Kedua input bersifat opsional: bila tidak ada perubahan, nilai lama dipertahankan.
+        $umkm->nib = $this->updateFieldBerkasAtauTeks($request, 'nib', $umkm->nib, 'pendaftaran-umkm/nib');
+        $umkm->sertifikasi_halal = $this->updateFieldBerkasAtauTeks($request, 'sertifikasi_halal', $umkm->sertifikasi_halal, 'pendaftaran-umkm/halal');
+
+        // Foto produk hanya diganti bila ada unggahan baru; foto lama dihapus dari storage
+        if ($request->hasFile('foto_produk') && $request->file('foto_produk')->isValid()) {
+            if ($umkm->foto_produk) {
+                Storage::disk('public')->delete($umkm->foto_produk);
+            }
+            $umkm->foto_produk = $request->file('foto_produk')->store('pendaftaran-umkm/produk', 'public');
+        }
+
+        $umkm->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
+            ->with('success', 'Data pendaftaran UMKM "' . $umkm->nomor_pendaftaran . '" berhasil diperbarui.');
+    }
+
+    /**
+     * Perbarui field yang dapat berisi nomor (teks) maupun berkas tersimpan.
+     *
+     * Prioritas:
+     * 1. Berkas baru diunggah  → simpan berkas baru (berkas lama dihapus).
+     * 2. Nomor teks diisi      → simpan nomor teks (berkas lama dihapus bila ada).
+     * 3. Keduanya kosong       → pertahankan nilai lama (jangan orphan-kan berkas).
+     */
+    private function updateFieldBerkasAtauTeks(Request $request, string $field, ?string $nilaiLama, string $folder): ?string
+    {
+        // 1. Unggahan berkas baru
+        if ($request->hasFile($field) && $request->file($field)->isValid()) {
+            if ($nilaiLama && Storage::disk('public')->exists($nilaiLama)) {
+                Storage::disk('public')->delete($nilaiLama);
+            }
+            return $request->file($field)->store($folder, 'public');
+        }
+
+        // 2. Nomor teks (hanya jika pengguna mengisi kolom teks)
+        $nilaiTeks = $request->input($field);
+        if ($nilaiTeks !== null && $nilaiTeks !== '') {
+            if ($nilaiLama && Storage::disk('public')->exists($nilaiLama)) {
+                Storage::disk('public')->delete($nilaiLama);
+            }
+            return $nilaiTeks;
+        }
+
+        // 3. Tidak ada perubahan
+        return $nilaiLama;
+    }
 }

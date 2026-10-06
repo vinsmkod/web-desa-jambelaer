@@ -72,6 +72,20 @@ class PengajuanSayaController extends Controller
             ->merge($pertanyaans)
             ->merge($umkms);
 
+        // 2b. Helper aksi Edit per item — hanya pengajuan milik sendiri yang berstatus
+        //     "diajukan"/"menunggu" yang masih boleh diubah oleh masyarakat.
+        foreach ($allSubmissions as $item) {
+            $item->editable = in_array(strtolower($item->status ?? ''), ['diajukan', 'menunggu']);
+
+            $item->edit_url = match ($item->jenis_layanan) {
+                'pengajuan_surat'  => route('pengajuan.surat.edit', $item->primary_id),
+                'pengaduan'        => route('pengaduan.edit', $item->primary_id),
+                'pertanyaan_umum'  => route('pertanyaan-umum.edit', $item->primary_id),
+                'pendaftaran_umkm' => route('pendaftaran-umkm.edit', $item->primary_id),
+                default            => null,
+            };
+        }
+
         // 3. Hitung statistik status milik user
         $stats = [
             'semua'        => $allSubmissions->count(),

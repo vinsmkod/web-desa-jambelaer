@@ -61,10 +61,15 @@ Route::get('/', function () {
 // Tentang Kami
 Route::get('/tentang-kami', function () {
     $settings  = Pengaturan::all()->keyBy('key');
-    $struktur  = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
     $mapsUrl   = Pengaturan::get('maps_embed_url', '');
-    return view('pages.tentang', compact('settings', 'struktur', 'mapsUrl'));
+    return view('pages.tentang', compact('settings', 'mapsUrl'));
 })->name('tentang');
+
+// Struktur Desa — halaman terpisah (SRS-F-003.1 Lihat Struktur Desa)
+Route::get('/struktur-desa', function () {
+    $struktur = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
+    return view('pages.struktur-desa', compact('struktur'));
+})->name('struktur.desa');
 
 // UMKM – Daftar produk (grouped by jenis)
 Route::get('/umkm', function () {
@@ -270,6 +275,24 @@ Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function 
     Route::get('/pengajuan-saya', [PengajuanSayaController::class, 'index'])->name('pengajuan.saya');
     Route::get('/pengajuan-saya/{jenis}/{id}', [PengajuanSayaController::class, 'showDetail'])->name('pengajuan.show.detail');
     Route::get('/pengajuan-saya/{id}', [PengajuanSayaController::class, 'show'])->whereNumber('id')->name('pengajuan.show');
+
+    // ── Edit Layanan Masyarakat (hanya pengajuan milik sendiri yang masih dapat diubah) ──
+
+    // 1. Pengajuan Pembuatan Surat (SRS-F-010.1)
+    Route::get('/pengajuan-surat/{id}/edit', [PengajuanSuratController::class, 'edit'])->whereNumber('id')->name('pengajuan.surat.edit');
+    Route::put('/pengajuan-surat/{id}', [PengajuanSuratController::class, 'update'])->whereNumber('id')->name('pengajuan.surat.update');
+
+    // 2. Pengaduan Masyarakat (SRS-F-011.1)
+    Route::get('/pengaduan/{id}/edit', [PengaduanController::class, 'edit'])->whereNumber('id')->name('pengaduan.edit');
+    Route::put('/pengaduan/{id}', [PengaduanController::class, 'update'])->whereNumber('id')->name('pengaduan.update');
+
+    // 3. Pertanyaan Umum (SRS-F-012.1)
+    Route::get('/pertanyaan-umum/{id}/edit', [PertanyaanUmumController::class, 'edit'])->whereNumber('id')->name('pertanyaan-umum.edit');
+    Route::put('/pertanyaan-umum/{id}', [PertanyaanUmumController::class, 'update'])->whereNumber('id')->name('pertanyaan-umum.update');
+
+    // 4. Pendaftaran UMKM (SRS-F-013.1)
+    Route::get('/pendaftaran-umkm/{id}/edit', [PendaftaranUmkmController::class, 'edit'])->whereNumber('id')->name('pendaftaran-umkm.edit');
+    Route::put('/pendaftaran-umkm/{id}', [PendaftaranUmkmController::class, 'update'])->whereNumber('id')->name('pendaftaran-umkm.update');
 });
 
 // Acara – Daftar agenda acara desa yang dipublikasikan (Informasi Publik)

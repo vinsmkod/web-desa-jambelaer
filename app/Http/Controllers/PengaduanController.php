@@ -111,4 +111,86 @@ class PengaduanController extends Controller
         return redirect()->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
             ->with('success', $successMsg);
     }
+
+    /**
+     * Tampilkan formulir edit pengaduan (SRS-F-011.1).
+     * Hanya pemilik pengaduan yang masih berstatus "Diajukan" yang dapat mengubah data.
+     */
+    public function edit(int $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $pengaduan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pengaduan ini.');
+        }
+
+        // Hanya pengaduan yang belum diproses yang dapat diubah
+        if (!in_array(strtolower($pengaduan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
+                ->with('warning', 'Pengaduan yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        return view('pages.pengajuan-saya.edit-pengaduan', compact('pengaduan'));
+    }
+
+    /**
+     * Perbarui data pengaduan milik sendiri yang masih dapat diubah.
+     */
+    public function update(Request $request, int $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR)
+        if ((int) $pengaduan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pengaduan ini.');
+        }
+
+        if (!in_array(strtolower($pengaduan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
+                ->with('warning', 'Pengaduan yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nama'          => ['required', 'string', 'max:255'],
+            'no_whatsapp'   => ['required', 'string', 'max:25'],
+            'judul'         => ['required', 'string', 'max:255'],
+            'isi_pengaduan' => ['required', 'string'],
+            'lokasi'        => ['nullable', 'string', 'max:255'],
+            'foto_bukti'    => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+        ], [
+            'nama.required'          => 'Nama lengkap wajib diisi.',
+            'no_whatsapp.required'   => 'Nomor WhatsApp aktif wajib diisi untuk konfirmasi.',
+            'judul.required'         => 'Judul pengaduan wajib diisi.',
+            'isi_pengaduan.required' => 'Uraian pengaduan wajib diisi secara jelas.',
+            'foto_bukti.mimes'       => 'Foto bukti harus berupa format gambar (JPG, PNG, atau WEBP).',
+            'foto_bukti.max'         => 'Ukuran foto bukti maksimal 5 MB.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $pengaduan->nama          = $request->nama;
+        $pengaduan->no_whatsapp   = $request->no_whatsapp;
+        $pengaduan->judul         = $request->judul;
+        $pengaduan->isi_pengaduan = $request->isi_pengaduan;
+        $pengaduan->lokasi        = $request->lokasi;
+
+        // Foto bukti hanya diganti bila ada unggahan baru; foto lama dihapus dari storage
+        if ($request->hasFile('foto_bukti') && $request->file('foto_bukti')->isValid()) {
+            if ($pengaduan->foto_bukti) {
+                Storage::disk('public')->delete($pengaduan->foto_bukti);
+            }
+            $pengaduan->foto_bukti = $request->file('foto_bukti')->store('pengaduan', 'public');
+        }
+
+        $pengaduan->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
+            ->with('success', 'Data pengaduan "' . $pengaduan->nomor_pengaduan . '" berhasil diperbarui.');
+    }
 }

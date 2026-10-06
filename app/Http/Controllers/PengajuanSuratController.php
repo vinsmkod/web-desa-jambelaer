@@ -140,4 +140,129 @@ class PengajuanSuratController extends Controller
         return redirect()->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
             ->with('success', $successMsg);
     }
+
+    /**
+     * Tampilkan formulir edit pengajuan surat (SRS-F-010.1).
+     * Hanya pemilik pengajuan yang masih berstatus "Diajukan" yang dapat mengubah data.
+     */
+    public function edit(int $id)
+    {
+        $pengajuan = PengajuanSurat::with('jenisSurat')->findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $pengajuan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pengajuan ini.');
+        }
+
+        // Hanya pengajuan yang belum diproses yang dapat diubah
+        if (!in_array(strtolower($pengajuan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
+                ->with('warning', 'Pengajuan yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        $jenisSurat = JenisSurat::where('is_active', true)
+            ->orderBy('urutan')
+            ->orderBy('nama_surat')
+            ->get();
+
+        // Pastikan jenis surat yang dipakai pengajuan ini tetap tampil di daftar, meski kini non-aktif
+        if ($pengajuan->jenisSurat && !$jenisSurat->contains('id', $pengajuan->jenis_surat_id)) {
+            $jenisSurat->prepend($pengajuan->jenisSurat);
+        }
+
+        return view('pages.pengajuan-saya.edit-surat', compact('pengajuan', 'jenisSurat'));
+    }
+
+    /**
+     * Perbarui data pengajuan surat milik sendiri yang masih dapat diubah.
+     */
+    public function update(Request $request, int $id)
+    {
+        $pengajuan = PengajuanSurat::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR)
+        if ((int) $pengajuan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk mengubah pengajuan ini.');
+        }
+
+        if (!in_array(strtolower($pengajuan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
+                ->with('warning', 'Pengajuan yang sudah diproses tidak dapat diubah lagi.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'jenis_surat_id'      => ['required', 'exists:jenis_surat,id'],
+            'name'                => ['required', 'string', 'max:255'],
+            'nik'                 => ['required', 'regex:/^[0-9]{16}$/'],
+            'no_kk'               => ['required', 'regex:/^[0-9]{16}$/'],
+            'no_whatsapp'         => ['required', 'string', 'max:25'],
+            'alamat_pemohon'      => ['required', 'string', 'max:500'],
+            'keperluan'           => ['required', 'string', 'max:1500'],
+            'keterangan_tambahan' => ['nullable', 'string', 'max:1500'],
+            'file_ktp'            => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,pdf', 'max:5120'],
+            'file_kk'             => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,pdf', 'max:5120'],
+            'dokumen_pendukung'   => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,pdf', 'max:10240'],
+        ], [
+            'jenis_surat_id.required' => 'Pilih salah satu jenis surat yang diajukan.',
+            'jenis_surat_id.exists'   => 'Jenis surat yang dipilih tidak valid.',
+            'name.required'           => 'Nama pemohon wajib diisi.',
+            'nik.required'            => 'Nomor Induk Kependudukan (NIK) 16 digit wajib diisi.',
+            'nik.regex'               => 'NIK harus berjumlah tepat 16 digit angka numerik.',
+            'no_kk.required'          => 'Nomor Kartu Keluarga (KK) 16 digit wajib diisi.',
+            'no_kk.regex'             => 'Nomor Kartu Keluarga harus berjumlah tepat 16 digit angka numerik.',
+            'no_whatsapp.required'    => 'Nomor WhatsApp aktif wajib diisi untuk koordinasi.',
+            'alamat_pemohon.required' => 'Alamat domisili pemohon wajib diisi.',
+            'keperluan.required'      => 'Tujuan / keperluan pengajuan surat wajib dijelaskan.',
+            'file_ktp.mimes'          => 'Berkas KTP harus berformat JPG, PNG, WEBP, atau PDF.',
+            'file_ktp.max'            => 'Ukuran berkas KTP maksimal 5 MB.',
+            'file_kk.mimes'           => 'Berkas KK harus berformat JPG, PNG, WEBP, atau PDF.',
+            'file_kk.max'             => 'Ukuran berkas KK maksimal 5 MB.',
+            'dokumen_pendukung.mimes' => 'Dokumen pendukung harus berformat JPG, PNG, WEBP, atau PDF.',
+            'dokumen_pendukung.max'   => 'Ukuran dokumen pendukung maksimal 10 MB.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Update data tekstual
+        $pengajuan->jenis_surat_id      = $request->jenis_surat_id;
+        $pengajuan->nama_pemohon        = $request->name;
+        $pengajuan->nik                 = $request->nik;
+        $pengajuan->no_kk               = $request->no_kk;
+        $pengajuan->no_whatsapp         = $request->no_whatsapp;
+        $pengajuan->alamat_pemohon      = $request->alamat_pemohon;
+        $pengajuan->keperluan           = $request->keperluan;
+        $pengajuan->keterangan_tambahan = $request->keterangan_tambahan;
+
+        // Berkas hanya diganti bila ada unggahan baru; berkas lama dihapus dari storage
+        if ($request->hasFile('file_ktp') && $request->file('file_ktp')->isValid()) {
+            if ($pengajuan->file_ktp) {
+                Storage::disk('public')->delete($pengajuan->file_ktp);
+            }
+            $pengajuan->file_ktp = $request->file('file_ktp')->store('pengajuan-surat/ktp', 'public');
+        }
+
+        if ($request->hasFile('file_kk') && $request->file('file_kk')->isValid()) {
+            if ($pengajuan->file_kk) {
+                Storage::disk('public')->delete($pengajuan->file_kk);
+            }
+            $pengajuan->file_kk = $request->file('file_kk')->store('pengajuan-surat/kk', 'public');
+        }
+
+        if ($request->hasFile('dokumen_pendukung') && $request->file('dokumen_pendukung')->isValid()) {
+            if ($pengajuan->dokumen_pendukung) {
+                Storage::disk('public')->delete($pengajuan->dokumen_pendukung);
+            }
+            $pengajuan->dokumen_pendukung = $request->file('dokumen_pendukung')->store('pengajuan-surat/pendukung', 'public');
+        }
+
+        $pengajuan->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
+            ->with('success', 'Data pengajuan surat "' . $pengajuan->nomor_pengajuan . '" berhasil diperbarui.');
+    }
 }

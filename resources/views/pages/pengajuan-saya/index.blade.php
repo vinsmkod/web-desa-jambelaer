@@ -225,6 +225,15 @@
                     Lihat Detail
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
+
+                @if(!empty($item->editable) && !empty($item->edit_url))
+                <a href="{{ $item->edit_url }}"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-500 text-amber-800 hover:text-white font-semibold text-xs transition-all border border-amber-200 hover:border-amber-500"
+                    title="Perbaiki pengajuan selagi masih berstatus Diajukan">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                    Edit
+                </a>
+                @endif
             </div>
 
         </div>

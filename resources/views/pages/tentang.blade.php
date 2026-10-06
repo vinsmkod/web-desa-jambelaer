@@ -377,65 +377,23 @@
         </div>
 
         {{-- ══════════════════════════════════════════════════════════
-             STRUKTUR ORGANISASI — DINAMIS (admin)
+             STRUKTUR ORGANISASI — DIPINDAHKAN KE HALAMAN TERPISAH (/struktur-desa)
         ══════════════════════════════════════════════════════════ --}}
-        @if(isset($struktur) && $struktur->isNotEmpty())
-        @php
-        $kepalaDesa = $struktur->first();
-        $jajaranDesa = $struktur->slice(1);
-        @endphp
-        <div id="struktur" class="py-16 border-b border-stone-100 reveal-on-scroll delay-300 scroll-mt-24">
-            <div class="text-center mb-12">
-                <span class="section-label">Perangkat Desa</span>
-                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-3">Struktur Organisasi Desa</h2>
-                <div class="section-divider"></div>
-                <p class="text-stone-500 font-light mt-4 text-sm max-w-lg mx-auto">
-                    Para perangkat desa yang berdedikasi melayani masyarakat Desa Jambelaer.
+        <div class="py-16 border-b border-stone-100 reveal-on-scroll delay-300">
+            <div class="bg-gradient-to-br from-forest-50 to-sand-50 border border-forest-100 rounded-3xl p-8 sm:p-12 text-center">
+                <div class="w-14 h-14 rounded-2xl bg-forest-800 text-sand-300 flex items-center justify-center mx-auto mb-5">
+                    <i data-lucide="users" class="w-7 h-7"></i>
+                </div>
+                <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900">Struktur Pemerintahan Desa</h2>
+                <p class="text-stone-500 font-light mt-3 text-sm max-w-lg mx-auto">
+                    Kenali para perangkat desa yang berdedikasi melayani masyarakat Desa Jambelaer. Susunan lengkap struktur organisasi kini tersedia pada halaman khusus.
                 </p>
+                <a href="{{ route('struktur.desa') }}" class="btn-primary mt-7 inline-flex items-center gap-2">
+                    Lihat Struktur Desa
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
             </div>
-
-            {{-- Kepala Desa --}}
-            <div class="flex justify-center mb-6">
-                <div class="group bg-white border-2 border-forest-200 rounded-2xl p-6 text-center w-52 sm:w-60 hover:border-forest-400 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative mb-4 inline-block">
-                        <img src="{{ $kepalaDesa->foto ? asset($kepalaDesa->foto) : 'https://ui-avatars.com/api/?name='.urlencode($kepalaDesa->nama).'&background=1a4731&color=fff&size=200' }}"
-                            alt="{{ $kepalaDesa->nama }}"
-                            class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-md ring-2 ring-forest-200 group-hover:ring-forest-400 transition-all duration-300">
-                        <div class="absolute -bottom-1 -right-1 w-7 h-7 bg-sand-500 rounded-full flex items-center justify-center border-2 border-white">
-                            <i data-lucide="star" class="w-3 h-3 text-white fill-white"></i>
-                        </div>
-                    </div>
-                    <h3 class="font-display font-extrabold text-sm text-forest-900 leading-tight">{{ $kepalaDesa->nama }}</h3>
-                    <span class="inline-block text-[11px] font-semibold text-forest-700 bg-forest-50 border border-forest-100 px-3 py-1 rounded-full mt-2">{{ $kepalaDesa->jabatan }}</span>
-                </div>
-            </div>
-
-            @if($jajaranDesa->isNotEmpty())
-            {{-- Connector --}}
-            <div class="flex justify-center">
-                <div class="w-px h-6 bg-stone-200"></div>
-            </div>
-            <div class="flex justify-center mb-2">
-                <div class="h-px w-64 bg-stone-200"></div>
-            </div>
-
-            {{-- Jajaran Grid --}}
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-                @foreach($jajaranDesa as $index => $anggota)
-                <div class="group card-village p-5 text-center reveal-fade-up" style="transition-delay: {{ ($index % 4) * 75 }}ms">
-                    <div class="relative mb-4 inline-block">
-                        <img src="{{ $anggota->foto ? asset($anggota->foto) : 'https://ui-avatars.com/api/?name='.urlencode($anggota->nama).'&background=1a4731&color=fff&size=200' }}"
-                            alt="{{ $anggota->nama }}"
-                            class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-4 border-white shadow-md ring-2 ring-stone-100 group-hover:ring-forest-200 transition-all duration-300">
-                    </div>
-                    <h3 class="font-display font-bold text-stone-800 text-sm leading-tight">{{ $anggota->nama }}</h3>
-                    <span class="inline-block text-[11px] font-medium text-forest-700 bg-forest-50 border border-forest-100 px-2.5 py-0.5 rounded-full mt-1.5">{{ $anggota->jabatan }}</span>
-                </div>
-                @endforeach
-            </div>
-            @endif
         </div>
-        @endif
 
         {{-- ══════════════════════════════════════════════════════════
              PETA LOKASI

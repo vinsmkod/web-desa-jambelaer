@@ -24,6 +24,17 @@
         'pendaftaran_umkm'=> 'Pendaftaran UMKM',
         default           => 'Layanan',
     };
+
+    // Edit hanya diizinkan selama pengajuan masih berstatus "diajukan"/"menunggu"
+    $editable = in_array(strtolower($data->status ?? ''), ['diajukan', 'menunggu']);
+
+    $editUrl = match($jenisLayanan) {
+        'pengajuan_surat'  => $editable ? route('pengajuan.surat.edit', $data->pengajuan_surat_id) : null,
+        'pengaduan'        => $editable ? route('pengaduan.edit', $data->pengaduan_id) : null,
+        'pertanyaan_umum'  => $editable ? route('pertanyaan-umum.edit', $data->pertanyaan_id) : null,
+        'pendaftaran_umkm' => $editable ? route('pendaftaran-umkm.edit', $data->pendaftaran_umkm_id) : null,
+        default            => null,
+    };
 @endphp
 
 @section('title', 'Detail ' . $nomorTiket . ' – Desa Jambelaer')
@@ -49,6 +60,15 @@
         <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
         <div>
             <p class="font-semibold">{{ session('success') }}</p>
+        </div>
+    </div>
+    @endif
+
+    @if(session('warning'))
+    <div class="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-sm text-amber-800 shadow-sm">
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+        <div>
+            <p class="font-semibold">{{ session('warning') }}</p>
         </div>
     </div>
     @endif
@@ -393,14 +413,23 @@
         </div>
 
         {{-- Footer Actions --}}
-        <div class="p-6 bg-stone-50 border-t border-stone-100 flex items-center justify-between">
+        <div class="p-6 bg-stone-50 border-t border-stone-100 flex flex-col sm:flex-row items-center justify-between gap-3">
             <a href="{{ route('pengajuan.saya') }}" class="btn-secondary text-xs">
                 &larr; Kembali ke Daftar Pengajuan
             </a>
 
-            <a href="{{ route('kontak') }}#layanan-hub" class="btn-primary text-xs">
-                Buat Pengajuan Lain
-            </a>
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                @if($editUrl)
+                <a href="{{ $editUrl }}" class="btn-primary !bg-amber-500 !border-amber-500 hover:!bg-amber-600 hover:!border-amber-600 text-xs">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                    Edit Pengajuan
+                </a>
+                @endif
+
+                <a href="{{ route('kontak') }}#layanan-hub" class="btn-primary text-xs">
+                    Buat Pengajuan Lain
+                </a>
+            </div>
         </div>
 
     </div>
