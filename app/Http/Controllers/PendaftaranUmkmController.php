@@ -225,6 +225,38 @@ class PendaftaranUmkmController extends Controller
     }
 
     /**
+     * Batalkan pendaftaran UMKM milik sendiri (SRS-F-013.1).
+     *
+     * Hanya pemilik pendaftaran yang masih berstatus "diajukan"/"menunggu" yang dapat
+     * membatalkan. Mekanismenya adalah perubahan status menjadi "dibatalkan" — data
+     * tetap tersimpan sebagai riwayat — bukan penghapusan record. Pendaftaran yang
+     * sudah disetujui/dipublikasikan tidak dapat dibatalkan.
+     */
+    public function batal(int $id)
+    {
+        $umkm = PendaftaranUmkm::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $umkm->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk membatalkan pendaftaran UMKM ini.');
+        }
+
+        // Hanya pendaftaran yang belum diproses yang dapat dibatalkan
+        if (!in_array(strtolower($umkm->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
+                ->with('warning', 'Pendaftaran UMKM tidak dapat dibatalkan karena sudah diproses.');
+        }
+
+        $umkm->status = 'dibatalkan';
+        $umkm->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'umkm', 'id' => $umkm->pendaftaran_umkm_id])
+            ->with('success', 'Pendaftaran UMKM "' . $umkm->nomor_pendaftaran . '" berhasil dibatalkan.');
+    }
+
+    /**
      * Perbarui field yang dapat berisi nomor (teks) maupun berkas tersimpan.
      *
      * Prioritas:

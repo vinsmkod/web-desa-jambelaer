@@ -84,6 +84,18 @@ class PengajuanSayaController extends Controller
                 'pendaftaran_umkm' => route('pendaftaran-umkm.edit', $item->primary_id),
                 default            => null,
             };
+
+            // Helper aksi Batal per item — pengajuan milik sendiri yang berstatus
+            // "diajukan"/"menunggu" (belum diproses) masih boleh dibatalkan masyarakat.
+            $item->cancelable = (bool) $item->editable;
+
+            $item->cancel_url = match ($item->jenis_layanan) {
+                'pengajuan_surat'  => route('pengajuan.surat.batal', $item->primary_id),
+                'pengaduan'        => route('pengaduan.batal', $item->primary_id),
+                'pertanyaan_umum'  => route('pertanyaan-umum.batal', $item->primary_id),
+                'pendaftaran_umkm' => route('pendaftaran-umkm.batal', $item->primary_id),
+                default            => null,
+            };
         }
 
         // 3. Hitung statistik status milik user

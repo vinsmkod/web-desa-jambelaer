@@ -64,6 +64,7 @@ class Pengaduan extends Model
             'diproses'             => 'Diproses',
             'selesai', 'disetujui' => 'Selesai',
             'ditolak'              => 'Ditolak',
+            'dibatalkan'           => 'Dibatalkan',
             default                => ucfirst($this->status ?? 'Diajukan'),
         };
     }
@@ -75,6 +76,7 @@ class Pengaduan extends Model
             'diproses'             => 'bg-indigo-50 text-indigo-700 border-indigo-200',
             'selesai', 'disetujui' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
             'ditolak'              => 'bg-rose-50 text-rose-700 border-rose-200',
+            'dibatalkan'           => 'bg-stone-100 text-stone-600 border-stone-300',
             default                => 'bg-slate-50 text-slate-700 border-slate-200',
         };
     }
@@ -86,6 +88,7 @@ class Pengaduan extends Model
             'diproses'             => 2,
             'selesai', 'disetujui' => 3,
             'ditolak'              => -1,
+            'dibatalkan'           => -2,
             default                => 1,
         };
     }

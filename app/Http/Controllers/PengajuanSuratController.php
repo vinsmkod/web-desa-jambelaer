@@ -265,4 +265,35 @@ class PengajuanSuratController extends Controller
             ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
             ->with('success', 'Data pengajuan surat "' . $pengajuan->nomor_pengajuan . '" berhasil diperbarui.');
     }
+
+    /**
+     * Batalkan pengajuan surat milik sendiri (SRS-F-010.1).
+     *
+     * Hanya pemilik pengajuan yang masih berstatus "diajukan"/"menunggu" yang dapat
+     * membatalkan. Mekanismenya adalah perubahan status menjadi "dibatalkan" — data
+     * tetap tersimpan sebagai riwayat — bukan penghapusan record.
+     */
+    public function batal(int $id)
+    {
+        $pengajuan = PengajuanSurat::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $pengajuan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk membatalkan pengajuan ini.');
+        }
+
+        // Hanya pengajuan yang belum diproses yang dapat dibatalkan
+        if (!in_array(strtolower($pengajuan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
+                ->with('warning', 'Pengajuan tidak dapat dibatalkan karena sudah diproses.');
+        }
+
+        $pengajuan->status = 'dibatalkan';
+        $pengajuan->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'surat', 'id' => $pengajuan->pengajuan_surat_id])
+            ->with('success', 'Pengajuan surat "' . $pengajuan->nomor_pengajuan . '" berhasil dibatalkan.');
+    }
 }

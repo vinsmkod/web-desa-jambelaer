@@ -293,6 +293,22 @@ Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function 
     // 4. Pendaftaran UMKM (SRS-F-013.1)
     Route::get('/pendaftaran-umkm/{id}/edit', [PendaftaranUmkmController::class, 'edit'])->whereNumber('id')->name('pendaftaran-umkm.edit');
     Route::put('/pendaftaran-umkm/{id}', [PendaftaranUmkmController::class, 'update'])->whereNumber('id')->name('pendaftaran-umkm.update');
+
+    // ── Batalkan Pengajuan Layanan Masyarakat (hanya pemilik sendiri yang masih dapat dibatalkan) ──
+    // Mekanisme: perubahan status menjadi "dibatalkan" (bukan hapus data), sesuai workflow
+    // berbasis status yang digunakan sistem. Endpoint hanya menerima POST + CSRF token.
+
+    // 1. Pengajuan Pembuatan Surat (SRS-F-010.1)
+    Route::post('/pengajuan-surat/{id}/batal', [PengajuanSuratController::class, 'batal'])->whereNumber('id')->name('pengajuan.surat.batal');
+
+    // 2. Pengaduan Masyarakat (SRS-F-011.1)
+    Route::post('/pengaduan/{id}/batal', [PengaduanController::class, 'batal'])->whereNumber('id')->name('pengaduan.batal');
+
+    // 3. Pertanyaan Umum (SRS-F-012.1)
+    Route::post('/pertanyaan-umum/{id}/batal', [PertanyaanUmumController::class, 'batal'])->whereNumber('id')->name('pertanyaan-umum.batal');
+
+    // 4. Pendaftaran UMKM (SRS-F-013.1)
+    Route::post('/pendaftaran-umkm/{id}/batal', [PendaftaranUmkmController::class, 'batal'])->whereNumber('id')->name('pendaftaran-umkm.batal');
 });
 
 // Acara – Daftar agenda acara desa yang dipublikasikan (Informasi Publik)

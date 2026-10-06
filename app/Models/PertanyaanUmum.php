@@ -61,6 +61,7 @@ class PertanyaanUmum extends Model
             'diajukan', 'menunggu' => 'Diajukan',
             'dijawab'              => 'Dijawab',
             'selesai'              => 'Selesai',
+            'dibatalkan'           => 'Dibatalkan',
             default                => ucfirst($this->status ?? 'Diajukan'),
         };
     }
@@ -71,7 +72,20 @@ class PertanyaanUmum extends Model
             'diajukan', 'menunggu' => 'bg-amber-50 text-amber-700 border-amber-200',
             'dijawab'              => 'bg-sky-50 text-sky-700 border-sky-200',
             'selesai'              => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+            'dibatalkan'           => 'bg-stone-100 text-stone-600 border-stone-300',
             default                => 'bg-slate-50 text-slate-700 border-slate-200',
+        };
+    }
+
+    public function getProgressStepAttribute(): int
+    {
+        return match(strtolower($this->status ?? 'diajukan')) {
+            'diajukan', 'menunggu' => 1,
+            'dijawab'              => 2,
+            'selesai'              => 3,
+            'ditolak'              => -1,
+            'dibatalkan'           => -2,
+            default                => 1,
         };
     }
 

@@ -234,6 +234,19 @@
                     Edit
                 </a>
                 @endif
+
+                @if(!empty($item->cancelable) && !empty($item->cancel_url))
+                <form action="{{ $item->cancel_url }}" method="POST" class="inline-block"
+                    onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pengajuan ini? Pengajuan yang dibatalkan tidak akan diproses lebih lanjut.');">
+                    @csrf
+                    <button type="submit"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-500 text-rose-700 hover:text-white font-semibold text-xs transition-all border border-rose-200 hover:border-rose-500"
+                        title="Batalkan pengajuan selagi masih berstatus Diajukan">
+                        <i data-lucide="ban" class="w-3.5 h-3.5"></i>
+                        Batalkan
+                    </button>
+                </form>
+                @endif
             </div>
 
         </div>

@@ -166,4 +166,35 @@ class PertanyaanUmumController extends Controller
             ->route('pengajuan.show.detail', ['jenis' => 'pertanyaan', 'id' => $pertanyaan->pertanyaan_id])
             ->with('success', 'Data pertanyaan "' . $pertanyaan->nomor_pertanyaan . '" berhasil diperbarui.');
     }
+
+    /**
+     * Batalkan pertanyaan umum milik sendiri (SRS-F-012.1).
+     *
+     * Hanya pemilik pertanyaan yang masih berstatus "diajukan"/"menunggu" yang dapat
+     * membatalkan. Mekanismenya adalah perubahan status menjadi "dibatalkan" — data
+     * tetap tersimpan sebagai riwayat — bukan penghapusan record.
+     */
+    public function batal(int $id)
+    {
+        $pertanyaan = PertanyaanUmum::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $pertanyaan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk membatalkan pertanyaan ini.');
+        }
+
+        // Hanya pertanyaan yang belum dijawab/diproses yang dapat dibatalkan
+        if (!in_array(strtolower($pertanyaan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'pertanyaan', 'id' => $pertanyaan->pertanyaan_id])
+                ->with('warning', 'Pertanyaan tidak dapat dibatalkan karena sudah dijawab/diproses.');
+        }
+
+        $pertanyaan->status = 'dibatalkan';
+        $pertanyaan->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'pertanyaan', 'id' => $pertanyaan->pertanyaan_id])
+            ->with('success', 'Pertanyaan "' . $pertanyaan->nomor_pertanyaan . '" berhasil dibatalkan.');
+    }
 }

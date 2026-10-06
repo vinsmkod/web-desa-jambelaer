@@ -35,6 +35,17 @@
         'pendaftaran_umkm' => $editable ? route('pendaftaran-umkm.edit', $data->pendaftaran_umkm_id) : null,
         default            => null,
     };
+
+    // Pembatalan diizinkan untuk pengajuan milik sendiri yang belum diproses (gate status sama seperti edit)
+    $cancelable = $editable;
+
+    $cancelUrl = match($jenisLayanan) {
+        'pengajuan_surat'  => $cancelable ? route('pengajuan.surat.batal', $data->pengajuan_surat_id) : null,
+        'pengaduan'        => $cancelable ? route('pengaduan.batal', $data->pengaduan_id) : null,
+        'pertanyaan_umum'  => $cancelable ? route('pertanyaan-umum.batal', $data->pertanyaan_id) : null,
+        'pendaftaran_umkm' => $cancelable ? route('pendaftaran-umkm.batal', $data->pendaftaran_umkm_id) : null,
+        default            => null,
+    };
 @endphp
 
 @section('title', 'Detail ' . $nomorTiket . ' – Desa Jambelaer')
@@ -107,6 +118,7 @@
         @php
             $currentStep = $data->progress_step ?? 1;
             $isDitolak = ($currentStep === -1);
+            $isDibatalkan = ($currentStep === -2);
         @endphp
 
         <div class="p-6 sm:p-8 border-b border-stone-100 bg-stone-50/50">
@@ -123,6 +135,17 @@
                     <h3 class="font-bold text-sm">Pengajuan Ditolak / Memerlukan Perbaikan</h3>
                     <p class="text-xs text-rose-700 mt-1">
                         Mohon periksa bagian tanggapan administrator di bawah untuk mengetahui alasan penolakan atau hal yang perlu dilengkapi.
+                    </p>
+                </div>
+            </div>
+            @elseif($isDibatalkan)
+            {{-- Alert Dibatalkan --}}
+            <div class="p-4 rounded-2xl bg-stone-100 border border-stone-300 flex items-start gap-3 text-stone-700">
+                <i data-lucide="ban" class="w-5 h-5 text-stone-500 flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h3 class="font-bold text-sm">Pengajuan Dibatalkan</h3>
+                    <p class="text-xs text-stone-600 mt-1">
+                        Pengajuan ini telah Anda batalkan sendiri dan tidak akan ditindaklanjuti lebih lanjut oleh Pemerintah Desa Jambelaer.
                     </p>
                 </div>
             </div>
@@ -424,6 +447,17 @@
                     <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
                     Edit Pengajuan
                 </a>
+                @endif
+
+                @if($cancelUrl)
+                <form action="{{ $cancelUrl }}" method="POST" class="inline-block"
+                    onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pengajuan ini? Pengajuan yang dibatalkan tidak akan diproses lebih lanjut.');">
+                    @csrf
+                    <button type="submit" class="btn-primary !bg-rose-500 !border-rose-500 hover:!bg-rose-600 hover:!border-rose-600 text-xs">
+                        <i data-lucide="ban" class="w-3.5 h-3.5"></i>
+                        Batalkan Pengajuan
+                    </button>
+                </form>
                 @endif
 
                 <a href="{{ route('kontak') }}#layanan-hub" class="btn-primary text-xs">

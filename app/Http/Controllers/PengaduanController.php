@@ -193,4 +193,35 @@ class PengaduanController extends Controller
             ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
             ->with('success', 'Data pengaduan "' . $pengaduan->nomor_pengaduan . '" berhasil diperbarui.');
     }
+
+    /**
+     * Batalkan pengaduan milik sendiri (SRS-F-011.1).
+     *
+     * Hanya pemilik pengaduan yang masih berstatus "diajukan"/"menunggu" yang dapat
+     * membatalkan. Mekanismenya adalah perubahan status menjadi "dibatalkan" — data
+     * tetap tersimpan sebagai riwayat — bukan penghapusan record.
+     */
+    public function batal(int $id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
+        if ((int) $pengaduan->user_id !== (int) Auth::id()) {
+            abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk membatalkan pengaduan ini.');
+        }
+
+        // Hanya pengaduan yang belum diproses yang dapat dibatalkan
+        if (!in_array(strtolower($pengaduan->status ?? 'diajukan'), ['diajukan', 'menunggu'])) {
+            return redirect()
+                ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
+                ->with('warning', 'Pengaduan tidak dapat dibatalkan karena sudah diproses.');
+        }
+
+        $pengaduan->status = 'dibatalkan';
+        $pengaduan->save();
+
+        return redirect()
+            ->route('pengajuan.show.detail', ['jenis' => 'pengaduan', 'id' => $pengaduan->pengaduan_id])
+            ->with('success', 'Pengaduan "' . $pengaduan->nomor_pengaduan . '" berhasil dibatalkan.');
+    }
 }
