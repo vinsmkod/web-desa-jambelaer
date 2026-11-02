@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Kelola Pengaduan Masyarakat')
-@section('header_title', 'Kelola Pengaduan Masyarakat')
+@section('page_title', 'Kelola Pengaduan Masyarakat')
+@section('page_subtitle', 'Kelola, tindaklanjuti, dan berikan tanggapan atas aspirasi atau pengaduan warga desa')
 
 @section('content')
 <div class="space-y-6">

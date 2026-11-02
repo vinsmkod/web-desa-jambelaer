@@ -168,11 +168,18 @@
                         </div>
                         @endif
                         @if($product->no_whatsapp_umkm)
+                        @php
+                            $cleanWa = preg_replace('/[^0-9]/', '', $product->no_whatsapp_umkm);
+                            if (str_starts_with($cleanWa, '0')) {
+                                $cleanWa = '62' . substr($cleanWa, 1);
+                            }
+                        @endphp
                         <div>
-                            <span class="text-stone-400 font-medium block">Kontak Penjual</span>
-                            <span class="text-forest-700 font-bold block mt-0.5">
-                                {{ $product->no_whatsapp_umkm }}
-                            </span>
+                            <span class="text-stone-400 font-medium block">Kontak Penjual (WhatsApp)</span>
+                            <a href="https://wa.me/{{ $cleanWa }}" target="_blank" rel="noopener noreferrer" class="text-forest-700 hover:text-forest-900 font-bold flex items-center gap-1.5 mt-0.5 hover:underline">
+                                <svg class="w-4 h-4 text-emerald-600 fill-current inline-block flex-shrink-0" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.311.045-.698.08-2.021-.469-1.688-.701-2.775-2.42-2.859-2.533-.083-.113-.679-.904-.679-1.724 0-.82.427-1.223.579-1.39.151-.167.331-.209.442-.209.112 0 .224 0 .323.005.104.005.244-.039.38.29.144.348.491 1.2.534 1.288.043.088.072.19.014.305-.058.115-.088.188-.174.289-.086.102-.181.228-.259.306-.086.086-.176.18-.076.353.1.173.444.733.953 1.186.655.583 1.207.764 1.38.85.173.086.274.072.376-.044.102-.115.437-.508.553-.682.116-.174.232-.145.39-.087.159.058 1.009.476 1.182.563.173.087.289.13.332.203.043.072.043.42-.101.825z"/></svg>
+                                <span>{{ $product->no_whatsapp_umkm }}</span>
+                            </a>
                         </div>
                         @endif
                         @if($product->link_marketplace)

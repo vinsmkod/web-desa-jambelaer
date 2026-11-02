@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Produk;
+use App\Models\UMKM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class ProdukController extends Controller
+class UMKMController extends Controller
 {
     public function index(Request $request)
     {
-        $allProduk = Produk::orderBy('urutan')->orderBy('produk_id')->get();
-        $produk    = Produk::orderBy('urutan')->orderBy('produk_id')->paginate(5)->withQueryString();
+        $allProduk = UMKM::orderBy('urutan')->orderBy('produk_id')->get();
+        $produk    = UMKM::orderBy('urutan')->orderBy('produk_id')->paginate(5)->withQueryString();
         return view('admin.produk.index', compact('produk', 'allProduk'));
     }
 
@@ -64,30 +64,30 @@ class ProdukController extends Controller
             }
         }
         $data['details']    = $details;
-        $data['is_active']  = $request->boolean('is_active');
+        $data['is_active']  = $request->boolean('is_active', true);
         $data['created_by'] = Auth::id();
 
-        // Auto-generate unique slug
+        // Auto slug
         $slug = Str::slug($data['title']);
-        $original = $slug;
-        $i = 1;
-        while (Produk::where('slug', $slug)->exists()) {
-            $slug = $original . '-' . $i++;
+        $originalSlug = $slug;
+        $counter = 1;
+        while (UMKM::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter++;
         }
         $data['slug'] = $slug;
 
-        Produk::create($data);
+        UMKM::create($data);
 
         return redirect()->route('admin.produk.index')
-            ->with('success', 'Produk berhasil ditambahkan!');
+            ->with('success', 'Produk UMKM berhasil ditambahkan!');
     }
 
-    public function edit(Produk $produk)
+    public function edit(UMKM $produk)
     {
         return view('admin.produk.edit', compact('produk'));
     }
 
-    public function update(Request $request, Produk $produk)
+    public function update(Request $request, UMKM $produk)
     {
         $data = $request->validate([
             'title'            => ['required', 'string', 'max:255'],
@@ -137,16 +137,17 @@ class ProdukController extends Controller
         $produk->update($data);
 
         return redirect()->route('admin.produk.index')
-            ->with('success', 'Produk berhasil diperbarui!');
+            ->with('success', 'Produk UMKM berhasil diperbarui!');
     }
 
-    public function destroy(Produk $produk)
+    public function destroy(UMKM $produk)
     {
         if ($produk->img && file_exists(public_path($produk->img))) {
             @unlink(public_path($produk->img));
         }
         $produk->delete();
+
         return redirect()->route('admin.produk.index')
-            ->with('success', 'Produk berhasil dihapus.');
+            ->with('success', 'Produk UMKM berhasil dihapus.');
     }
 }

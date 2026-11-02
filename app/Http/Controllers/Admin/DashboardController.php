@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\PengajuanSurat;
 use App\Models\Pengaduan;
 use App\Models\PertanyaanUmum;
@@ -15,8 +15,8 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'total_produk'    => Produk::count(),
-            'produk_aktif'    => Produk::where('is_active', true)->count(),
+            'total_produk'    => UMKM::count(),
+            'produk_aktif'    => UMKM::where('is_active', true)->count(),
             // 4 Modul Layanan Masyarakat Baru
             'pengajuan_surat' => PengajuanSurat::count(),
             'pengajuan_surat_pending' => PengajuanSurat::whereIn('status', ['diajukan', 'menunggu'])->count(),
@@ -96,7 +96,7 @@ class DashboardController extends Controller
             ->take(6)
             ->values();
 
-        $produk_terbaru  = Produk::latest()->take(5)->get();
+        $produk_terbaru  = UMKM::latest()->take(5)->get();
 
         // Chart data 7 hari terakhir dari 4 layanan
         $startDate = now()->subDays(6)->startOfDay();

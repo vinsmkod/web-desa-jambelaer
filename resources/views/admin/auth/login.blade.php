@@ -18,7 +18,8 @@
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @theme {
-            --font-sans: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+            --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+            --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
             --color-forest-50:  #f0fdf4;
             --color-forest-100: #dcfce7;
             --color-forest-200: #bbf7d0;
@@ -26,7 +27,7 @@
             --color-forest-600: #16a34a;
             --color-forest-700: #15803d;
             --color-forest-800: #1a4731;
-            --color-forest-900: #0f2d1f;
+            --color-forest-900: #0d2b1d;
         }
 
         .bg-glass {

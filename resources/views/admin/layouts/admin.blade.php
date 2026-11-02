@@ -33,7 +33,8 @@
             --color-forest-600: #16a34a;
             --color-forest-700: #15803d;
             --color-forest-800: #1a4731;
-            --color-forest-900: #14532d;
+            --color-forest-900: #0d2b1d;
+            --color-sand-300:  #d9ba92;
         }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -129,8 +130,15 @@
                 <i data-lucide="layout-dashboard" class="icon"></i>
                 <span>Dashboard</span>
             </a>
-            <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-3 pt-2 border-t border-slate-100">Layanan Warga</p>
 
+            @php $authUser = auth()->user(); @endphp
+
+            {{-- Layanan Warga: tampil untuk perangkat desa yang berwenang --}}
+            @if($authUser->canAccessSurat() || $authUser->canManagePengaduan() || $authUser->canManagePertanyaan() || $authUser->canManageUMKM())
+            <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-3 pt-2 border-t border-slate-100">Layanan Warga</p>
+            @endif
+
+            @if($authUser->canAccessSurat())
             <a href="{{ route('admin.pengajuan-surat.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pengajuan-surat.*') ? 'active' : '' }}">
                 <i data-lucide="file-check" class="icon"></i>
@@ -140,7 +148,9 @@
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadSurat }}</span>
                 @endif
             </a>
+            @endif
 
+            @if($authUser->canManagePengaduan())
             <a href="{{ route('admin.pengaduan.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}">
                 <i data-lucide="alert-circle" class="icon"></i>
@@ -150,7 +160,9 @@
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadAduan }}</span>
                 @endif
             </a>
+            @endif
 
+            @if($authUser->canManagePertanyaan())
             <a href="{{ route('admin.pertanyaan-umum.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pertanyaan-umum.*') ? 'active' : '' }}">
                 <i data-lucide="help-circle" class="icon"></i>
@@ -160,7 +172,9 @@
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadTanya }}</span>
                 @endif
             </a>
+            @endif
 
+            @if($authUser->canManageUMKM())
             <a href="{{ route('admin.pendaftaran-umkm.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pendaftaran-umkm.*') ? 'active' : '' }}">
                 <i data-lucide="store" class="icon"></i>
@@ -170,28 +184,45 @@
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadUmkm }}</span>
                 @endif
             </a>
+            @endif
 
+            @if($authUser->canProcessSurat() || $authUser->canApproveSurat())
             <a href="{{ route('admin.jenis-surat.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.jenis-surat.*') ? 'active' : '' }}">
                 <i data-lucide="file-text" class="icon"></i>
                 <span>Kelola Jenis Surat</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\JenisSurat::count() }}</span>
             </a>
+            @endif
 
+            @if($authUser->canManageUMKM())
             <a href="{{ route('admin.produk.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">
                 <i data-lucide="package" class="icon"></i>
                 <span>Katalog UMKM</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Produk::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\UMKM::count() }}</span>
             </a>
+            @endif
 
+            {{-- Konten: tampil sesuai hak akses masing-masing role --}}
+            @if($authUser->canManageProfilDesa() || $authUser->canManageBerita() || $authUser->canManageUMKM())
             <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Konten</p>
+            @endif
 
+            @if($authUser->canManageProfilDesa())
+            <a href="{{ route('admin.tentang-desa.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.tentang-desa.*') ? 'active' : '' }}">
+                <i data-lucide="info" class="icon"></i>
+                <span>Kelola Profil Desa</span>
+            </a>
             <a href="{{ route('admin.tentang.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.tentang.*') ? 'active' : '' }}">
                 <i data-lucide="users" class="icon"></i>
                 <span>Struktur Desa</span>
             </a>
+            @endif
+
+            @if($authUser->canManageProfilDesa())
             <a href="{{ route('admin.budaya.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.budaya.*') ? 'active' : '' }}">
                 <i data-lucide="music" class="icon"></i>
@@ -210,12 +241,18 @@
                 <span>Galeri Desa</span>
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
             </a>
+            @endif
+
+            @if($authUser->canManageBerita())
             <a href="{{ route('admin.berita.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                 <i data-lucide="newspaper" class="icon"></i>
                 <span>Berita Desa</span>
-                <span class="ml-auto text-xs bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
             </a>
+            @endif
+
+            @if($authUser->canManageProfilDesa())
             <a href="{{ route('admin.acara.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.acara.*') ? 'active' : '' }}">
                 <i data-lucide="calendar" class="icon"></i>
@@ -225,6 +262,11 @@
                 @endphp
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ $totalAcara }}</span>
             </a>
+            @endif
+
+            {{-- Administrasi sistem --}}
+            @if($authUser->canManageProfilDesa())
+            <p class="px-3 text-[10px] font-bold tracking-widest uppercase text-slate-400 mb-2 mt-4 pt-3 border-t border-slate-100">Sistem</p>
             <a href="{{ route('admin.pengaturan.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
                 <i data-lucide="settings-2" class="icon"></i>
@@ -233,8 +275,9 @@
             <a href="{{ route('admin.kelola-admin.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.kelola-admin.*') ? 'active' : '' }}">
                 <i data-lucide="user-plus" class="icon"></i>
-                <span>Kelola Admin</span>
+                <span>Kelola Pengguna</span>
             </a>
+            @endif
 
             <div class="pt-3 mt-3 border-t border-slate-100">
                 <a href="{{ route('home') }}" target="_blank" class="sidebar-link text-slate-400">

@@ -51,50 +51,50 @@
             <div class="space-y-4">
                 {{-- Nama Acara --}}
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Nama / Judul Acara <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="nama_acara" value="{{ old('nama_acara', $pesan->nama_acara) }}" required
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all font-medium">
+                           class="form-input font-medium">
                 </div>
 
                 {{-- Tanggal & Waktu --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <label class="form-label">
                             Tanggal Acara <span class="text-rose-500">*</span>
                         </label>
                         <input type="date" name="tanggal_acara"
                                value="{{ old('tanggal_acara', $pesan->tanggal_acara ? $pesan->tanggal_acara->format('Y-m-d') : '') }}" required
-                               class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                               class="form-input">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <label class="form-label">
                             Waktu Pelaksanaan (WIB)
                         </label>
                         <input type="time" name="waktu_acara"
                                value="{{ old('waktu_acara', $pesan->waktu_acara ? date('H:i', strtotime($pesan->waktu_acara)) : '') }}"
-                               class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                               class="form-input">
                     </div>
                 </div>
 
                 {{-- Lokasi Acara --}}
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Lokasi / Tempat Pelaksanaan <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="lokasi_acara" value="{{ old('lokasi_acara', $pesan->lokasi_acara) }}" required
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                           class="form-input">
                 </div>
 
                 {{-- Deskripsi Acara --}}
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Deskripsi & Rangkaian Kegiatan <span class="text-rose-500">*</span>
                     </label>
                     <textarea name="deskripsi_acara" rows="5" required
-                              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all leading-relaxed">{{ old('deskripsi_acara', $pesan->deskripsi_acara) }}</textarea>
+                              class="form-input leading-relaxed">{{ old('deskripsi_acara', $pesan->deskripsi_acara) }}</textarea>
                 </div>
             </div>
         </div>
@@ -108,38 +108,38 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Nama Penyelenggara / Penanggung Jawab <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="name" value="{{ old('name', $pesan->name) }}" required
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                           class="form-input">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Instansi / Lembaga / Panitia
                     </label>
                     <input type="text" name="nama_instansi" value="{{ old('nama_instansi', $pesan->nama_instansi) }}"
                            placeholder="Contoh: Pemerintah Desa / Karang Taruna / BPD"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                           class="form-input">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Nomor WhatsApp Narahubung
                     </label>
                     <input type="text" name="no_whatsapp" value="{{ old('no_whatsapp', $pesan->no_whatsapp) }}"
                            placeholder="081234567890"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all font-mono">
+                           class="form-input font-mono">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Estimasi Jumlah Peserta (Orang)
                     </label>
                     <input type="number" name="jumlah_peserta" value="{{ old('jumlah_peserta', $pesan->jumlah_peserta) }}" min="0"
                            placeholder="Contoh: 150"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                           class="form-input">
                 </div>
             </div>
         </div>
@@ -154,7 +154,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <!-- Foto Banner Acara -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Foto Poster / Banner Acara
                     </label>
                     @php
@@ -187,7 +187,7 @@
 
                 <!-- Dokumen PDF Proposal -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label class="form-label">
                         Dokumen Surat / Proposal Acara (PDF)
                     </label>
                     <div class="border-2 border-dashed border-slate-200 hover:border-forest-400 rounded-2xl p-4 text-center transition-all bg-slate-50/50">
@@ -226,10 +226,10 @@
             <div class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <label class="form-label">
                             Status Verifikasi Acara <span class="text-rose-500">*</span>
                         </label>
-                        <select name="status" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all font-semibold">
+                        <select name="status" class="form-input font-semibold">
                             <option value="disetujui" {{ old('status', $pesan->status) === 'disetujui' ? 'selected' : '' }}>Disetujui (Dapat Dipublikasikan)</option>
                             <option value="menunggu" {{ old('status', $pesan->status) === 'menunggu' ? 'selected' : '' }}>Menunggu Review</option>
                             <option value="ditolak" {{ old('status', $pesan->status) === 'ditolak' ? 'selected' : '' }}>Ditolak / Batal</option>
@@ -237,12 +237,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <label class="form-label">
                             Catatan Internal Admin (Opsional)
                         </label>
                         <input type="text" name="catatan_admin" value="{{ old('catatan_admin', $pesan->catatan_admin) }}"
                                placeholder="Catatan khusus panitia / kesiapan lokasi..."
-                               class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-500/20 focus:border-forest-600 transition-all">
+                               class="form-input">
                     </div>
                 </div>
 
@@ -261,10 +261,10 @@
 
         {{-- ── Submit Actions ── --}}
         <div class="flex items-center justify-end gap-3 pt-2">
-            <a href="{{ route('admin.acara.show', $pesan) }}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 transition-all">
+            <a href="{{ route('admin.acara.show', $pesan) }}" class="btn-secondary text-xs">
                 Batal
             </a>
-            <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-forest-800 hover:bg-forest-700 text-white text-xs font-semibold shadow-xs transition-all">
+            <button type="submit" class="btn-primary !px-6 text-xs">
                 <i data-lucide="check" class="w-4 h-4"></i>
                 Simpan Perubahan
             </button>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Profil Desa Jambelaer | Kecamatan Dawuan, Kabupaten Subang')
-@section('meta_desc', 'Profil lengkap Desa Jambelaer – sejarah desa, visi misi, sambutan kepala desa, potensi wilayah, dan struktur pemerintahan desa di Kecamatan Dawuan, Kabupaten Subang, Jawa Barat.')
+@section('meta_desc', 'Profil lengkap Desa Jambelaer â€“ sejarah desa, visi misi, sambutan kepala desa, potensi wilayah, dan struktur pemerintahan desa di Kecamatan Dawuan, Kabupaten Subang, Jawa Barat.')
 @section('og_image', asset('uploads/img/sawah.jpeg'))
 
 @push('schema')
@@ -29,14 +29,14 @@
 
 @section('content')
 
-{{-- ══════════════════════════════════════════════════════════════════
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
      PAGE HEADER BANNER & BREADCRUMB
-══════════════════════════════════════════════════════════════════ --}}
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <span class="text-forest-800 font-semibold">Tentang Kami</span>
+        <span class="text-forest-800 font-semibold">Profil Desa</span>
     </nav>
 </div>
 
@@ -48,16 +48,16 @@
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <span class="section-label !bg-white/10 !text-sand-300 !border-white/20">Profil Desa</span>
         <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mt-3">Mengenal Desa Jambelaer</h1>
-        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Kecamatan Dawuan • Kabupaten Subang • Jawa Barat</p>
+        <p class="text-xs sm:text-sm text-white/70 mt-2 font-light max-w-md">Kecamatan Dawuan â€¢ Kabupaten Subang â€¢ Jawa Barat</p>
     </div>
 </div>
 
 <div class="bg-white pb-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- ══════════════════════════════════════════════════════════
-             SEJARAH DESA — Timeline Visual
-        ══════════════════════════════════════════════════════════ --}}
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             SEJARAH DESA â€” Timeline Visual
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div id="sejarah" class="py-16 border-b border-stone-100 reveal-on-scroll scroll-mt-24">
             <div class="grid lg:grid-cols-12 gap-10 items-start">
                 {{-- Left: Label --}}
@@ -68,7 +68,7 @@
                     </h2>
                     <div class="section-divider !mx-0"></div>
                     <p class="text-sm text-stone-500 font-light leading-relaxed">
-                        Desa Jambelaer merupakan salah satu desa di wilayah Kecamatan Dawuan yang sebelumnya termasuk ke dalam wilayah Kecamatan Kalijati, berdasarkan Peraturan Daerah Nomor 3 Tahun 2007.
+                        {{ $profil['sejarah'] }}
                     </p>
                 </div>
 
@@ -79,90 +79,34 @@
                         <div class="absolute left-5 top-0 bottom-0 w-px bg-forest-100"></div>
 
                         <div class="space-y-8">
-                            {{-- Timeline item 1 --}}
-                            <div class="flex gap-6 group">
-                                <div class="relative z-10 flex-shrink-0">
-                                    <div class="w-10 h-10 rounded-full bg-forest-800 border-4 border-white shadow-sm flex items-center justify-center">
-                                        <i data-lucide="users" class="w-4 h-4 text-sand-300"></i>
+                            @foreach($timeline as $item)
+                                @php $palette = $item->palette_classes; @endphp
+                                <div class="flex gap-6 group">
+                                    <div class="relative z-10 flex-shrink-0">
+                                        <div class="w-10 h-10 rounded-full {{ $palette['dot'] }} border-4 border-white shadow-sm flex items-center justify-center">
+                                            <i data-lucide="{{ $item->ikon ?: 'circle' }}" class="w-4 h-4 {{ $palette['icon'] }}"></i>
+                                        </div>
+                                    </div>
+                                    <div class="{{ $loop->last ? 'flex-1' : 'pb-8 flex-1' }}">
+                                        <div class="{{ $palette['card'] }} rounded-xl p-5">
+                                            <span class="text-[11px] font-bold tracking-widest uppercase {{ $palette['badge'] }}">Tahun {{ $item->tahun }}</span>
+                                            <h3 class="font-display font-bold text-base text-forest-900 mt-1">{{ $item->judul }}</h3>
+                                            <div class="text-sm text-stone-600 font-light leading-relaxed mt-2 [&_strong]:font-semibold [&_strong]:text-forest-800">
+                                                {!! $item->deskripsi !!}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="pb-8 flex-1">
-                                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-5">
-                                        <span class="text-[11px] font-bold tracking-widest uppercase text-sand-600">Tahun 1923</span>
-                                        <h3 class="font-display font-bold text-base text-forest-900 mt-1">Prakarsa 4 Galandang</h3>
-                                        <p class="text-sm text-stone-600 font-light leading-relaxed mt-2">
-                                            Desa Jambelaer dibentuk atas kesepakatan 4 tokoh galandang:
-                                            <strong class="text-forest-800">SURLI</strong> (Kp. Jambelaer),
-                                            <strong class="text-forest-800">ARNAB</strong> (Kp. Sadang),
-                                            <strong class="text-forest-800">RUKI</strong> (Kp. Jambelaer), dan
-                                            <strong class="text-forest-800">SUWARI</strong> (Kp. Melong).
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Timeline item 2 --}}
-                            <div class="flex gap-6 group">
-                                <div class="relative z-10 flex-shrink-0">
-                                    <div class="w-10 h-10 rounded-full bg-sand-500 border-4 border-white shadow-sm flex items-center justify-center">
-                                        <i data-lucide="landmark" class="w-4 h-4 text-white"></i>
-                                    </div>
-                                </div>
-                                <div class="pb-8 flex-1">
-                                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-5">
-                                        <span class="text-[11px] font-bold tracking-widest uppercase text-sand-600">Tahun 1940 – 1985</span>
-                                        <h3 class="font-display font-bold text-base text-forest-900 mt-1">Pemerintahan Pertama</h3>
-                                        <p class="text-sm text-stone-600 font-light leading-relaxed mt-2">
-                                            Kepala desa pertama dijabat oleh <strong class="text-forest-800">SUWARI</strong>, salah satu tokoh pendiri desa, yang memimpin selama 45 tahun dengan dedikasi penuh kepada masyarakat.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Timeline item 3 --}}
-                            <div class="flex gap-6 group">
-                                <div class="relative z-10 flex-shrink-0">
-                                    <div class="w-10 h-10 rounded-full bg-forest-600 border-4 border-white shadow-sm flex items-center justify-center">
-                                        <i data-lucide="vote" class="w-4 h-4 text-white"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="bg-sand-50 border border-sand-100 rounded-xl p-5">
-                                        <span class="text-[11px] font-bold tracking-widest uppercase text-sand-600">Tahun 1961</span>
-                                        <h3 class="font-display font-bold text-base text-forest-900 mt-1">Pemilihan Demokratis Pertama</h3>
-                                        <p class="text-sm text-stone-600 font-light leading-relaxed mt-2">
-                                            Pemilihan kepala desa secara demokratis oleh masyarakat pertama kali dilaksanakan, menandai dimulainya tata kelola pemerintahan desa yang partisipatif.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Timeline item 4 --}}
-                            <div class="flex gap-6 group">
-                                <div class="relative z-10 flex-shrink-0">
-                                    <div class="w-10 h-10 rounded-full bg-stone-300 border-4 border-white shadow-sm flex items-center justify-center">
-                                        <i data-lucide="file-text" class="w-4 h-4 text-stone-600"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <div class="bg-forest-50 border border-forest-100 rounded-xl p-5">
-                                        <span class="text-[11px] font-bold tracking-widest uppercase text-forest-600">Tahun 2007</span>
-                                        <h3 class="font-display font-bold text-base text-forest-900 mt-1">Pemekaran Kecamatan</h3>
-                                        <p class="text-sm text-stone-600 font-light leading-relaxed mt-2">
-                                            Berdasarkan Peraturan Daerah Nomor 3 Tahun 2007, Desa Jambelaer resmi masuk ke dalam wilayah Kecamatan Dawuan yang baru dimekarkan dari Kecamatan Kalijati.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- ══════════════════════════════════════════════════════════
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              SAMBUTAN KEPALA DESA
-        ══════════════════════════════════════════════════════════ --}}
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div id="sambutan" class="py-16 border-b border-stone-100 reveal-on-scroll scroll-mt-24">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 {{-- Photo --}}
@@ -233,9 +177,9 @@
             </div>
         </div>
 
-        {{-- ══════════════════════════════════════════════════════════
-             INFORMASI DESA — 3 Kartu
-        ══════════════════════════════════════════════════════════ --}}
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             INFORMASI DESA â€” 3 Kartu
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div id="data-desa" class="py-16 border-b border-stone-100 reveal-on-scroll delay-100 scroll-mt-24">
             <div class="text-center mb-10">
                 <span class="section-label">Profil Wilayah</span>
@@ -256,32 +200,32 @@
                         </div>
                     </div>
                     <p class="text-sm text-stone-600 font-light leading-relaxed mb-5">
-                        Wilayah Desa Jambelaer terletak di Kecamatan Dawuan, Kabupaten Subang, Provinsi Jawa Barat dengan topografi yang didominasi lahan pertanian produktif.
+                        {{ $profil['letak'] }}
                     </p>
 
                     <div class="grid grid-cols-2 gap-2">
                         <div class="bg-stone-50 rounded-lg p-3 border border-stone-100">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">↑ Utara</span>
-                            <span class="text-xs font-semibold text-forest-900">Desa Cisampih</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">â†‘ Utara</span>
+                            <span class="text-xs font-semibold text-forest-900">{{ $profil['batas_utara'] }}</span>
                         </div>
                         <div class="bg-stone-50 rounded-lg p-3 border border-stone-100">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">→ Timur</span>
-                            <span class="text-xs font-semibold text-forest-900">Kelurahan Parung</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">â†’ Timur</span>
+                            <span class="text-xs font-semibold text-forest-900">{{ $profil['batas_timur'] }}</span>
                         </div>
                         <div class="bg-stone-50 rounded-lg p-3 border border-stone-100">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">↓ Selatan</span>
-                            <span class="text-xs font-semibold text-forest-900">Desa Curug Agung</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">â†“ Selatan</span>
+                            <span class="text-xs font-semibold text-forest-900">{{ $profil['batas_selatan'] }}</span>
                         </div>
                         <div class="bg-stone-50 rounded-lg p-3 border border-stone-100">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">← Barat</span>
-                            <span class="text-xs font-semibold text-forest-900">Desa Tanggulun Timur</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block mb-1">â† Barat</span>
+                            <span class="text-xs font-semibold text-forest-900">{{ $profil['batas_barat'] }}</span>
                         </div>
                     </div>
 
                     <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
                         <span class="text-xs text-stone-500 font-medium">Total Luas Wilayah</span>
                         <span class="text-xs font-bold text-forest-800 bg-forest-50 border border-forest-100 px-3 py-1 rounded-full">
-                            2.500,366 Ha
+                            {{ $profil['luas'] }}
                         </span>
                     </div>
                 </div>
@@ -293,12 +237,12 @@
                             <i data-lucide="wheat" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="font-display font-bold text-sm text-forest-900">Potensi Utama</h3>
-                            <span class="text-xs text-stone-400 font-light">Sumber Daya & Ekonomi</span>
+                            <h3 class="font-display font-bold text-sm text-forest-900">{{ $profil['potensi_judul'] }}</h3>
+                            <span class="text-xs text-stone-400 font-light">{{ $profil['potensi_subjudul'] }}</span>
                         </div>
                     </div>
                     <p class="text-sm text-stone-600 font-light leading-relaxed">
-                        Lahan persawahan yang produktif menjadi tulang punggung perekonomian desa bersama industri UMKM rumahan dan kerajinan bambu. Sektor pertanian padi, palawija, dan hortikultura menjadi andalan mata pencaharian warga Desa Jambelaer sehari-hari.
+                        {{ $profil['potensi_deskripsi'] }}
                     </p>
                 </div>
 
@@ -309,20 +253,20 @@
                             <i data-lucide="building-2" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="font-display font-bold text-sm text-forest-900">Administrasi Desa</h3>
-                            <span class="text-xs text-stone-400 font-light">Struktur & Wilayah</span>
+                            <h3 class="font-display font-bold text-sm text-forest-900">{{ $profil['administrasi_judul'] }}</h3>
+                            <span class="text-xs text-stone-400 font-light">{{ $profil['administrasi_subjudul'] }}</span>
                         </div>
                     </div>
                     <p class="text-sm text-stone-600 font-light leading-relaxed">
-                        Salah satu dari 10 desa di bawah Kecamatan Dawuan dengan pemerintahan yang aktif dan transparan. Desa Jambelaer terdiri dari beberapa dusun dengan RT/RW yang tertata rapi untuk memudahkan pelayanan masyarakat di tingkat paling bawah.
+                        {{ $profil['administrasi_deskripsi'] }}
                     </p>
                 </div>
             </div>
         </div>
 
-        {{-- ══════════════════════════════════════════════════════════
-             VISI & MISI — Side by Side Panel
-        ══════════════════════════════════════════════════════════ --}}
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             VISI & MISI â€” Side by Side Panel
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div id="visi-misi" class="py-16 border-b border-stone-100 reveal-on-scroll delay-200 scroll-mt-24">
             <div class="text-center mb-10">
                 <span class="section-label">Arah Pembangunan</span>
@@ -342,10 +286,10 @@
                             <h3 class="font-display font-bold text-lg text-white">Visi Desa</h3>
                         </div>
                         <blockquote class="font-serif italic text-base text-sand-200 leading-relaxed border-l-4 border-sand-500 pl-5">
-                            "Mewujudkan Desa Jambelaer yang Mandiri, Sejahtera, Berbasis Pertanian Berkelanjutan, dan Teguh Memegang Nilai Budaya Siliwangi pada Tahun 2030."
+                            "{{ $profil['visi'] }}"
                         </blockquote>
                         <p class="mt-4 text-sm text-white/50 font-light leading-relaxed">
-                            Visi ini menjadi arah pembangunan desa kami dalam mengoptimalkan potensi bumi, memberdayakan sumber daya manusia, dan menciptakan tata kelola pemerintahan yang bersih dan akuntabel.
+                            {{ $profil['visi_deskripsi'] }}
                         </p>
                     </div>
                 </div>
@@ -359,16 +303,10 @@
                         <h3 class="font-display font-bold text-lg text-forest-900">Misi Desa</h3>
                     </div>
                     <ul class="space-y-3">
-                        @foreach([
-                        'Meningkatkan produktivitas pertanian melalui modernisasi alat ramah lingkungan.',
-                        'Mendorong pertumbuhan UMKM desa melalui program digitalisasi pemasaran.',
-                        'Melestarikan kesenian Sunda dan tradisi Ruwatan Bumi.',
-                        'Menyelenggarakan pelayanan administrasi desa yang cepat dan digital.',
-                        'Meningkatkan kualitas infrastruktur jalan, air bersih, dan fasilitas umum desa.',
-                        ] as $i => $misi)
+                        @foreach($misi as $i => $item)
                         <li class="flex items-start gap-3">
                             <span class="flex-shrink-0 w-6 h-6 rounded bg-forest-800 text-white flex items-center justify-center font-bold text-[10px] mt-0.5">{{ $i + 1 }}</span>
-                            <span class="text-sm text-stone-700 font-light leading-relaxed">{{ $misi }}</span>
+                            <span class="text-sm text-stone-700 font-light leading-relaxed">{{ $item->isi }}</span>
                         </li>
                         @endforeach
                     </ul>
@@ -376,9 +314,9 @@
             </div>
         </div>
 
-        {{-- ══════════════════════════════════════════════════════════
-             STRUKTUR ORGANISASI — DIPINDAHKAN KE HALAMAN TERPISAH (/struktur-desa)
-        ══════════════════════════════════════════════════════════ --}}
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             STRUKTUR ORGANISASI â€” DIPINDAHKAN KE HALAMAN TERPISAH (/struktur-desa)
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div class="py-16 border-b border-stone-100 reveal-on-scroll delay-300">
             <div class="bg-gradient-to-br from-forest-50 to-sand-50 border border-forest-100 rounded-3xl p-8 sm:p-12 text-center">
                 <div class="w-14 h-14 rounded-2xl bg-forest-800 text-sand-300 flex items-center justify-center mx-auto mb-5">
@@ -395,9 +333,9 @@
             </div>
         </div>
 
-        {{-- ══════════════════════════════════════════════════════════
+        {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              PETA LOKASI
-        ══════════════════════════════════════════════════════════ --}}
+        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
         <div id="peta" class="py-14 reveal-on-scroll scroll-mt-24">
             <div class="text-center mb-8">
                 <span class="section-label">Peta Wilayah</span>
@@ -413,10 +351,10 @@
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
-                <div class="flex items-center gap-3 px-3 pt-3 pb-1">
-                    <i data-lucide="map-pin" class="w-4 h-4 text-forest-600 flex-shrink-0"></i>
-                    <span class="text-xs text-stone-500 font-light">Jl. Raya Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat 41270</span>
-                    <a href="https://maps.google.com/?q=Kantor+Desa+Jambelaer" target="_blank" class="ml-auto text-[11px] text-forest-700 font-semibold hover:text-forest-500 whitespace-nowrap flex items-center gap-1">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-3 pt-3 pb-1">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-forest-600 flex-shrink-0 hidden sm:block"></i>
+                    <span class="text-xs text-stone-500 font-light min-w-0 sm:truncate">{{ $profil['alamat'] }}</span>
+                    <a href="{{ $profil['maps_link'] }}" target="_blank" class="sm:ml-auto text-[11px] text-forest-700 font-semibold hover:text-forest-500 whitespace-nowrap flex items-center gap-1 flex-shrink-0">
                         Buka Maps <i data-lucide="external-link" class="w-3 h-3"></i>
                     </a>
                 </div>

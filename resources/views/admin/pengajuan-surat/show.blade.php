@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Detail Pengajuan Surat - ' . $pengajuanSurat->nomor_pengajuan)
-@section('header_title', 'Detail Pengajuan Surat')
+@section('page_title', 'Detail Pengajuan Surat')
+@section('page_subtitle', $pengajuanSurat->nomor_pengajuan)
 
 @section('content')
 <div class="space-y-6 max-w-5xl">
@@ -117,12 +118,104 @@
                 </div>
             </div>
 
-            {{-- Form Status & Catatan Administrator --}}
-            <div class="pt-6 border-t border-slate-100 bg-slate-50/50 p-5 rounded-2xl border">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
-                    <i data-lucide="check-square" class="w-4 h-4 text-forest-700"></i>
-                    Tindakan Administrator & Verifikasi Status
+            {{-- Alur Pelayanan Berjenjang (SRS-F-010) --}}
+            <div class="pt-6 border-t border-slate-100">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="git-commit" class="w-4 h-4 text-forest-700"></i>
+                    Tahapan Alur Pelayanan Surat (SRS-F-010)
                 </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                    {{-- 1. Pengajuan Pemohon --}}
+                    <div class="p-3.5 rounded-xl border {{ $pengajuanSurat->created_at ? 'bg-emerald-50/60 border-emerald-200' : 'bg-slate-50 border-slate-200' }}">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold {{ $pengajuanSurat->created_at ? 'bg-emerald-600 text-white' : 'bg-slate-300 text-slate-600' }}">1</span>
+                            <span class="text-xs font-bold text-slate-800">Diajukan</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2 font-medium">Oleh: {{ $pengajuanSurat->nama_pemohon ?? 'Pemohon' }}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">{{ $pengajuanSurat->created_at ? $pengajuanSurat->created_at->format('d/m/Y H:i') : '-' }}</p>
+                    </div>
+
+                    {{-- 2. Staff Desa --}}
+                    <div class="p-3.5 rounded-xl border {{ $pengajuanSurat->diproses_at ? 'bg-emerald-50/60 border-emerald-200' : ($pengajuanSurat->status === 'diajukan' ? 'bg-amber-50/60 border-amber-300' : 'bg-slate-50 border-slate-200') }}">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold {{ $pengajuanSurat->diproses_at ? 'bg-emerald-600 text-white' : ($pengajuanSurat->status === 'diajukan' ? 'bg-amber-500 text-white' : 'bg-slate-300 text-slate-600') }}">2</span>
+                            <span class="text-xs font-bold text-slate-800">Diproses</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2 font-medium">Staff: {{ $pengajuanSurat->diprosesBy->name ?? ($pengajuanSurat->status === 'diajukan' ? 'Menunggu Staff Desa' : '-') }}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">{{ $pengajuanSurat->diproses_at ? $pengajuanSurat->diproses_at->format('d/m/Y H:i') : '-' }}</p>
+                    </div>
+
+                    {{-- 3. Sekretaris Desa --}}
+                    <div class="p-3.5 rounded-xl border {{ $pengajuanSurat->diverifikasi_at ? 'bg-emerald-50/60 border-emerald-200' : ($pengajuanSurat->status === 'diproses' ? 'bg-amber-50/60 border-amber-300' : 'bg-slate-50 border-slate-200') }}">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold {{ $pengajuanSurat->diverifikasi_at ? 'bg-emerald-600 text-white' : ($pengajuanSurat->status === 'diproses' ? 'bg-amber-500 text-white' : 'bg-slate-300 text-slate-600') }}">3</span>
+                            <span class="text-xs font-bold text-slate-800">Diverifikasi</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2 font-medium">Sekdes: {{ $pengajuanSurat->diverifikasiBy->name ?? ($pengajuanSurat->status === 'diproses' ? 'Menunggu Sekdes' : '-') }}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">{{ $pengajuanSurat->diverifikasi_at ? $pengajuanSurat->diverifikasi_at->format('d/m/Y H:i') : '-' }}</p>
+                    </div>
+
+                    {{-- 4. Kepala Desa --}}
+                    <div class="p-3.5 rounded-xl border {{ $pengajuanSurat->disetujui_at ? 'bg-emerald-50/60 border-emerald-200' : ($pengajuanSurat->status === 'diverifikasi' ? 'bg-amber-50/60 border-amber-300' : 'bg-slate-50 border-slate-200') }}">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold {{ $pengajuanSurat->disetujui_at ? 'bg-emerald-600 text-white' : ($pengajuanSurat->status === 'diverifikasi' ? 'bg-amber-500 text-white' : 'bg-slate-300 text-slate-600') }}">4</span>
+                            <span class="text-xs font-bold text-slate-800">Selesai (Persetujuan)</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2 font-medium">Kades: {{ $pengajuanSurat->disetujuiBy->name ?? ($pengajuanSurat->status === 'diverifikasi' ? 'Menunggu Kades' : '-') }}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">{{ $pengajuanSurat->disetujui_at ? $pengajuanSurat->disetujui_at->format('d/m/Y H:i') : '-' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Form Tindakan & Verifikasi Berdasarkan Hak Akses Role --}}
+            @php
+                $authUser = auth()->user();
+                $currentStatus = strtolower($pengajuanSurat->status ?? 'diajukan');
+                $isAllowedToAct = false;
+                $allowedOptions = [];
+
+                if ($authUser->role === \App\Models\User::ROLE_STAFF_DESA) {
+                    $isAllowedToAct = in_array($currentStatus, ['diajukan', 'menunggu', 'diproses']);
+                    $allowedOptions = [
+                        'diproses' => 'Diproses (Pemeriksaan Dokumen Lengkap & Sesuai)',
+                        'ditolak'  => 'Ditolak (Persyaratan Berkas Tidak Lengkap / Tidak Sesuai)',
+                    ];
+                } elseif ($authUser->role === \App\Models\User::ROLE_SEKRETARIS_DESA) {
+                    $isAllowedToAct = in_array($currentStatus, ['diproses', 'diverifikasi']);
+                    $allowedOptions = [
+                        'diverifikasi' => 'Diverifikasi (Verifikasi Berkas Disetujui Sekretaris Desa)',
+                        'ditolak'      => 'Ditolak (Berkas Ditolak / Perlu Perbaikan)',
+                    ];
+                } elseif ($authUser->role === \App\Models\User::ROLE_KEPALA_DESA) {
+                    $isAllowedToAct = in_array($currentStatus, ['diverifikasi', 'selesai']);
+                    $allowedOptions = [
+                        'selesai' => 'Selesai (Disetujui Kepala Desa & Surat Diterbitkan)',
+                        'ditolak' => 'Ditolak (Persetujuan Ditolak Kepala Desa)',
+                    ];
+                } elseif ($authUser->role === \App\Models\User::ROLE_ADMIN) {
+                    $isAllowedToAct = true;
+                    $allowedOptions = [
+                        'diajukan'     => 'Diajukan (Menunggu Pemeriksaan)',
+                        'diproses'     => 'Diproses (Staff Desa)',
+                        'diverifikasi' => 'Diverifikasi (Sekretaris Desa)',
+                        'selesai'      => 'Selesai (Kepala Desa)',
+                        'ditolak'      => 'Ditolak',
+                    ];
+                }
+            @endphp
+
+            @if($isAllowedToAct && !in_array($currentStatus, ['selesai', 'dibatalkan']))
+            <div class="pt-6 border-t border-slate-100 bg-slate-50/70 p-5 rounded-2xl border border-slate-200">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                        <i data-lucide="check-square" class="w-4 h-4 text-forest-700"></i>
+                        Tindakan Anda ({{ $authUser->role_label }})
+                    </h3>
+                    <span class="text-[11px] font-semibold text-slate-500 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                        Status Saat Ini: <strong class="text-slate-800">{{ $pengajuanSurat->status_label }}</strong>
+                    </span>
+                </div>
 
                 <form action="{{ route('admin.pengajuan-surat.status', $pengajuanSurat) }}" method="POST" class="space-y-4">
                     @csrf
@@ -130,31 +223,94 @@
 
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
-                            <label for="status" class="form-label">Status Pengajuan</label>
-                            <select name="status" id="status" class="form-input">
-                                <option value="diajukan" {{ $pengajuanSurat->status === 'diajukan' ? 'selected' : '' }}>Diajukan (Menunggu Pemeriksaan)</option>
-                                <option value="diverifikasi" {{ $pengajuanSurat->status === 'diverifikasi' ? 'selected' : '' }}>Diverifikasi (Berkas Sesuai)</option>
-                                <option value="diproses" {{ $pengajuanSurat->status === 'diproses' ? 'selected' : '' }}>Diproses (Pencetakan / Tanda Tangan)</option>
-                                <option value="selesai" {{ $pengajuanSurat->status === 'selesai' ? 'selected' : '' }}>Selesai (Surat Siap Diambil / Terbit)</option>
-                                <option value="ditolak" {{ $pengajuanSurat->status === 'ditolak' ? 'selected' : '' }}>Ditolak (Persyaratan Tidak Lengkap)</option>
+                            <label for="status" class="form-label">Tindakan Keputusan <span class="text-red-500">*</span></label>
+                            <select name="status" id="status" class="form-input font-medium" required>
+                                <option value="">-- Pilih Tindakan Keputusan --</option>
+                                @foreach($allowedOptions as $optVal => $optLabel)
+                                    <option value="{{ $optVal }}" {{ $currentStatus === $optVal ? 'selected' : '' }}>
+                                        {{ $optLabel }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label for="catatan_admin" class="form-label">Catatan / Tanggapan untuk Pemohon</label>
+                        <label for="catatan_admin" class="form-label">Catatan / Keterangan untuk Pemohon</label>
                         <textarea name="catatan_admin" id="catatan_admin" rows="3" class="form-input"
-                            placeholder="Tuliskan keterangan untuk pemohon (contoh: Surat telah selesai ditandatangani Kepala Desa dan siap diambil di kantor desa membawa KTP asli)...">{{ old('catatan_admin', $pengajuanSurat->catatan_admin) }}</textarea>
+                            placeholder="Tuliskan catatan proses permohonan surat ini (opsional)...">{{ old('catatan_admin', $pengajuanSurat->catatan_admin) }}</textarea>
                     </div>
 
                     <div class="flex items-center justify-between pt-2">
                         <button type="submit" class="btn-primary text-xs">
                             <i data-lucide="save" class="w-3.5 h-3.5"></i>
-                            Simpan Perubahan Status
+                            Simpan Keputusan & Perbarui Status
                         </button>
                     </div>
                 </form>
             </div>
+            @elseif(in_array($currentStatus, ['selesai', 'dibatalkan']))
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center gap-3">
+                <i data-lucide="info" class="w-5 h-5 text-slate-500 flex-shrink-0"></i>
+                <span>Pengajuan surat ini telah berstatus <strong>{{ $pengajuanSurat->status_label }}</strong>. Proses alur permohonan telah berakhir.</span>
+            </div>
+            @else
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-center gap-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 flex-shrink-0"></i>
+                <div>
+                    <span class="font-bold block">Menunggu Tahapan Lain</span>
+                    <span>Status surat saat ini adalah <strong>{{ $pengajuanSurat->status_label }}</strong>. Tahapan ini hanya dapat diproses oleh perangkat desa yang berwenang sesuai alur: <em>Staff Desa &rarr; Sekretaris Desa &rarr; Kepala Desa</em>.</span>
+                </div>
+            </div>
+            @endif
+
+            {{-- Riwayat Perubahan Status (Log Audit) --}}
+            @if($pengajuanSurat->riwayat && $pengajuanSurat->riwayat->count() > 0)
+            <div class="pt-6 border-t border-slate-100">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                    <i data-lucide="history" class="w-4 h-4 text-forest-700"></i>
+                    Riwayat Proses & Catatan Alur Pelayanan
+                </h3>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+                        <thead>
+                            <tr class="bg-slate-50 text-[10px] uppercase font-bold text-slate-400 border-b border-slate-200">
+                                <th class="py-2.5 px-3">Waktu</th>
+                                <th class="py-2.5 px-3">Oleh</th>
+                                <th class="py-2.5 px-3">Perubahan Status</th>
+                                <th class="py-2.5 px-3">Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @foreach($pengajuanSurat->riwayat as $log)
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="py-2.5 px-3 whitespace-nowrap text-slate-500 font-mono text-[11px]">
+                                    {{ $log->created_at ? $log->created_at->format('d/m/Y H:i') : '-' }}
+                                </td>
+                                <td class="py-2.5 px-3 whitespace-nowrap font-medium text-slate-800">
+                                    {{ $log->user->name ?? 'Sistem' }}
+                                    @if($log->user && $log->user->role_label)
+                                    <span class="text-[10px] text-slate-400 block font-normal">{{ $log->user->role_label }}</span>
+                                    @endif
+                                </td>
+                                <td class="py-2.5 px-3 whitespace-nowrap">
+                                    <span class="inline-flex items-center gap-1">
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600">{{ ucfirst($log->status_lama ?? 'Diajukan') }}</span>
+                                        <span class="text-slate-400">&rarr;</span>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold {{ $log->status_baru_badge_class }}">{{ $log->status_baru_label }}</span>
+                                    </span>
+                                </td>
+                                <td class="py-2.5 px-3 text-slate-600">
+                                    {{ $log->catatan ?: '-' }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
 
         </div>
     </div>

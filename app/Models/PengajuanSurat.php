@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PengajuanSurat extends Model
 {
@@ -29,8 +30,20 @@ class PengajuanSurat extends Model
         'file_kk',
         'dokumen_pendukung',
         'keterangan_tambahan',
-        'status',          // diajukan, diverifikasi, diproses, selesai, ditolak
+        'status',          // diajukan, diproses, diverifikasi, selesai, ditolak, dibatalkan
         'catatan_admin',
+        'diproses_by',
+        'diproses_at',
+        'diverifikasi_by',
+        'diverifikasi_at',
+        'disetujui_by',
+        'disetujui_at',
+    ];
+
+    protected $casts = [
+        'diproses_at'     => 'datetime',
+        'diverifikasi_at' => 'datetime',
+        'disetujui_at'    => 'datetime',
     ];
 
     /**
@@ -65,8 +78,8 @@ class PengajuanSurat extends Model
     {
         return match(strtolower($this->status ?? 'diajukan')) {
             'diajukan', 'menunggu' => 'Diajukan',
-            'diverifikasi'         => 'Diverifikasi',
             'diproses'             => 'Diproses',
+            'diverifikasi'         => 'Diverifikasi',
             'selesai', 'disetujui' => 'Selesai',
             'ditolak'              => 'Ditolak',
             'dibatalkan'           => 'Dibatalkan',
@@ -78,8 +91,8 @@ class PengajuanSurat extends Model
     {
         return match(strtolower($this->status ?? 'diajukan')) {
             'diajukan', 'menunggu' => 'bg-amber-50 text-amber-700 border-amber-200',
-            'diverifikasi'         => 'bg-sky-50 text-sky-700 border-sky-200',
             'diproses'             => 'bg-indigo-50 text-indigo-700 border-indigo-200',
+            'diverifikasi'         => 'bg-sky-50 text-sky-700 border-sky-200',
             'selesai', 'disetujui' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
             'ditolak'              => 'bg-rose-50 text-rose-700 border-rose-200',
             'dibatalkan'           => 'bg-stone-100 text-stone-600 border-stone-300',
@@ -87,17 +100,41 @@ class PengajuanSurat extends Model
         };
     }
 
+    /**
+     * Progres tahapan pelayanan surat sesuai SRS:
+     * 1. Diajukan (Masyarakat)
+     * 2. Diproses (Staff Desa)
+     * 3. Diverifikasi (Sekretaris Desa)
+     * 4. Selesai (Kepala Desa)
+     */
     public function getProgressStepAttribute(): int
     {
         return match(strtolower($this->status ?? 'diajukan')) {
             'diajukan', 'menunggu' => 1,
-            'diverifikasi'         => 2,
-            'diproses'             => 3,
+            'diproses'             => 2,
+            'diverifikasi'         => 3,
             'selesai', 'disetujui' => 4,
             'ditolak'              => -1,
             'dibatalkan'           => -2,
             default                => 1,
         };
+    }
+
+    /**
+     * Catat log riwayat setiap perubahan status & tindak lanjut proses surat.
+     */
+    public function logRiwayat(string $statusAwal, string $statusBaru, ?User $actor, ?string $catatan = null): RiwayatPengajuanSurat
+    {
+        return RiwayatPengajuanSurat::create([
+            'pengajuan_surat_id' => $this->pengajuan_surat_id,
+            'user_id'            => $actor?->user_id,
+            'actor_name'         => $actor ? $actor->name : 'Sistem / Pemohon',
+            'actor_role'         => $actor ? $actor->role : 'masyarakat',
+            'status_awal'        => $statusAwal,
+            'status_baru'        => $statusBaru,
+            'catatan'            => $catatan,
+            'created_at'         => now(),
+        ]);
     }
 
     // ── Relationships ────────────────────────────────────────────────────────
@@ -110,5 +147,25 @@ class PengajuanSurat extends Model
     public function jenisSurat(): BelongsTo
     {
         return $this->belongsTo(JenisSurat::class, 'jenis_surat_id', 'id');
+    }
+
+    public function diprosesBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'diproses_by', 'user_id');
+    }
+
+    public function diverifikasiBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'diverifikasi_by', 'user_id');
+    }
+
+    public function disetujuiBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'disetujui_by', 'user_id');
+    }
+
+    public function riwayat(): HasMany
+    {
+        return $this->hasMany(RiwayatPengajuanSurat::class, 'pengajuan_surat_id', 'pengajuan_surat_id')->orderBy('created_at', 'asc');
     }
 }

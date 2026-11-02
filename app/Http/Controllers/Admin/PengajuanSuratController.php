@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PengajuanSurat;
 use App\Models\JenisSurat;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PengajuanSuratController extends Controller
@@ -19,15 +21,16 @@ class PengajuanSuratController extends Controller
         $jenisId = $request->get('jenis_id');
         $search = $request->get('q');
 
-        $query = PengajuanSurat::with(['jenisSurat', 'user'])->latest();
+        $query = PengajuanSurat::with(['jenisSurat', 'user', 'diprosesBy', 'diverifikasiBy', 'disetujuiBy'])->latest();
 
         $stats = [
             'total'        => PengajuanSurat::count(),
             'diajukan'     => PengajuanSurat::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'diverifikasi' => PengajuanSurat::where('status', 'diverifikasi')->count(),
             'diproses'     => PengajuanSurat::where('status', 'diproses')->count(),
+            'diverifikasi' => PengajuanSurat::where('status', 'diverifikasi')->count(),
             'selesai'      => PengajuanSurat::whereIn('status', ['selesai', 'disetujui'])->count(),
             'ditolak'      => PengajuanSurat::where('status', 'ditolak')->count(),
+            'dibatalkan'   => PengajuanSurat::where('status', 'dibatalkan')->count(),
         ];
 
         if ($status && $status !== 'semua') {
@@ -61,30 +64,117 @@ class PengajuanSuratController extends Controller
     }
 
     /**
-     * Tampilkan detail pengajuan surat dan berkas persyaratan.
+     * Tampilkan detail pengajuan surat, berkas persyaratan, dan riwayat proses workflow.
      */
     public function show(PengajuanSurat $pengajuanSurat)
     {
-        $pengajuanSurat->load(['jenisSurat', 'user']);
+        $pengajuanSurat->load([
+            'jenisSurat',
+            'user',
+            'diprosesBy',
+            'diverifikasiBy',
+            'disetujuiBy',
+            'riwayat.user'
+        ]);
+
         return view('admin.pengajuan-surat.show', compact('pengajuanSurat'));
     }
 
     /**
-     * Perbarui status dan catatan admin untuk pengajuan surat.
+     * Perbarui status pengajuan surat sesuai kewenangan berjenjang (SRS-F-010).
+     *
+     * Alur Workflow:
+     * 1. Diajukan (Masyarakat)
+     * 2. Diproses (Staff Desa): Memeriksa kelengkapan berkas & memproses -> 'diproses' / 'ditolak'
+     * 3. Diverifikasi (Sekretaris Desa): Memverifikasi pengajuan -> 'diverifikasi' / 'ditolak'
+     * 4. Selesai (Kepala Desa): Memberikan persetujuan akhir -> 'selesai' / 'ditolak'
      */
     public function updateStatus(Request $request, PengajuanSurat $pengajuanSurat)
     {
+        $user = Auth::user();
+
         $validated = $request->validate([
-            'status'        => ['required', 'string', 'in:diajukan,diverifikasi,diproses,selesai,ditolak'],
+            'status'        => ['required', 'string', 'in:diproses,diverifikasi,selesai,ditolak,diajukan'],
             'catatan_admin' => ['nullable', 'string', 'max:2000'],
+        ], [
+            'status.required' => 'Status pengajuan wajib dipilih.',
+            'status.in'       => 'Pilihan status tidak valid.',
         ]);
 
-        $pengajuanSurat->update([
-            'status'        => $validated['status'],
-            'catatan_admin' => $validated['catatan_admin'] ?? $pengajuanSurat->catatan_admin,
-        ]);
+        $statusAwal = strtolower($pengajuanSurat->status ?? 'diajukan');
+        $targetStatus = strtolower($validated['status']);
+        $catatan = $validated['catatan_admin'] ?? null;
 
-        return back()->with('success', 'Status pengajuan surat (' . $pengajuanSurat->nomor_pengajuan . ') berhasil diperbarui.');
+        // Otorisasi & Validasi Transisi Status Berdasarkan Role
+        if ($user->role === User::ROLE_STAFF_DESA) {
+            // Staff Desa berwenang memproses berkas (diajukan -> diproses) atau menolak
+            if (!in_array($targetStatus, ['diproses', 'ditolak'])) {
+                abort(403, 'Kewenangan Staff Desa: Memeriksa kelengkapan berkas dan memproses pengajuan (status: Diproses) atau Menolak. Tahapan verifikasi dilakukan oleh Sekretaris Desa dan persetujuan oleh Kepala Desa.');
+            }
+
+            if ($statusAwal !== 'diajukan' && $statusAwal !== 'menunggu' && $targetStatus === 'diproses') {
+                return back()->with('error', 'Pengajuan ini sudah pernah diproses sebelumnya.');
+            }
+
+            if ($targetStatus === 'diproses') {
+                $pengajuanSurat->diproses_by = $user->user_id;
+                $pengajuanSurat->diproses_at = now();
+            }
+        } elseif ($user->role === User::ROLE_SEKRETARIS_DESA) {
+            // Sekretaris Desa berwenang memverifikasi berkas yang sudah diproses Staff Desa
+            if (!in_array($targetStatus, ['diverifikasi', 'ditolak'])) {
+                abort(403, 'Kewenangan Sekretaris Desa: Melakukan verifikasi pengajuan yang telah diproses oleh Staff Desa (status: Diverifikasi) atau Menolak. Persetujuan akhir dilakukan oleh Kepala Desa.');
+            }
+
+            if ($statusAwal !== 'diproses' && $targetStatus === 'diverifikasi') {
+                return back()->with('error', 'Pengajuan harus diperiksa dan diproses terlebih dahulu oleh Staff Desa sebelum dapat diverifikasi oleh Sekretaris Desa.');
+            }
+
+            if ($targetStatus === 'diverifikasi') {
+                $pengajuanSurat->diverifikasi_by = $user->user_id;
+                $pengajuanSurat->diverifikasi_at = now();
+            }
+        } elseif ($user->role === User::ROLE_KEPALA_DESA) {
+            // Kepala Desa berwenang memberikan persetujuan akhir (selesai) atau penolakan
+            if (!in_array($targetStatus, ['selesai', 'ditolak'])) {
+                abort(403, 'Kewenangan Kepala Desa: Memberikan persetujuan akhir (status: Selesai) atau penolakan.');
+            }
+
+            if ($statusAwal !== 'diverifikasi' && $targetStatus === 'selesai') {
+                return back()->with('error', 'Pengajuan harus diverifikasi terlebih dahulu oleh Sekretaris Desa sebelum dapat disetujui oleh Kepala Desa.');
+            }
+
+            if ($targetStatus === 'selesai') {
+                $pengajuanSurat->disetujui_by = $user->user_id;
+                $pengajuanSurat->disetujui_at = now();
+            }
+        } elseif ($user->role === User::ROLE_ADMIN) {
+            // Administrator Sistem (Super-Access): Update tracking sesuai status target
+            if ($targetStatus === 'diproses') {
+                $pengajuanSurat->diproses_by = $user->user_id;
+                $pengajuanSurat->diproses_at = now();
+            } elseif ($targetStatus === 'diverifikasi') {
+                $pengajuanSurat->diverifikasi_by = $user->user_id;
+                $pengajuanSurat->diverifikasi_at = now();
+            } elseif ($targetStatus === 'selesai') {
+                $pengajuanSurat->disetujui_by = $user->user_id;
+                $pengajuanSurat->disetujui_at = now();
+            }
+        } else {
+            abort(403, 'Anda tidak memiliki hak akses untuk memproses status pengajuan surat.');
+        }
+
+        // Simpan perubahan ke tabel pengajuan_surats
+        $pengajuanSurat->status = $targetStatus;
+        if ($catatan !== null) {
+            $pengajuanSurat->catatan_admin = $catatan;
+        }
+        $pengajuanSurat->save();
+
+        // Rekam riwayat workflow ke riwayat_pengajuan_surats
+        $pengajuanSurat->logRiwayat($statusAwal, $targetStatus, $user, $catatan);
+
+        return back()->with('success', 'Status pengajuan surat (' . $pengajuanSurat->nomor_pengajuan . ') berhasil diperbarui menjadi: ' . $pengajuanSurat->status_label);
     }
 
     /**
@@ -92,6 +182,10 @@ class PengajuanSuratController extends Controller
      */
     public function destroy(PengajuanSurat $pengajuanSurat)
     {
+        if (!Auth::user()->canManageUsers() && Auth::user()->role !== User::ROLE_ADMIN) {
+            abort(403, 'Hanya Staff Desa dan Kepala Desa yang berwenang menghapus arsip pengajuan.');
+        }
+
         if ($pengajuanSurat->file_ktp) {
             Storage::disk('public')->delete($pengajuanSurat->file_ktp);
         }

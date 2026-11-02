@@ -7,7 +7,7 @@ use App\Models\Pengaduan;
 use App\Models\PengajuanSurat;
 use App\Models\PertanyaanUmum;
 use App\Models\PendaftaranUmkm;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -406,8 +406,8 @@ class LayananMasyarakatFlowTest extends TestCase
         $umkm->refresh();
         $this->assertEquals('disetujui', $umkm->status);
 
-        // Check Produk created and linked via pendaftaran_umkm_id
-        $produk = Produk::where('pendaftaran_umkm_id', $umkm->pendaftaran_umkm_id)->first();
+        // Check Produk / UMKM created and linked via pendaftaran_umkm_id
+        $produk = UMKM::where('pendaftaran_umkm_id', $umkm->pendaftaran_umkm_id)->first();
         $this->assertNotNull($produk);
         $this->assertEquals('Madu Hutan Jambelaer', $produk->title);
         $this->assertEquals('Pak Kosasih', $produk->producer);

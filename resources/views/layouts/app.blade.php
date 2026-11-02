@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @php
-        // ── SEO Globals ─────────────────────────────────────────────────────
+        // â”€â”€ SEO Globals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $siteName    = 'Sistem Informasi Desa Jambelaer';
         $siteUrl     = config('app.url', 'https://desajambelaer.sainzlab.my.id');
         $defaultImg  = $siteUrl . '/' . ltrim(asset('uploads/img/DESA_JAMBELAER.png'), '/');
@@ -23,7 +23,7 @@
         if ($pageTitle) {
             $fullTitle = $pageTitle . ' | ' . $siteName;
         } else {
-            $fullTitle = $siteName . ' — Portal Resmi Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang';
+            $fullTitle = $siteName . ' â€” Portal Resmi Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang';
         }
 
         // Build canonical URL (use section if provided, else current URL without query)
@@ -99,7 +99,7 @@
             --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
             --font-serif:   'Lora', ui-serif, Georgia, serif;
 
-            /* ── Forest Green Scale ── */
+            /* â”€â”€ Forest Green Scale â”€â”€ */
             --color-forest-950: #071a10;
             --color-forest-900: #0d2b1d;
             --color-forest-800: #1a4731;
@@ -111,7 +111,7 @@
             --color-forest-100: #d6efdf;
             --color-forest-50:  #f0f9f3;
 
-            /* ── Warm Sand / Stone Scale ── */
+            /* â”€â”€ Warm Sand / Stone Scale â”€â”€ */
             --color-sand-900:  #4a3520;
             --color-sand-700:  #7a5c30;
             --color-sand-500:  #b88a48;
@@ -121,12 +121,12 @@
             --color-sand-100:  #f2e8d0;
             --color-sand-50:   #faf4e8;
 
-            /* ── Page Background ── */
+            /* â”€â”€ Page Background â”€â”€ */
             --color-page:      #fdfaf5;
             --color-surface:   #ffffff;
         }
 
-        /* ── Base ── */
+        /* â”€â”€ Base â”€â”€ */
         html { scroll-behavior: smooth; }
         body { background-color: var(--color-page); }
 
@@ -135,7 +135,7 @@
         ::-webkit-scrollbar-thumb  { background: #c9a06a; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #b88a48; }
 
-        /* ── Reveal & Animate on Scroll ── */
+        /* â”€â”€ Reveal & Animate on Scroll â”€â”€ */
         .reveal-on-scroll,
         .reveal-fade-up {
             opacity: 0;
@@ -188,7 +188,7 @@
         .delay-400 { transition-delay: 400ms; }
         .delay-500 { transition-delay: 500ms; }
 
-        /* ── Navbar Link Styles ── */
+        /* â”€â”€ Navbar Link Styles â”€â”€ */
         .nav-link-active {
             color: #1a4731;
             font-weight: 600;
@@ -222,7 +222,7 @@
         .nav-link-hover:hover { color: #1a4731; }
         .nav-link-hover:hover::after { background: #b88a48; }
 
-        /* ── Navbar Dropdown ── */
+        /* â”€â”€ Navbar Dropdown â”€â”€ */
         .nav-dropdown { position: relative; }
         .nav-dropdown-btn {
             display: inline-flex;
@@ -306,7 +306,7 @@
         .nav-dropdown-panel a:hover .dp-icon { background: #d6efdf; }
         .dp-divider { height: 1px; background: #f5f5f4; margin: 4px 6px; }
 
-        /* ── Mobile Accordion ── */
+        /* â”€â”€ Mobile Accordion â”€â”€ */
         .mob-acc-body {
             max-height: 0;
             overflow: hidden;
@@ -316,7 +316,7 @@
         .mob-acc-chev { transition: transform 0.22s; }
         .mob-acc-chev.open { transform: rotate(180deg); }
 
-        /* ── Section Label Pill ── */
+        /* â”€â”€ Section Label Pill â”€â”€ */
         .section-label {
             display: inline-block;
             font-size: 0.65rem;
@@ -330,7 +330,7 @@
             border: 1px solid #aeddc4;
         }
 
-        /* ── Divider Bar ── */
+        /* â”€â”€ Divider Bar â”€â”€ */
         .section-divider {
             width: 48px;
             height: 3px;
@@ -339,7 +339,7 @@
             margin: 14px auto 0;
         }
 
-        /* ── Buttons ── */
+        /* â”€â”€ Buttons â”€â”€ */
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -384,13 +384,13 @@
             transform: translateY(-1px);
         }
 
-        /* ── Paper Texture Overlay ── */
+        /* â”€â”€ Paper Texture Overlay â”€â”€ */
         .paper-bg {
             background-color: #fdfaf5;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23fdfaf5'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23f5ead6' opacity='0.3'/%3E%3C/svg%3E");
         }
 
-        /* ── Card Style ── */
+        /* â”€â”€ Card Style â”€â”€ */
         .card-village {
             background: #ffffff;
             border: 1px solid #e7e5e4;
@@ -415,7 +415,7 @@
 
 <body class="font-sans text-stone-800 paper-bg antialiased overflow-x-hidden">
 
-    <!-- ══════════════════════════ NAVBAR ══════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• NAVBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <header id="main-header" role="banner" class="fixed top-0 left-0 w-full z-50 bg-white border-b border-stone-200 transition-shadow duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 lg:h-[68px]">
@@ -427,7 +427,7 @@
                     </div>
                     <div class="leading-tight">
                         <span class="font-display font-extrabold text-sm sm:text-base tracking-tight text-forest-900 block leading-none">DESA JAMBELAER</span>
-                        <span class="text-[9px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5 hidden sm:block">Kec. Dawuan · Kab. Subang</span>
+                        <span class="text-[9px] text-sand-700 font-semibold tracking-widest uppercase block mt-0.5 hidden sm:block">Kec. Dawuan Â· Kab. Subang</span>
                     </div>
                 </a>
 
@@ -441,8 +441,8 @@
                     </a>
 
                     {{-- Tentang Desa --}}
-                    <a href="{{ route('tentang') }}"
-                       class="{{ request()->routeIs('tentang*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
+                    <a href="{{ route('profil.desa') }}"
+                       class="{{ request()->routeIs('profil.desa*') ? 'nav-link-active' : 'nav-link-hover' }} font-display text-sm pb-1 px-2.5">
                         Tentang Desa
                     </a>
 
@@ -581,8 +581,8 @@
                 </a>
 
                 {{-- Tentang Desa --}}
-                <a href="{{ route('tentang') }}"
-                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('tentang*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
+                <a href="{{ route('profil.desa') }}"
+                   class="flex items-center px-3 py-2.5 rounded-lg text-sm font-semibold {{ request()->routeIs('profil.desa*') ? 'text-forest-800 bg-forest-50' : 'text-stone-700 hover:bg-forest-50 hover:text-forest-800' }} transition-all">
                     <i data-lucide="landmark" class="w-4 h-4 mr-2.5 flex-shrink-0"></i>Tentang Desa
                 </a>
 
@@ -676,7 +676,7 @@
         </nav>
     </header>
 
-    <!-- ══════════════════════════ PAGE CONTENT ══════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAGE CONTENT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <main role="main" class="pt-16 lg:pt-[68px]">
         @yield('content')
     </main>
@@ -695,7 +695,7 @@
                         </div>
                         <div>
                             <span class="font-display font-extrabold text-sm text-white block leading-tight">Pemerintah Desa Jambelaer</span>
-                            <span class="text-[10px] text-sand-400 tracking-widest uppercase">Kec. Dawuan · Kab. Subang · Jawa Barat</span>
+                            <span class="text-[10px] text-sand-400 tracking-widest uppercase">Kec. Dawuan Â· Kab. Subang Â· Jawa Barat</span>
                         </div>
                     </div>
                     <p class="text-sm text-white/50 leading-relaxed font-light max-w-xs">
@@ -748,7 +748,7 @@
                     <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Navigasi</h4>
                     <ul class="space-y-2">
                         <li><a href="{{ route('home') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Beranda</a></li>
-                        <li><a href="{{ route('tentang') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Tentang Desa</a></li>
+                        <li><a href="{{ route('profil.desa') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Tentang Desa</a></li>
                         <li><a href="{{ route('berita') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Berita</a></li>
                         <li><a href="{{ route('acara') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Kegiatan</a></li>
                         <li><a href="{{ route('galeri') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Galeri</a></li>
@@ -794,7 +794,7 @@
                         </li>
                         <li class="flex items-center gap-2.5">
                             <i data-lucide="clock" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
-                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin – Jumat: 08:00 – 15:30 WIB') }}</span>
+                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin â€“ Jumat: 08:00 â€“ 15:30 WIB') }}</span>
                         </li>
                     </ul>
                 </div>
@@ -803,7 +803,7 @@
 
             <!-- Bottom Bar -->
             <div class="pt-7 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30 font-light">
-                <p>© {{ date('Y') }} Pemerintah Desa Jambelaer · Kecamatan Dawuan · Kabupaten Subang</p>
+                <p>Â© {{ date('Y') }} Pemerintah Desa Jambelaer Â· Kecamatan Dawuan Â· Kabupaten Subang</p>
                 <div class="flex items-center divide-x divide-white/10 text-white/25">
                     <a href="#" class="hover:text-sand-400 transition-colors pr-4">Kebijakan Privasi</a>
                     <a href="#" class="hover:text-sand-400 transition-colors px-4">Syarat &amp; Ketentuan</a>
@@ -818,7 +818,7 @@
         <i data-lucide="arrow-up" class="w-4 h-4"></i>
     </button>
 
-    <!-- ══════════════════════════ SHARED SCRIPTS ══════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SHARED SCRIPTS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Init Lucide icons
@@ -848,7 +848,7 @@
                 behavior: 'smooth'
             }));
 
-            // ── Desktop Dropdown ──────────────────────────────────────
+            // â”€â”€ Desktop Dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             const dropdowns = document.querySelectorAll('.nav-dropdown');
             dropdowns.forEach(function(dd) {
                 const btn = dd.querySelector('.nav-dropdown-btn');
@@ -867,7 +867,7 @@
                 if (e.key === 'Escape') { dropdowns.forEach(d => { d.classList.remove('open'); const b = d.querySelector('.nav-dropdown-btn'); if(b) b.setAttribute('aria-expanded','false'); }); }
             });
 
-            // ── Mobile Menu Toggle ────────────────────────────────────
+            // â”€â”€ Mobile Menu Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             const mobileBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const hamburger = document.getElementById('hamburger-icon');
@@ -881,7 +881,7 @@
                 closeIcon.classList.toggle('hidden');
             });
 
-            // ── Mobile Accordion ─────────────────────────────────────
+            // â”€â”€ Mobile Accordion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             function setupAcc(btnId, bodyId, chevId) {
                 const btn  = document.getElementById(btnId);
                 const body = document.getElementById(bodyId);
@@ -897,7 +897,7 @@
             setupAcc('mob-informasi-btn', 'mob-informasi-body','mob-informasi-chev');
             setupAcc('mob-potensi-btn',   'mob-potensi-body',  'mob-potensi-chev');
 
-            // ── Scroll Reveal Observer ────────────────────────────────
+            // â”€â”€ Scroll Reveal Observer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             const revealEls = document.querySelectorAll('.reveal-on-scroll, .reveal-fade-up, .reveal-fade-left, .reveal-fade-right, .reveal-zoom-in, .reveal-fade-in, [data-aos]');
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {

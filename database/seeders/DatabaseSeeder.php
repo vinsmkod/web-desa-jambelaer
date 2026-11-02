@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\Pengaturan;
 use App\Models\Budaya;
 use App\Models\Berita;
@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // ── Admin User ──────────────────────────────────────────────────────
+        // ── Admin & Perangkat Desa Users (SRS-F-001 & SRS-F-014) ───────────
         User::updateOrCreate(
             ['email' => 'admin@jambelaer.id'],
             [
@@ -24,6 +24,51 @@ class DatabaseSeeder extends Seeder
                 'email'    => 'admin@jambelaer.id',
                 'password' => Hash::make('admin123'),
                 'role'     => 'admin',
+                'jabatan'  => 'Administrator Sistem',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'staff@jambelaer.desa.id'],
+            [
+                'name'     => 'Staff Desa Jambelaer',
+                'email'    => 'staff@jambelaer.desa.id',
+                'password' => Hash::make('staff123'),
+                'role'     => 'staff_desa',
+                'jabatan'  => 'Staff Pelayanan Umum',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'kasi@jambelaer.desa.id'],
+            [
+                'name'     => 'Kasi Pemerintahan Desa',
+                'email'    => 'kasi@jambelaer.desa.id',
+                'password' => Hash::make('kasi123'),
+                'role'     => 'kasi_pemerintahan',
+                'jabatan'  => 'Kepala Seksi Pemerintahan',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'sekdes@jambelaer.desa.id'],
+            [
+                'name'     => 'Sekretaris Desa Jambelaer',
+                'email'    => 'sekdes@jambelaer.desa.id',
+                'password' => Hash::make('sekdes123'),
+                'role'     => 'sekretaris_desa',
+                'jabatan'  => 'Sekretaris Desa',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'kades@jambelaer.desa.id'],
+            [
+                'name'     => 'Kepala Desa Jambelaer',
+                'email'    => 'kades@jambelaer.desa.id',
+                'password' => Hash::make('kades123'),
+                'role'     => 'kepala_desa',
+                'jabatan'  => 'Kepala Desa',
             ]
         );
 
@@ -179,7 +224,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($produk as $p) {
-            Produk::updateOrCreate(['slug' => $p['slug']], $p);
+            UMKM::updateOrCreate(['slug' => $p['slug']], $p);
         }
 
         // ── Pengaturan Desa ──────────────────────────────────────────────────

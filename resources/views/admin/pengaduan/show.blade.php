@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Detail Pengaduan - ' . $pengaduan->nomor_pengaduan)
-@section('header_title', 'Detail Pengaduan Masyarakat')
+@section('page_title', 'Detail Pengaduan Masyarakat')
+@section('page_subtitle', $pengaduan->nomor_pengaduan)
 
 @section('content')
 <div class="space-y-6 max-w-5xl">

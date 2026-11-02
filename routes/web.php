@@ -4,28 +4,30 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\ProfilDesaController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PertanyaanUmumController;
 use App\Http\Controllers\PendaftaranUmkmController;
-use App\Http\Controllers\Auth\MasyarakatAuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengajuanSayaController;
-use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\UMKMController;
+use App\Http\Controllers\Admin\UMKMController as AdminUMKMController;
 use App\Http\Controllers\Admin\PengajuanSuratController as AdminPengajuanSuratController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\PertanyaanUmumController as AdminPertanyaanUmumController;
 use App\Http\Controllers\Admin\PendaftaranUmkmController as AdminPendaftaranUmkmController;
 use App\Http\Controllers\Admin\JenisSuratController;
 use App\Http\Controllers\Admin\PengaturanController;
-use App\Http\Controllers\Admin\TentangController;
+use App\Http\Controllers\Admin\ProfilDesaController as AdminProfilDesaController;
+use App\Http\Controllers\Admin\StrukturDesaController as AdminStrukturDesaController;
 use App\Http\Controllers\Admin\BudayaController;
 use App\Http\Controllers\Admin\AcaraController;
 use App\Http\Controllers\Admin\GaleriController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\WisataController;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\Pengaturan;
 use App\Models\StrukturDesa;
 use App\Models\Budaya;
@@ -49,7 +51,7 @@ Route::get('/', function () {
         'stat_rtrw'     => Pengaturan::get('stat_rtrw', '24'),
         'stat_dusun'    => Pengaturan::get('stat_dusun', '4'),
     ];
-    $umkms   = Produk::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->take(6)->get();
+    $umkms   = UMKM::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->take(6)->get();
     $budayas = Budaya::orderBy('urutan')->orderBy('budaya_id')->take(3)->get();
     $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->take(3)->get();
     $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->take(3)->get();
@@ -58,12 +60,10 @@ Route::get('/', function () {
     return view('pages.home', compact('settings', 'umkms', 'budayas', 'wisatas', 'beritas', 'galeris'));
 })->name('home');
 
-// Tentang Kami
-Route::get('/tentang-kami', function () {
-    $settings  = Pengaturan::all()->keyBy('key');
-    $mapsUrl   = Pengaturan::get('maps_embed_url', '');
-    return view('pages.tentang', compact('settings', 'mapsUrl'));
-})->name('tentang');
+// Profil Desa — seluruh konten dikelola melalui dashboard Administrator
+Route::get('/profil-desa', [ProfilDesaController::class, 'index'])->name('profil.desa');
+Route::get('/tentang-desa', [ProfilDesaController::class, 'index'])->name('tentang');
+Route::get('/tentang-kami', [ProfilDesaController::class, 'index'])->name('tentang.kami');
 
 // Struktur Desa — halaman terpisah (SRS-F-003.1 Lihat Struktur Desa)
 Route::get('/struktur-desa', function () {
@@ -71,32 +71,10 @@ Route::get('/struktur-desa', function () {
     return view('pages.struktur-desa', compact('struktur'));
 })->name('struktur.desa');
 
-// UMKM – Daftar produk (grouped by jenis)
-Route::get('/umkm', function () {
-    $products           = Produk::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->get();
-    $jenisGroups        = $products->whereNotNull('jenis')->groupBy('jenis');
-    $individualProducts = $products->filter(fn($p) => is_null($p->jenis));
-    return view('pages.umkm', compact('products', 'jenisGroups', 'individualProducts'));
-})->name('umkm');
-
-// UMKM – Daftar produsen per jenis produk (HARUS sebelum /{slug})
-Route::get('/umkm/jenis/{jenis}', function ($jenis) {
-    $producers = Produk::where('is_active', true)
-        ->where('jenis', $jenis)
-        ->orderBy('urutan')
-        ->orderBy('produk_id')
-        ->get();
-    if ($producers->isEmpty()) abort(404);
-    $jenisLabel = $producers->first()->jenis_label ?? ucfirst($jenis);
-    return view('pages.umkm-producers', compact('producers', 'jenis', 'jenisLabel'));
-})->name('umkm.jenis');
-
-// UMKM – Detail produk
-Route::get('/umkm/{slug}', function ($slug) {
-    $product     = Produk::where('slug', $slug)->where('is_active', true)->firstOrFail();
-    $allProducts = Produk::where('is_active', true)->where('slug', '!=', $slug)->take(4)->get();
-    return view('pages.umkm-detail', compact('product', 'allProducts'));
-})->name('umkm.detail');
+// UMKM – View UMKM (SRS-F-005)
+Route::get('/umkm', [UMKMController::class, 'index'])->name('umkm');
+Route::get('/umkm/jenis/{jenis}', [UMKMController::class, 'jenis'])->name('umkm.jenis');
+Route::get('/umkm/{slug}', [UMKMController::class, 'detail'])->name('umkm.detail');
 
 // Budaya
 Route::get('/budaya', function () {
@@ -264,11 +242,11 @@ Route::get('/pendaftaran-umkm', [PendaftaranUmkmController::class, 'create'])->n
 Route::post('/pendaftaran-umkm', [PendaftaranUmkmController::class, 'store'])->name('pendaftaran-umkm.store');
 
 // ── Autentikasi Masyarakat ───────────────────────────────────────────────────
-Route::get('/login', [MasyarakatAuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [MasyarakatAuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
-Route::get('/register', [MasyarakatAuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [MasyarakatAuthController::class, 'register'])->name('register.post');
-Route::post('/logout', [MasyarakatAuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ── Riwayat & Tracking Layanan Masyarakat (Wajib Login) ──────────────────────
 Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function () {
@@ -362,84 +340,133 @@ Route::get('/berita/{slug}', function ($slug) {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Login (public)
-    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.post');
+    Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'adminLogin'])->middleware('throttle:5,1')->name('login.post');
 
-    // Protected routes
+    // Protected routes — semua aktor perangkat desa melewati AdminAuth middleware
     Route::middleware(\App\Http\Middleware\AdminAuth::class)->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('/logout', [AuthController::class, 'adminLogout'])->name('logout');
 
-        // Dashboard
+        // Dashboard — dapat diakses semua perangkat desa
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         // 1. Kelola Pengajuan Pembuatan Surat (SRS-F-010)
-        Route::get('/pengajuan-surat', [AdminPengajuanSuratController::class, 'index'])->name('pengajuan-surat.index');
-        Route::get('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'show'])->name('pengajuan-surat.show');
-        Route::patch('/pengajuan-surat/{pengajuanSurat}/status', [AdminPengajuanSuratController::class, 'updateStatus'])->name('pengajuan-surat.status');
-        Route::delete('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'destroy'])->name('pengajuan-surat.destroy');
+        // Staff Desa, Sekretaris Desa, dan Kepala Desa dapat mengakses pengajuan surat
+        Route::middleware('role:staff_desa,sekretaris_desa,kepala_desa,admin')->group(function () {
+            Route::get('/pengajuan-surat', [AdminPengajuanSuratController::class, 'index'])->name('pengajuan-surat.index');
+            Route::get('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'show'])->name('pengajuan-surat.show');
+            Route::patch('/pengajuan-surat/{pengajuanSurat}/status', [AdminPengajuanSuratController::class, 'updateStatus'])->name('pengajuan-surat.status');
+            Route::delete('/pengajuan-surat/{pengajuanSurat}', [AdminPengajuanSuratController::class, 'destroy'])->name('pengajuan-surat.destroy');
+        });
 
         // 2. Kelola Pengaduan Masyarakat (SRS-F-011)
-        Route::get('/pengaduan', [AdminPengaduanController::class, 'index'])->name('pengaduan.index');
-        Route::get('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'show'])->name('pengaduan.show');
-        Route::patch('/pengaduan/{pengaduan}/status', [AdminPengaduanController::class, 'updateStatus'])->name('pengaduan.status');
-        Route::delete('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'destroy'])->name('pengaduan.destroy');
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/pengaduan', [AdminPengaduanController::class, 'index'])->name('pengaduan.index');
+            Route::get('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'show'])->name('pengaduan.show');
+            Route::patch('/pengaduan/{pengaduan}/status', [AdminPengaduanController::class, 'updateStatus'])->name('pengaduan.status');
+            Route::delete('/pengaduan/{pengaduan}', [AdminPengaduanController::class, 'destroy'])->name('pengaduan.destroy');
+        });
 
         // 3. Kelola Pertanyaan Umum (SRS-F-012)
-        Route::get('/pertanyaan-umum', [AdminPertanyaanUmumController::class, 'index'])->name('pertanyaan-umum.index');
-        Route::get('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'show'])->name('pertanyaan-umum.show');
-        Route::patch('/pertanyaan-umum/{pertanyaanUmum}/status', [AdminPertanyaanUmumController::class, 'updateStatus'])->name('pertanyaan-umum.status');
-        Route::delete('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'destroy'])->name('pertanyaan-umum.destroy');
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/pertanyaan-umum', [AdminPertanyaanUmumController::class, 'index'])->name('pertanyaan-umum.index');
+            Route::get('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'show'])->name('pertanyaan-umum.show');
+            Route::patch('/pertanyaan-umum/{pertanyaanUmum}/status', [AdminPertanyaanUmumController::class, 'updateStatus'])->name('pertanyaan-umum.status');
+            Route::delete('/pertanyaan-umum/{pertanyaanUmum}', [AdminPertanyaanUmumController::class, 'destroy'])->name('pertanyaan-umum.destroy');
+        });
 
         // 4. Kelola Pendaftaran UMKM (SRS-F-013)
-        Route::get('/pendaftaran-umkm', [AdminPendaftaranUmkmController::class, 'index'])->name('pendaftaran-umkm.index');
-        Route::get('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'show'])->name('pendaftaran-umkm.show');
-        Route::patch('/pendaftaran-umkm/{pendaftaranUmkm}/status', [AdminPendaftaranUmkmController::class, 'updateStatus'])->name('pendaftaran-umkm.status');
-        Route::post('/pendaftaran-umkm/{pendaftaranUmkm}/publikasikan', [AdminPendaftaranUmkmController::class, 'publikasikan'])->name('pendaftaran-umkm.publikasikan');
-        Route::delete('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'destroy'])->name('pendaftaran-umkm.destroy');
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/pendaftaran-umkm', [AdminPendaftaranUmkmController::class, 'index'])->name('pendaftaran-umkm.index');
+            Route::get('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'show'])->name('pendaftaran-umkm.show');
+            Route::patch('/pendaftaran-umkm/{pendaftaranUmkm}/status', [AdminPendaftaranUmkmController::class, 'updateStatus'])->name('pendaftaran-umkm.status');
+            Route::post('/pendaftaran-umkm/{pendaftaranUmkm}/publikasikan', [AdminPendaftaranUmkmController::class, 'publikasikan'])->name('pendaftaran-umkm.publikasikan');
+            Route::delete('/pendaftaran-umkm/{pendaftaranUmkm}', [AdminPendaftaranUmkmController::class, 'destroy'])->name('pendaftaran-umkm.destroy');
+        });
 
-        // Kelola Jenis Surat CRUD
-        Route::resource('jenis-surat', JenisSuratController::class)->names('jenis-surat');
-        Route::patch('/jenis-surat/{jenisSurat}/toggle', [JenisSuratController::class, 'toggleActive'])->name('jenis-surat.toggle');
+        // Kelola Jenis Surat CRUD — Staff Desa dan admin
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('jenis-surat', JenisSuratController::class)->names('jenis-surat');
+            Route::patch('/jenis-surat/{jenisSurat}/toggle', [JenisSuratController::class, 'toggleActive'])->name('jenis-surat.toggle');
+        });
 
-        // Produk UMKM (SRS-F-005)
-        Route::resource('produk', ProdukController::class);
+        // Kelola UMKM (SRS-F-005) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('produk', AdminUMKMController::class);
+            Route::resource('umkm', AdminUMKMController::class)->names('umkm');
+        });
 
-        // Galeri Desa (SRS-F-008)
-        Route::resource('galeri', GaleriController::class);
+        // Galeri Desa (SRS-F-008) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('galeri', GaleriController::class);
+        });
 
-        // Acara & Agenda Desa CRUD (SRS-F-009)
-        Route::resource('acara', AcaraController::class)->parameters(['acara' => 'acara']);
-        Route::patch('/acara/{acara}/status', [AcaraController::class, 'updateStatus'])->name('acara.status');
-        Route::post('/acara/{acara}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('acara.publikasi');
+        // Acara & Agenda Desa CRUD (SRS-F-009) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('acara', AcaraController::class)->parameters(['acara' => 'acara']);
+            Route::patch('/acara/{acara}/status', [AcaraController::class, 'updateStatus'])->name('acara.status');
+            Route::post('/acara/{acara}/publikasi', [AcaraController::class, 'publikasiAcara'])->name('acara.publikasi');
+        });
 
-        // Pengaturan (SRS-F-002)
-        Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
-        Route::put('/pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
+        // Pengaturan (SRS-F-002) — Kepala Desa dan admin
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+            Route::put('/pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
+        });
 
-        // Tentang Kami & Struktur Desa (SRS-F-002 & SRS-F-003)
-        Route::get('/tentang', [TentangController::class, 'index'])->name('tentang.index');
-        Route::put('/tentang', [TentangController::class, 'update'])->name('tentang.update');
-        Route::post('/struktur', [TentangController::class, 'strukturStore'])->name('struktur.store');
-        Route::put('/struktur/{struktur}', [TentangController::class, 'strukturUpdate'])->name('struktur.update');
-        Route::delete('/struktur/{struktur}', [TentangController::class, 'strukturDestroy'])->name('struktur.destroy');
+        // Struktur Desa (SRS-F-003) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/tentang', [AdminStrukturDesaController::class, 'index'])->name('tentang.index');
+            Route::get('/struktur', [AdminStrukturDesaController::class, 'index'])->name('struktur.index');
+            Route::post('/struktur', [AdminStrukturDesaController::class, 'store'])->name('struktur.store');
+            Route::put('/struktur/{struktur}', [AdminStrukturDesaController::class, 'update'])->name('struktur.update');
+            Route::delete('/struktur/{struktur}', [AdminStrukturDesaController::class, 'destroy'])->name('struktur.destroy');
+        });
 
-        // Budaya (SRS-F-007)
-        Route::resource('budaya', BudayaController::class);
+        // Kelola Profil Desa / Tentang Desa (SRS-F-002) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/profil-desa', [AdminProfilDesaController::class, 'index'])->name('profil-desa.index');
+            Route::get('/tentang-desa', [AdminProfilDesaController::class, 'index'])->name('tentang-desa.index');
+            Route::put('/tentang-desa/sejarah', [AdminProfilDesaController::class, 'desaUpdateSejarah'])->name('tentang-desa.sejarah.update');
+            Route::post('/tentang-desa/timeline', [AdminProfilDesaController::class, 'timelineStore'])->name('tentang-desa.timeline.store');
+            Route::put('/tentang-desa/timeline/{timeline}', [AdminProfilDesaController::class, 'timelineUpdate'])->name('tentang-desa.timeline.update');
+            Route::delete('/tentang-desa/timeline/{timeline}', [AdminProfilDesaController::class, 'timelineDestroy'])->name('tentang-desa.timeline.destroy');
+            Route::put('/tentang-desa/kepala-desa', [AdminProfilDesaController::class, 'desaUpdateKades'])->name('tentang-desa.kades.update');
+            Route::put('/tentang-desa/sambutan', [AdminProfilDesaController::class, 'desaUpdateSambutan'])->name('tentang-desa.sambutan.update');
+            Route::put('/tentang-desa/wilayah', [AdminProfilDesaController::class, 'desaUpdateWilayah'])->name('tentang-desa.wilayah.update');
+            Route::put('/tentang-desa/potensi', [AdminProfilDesaController::class, 'desaUpdatePotensi'])->name('tentang-desa.potensi.update');
+            Route::put('/tentang-desa/administrasi', [AdminProfilDesaController::class, 'desaUpdateAdministrasi'])->name('tentang-desa.administrasi.update');
+            Route::put('/tentang-desa/visi', [AdminProfilDesaController::class, 'desaUpdateVisi'])->name('tentang-desa.visi.update');
+            Route::post('/tentang-desa/misi', [AdminProfilDesaController::class, 'misiStore'])->name('tentang-desa.misi.store');
+            Route::put('/tentang-desa/misi/{misi}', [AdminProfilDesaController::class, 'misiUpdate'])->name('tentang-desa.misi.update');
+            Route::delete('/tentang-desa/misi/{misi}', [AdminProfilDesaController::class, 'misiDestroy'])->name('tentang-desa.misi.destroy');
+            Route::put('/tentang-desa/peta', [AdminProfilDesaController::class, 'desaUpdatePeta'])->name('tentang-desa.peta.update');
+        });
 
-        // Wisata (SRS-F-006)
-        Route::resource('wisata', WisataController::class)->parameters(['wisata' => 'wisata']);
+        // Budaya (SRS-F-007) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('budaya', BudayaController::class);
+        });
 
-        // Berita (SRS-F-004)
-        Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
+        // Wisata (SRS-F-006) — Staff Desa dan Kepala Desa
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::resource('wisata', WisataController::class)->parameters(['wisata' => 'wisata']);
+        });
 
-        // Kelola Pengguna Admin (SRS-F-014)
-        Route::get('/kelola-admin', [AdminManagementController::class, 'index'])->name('kelola-admin.index');
-        Route::get('/kelola-admin/create', [AdminManagementController::class, 'create'])->name('kelola-admin.create');
-        Route::post('/kelola-admin', [AdminManagementController::class, 'store'])->name('kelola-admin.store');
-        Route::get('/kelola-admin/{admin}/edit', [AdminManagementController::class, 'edit'])->name('kelola-admin.edit');
-        Route::put('/kelola-admin/{admin}', [AdminManagementController::class, 'update'])->name('kelola-admin.update');
-        Route::delete('/kelola-admin/{admin}', [AdminManagementController::class, 'destroy'])->name('kelola-admin.destroy');
+        // Berita (SRS-F-004) — Staff Desa dan Kasi Pemerintahan
+        Route::middleware('role:staff_desa,kasi_pemerintahan,kepala_desa,admin')->group(function () {
+            Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
+        });
 
+        // Kelola Pengguna Admin (SRS-F-014) — Kepala Desa dan admin (akses penuh)
+        Route::middleware('role:staff_desa,kepala_desa,admin')->group(function () {
+            Route::get('/kelola-admin', [AdminManagementController::class, 'index'])->name('kelola-admin.index');
+            Route::get('/kelola-admin/create', [AdminManagementController::class, 'create'])->name('kelola-admin.create');
+            Route::post('/kelola-admin', [AdminManagementController::class, 'store'])->name('kelola-admin.store');
+            Route::get('/kelola-admin/{admin}/edit', [AdminManagementController::class, 'edit'])->name('kelola-admin.edit');
+            Route::put('/kelola-admin/{admin}', [AdminManagementController::class, 'update'])->name('kelola-admin.update');
+            Route::delete('/kelola-admin/{admin}', [AdminManagementController::class, 'destroy'])->name('kelola-admin.destroy');
+        });
 
     });
 });

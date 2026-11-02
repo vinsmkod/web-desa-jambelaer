@@ -7,7 +7,7 @@ use App\Models\Budaya;
 use App\Models\Galeri;
 use App\Models\AgendaAcara;
 use App\Models\PendaftaranUmkm;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\StrukturDesa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -104,7 +104,7 @@ class AdminContentRelationshipTest extends \Tests\TestCase
             'status'            => 'disetujui',
         ]);
 
-        $produk = Produk::create([
+        $produk = UMKM::create([
             'created_by'          => $user->user_id,
             'pendaftaran_umkm_id' => $pendaftaran->pendaftaran_umkm_id,
             'title'               => 'Produk UMKM Test ' . uniqid(),

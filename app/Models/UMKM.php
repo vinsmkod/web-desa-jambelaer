@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Produk extends Model
+class UMKM extends Model
 {
     use HasFactory;
 
@@ -34,7 +34,6 @@ class Produk extends Model
     /**
      * URL gambar produk UMKM dengan fallback aman.
      * Menangani URL penuh (http/https), path lokal storage/, dan path langsung di public/.
-     * Konsisten dengan model Berita, Wisata, dan Budaya.
      */
     public function getImgUrlAttribute(): string
     {
@@ -75,7 +74,3 @@ class Produk extends Model
         return $this->belongsTo(PendaftaranUmkm::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
     }
 }
-
-
-
-

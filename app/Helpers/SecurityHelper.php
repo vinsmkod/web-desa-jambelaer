@@ -77,4 +77,41 @@ class SecurityHelper
 
         return '<iframe ' . implode(' ', $safeAttrs) . '></iframe>';
     }
+
+    /**
+     * Sanitize teks konten kaya sederhana (mis. deskripsi timeline sejarah).
+     * - Seluruh HTML di-escape terlebih dahulu (mencegah XSS).
+     * - Hanya tag inline aman (strong, b, em, i, br) yang diizinkan kembali tanpa atribut.
+     * - Baris baru dikonversi menjadi <br>.
+     * - Mengembalikan null jika input kosong.
+     */
+    public static function sanitizeInlineHtml(?string $input): ?string
+    {
+        if (empty($input)) {
+            return null;
+        }
+
+        $escaped = htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+
+        $allowedTagPairs = ['strong', 'b', 'em', 'i'];
+        foreach ($allowedTagPairs as $tag) {
+            $escaped = str_ireplace(
+                ['&lt;' . $tag . '&gt;', '&lt;/' . $tag . '&gt;'],
+                ['<' . $tag . '>', '</' . $tag . '>'],
+                $escaped
+            );
+            // Bentuk penulisan dengan spasi di dalam tag (mis. <strong >)
+            $escaped = preg_replace(
+                '/&lt;' . $tag . '\s+&gt;/i',
+                '<' . $tag . '>',
+                $escaped
+            );
+        }
+
+        // <br> dan <br/>
+        $escaped = str_ireplace(['&lt;br&gt;', '&lt;br /&gt;', '&lt;br/&gt;', '&lt;br &/&gt;'], '<br>', $escaped);
+        $escaped = preg_replace('/&lt;br\s*\/?&gt;/i', '<br>', $escaped);
+
+        return nl2br($escaped);
+    }
 }

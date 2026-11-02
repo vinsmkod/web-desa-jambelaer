@@ -1,8 +1,8 @@
 @extends('admin.layouts.admin')
 
-@section('title', 'Tambah Admin Baru')
-@section('page_title', 'Tambah Admin Baru')
-@section('page_subtitle', 'Mendaftarkan akun administrator baru ke dalam sistem')
+@section('title', 'Tambah Akun Perangkat Desa')
+@section('page_title', 'Tambah Akun Perangkat Desa')
+@section('page_subtitle', 'Mendaftarkan akun perangkat desa baru sesuai pembagian kewenangan (SRS)')
 
 @section('content')
 <div class="max-w-3xl space-y-6">
@@ -11,7 +11,7 @@
     <div class="flex items-center justify-between">
         <a href="{{ route('admin.kelola-admin.index') }}" class="btn-secondary text-xs">
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
-            Kembali ke Daftar Admin
+            Kembali ke Daftar Perangkat Desa
         </a>
     </div>
 
@@ -22,8 +22,8 @@
                 <i data-lucide="user-plus" class="w-6 h-6 text-amber-300"></i>
             </div>
             <div>
-                <h2 class="text-base font-bold text-slate-900">Form Registrasi Admin</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Isi formulir di bawah ini untuk menambahkan hak akses administrator baru</p>
+                <h2 class="text-base font-bold text-slate-900">Form Pendaftaran Perangkat Desa</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Tentukan nama, email login, kewenangan role, dan kata sandi akun</p>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
         <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs space-y-1.5">
             <div class="font-bold flex items-center gap-2">
                 <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                <span>Gagal mendaftarkan admin. Mohon periksa input berikut:</span>
+                <span>Gagal mendaftarkan akun. Mohon periksa input berikut:</span>
             </div>
             <ul class="list-disc list-inside space-y-1 pl-1">
                 @foreach ($errors->all() as $error)
@@ -47,7 +47,7 @@
 
             <!-- Nama Lengkap -->
             <div>
-                <label for="name" class="form-label">Nama Lengkap Admin <span class="text-red-500">*</span></label>
+                <label for="name" class="form-label">Nama Lengkap <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <i data-lucide="user" class="w-5 h-5"></i>
@@ -63,19 +63,51 @@
 
             <!-- Email -->
             <div>
-                <label for="email" class="form-label">Alamat Email <span class="text-red-500">*</span></label>
+                <label for="email" class="form-label">Alamat Email Login <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                     </div>
                     <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                        placeholder="admin@jambelaer.desa.id" autocomplete="new-email"
+                        placeholder="staff@jambelaer.desa.id" autocomplete="new-email"
                         class="form-input !pl-12 @error('email') border-red-400 @enderror">
                 </div>
-                <p class="text-[11px] text-slate-400 mt-1">Email ini akan digunakan oleh admin untuk login ke panel ini.</p>
+                <p class="text-[11px] text-slate-400 mt-1">Email ini digunakan untuk login ke portal administrasi desa.</p>
                 @error('email')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <!-- Role & Jabatan Grid -->
+            <div class="grid sm:grid-cols-2 gap-5">
+                <!-- Role / Hak Akses -->
+                <div>
+                    <label for="role" class="form-label">Kewenangan / Role Sistem (SRS) <span class="text-red-500">*</span></label>
+                    <select name="role" id="role" required class="form-input @error('role') border-red-400 @enderror">
+                        <option value="">-- Pilih Role Perangkat Desa --</option>
+                        @foreach($roles as $key => $label)
+                            <option value="{{ $key }}" {{ old('role') === $key ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <p class="text-[11px] text-slate-400 mt-1">Menentukan menu dan batas wewenang operasional.</p>
+                    @error('role')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Jabatan Struktural -->
+                <div>
+                    <label for="jabatan" class="form-label">Jabatan Struktural / Unit Kerja</label>
+                    <input type="text" name="jabatan" id="jabatan" value="{{ old('jabatan') }}"
+                        placeholder="Contoh: Staff Pelayanan Umum / Kaur Keuangan"
+                        class="form-input @error('jabatan') border-red-400 @enderror">
+                    <p class="text-[11px] text-slate-400 mt-1">Opsional: Keterangan posisi dalam struktur desa.</p>
+                    @error('jabatan')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Password Grid -->
@@ -96,7 +128,7 @@
                             <i id="icon-password" data-lucide="eye" class="w-5 h-5"></i>
                         </button>
                     </div>
-                    <p class="text-[11px] text-slate-400 mt-1">Minimal 8 karakter.</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Kombinasi huruf & angka minimal 8 karakter.</p>
                     @error('password')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -121,15 +153,6 @@
                 </div>
             </div>
 
-            <!-- Warning Callout -->
-            <div class="p-4 rounded-xl bg-forest-50/60 border border-forest-100 flex items-start gap-3">
-                <i data-lucide="info" class="w-5 h-5 text-forest-700 flex-shrink-0 mt-0.5"></i>
-                <div class="text-xs text-slate-600 space-y-1">
-                    <p class="font-bold text-slate-800">Catatan Keamanan:</p>
-                    <p>Setelah akun terdaftar, admin yang bersangkutan dapat langsung login. Pastikan informasi password disimpan secara aman.</p>
-                </div>
-            </div>
-
             <!-- Submit Buttons -->
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <a href="{{ route('admin.kelola-admin.index') }}" class="btn-secondary">
@@ -137,7 +160,7 @@
                 </a>
                 <button type="submit" class="btn-primary">
                     <i data-lucide="user-check" class="w-4 h-4"></i>
-                    Simpan & Daftarkan Admin
+                    Simpan & Daftarkan Akun
                 </button>
             </div>
         </form>
@@ -163,18 +186,6 @@
             lucide.createIcons();
         }
     }
-
-    @if(!$errors->any())
-    document.addEventListener('DOMContentLoaded', function () {
-        setTimeout(function () {
-            const inputs = ['name', 'email', 'password', 'password_confirmation'];
-            inputs.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = '';
-            });
-        }, 50);
-    });
-    @endif
 </script>
 @endpush
 @endsection

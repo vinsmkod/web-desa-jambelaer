@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Kelola Pengajuan Surat')
-@section('header_title', 'Kelola Pengajuan Surat')
+@section('page_title', 'Kelola Pengajuan Surat')
+@section('page_subtitle', 'Kelola, verifikasi berkas, dan proses surat keterangan permohonan masyarakat')
 
 @section('content')
 <div class="space-y-6">

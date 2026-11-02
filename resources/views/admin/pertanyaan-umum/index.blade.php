@@ -1,7 +1,8 @@
 @extends('admin.layouts.admin')
 
 @section('title', 'Kelola Pertanyaan Umum')
-@section('header_title', 'Kelola Pertanyaan Umum')
+@section('page_title', 'Kelola Pertanyaan Umum')
+@section('page_subtitle', 'Kelola dan berikan jawaban resmi atas pertanyaan informasi dari warga desa')
 
 @section('content')
 <div class="space-y-6">

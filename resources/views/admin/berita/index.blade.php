@@ -26,7 +26,7 @@
 
 
     <!-- Table List -->
-    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+    <div class="page-card p-6 space-y-4">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-lg bg-forest-50 border border-forest-100 flex items-center justify-center text-forest-700">
@@ -42,12 +42,12 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
                 <thead>
-                    <tr class="border-b border-slate-200 bg-slate-50/60 text-slate-500 font-bold uppercase tracking-wider">
-                        <th class="py-3.5 px-4 rounded-l-xl">Artikel Berita</th>
-                        <th class="py-3.5 px-4">Penulis & Views</th>
-                        <th class="py-3.5 px-4">Status</th>
-                        <th class="py-3.5 px-4">Tanggal Publikasi</th>
-                        <th class="py-3.5 px-4 text-right rounded-r-xl">Aksi</th>
+                    <tr class="border-b border-slate-200">
+                        <th class="table-th rounded-l-xl">Artikel Berita</th>
+                        <th class="table-th">Penulis & Views</th>
+                        <th class="table-th">Status</th>
+                        <th class="table-th">Tanggal Publikasi</th>
+                        <th class="table-th text-right rounded-r-xl">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -60,6 +60,9 @@
                                     <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}" class="w-full h-full object-cover">
                                 </div>
                                 <div class="min-w-0">
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 mb-1">
+                                        {{ $item->kategori_label }}
+                                    </span>
                                     <a href="{{ route('berita.detail', $item->slug) }}" target="_blank" class="font-bold text-slate-800 hover:text-forest-700 transition-colors text-sm line-clamp-1 flex items-center gap-1">
                                         <span>{{ $item->judul }}</span>
                                         <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
@@ -102,7 +105,7 @@
                         <td class="py-4 px-4 text-right whitespace-nowrap">
                             <div class="flex items-center justify-end gap-1.5">
                                 <a href="{{ route('admin.berita.edit', $item->berita_id) }}"
-                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-forest-50 hover:text-forest-700 transition-all"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-forest-50 hover:text-forest-700 transition-colors"
                                     title="Edit Berita">
                                     <i data-lucide="pencil" class="w-4 h-4"></i>
                                 </a>
@@ -113,7 +116,7 @@
                                     <button type="button"
                                         onclick="submitDeleteForm(this)"
                                         data-judul="{{ addslashes($item->judul) }}"
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors border border-red-200 hover:border-red-500"
                                         title="Hapus Berita">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                                     </button>

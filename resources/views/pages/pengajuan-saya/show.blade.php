@@ -163,17 +163,25 @@
                 <div class="p-3.5 rounded-2xl border {{ $currentStep >= 2 ? 'bg-white border-forest-200 shadow-xs' : 'bg-stone-100/60 border-stone-200 opacity-60' }}">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="w-5 h-5 rounded-full {{ $currentStep >= 2 ? 'bg-forest-700 text-white' : 'bg-stone-300 text-stone-600' }} flex items-center justify-center text-[10px] font-bold">2</span>
-                        <span class="text-xs font-bold {{ $currentStep >= 2 ? 'text-forest-900' : 'text-stone-500' }}">Diverifikasi</span>
+                        <span class="text-xs font-bold {{ $currentStep >= 2 ? 'text-forest-900' : 'text-stone-500' }}">
+                            {{ $jenisLayanan === 'pengajuan_surat' ? 'Diproses' : 'Diverifikasi' }}
+                        </span>
                     </div>
-                    <p class="text-[11px] text-stone-400 font-light">Pemeriksaan berkas</p>
+                    <p class="text-[11px] text-stone-400 font-light">
+                        {{ $jenisLayanan === 'pengajuan_surat' ? 'Pemeriksaan Staff' : 'Pemeriksaan berkas' }}
+                    </p>
                 </div>
 
                 <div class="p-3.5 rounded-2xl border {{ $currentStep >= 3 ? 'bg-white border-forest-200 shadow-xs' : 'bg-stone-100/60 border-stone-200 opacity-60' }}">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="w-5 h-5 rounded-full {{ $currentStep >= 3 ? 'bg-forest-700 text-white' : 'bg-stone-300 text-stone-600' }} flex items-center justify-center text-[10px] font-bold">3</span>
-                        <span class="text-xs font-bold {{ $currentStep >= 3 ? 'text-forest-900' : 'text-stone-500' }}">Diproses</span>
+                        <span class="text-xs font-bold {{ $currentStep >= 3 ? 'text-forest-900' : 'text-stone-500' }}">
+                            {{ $jenisLayanan === 'pengajuan_surat' ? 'Diverifikasi' : 'Diproses' }}
+                        </span>
                     </div>
-                    <p class="text-[11px] text-stone-400 font-light">Tindak lanjut staf</p>
+                    <p class="text-[11px] text-stone-400 font-light">
+                        {{ $jenisLayanan === 'pengajuan_surat' ? 'Verifikasi Sekdes' : 'Tindak lanjut staf' }}
+                    </p>
                 </div>
 
                 <div class="p-3.5 rounded-2xl border {{ $currentStep >= 4 ? 'bg-white border-emerald-300 shadow-xs' : 'bg-stone-100/60 border-stone-200 opacity-60' }}">
@@ -181,7 +189,9 @@
                         <span class="w-5 h-5 rounded-full {{ $currentStep >= 4 ? 'bg-emerald-600 text-white' : 'bg-stone-300 text-stone-600' }} flex items-center justify-center text-[10px] font-bold">4</span>
                         <span class="text-xs font-bold {{ $currentStep >= 4 ? 'text-emerald-950' : 'text-stone-500' }}">Selesai</span>
                     </div>
-                    <p class="text-[11px] text-stone-400 font-light">Tuntas / Terbit</p>
+                    <p class="text-[11px] text-stone-400 font-light">
+                        {{ $jenisLayanan === 'pengajuan_surat' ? 'Disetujui Kades' : 'Tuntas / Terbit' }}
+                    </p>
                 </div>
             </div>
             @endif

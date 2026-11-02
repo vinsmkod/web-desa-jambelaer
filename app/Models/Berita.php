@@ -14,6 +14,18 @@ class Berita extends Model
     protected $table = 'berita';
     protected $primaryKey = 'berita_id';
 
+    public const KATEGORI_UMUM                  = 'umum';
+    public const KATEGORI_PEMERINTAHAN          = 'kegiatan_pemerintahan';
+    public const KATEGORI_PEMBANGUNAN           = 'pembangunan_desa';
+    public const KATEGORI_KEGIATAN_PEMERINTAHAN = 'kegiatan_pemerintahan';
+    public const KATEGORI_PEMBANGUNAN_DESA      = 'pembangunan_desa';
+
+    public const KATEGORI_LIST = [
+        self::KATEGORI_UMUM         => 'Umum & Kemasyarakatan',
+        self::KATEGORI_PEMERINTAHAN => 'Kegiatan Pemerintahan Desa',
+        self::KATEGORI_PEMBANGUNAN  => 'Rencana & Pembangunan Desa',
+    ];
+
     protected $fillable = [
         'created_by',
         'judul',
@@ -22,6 +34,7 @@ class Berita extends Model
         'konten',
         'gambar',
         'penulis',
+        'kategori',
         'views',
         'is_published',
         'published_at',
@@ -32,6 +45,14 @@ class Berita extends Model
         'published_at' => 'datetime',
         'views'        => 'integer',
     ];
+
+    /**
+     * Label kategori berita.
+     */
+    public function getKategoriLabelAttribute(): string
+    {
+        return self::KATEGORI_LIST[$this->kategori] ?? ucfirst(str_replace('_', ' ', $this->kategori ?? 'Umum'));
+    }
 
     /**
      * URL Gambar Berita dengan fallback default.
@@ -53,6 +74,7 @@ class Berita extends Model
         // Gambar fallback default lokal
         return asset('uploads/img/DESA_JAMBELAER.png');
     }
+
     // ── Relationships ────────────────────────────────────────────────────────
     
     /**
@@ -62,11 +84,4 @@ class Berita extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'user_id');
     }
-
-    /**
-     * Catatan: Frontend menggunakan query manual `where('slug', $slug)`,
-     * bukan Route Model Binding, sehingga getRouteKeyName() tidak diperlukan.
-     * Admin resource binding menggunakan 'id' secara default (sudah benar).
-     */
 }
-

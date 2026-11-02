@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PendaftaranUmkm;
-use App\Models\Produk;
+use App\Models\UMKM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -96,7 +96,7 @@ class PendaftaranUmkmController extends Controller
         ]);
 
         // Cek apakah sudah pernah dipublikasikan
-        $existingProduk = Produk::where('pendaftaran_umkm_id', $pendaftaranUmkm->pendaftaran_umkm_id)->first();
+        $existingProduk = UMKM::where('pendaftaran_umkm_id', $pendaftaranUmkm->pendaftaran_umkm_id)->first();
 
         if ($existingProduk) {
             $existingProduk->update(['is_active' => true]);
@@ -109,14 +109,14 @@ class PendaftaranUmkmController extends Controller
         $slug = Str::slug($baseTitle);
         $originalSlug = $slug;
         $counter = 1;
-        while (Produk::where('slug', $slug)->exists()) {
+        while (UMKM::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $counter++;
         }
 
         // Gambar produk: gunakan foto produk pemohon
         $imgPath = $pendaftaranUmkm->foto_produk ?: 'uploads/img/DESA_JAMBELAER.png';
 
-        $produk = Produk::create([
+        $produk = UMKM::create([
             'pendaftaran_umkm_id' => $pendaftaranUmkm->pendaftaran_umkm_id,
             'created_by'          => Auth::id(),
             'slug'                => $slug,

@@ -345,12 +345,12 @@
                     <h2 class="font-display font-bold text-xl text-forest-900 mb-1">Kirim Pengajuan Layanan</h2>
                     <p class="text-sm text-stone-400 font-light mb-5">Isi formulir di bawah ini untuk mengajukan permohonan layanan desa secara resmi.</p>
 
-                    <div class="mb-6 p-3.5 rounded-xl bg-forest-50 border border-forest-100 flex items-center justify-between text-xs">
-                        <div class="flex items-center gap-2 text-forest-900 font-medium">
-                            <i data-lucide="user-check" class="w-4 h-4 text-forest-700"></i>
-                            <span>Mengajukan sebagai: <strong>{{ Auth::user()->name }}</strong> ({{ Auth::user()->email }})</span>
+                    <div class="mb-6 p-3.5 rounded-xl bg-forest-50 border border-forest-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <div class="flex items-center gap-2 text-forest-900 font-medium min-w-0">
+                            <i data-lucide="user-check" class="w-4 h-4 text-forest-700 flex-shrink-0"></i>
+                            <span class="min-w-0 break-all">Mengajukan sebagai: <strong>{{ Auth::user()->name }}</strong> ({{ Auth::user()->email }})</span>
                         </div>
-                        <a href="{{ route('pengajuan.saya') }}" class="text-forest-800 hover:text-forest-950 font-bold flex items-center gap-1">
+                        <a href="{{ route('pengajuan.saya') }}" class="text-forest-800 hover:text-forest-950 font-bold flex items-center gap-1 flex-shrink-0">
                             Pengajuan Saya <i data-lucide="chevron-right" class="w-3 h-3"></i>
                         </a>
                     </div>

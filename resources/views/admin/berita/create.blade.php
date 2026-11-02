@@ -60,6 +60,25 @@
                 @enderror
             </div>
 
+            <!-- Kategori Berita (SRS-F-004) -->
+            <div>
+                <label for="kategori" class="form-label">Kategori Berita <span class="text-red-500">*</span></label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i data-lucide="tag" class="w-5 h-5"></i>
+                    </div>
+                    <select name="kategori" id="kategori" required class="form-input !pl-12 @error('kategori') border-red-400 @enderror">
+                        <option value="">-- Pilih Kategori Berita --</option>
+                        @foreach($allowedKategori as $val => $label)
+                            <option value="{{ $val }}" {{ old('kategori') === $val ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @error('kategori')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!-- Penulis -->
             <div>
                 <label for="penulis" class="form-label">Penulis / Redaksi <span class="text-red-500">*</span></label>

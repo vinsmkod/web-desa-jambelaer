@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Berita;
 use App\Models\Budaya;
 use App\Models\Galeri;
-use App\Models\Produk;
+use App\Models\UMKM;
 use App\Models\Wisata;
 use Illuminate\Http\Response;
 
@@ -40,7 +40,7 @@ class SitemapController extends Controller
             ->get();
 
         // ── Produk UMKM Aktif ─────────────────────────────────────────────────
-        $produkList = Produk::where('is_active', true)
+        $produkList = UMKM::where('is_active', true)
             ->select('slug', 'jenis', 'updated_at')
             ->orderBy('urutan')
             ->get();

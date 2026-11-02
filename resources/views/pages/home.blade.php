@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Sistem Informasi Desa Jambelaer | Kecamatan Dawuan, Kabupaten Subang')
 @section('meta_desc', 'Portal resmi Pemerintah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat. Temukan informasi profil desa, berita terkini, produk UMKM unggulan, destinasi wisata, budaya lokal, dan layanan publik desa.')
@@ -51,9 +51,9 @@
 
 @section('content')
 
-{{-- ══════════════════════════════════════════════════════════════════
-     1. HERO SECTION — Split Layout
-══════════════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     1. HERO SECTION â€” Split Layout
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="relative overflow-hidden bg-forest-900 rounded-[28px] sm:rounded-[32px] mx-3 sm:mx-5 lg:mx-6 mt-4 sm:mt-6 mb-1 shadow-md">
     {{-- Subtle texture / ambient glow --}}
     <div class="absolute -top-24 -right-24 w-96 h-96 bg-sand-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -71,7 +71,7 @@
                         <span class="text-[10px] sm:text-[11px] font-bold tracking-[0.18em] uppercase text-sand-300">WEBSITE RESMI PEMERINTAH DESA</span>
                     </div>
                     <div class="pt-2">
-                        <span class="block text-xs sm:text-sm text-sand-200/80 font-medium tracking-wide">Kecamatan Dawuan • Kabupaten Subang • Jawa Barat</span>
+                        <span class="block text-xs sm:text-sm text-sand-200/80 font-medium tracking-wide">Kecamatan Dawuan â€¢ Kabupaten Subang â€¢ Jawa Barat</span>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
 
                 {{-- CTA Group --}}
                 <div class="mt-8 flex flex-wrap items-center gap-3 reveal-fade-up delay-250">
-                    <a href="{{ route('tentang') }}" class="btn-primary group !bg-sand-500 !border-sand-500 hover:!bg-sand-400 hover:!border-sand-400 !text-forest-950 !font-extrabold shadow-lg shadow-sand-900/20">
+                    <a href="{{ route('profil.desa') }}" class="btn-primary group !bg-sand-500 !border-sand-500 hover:!bg-sand-400 hover:!border-sand-400 !text-forest-950 !font-extrabold shadow-lg shadow-sand-900/20">
                         Profil Desa
                         <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </a>
@@ -131,9 +131,9 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════════════════════════════════
-     2. STATISTIK DESA — Metric Cards
-══════════════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     2. STATISTIK DESA â€” Metric Cards
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="py-14 sm:py-16 bg-white border-b border-stone-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -209,9 +209,9 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════════════════════════
-     3. SAMBUTAN KEPALA DESA — Formal Welcome Card
-══════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     3. SAMBUTAN KEPALA DESA + SEKILAS PROFIL â€” Institutional Welcome
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 @php
 $kadesNama = \App\Models\Pengaturan::get('kades_nama', 'Sahar Dwi Anugrah, S.Kom');
 $kadesJabatan = \App\Models\Pengaturan::get('kades_jabatan', 'Kepala Desa Jambelaer');
@@ -227,7 +227,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
             {{-- Photo --}}
             <div class="lg:col-span-4 flex justify-center lg:justify-start reveal-fade-left">
                 <div class="relative">
-                    <div class="absolute -top-3 -left-3 w-full h-full border-2 border-sand-300/60 rounded-2xl"></div>
+                    <div class="absolute -top-3 -left-3 w-full h-full border-2 border-sand-300/60 rounded-2xl hidden sm:block"></div>
                     <div class="relative w-64 h-80 sm:w-72 sm:h-96 rounded-2xl overflow-hidden shadow-xl bg-forest-900 border border-stone-200">
                         @if($kadesFoto && file_exists(public_path($kadesFoto)))
                         <img src="{{ asset($kadesFoto) }}" alt="{{ $kadesNama }}" class="w-full h-full object-cover">
@@ -260,49 +260,6 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                     {{ Str::limit($sambutanTeks, 340) }}
                 </p>
 
-                <div class="pt-2 flex flex-wrap items-center gap-3">
-                    <a href="{{ route('tentang') }}#sambutan" class="btn-primary">
-                        Baca Sambutan Lengkap
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </a>
-                    <a href="{{ route('kontak') }}" class="btn-secondary">
-                        <i data-lucide="message-square" class="w-4 h-4 mr-2"></i>
-                        Sampaikan Aspirasi
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- ══════════════════════════════════════════════════════════
-     4. SEKILAS PROFIL DESA — Summary & Overview
-══════════════════════════════════════════════════════════ --}}
-<section class="py-16 sm:py-20 bg-white border-b border-stone-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-
-            {{-- Left Column: Visual Image Collage --}}
-            <div class="lg:col-span-5 reveal-fade-left">
-                <div class="relative">
-                    <div class="rounded-3xl overflow-hidden shadow-xl border border-stone-200/80 aspect-[4/3] relative">
-                        <img src="{{ asset('uploads/img/sawah.jpeg') }}"
-                            alt="Bentang Alam Desa Jambelaer"
-                            class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-transparent to-transparent"></div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Right Column: Story & Vision --}}
-            <div class="lg:col-span-7 space-y-5 reveal-fade-right">
-                <span class="section-label">Tentang Kami</span>
-                <h2 class="font-display font-extrabold text-2xl sm:text-4xl text-forest-900 leading-tight">
-                    Mengenal Lebih Dekat<br>
-                    <span class="text-sand-700">Desa Jambelaer</span>
-                </h2>
-
                 <p class="text-stone-600 text-sm sm:text-base leading-relaxed font-light">
                     Desa Jambelaer merupakan bagian dari Kecamatan Dawuan, Kabupaten Subang yang kaya akan potensi pertanian, kekompakan masyarakat berbudaya Sunda, serta semangat wirausaha lokal khususnya produksi pangan olahan tradisional seperti Opak ketan.
                 </p>
@@ -324,10 +281,14 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                     </div>
                 </div>
 
-                <div class="pt-2">
-                    <a href="{{ route('tentang') }}" class="btn-primary">
+                <div class="pt-2 flex flex-wrap items-center gap-3">
+                    <a href="{{ route('profil.desa') }}" class="btn-primary">
                         Selengkapnya Tentang Desa
                         <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </a>
+                    <a href="{{ route('kontak') }}" class="btn-secondary">
+                        <i data-lucide="message-square" class="w-4 h-4 mr-2"></i>
+                        Sampaikan Aspirasi
                     </a>
                 </div>
             </div>
@@ -336,9 +297,9 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
     </div>
 </section>
 
-{{-- ══════════════════════════════════════════════════════════════════
-     4. POTENSI DESA — 3 Main Feature Pillars
-══════════════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     4. POTENSI DESA â€” 3 Main Feature Pillars
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="py-16 sm:py-20 bg-white border-b border-stone-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -406,9 +367,9 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
     </div>
 </section>
 
-{{-- ══════════════════════════════════════════════════════════════════
-     8. BERITA & INFORMASI DESA — News Stream
-══════════════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     8. BERITA & INFORMASI DESA â€” News Stream
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="py-16 sm:py-20 bg-white border-b border-stone-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -418,7 +379,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                 <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-2.5">Berita & Pengumuman Desa</h2>
                 <p class="mt-1 text-stone-500 font-light text-sm">Informasi kegiatan pemerintahan, pembangunan, dan pengumuman untuk warga.</p>
             </div>
-            <a href="{{ route('berita') }}" class="hidden md:inline-flex items-center text-xs font-bold text-forest-800 hover:text-sand-700 transition-colors mt-4 md:mt-0">
+            <a href="{{ route('berita') }}" class="inline-flex items-center self-start text-xs font-bold text-forest-800 hover:text-sand-700 transition-colors mt-4 md:mt-0 md:self-auto">
                 Semua Berita <i data-lucide="arrow-right" class="w-4 h-4 ml-1.5"></i>
             </a>
         </div>
@@ -435,10 +396,10 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                         </span>
                     </div>
                     <div class="p-5">
-                        <div class="flex items-center gap-3 text-[11px] text-stone-400 font-medium mb-2">
-                            <span><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>{{ $berita->published_at ? $berita->published_at->format('d M Y') : $berita->created_at->format('d M Y') }}</span>
-                            <span>•</span>
-                            <span><i data-lucide="user" class="w-3 h-3 inline mr-1"></i>{{ $berita->penulis }}</span>
+                        <div class="flex items-center flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-400 font-medium mb-2">
+                            <span class="whitespace-nowrap"><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>{{ $berita->published_at ? $berita->published_at->format('d M Y') : $berita->created_at->format('d M Y') }}</span>
+                            <span>â€¢</span>
+                            <span class="min-w-0 truncate"><i data-lucide="user" class="w-3 h-3 inline mr-1"></i>{{ $berita->penulis }}</span>
                         </div>
                         <h3 class="font-display font-bold text-base text-forest-900 group-hover:text-forest-700 transition-colors leading-snug">
                             <a href="{{ route('berita.detail', $berita->slug) }}">{{ $berita->judul }}</a>
@@ -466,15 +427,14 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
     </div>
 </section>
 
-{{-- ══════════════════════════════════════════════════════════════════
-     10. LAYANAN & PENGADUAN MASYARAKAT — 5 Service Cards
-══════════════════════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     10. LAYANAN & PENGADUAN MASYARAKAT â€” 4 Service Cards
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <section class="py-16 sm:py-20 bg-white border-b border-stone-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="text-center max-w-2xl mx-auto mb-12 reveal-on-scroll">
-            <span class="section-label">Pelayanan Digital</span>
-            <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-2.5">Layanan Masyarakat & Aspirasi</h2>
+            <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-forest-900">Layanan Masyarakat & Aspirasi</h2>
             <p class="mt-2 text-stone-500 font-light text-sm">Sampaikan permohonan surat keterangan, pertanyaan informasi, pengaduan lingkungan, hingga pendaftaran UMKM secara langsung ke kantor desa.</p>
             <div class="section-divider"></div>
         </div>
@@ -535,8 +495,8 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                 </div>
             </div>
 
-            {{-- 5. Daftar UMKM --}}
-            <div class="card-village p-5 flex flex-col justify-between hover:border-amber-400 group reveal-fade-up delay-250">
+            {{-- 4. Daftar UMKM --}}
+            <div class="card-village p-5 flex flex-col justify-between hover:border-amber-400 group reveal-fade-up delay-200">
                 <div>
                     <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-4 group-hover:bg-amber-600 group-hover:text-white transition-all">
                         <i data-lucide="store" class="w-5 h-5"></i>

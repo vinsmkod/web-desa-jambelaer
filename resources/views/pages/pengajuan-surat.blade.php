@@ -50,13 +50,13 @@
         @auth
         {{-- Logged-in Banner --}}
         <div class="mb-8 p-4 sm:p-5 rounded-2xl bg-forest-50 border border-forest-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 min-w-0">
                 <div class="w-10 h-10 rounded-xl bg-forest-800 text-sand-300 flex items-center justify-center flex-shrink-0">
                     <i data-lucide="user-check" class="w-5 h-5"></i>
                 </div>
-                <div>
+                <div class="min-w-0">
                     <span class="text-[10px] font-bold tracking-widest uppercase text-forest-700 block">Pemohon Terautentikasi</span>
-                    <p class="text-sm font-bold text-forest-950">{{ Auth::user()->name }} <span class="text-xs font-normal text-forest-700">({{ Auth::user()->email }})</span></p>
+                    <p class="text-sm font-bold text-forest-950 break-all">{{ Auth::user()->name }} <span class="text-xs font-normal text-forest-700">({{ Auth::user()->email }})</span></p>
                 </div>
             </div>
             <a href="{{ route('pengajuan.saya') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-forest-200 text-xs font-bold text-forest-800 hover:bg-forest-100 transition-all shadow-2xs">
@@ -217,7 +217,7 @@
 
                     {{-- 4. Unggah Persyaratan (KTP, KK, Dokumen Pendukung) --}}
                     <div class="pt-4 border-t border-stone-100">
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-4">
                             <h3 class="text-xs font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
                                 <i data-lucide="paperclip" class="w-4 h-4 text-forest-700"></i>
                                 Unggah Berkas Persyaratan

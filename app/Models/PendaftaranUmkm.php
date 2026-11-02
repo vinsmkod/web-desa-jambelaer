@@ -158,6 +158,6 @@ class PendaftaranUmkm extends Model
 
     public function produkDipublikasikan(): HasOne
     {
-        return $this->hasOne(Produk::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
+        return $this->hasOne(UMKM::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
     }
 }
