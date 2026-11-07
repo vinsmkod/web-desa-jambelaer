@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class JenisSurat extends Model
+class JenisSuratModel extends Model
 {
     protected $table = 'jenis_surat';
 
@@ -26,6 +26,6 @@ class JenisSurat extends Model
 
     public function pengajuanSurats(): HasMany
     {
-        return $this->hasMany(PengajuanSurat::class, 'jenis_surat_id', 'id');
+        return $this->hasMany(PengajuanSuratModel::class, 'jenis_surat_id', 'id');
     }
 }

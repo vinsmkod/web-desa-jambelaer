@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengaduan;
+use App\Models\PengaduanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,14 +17,14 @@ class PengaduanController extends Controller
         $status = $request->get('status', 'semua');
         $search = $request->get('q');
 
-        $query = Pengaduan::with('user')->latest();
+        $query = PengaduanModel::with('user')->latest();
 
         $stats = [
-            'total'    => Pengaduan::count(),
-            'diajukan' => Pengaduan::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'diproses' => Pengaduan::where('status', 'diproses')->count(),
-            'selesai'  => Pengaduan::whereIn('status', ['selesai', 'disetujui'])->count(),
-            'ditolak'  => Pengaduan::where('status', 'ditolak')->count(),
+            'total'    => PengaduanModel::count(),
+            'diajukan' => PengaduanModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'diproses' => PengaduanModel::where('status', 'diproses')->count(),
+            'selesai'  => PengaduanModel::whereIn('status', ['selesai', 'disetujui'])->count(),
+            'ditolak'  => PengaduanModel::where('status', 'ditolak')->count(),
         ];
 
         if ($status && $status !== 'semua') {
@@ -55,7 +55,7 @@ class PengaduanController extends Controller
     /**
      * Tampilkan detail pengaduan dan foto bukti.
      */
-    public function show(Pengaduan $pengaduan)
+    public function show(PengaduanModel $pengaduan)
     {
         $pengaduan->load('user');
         return view('admin.pengaduan.show', compact('pengaduan'));
@@ -64,7 +64,7 @@ class PengaduanController extends Controller
     /**
      * Berikan tanggapan dan perbarui status pengaduan masyarakat.
      */
-    public function updateStatus(Request $request, Pengaduan $pengaduan)
+    public function updateStatus(Request $request, PengaduanModel $pengaduan)
     {
         $validated = $request->validate([
             'status'          => ['required', 'string', 'in:diajukan,diproses,selesai,ditolak'],
@@ -82,7 +82,7 @@ class PengaduanController extends Controller
     /**
      * Hapus pengaduan masyarakat.
      */
-    public function destroy(Pengaduan $pengaduan)
+    public function destroy(PengaduanModel $pengaduan)
     {
         if ($pengaduan->foto_bukti) {
             Storage::disk('public')->delete($pengaduan->foto_bukti);

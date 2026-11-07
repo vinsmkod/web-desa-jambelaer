@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisSurat;
-use App\Models\PengajuanSurat;
+use App\Models\JenisSuratModel;
+use App\Models\PengajuanSuratModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +16,7 @@ class PengajuanSuratController extends Controller
      */
     public function create(Request $request)
     {
-        $jenisSurat = JenisSurat::where('is_active', true)
+        $jenisSurat = JenisSuratModel::where('is_active', true)
             ->orderBy('urutan')
             ->orderBy('nama_surat')
             ->get();
@@ -94,7 +94,7 @@ class PengajuanSuratController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $jenisSurat = JenisSurat::findOrFail($request->jenis_surat_id);
+        $jenisSurat = JenisSuratModel::findOrFail($request->jenis_surat_id);
         $user = Auth::user();
 
         // 3. Upload Berkas Aman
@@ -106,9 +106,9 @@ class PengajuanSuratController extends Controller
         }
 
         // 4. Buat Pengajuan Surat
-        $nomorPengajuan = PengajuanSurat::generateNomorPengajuan();
+        $nomorPengajuan = PengajuanSuratModel::generateNomorPengajuan();
 
-        $pengajuan = PengajuanSurat::create([
+        $pengajuan = PengajuanSuratModel::create([
             'nomor_pengajuan'     => $nomorPengajuan,
             'user_id'             => $user->user_id,
             'jenis_surat_id'      => $jenisSurat->id,
@@ -147,7 +147,7 @@ class PengajuanSuratController extends Controller
      */
     public function edit(int $id)
     {
-        $pengajuan = PengajuanSurat::with('jenisSurat')->findOrFail($id);
+        $pengajuan = PengajuanSuratModel::with('jenisSurat')->findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pengajuan->user_id !== (int) Auth::id()) {
@@ -161,7 +161,7 @@ class PengajuanSuratController extends Controller
                 ->with('warning', 'Pengajuan yang sudah diproses tidak dapat diubah lagi.');
         }
 
-        $jenisSurat = JenisSurat::where('is_active', true)
+        $jenisSurat = JenisSuratModel::where('is_active', true)
             ->orderBy('urutan')
             ->orderBy('nama_surat')
             ->get();
@@ -179,7 +179,7 @@ class PengajuanSuratController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $pengajuan = PengajuanSurat::findOrFail($id);
+        $pengajuan = PengajuanSuratModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR)
         if ((int) $pengajuan->user_id !== (int) Auth::id()) {
@@ -275,7 +275,7 @@ class PengajuanSuratController extends Controller
      */
     public function batal(int $id)
     {
-        $pengajuan = PengajuanSurat::findOrFail($id);
+        $pengajuan = PengajuanSuratModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pengajuan->user_id !== (int) Auth::id()) {

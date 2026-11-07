@@ -143,7 +143,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.pengajuan-surat.*') ? 'active' : '' }}">
                 <i data-lucide="file-check" class="icon"></i>
                 <span>Pengajuan Surat</span>
-                @php $unreadSurat = \App\Models\PengajuanSurat::where('status', 'diajukan')->count(); @endphp
+                @php $unreadSurat = \App\Models\PengajuanSuratModel::where('status', 'diajukan')->count(); @endphp
                 @if($unreadSurat > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadSurat }}</span>
                 @endif
@@ -155,7 +155,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}">
                 <i data-lucide="alert-circle" class="icon"></i>
                 <span>Pengaduan Warga</span>
-                @php $unreadAduan = \App\Models\Pengaduan::where('status', 'diajukan')->count(); @endphp
+                @php $unreadAduan = \App\Models\PengaduanModel::where('status', 'diajukan')->count(); @endphp
                 @if($unreadAduan > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadAduan }}</span>
                 @endif
@@ -167,7 +167,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.pertanyaan-umum.*') ? 'active' : '' }}">
                 <i data-lucide="help-circle" class="icon"></i>
                 <span>Pertanyaan Umum</span>
-                @php $unreadTanya = \App\Models\PertanyaanUmum::where('status', 'terkirim')->count(); @endphp
+                @php $unreadTanya = \App\Models\PertanyaanUmumModel::where('status', 'terkirim')->count(); @endphp
                 @if($unreadTanya > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadTanya }}</span>
                 @endif
@@ -179,7 +179,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.pendaftaran-umkm.*') ? 'active' : '' }}">
                 <i data-lucide="store" class="icon"></i>
                 <span>Pendaftaran UMKM</span>
-                @php $unreadUmkm = \App\Models\PendaftaranUmkm::where('status', 'menunggu_verifikasi')->count(); @endphp
+                @php $unreadUmkm = \App\Models\PendaftaranUmkmModel::where('status', 'menunggu_verifikasi')->count(); @endphp
                 @if($unreadUmkm > 0)
                 <span class="ml-auto text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-md">{{ $unreadUmkm }}</span>
                 @endif
@@ -191,7 +191,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.jenis-surat.*') ? 'active' : '' }}">
                 <i data-lucide="file-text" class="icon"></i>
                 <span>Kelola Jenis Surat</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\JenisSurat::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\JenisSuratModel::count() }}</span>
             </a>
             @endif
 
@@ -200,7 +200,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.produk.*') ? 'active' : '' }}">
                 <i data-lucide="package" class="icon"></i>
                 <span>Katalog UMKM</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\UMKM::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\UMKMModel::count() }}</span>
             </a>
             @endif
 
@@ -227,19 +227,19 @@
                 class="sidebar-link {{ request()->routeIs('admin.budaya.*') ? 'active' : '' }}">
                 <i data-lucide="music" class="icon"></i>
                 <span>Budaya Desa</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Budaya::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\BudayaModel::count() }}</span>
             </a>
             <a href="{{ route('admin.wisata.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.wisata.*') ? 'active' : '' }}">
                 <i data-lucide="compass" class="icon"></i>
                 <span>Wisata Desa</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Wisata::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\WisataModel::count() }}</span>
             </a>
             <a href="{{ route('admin.galeri.index') }}"
                 class="sidebar-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
                 <i data-lucide="image" class="icon"></i>
                 <span>Galeri Desa</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Galeri::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\GaleriModel::count() }}</span>
             </a>
             @endif
 
@@ -248,7 +248,7 @@
                 class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
                 <i data-lucide="newspaper" class="icon"></i>
                 <span>Berita Desa</span>
-                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\Berita::count() }}</span>
+                <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ \App\Models\BeritaModel::count() }}</span>
             </a>
             @endif
 
@@ -258,7 +258,7 @@
                 <i data-lucide="calendar" class="icon"></i>
                 <span>Agenda Acara</span>
                 @php
-                    $totalAcara = \App\Models\AgendaAcara::where(function($q){$q->whereNull('is_archived')->orWhere('is_archived', false);})->count();
+                    $totalAcara = \App\Models\AcaraModel::where(function($q){$q->whereNull('is_archived')->orWhere('is_archived', false);})->count();
                 @endphp
                 <span class="ml-auto text-[10px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded-md">{{ $totalAcara }}</span>
             </a>
@@ -297,7 +297,7 @@
                     <p class="text-sm font-semibold text-slate-800 truncate leading-tight">{{ auth()->user()->name }}</p>
                     <p class="text-[10px] text-slate-400 truncate">{{ auth()->user()->email }}</p>
                 </div>
-                <form method="POST" action="{{ route('admin.logout') }}">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" title="Logout"
                         class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors">
@@ -328,10 +328,10 @@
             <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 ml-auto">
                 <!-- Notif bell / Layanan Warga -->
                 @php
-                    $pendingTotal = \App\Models\PengajuanSurat::where('status', 'diajukan')->count() 
-                                  + \App\Models\Pengaduan::where('status', 'diajukan')->count()
-                                  + \App\Models\PertanyaanUmum::where('status', 'terkirim')->count()
-                                  + \App\Models\PendaftaranUmkm::where('status', 'menunggu_verifikasi')->count();
+                    $pendingTotal = \App\Models\PengajuanSuratModel::where('status', 'diajukan')->count() 
+                                  + \App\Models\PengaduanModel::where('status', 'diajukan')->count()
+                                  + \App\Models\PertanyaanUmumModel::where('status', 'terkirim')->count()
+                                  + \App\Models\PendaftaranUmkmModel::where('status', 'menunggu_verifikasi')->count();
                 @endphp
                 <a href="{{ route('admin.pengajuan-surat.index') }}" class="relative w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-all" title="Layanan Warga ({{ $pendingTotal }} Menunggu)">
                     <i data-lucide="bell" class="w-4 h-4"></i>

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class StrukturDesa extends Model
+class StrukturDesaModel extends Model
 {
     protected $table = 'struktur_desa';
     protected $primaryKey = 'struktur_desa_id';
@@ -30,7 +30,7 @@ class StrukturDesa extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'created_by', 'user_id');
     }
 }
 

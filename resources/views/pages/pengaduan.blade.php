@@ -25,7 +25,7 @@
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <a href="{{ route('kontak') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
+        <a href="{{ route('layanan') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
         <span class="text-forest-800 font-semibold">Pengaduan Masyarakat</span>
     </nav>
@@ -191,9 +191,10 @@
                         <p class="text-xs text-stone-400 font-light">
                             Dengan mengirim pengaduan, Anda menyatakan data yang diberikan adalah benar dan dapat dipertanggungjawabkan.
                         </p>
-                        <button type="submit" class="btn-primary !bg-rose-700 !border-rose-700 hover:!bg-rose-800 w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            Kirim Pengaduan
+                        <button type="submit" class="w-full sm:w-auto btn-submit-layanan">
+                            <span class="btn-spinner"></span>
+                            <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
+                            <span class="btn-text">Kirim Pengaduan</span>
                         </button>
                     </div>
                 </form>
@@ -247,7 +248,7 @@
                     <p class="text-xs text-stone-500 font-light leading-relaxed mb-4">
                         Untuk kejadian darurat yang membutuhkan penanganan mendesak, silakan hubungi langsung kontak WhatsApp desa.
                     </p>
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Pengaturan::get('desa_telepon', '6281324768193')) }}" target="_blank"
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\PengaturanModel::get('desa_telepon', '6281324768193')) }}" target="_blank"
                         class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all w-full justify-center">
                         <i data-lucide="message-circle" class="w-4 h-4"></i>
                         Hubungi WhatsApp Desa

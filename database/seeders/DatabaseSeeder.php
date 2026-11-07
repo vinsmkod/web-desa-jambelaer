@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\UMKM;
-use App\Models\Pengaturan;
-use App\Models\Budaya;
-use App\Models\Berita;
-use App\Models\Wisata;
+use App\Models\UserModel;
+use App\Models\UMKMModel;
+use App\Models\PengaturanModel;
+use App\Models\BudayaModel;
+use App\Models\BeritaModel;
+use App\Models\WisataModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ── Admin & Perangkat Desa Users (SRS-F-001 & SRS-F-014) ───────────
-        User::updateOrCreate(
+        UserModel::updateOrCreate(
             ['email' => 'admin@jambelaer.id'],
             [
                 'name'     => 'Admin Desa Jambelaer',
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        UserModel::updateOrCreate(
             ['email' => 'staff@jambelaer.desa.id'],
             [
                 'name'     => 'Staff Desa Jambelaer',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        UserModel::updateOrCreate(
             ['email' => 'kasi@jambelaer.desa.id'],
             [
                 'name'     => 'Kasi Pemerintahan Desa',
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        UserModel::updateOrCreate(
             ['email' => 'sekdes@jambelaer.desa.id'],
             [
                 'name'     => 'Sekretaris Desa Jambelaer',
@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        UserModel::updateOrCreate(
             ['email' => 'kades@jambelaer.desa.id'],
             [
                 'name'     => 'Kepala Desa Jambelaer',
@@ -154,77 +154,193 @@ class DatabaseSeeder extends Seeder
                 'is_active'   => true,
                 'urutan'      => 4,
             ],
-            // ── Opak – 3 Produsen Lokal ─────────────────────────────────────
+            // ── Opak – 7 Produsen Lokal Khas Desa Jambelaer ───────────────
             [
-                'slug'        => 'opak-singkong-bu-siti',
-                'title'       => 'Opak Singkong Bu Siti',
-                'producer'    => 'Bu Siti Rahayu',
-                'price'       => 'Rp 12.000 / bks',
-                'badge'       => 'Makanan',
-                'jenis'       => 'opak',
-                'jenis_label' => 'Opak',
-                'category'    => ['makanan'],
-                'img'         => '/uploads/img/DESA_JAMBELAER.png',
-                'desc_short'  => 'Opak singkong renyah buatan Bu Siti, dibumbui rempah khas Sunda. Digoreng kering tanpa pengawet.',
-                'desc_long'   => 'Opak singkong Bu Siti Rahayu adalah kerupuk tradisional khas Sunda yang terbuat dari singkong pilihan, diproses secara higienis tanpa bahan pengawet. Dibumbui dengan rempah khas Sunda seperti bawang putih, ketumbar, dan sedikit kencur sehingga menghasilkan cita rasa gurih yang otentik. Proses pengeringan dilakukan secara alami di bawah sinar matahari sebelum digoreng kering hingga sempurna renyah. Dikemas dalam plastik kedap udara 200 gram per bungkus.',
-                'details'     => [
-                    'Berat Bersih'  => '200 gram / bungkus',
-                    'Bahan Utama'   => 'Singkong pilihan',
-                    'Rasa'          => 'Original, Asin Gurih',
-                    'Masa Simpan'   => '2 bulan (kemasan tertutup)',
-                    'Ketersediaan'  => 'Tersedia, min. order 5 bungkus',
+                'slug'             => 'opak-ma-wiwin',
+                'title'            => 'Opak Ma Wiwin',
+                'producer'         => 'Opak Ma Wiwin',
+                'nama_pemilik'     => 'Ma Wiwin',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '085220724877',
+                'instagram_umkm'   => '@opak_ibu.wiwin',
+                'price'            => 'Rp 12.000 / bks',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282039_opak-ma-wiwin.jpeg',
+                'desc_short'       => 'Opak singkong renyah buatan Ma Wiwin Kp. Melong, diolah secara tradisional dengan cita rasa gurih khas Sunda.',
+                'desc_long'        => 'Opak Ma Wiwin diproduksi langsung dari Kp. Melong, Desa Jambelaer dengan resep tradisional keluarga. Menggunakan bahan singkong pilihan segar dan bumbu rempah alami tanpa pengawet. Teksturnya sangat renyah dan gurih, cocok untuk camilan maupun oleh-oleh khas desa.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '12.000 / Bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
                 ],
-                'is_active'   => true,
-                'urutan'      => 5,
+                'is_active'        => true,
+                'urutan'           => 5,
             ],
             [
-                'slug'        => 'opak-gurih-pak-deden',
-                'title'       => 'Opak Gurih Pak Deden',
-                'producer'    => 'Pak Deden Suryana',
-                'price'       => 'Rp 10.000 / bks',
-                'badge'       => 'Makanan',
-                'jenis'       => 'opak',
-                'jenis_label' => 'Opak',
-                'category'    => ['makanan'],
-                'img'         => '/uploads/img/DESA_JAMBELAER.png',
-                'desc_short'  => 'Opak tipis renyah produksi Pak Deden, resep turun-temurun 3 generasi di Desa Jambelaer.',
-                'desc_long'   => 'Pak Deden Suryana adalah pengrajin opak generasi ketiga di Desa Jambelaer. Resep warisan leluhur ini menggunakan singkong lokal yang dipanen sendiri dari kebun sekitar desa. Proses pembuatan sepenuhnya manual menggunakan alat tradisional sehingga setiap keping opak memiliki ketebalan khas dan tekstur renyah yang berbeda dari opak pabrikan. Tersedia dalam ukuran besar (diameter 20 cm) dan mini untuk camilan sehari-hari.',
-                'details'     => [
-                    'Berat Bersih'  => '150 gram / bungkus',
-                    'Bahan Utama'   => 'Singkong lokal organik',
-                    'Ukuran'        => 'Besar (Ø 20 cm) / Mini',
-                    'Masa Simpan'   => '3 bulan (kemasan tertutup)',
-                    'Ketersediaan'  => 'Tersedia, pengiriman 1–2 hari',
+                'slug'             => 'opak-ibu-ninin',
+                'title'            => 'Opak Ibu Ninin',
+                'producer'         => 'Ibu Ninin',
+                'nama_pemilik'     => 'Ibu Ninin',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '085793644896',
+                'instagram_umkm'   => '@opak_ibu.ninin',
+                'price'            => 'Rp 12.000 / bks',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282054_opak-ibu-ninin.jpeg',
+                'desc_short'       => 'Opak gurih lezat olahan Ibu Ninin Kp. Melong, tekstur tipis garing renyah alami.',
+                'desc_long'        => 'Opak Ibu Ninin adalah camilan tradisional olahan singkong pilihan dengan ketebalan yang pas dan kegaringan yang tahan lama. Diolah higienis oleh pengrajin lokal di Kp. Melong, Desa Jambelaer.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '12.000 / Bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
                 ],
-                'is_active'   => true,
-                'urutan'      => 6,
+                'is_active'        => true,
+                'urutan'           => 6,
             ],
             [
-                'slug'        => 'opak-pedas-ibu-tini',
-                'title'       => 'Opak Pedas Ibu Tini',
-                'producer'    => 'Kelompok Usaha Ibu Tini',
-                'price'       => 'Rp 13.000 / bks',
-                'badge'       => 'Makanan',
-                'jenis'       => 'opak',
-                'jenis_label' => 'Opak',
-                'category'    => ['makanan'],
-                'img'         => '/uploads/img/DESA_JAMBELAER.png',
-                'desc_short'  => 'Opak pedas varian baru khas Ibu Tini, berbumbu cabai rawit segar. Favorit para muda-mudi desa!',
-                'desc_long'   => 'Ibu Tini bersama kelompok usaha ibu-ibu RT 04 berinovasi membuat opak tradisional dengan sentuhan modern: varian rasa pedas menggunakan cabai rawit merah segar yang digiling halus. Rasanya menggigit di lidah namun tetap terasa rempah tradisionalnya. Produk ini menjadi favorit generasi muda dan sering dipesan sebagai oleh-oleh khas Desa Jambelaer. Setiap bungkus dikemas rapi dengan label produk yang menarik.',
-                'details'     => [
-                    'Berat Bersih'  => '180 gram / bungkus',
-                    'Varian Rasa'   => 'Pedas Original, Super Pedas',
-                    'Bahan Utama'   => 'Singkong + Cabai Rawit Merah Segar',
-                    'Masa Simpan'   => '2 bulan',
-                    'Ketersediaan'  => 'Tersedia, siap kirim',
+                'slug'             => 'opak-ibu-aan',
+                'title'            => 'Opak Ibu Aan',
+                'producer'         => 'Ibu Aan',
+                'nama_pemilik'     => 'Ibu Aan',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '085320081452',
+                'instagram_umkm'   => '@opak_ibu.aan',
+                'price'            => 'Rp 12.000 / bks',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282072_opak-ibu-aan.png',
+                'desc_short'       => 'Opak khas Ibu Aan dengan racikan bumbu gurih otentik, renyah dan empuk digigit.',
+                'desc_long'        => 'Opak Ibu Aan menyajikan opak singkong tradisional berkualitas tinggi. Diproses dengan penjemuran alami dan penggorengan menggunakan minyak berkualitas sehingga tidak serak di tenggorokan.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '12.000 / bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
                 ],
-                'is_active'   => true,
-                'urutan'      => 7,
+                'is_active'        => true,
+                'urutan'           => 7,
+            ],
+            [
+                'slug'             => 'opak-hj-karli',
+                'title'            => 'Opak Hj. Karli',
+                'producer'         => 'Hj. Karli',
+                'nama_pemilik'     => 'Hj. Karli',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '085559072303',
+                'instagram_umkm'   => '@opak_haji.karli',
+                'price'            => 'Rp 13.000 / bks',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282086_opak-hj-karli.jpeg',
+                'desc_short'       => 'Opak legendaris Hj. Karli, rasa gurih sedap dan renyah nikmat untuk segala suasana.',
+                'desc_long'        => 'Opak Hj. Karli telah dikenal luas oleh masyarakat Subang. Menggunakan singkong lokal pilihan serta bumbu rempah Sunda yang gurih dan beraroma harum.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '13.000 / bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
+                ],
+                'is_active'        => true,
+                'urutan'           => 8,
+            ],
+            [
+                'slug'             => 'opak-ibu-hj-atang',
+                'title'            => 'Opak Ibu Hj. Atang',
+                'producer'         => 'Ibu Hj. Atang',
+                'nama_pemilik'     => 'Ibu Hj. Atang',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '085220051904',
+                'instagram_umkm'   => '@opak_ibu.h.atang',
+                'price'            => 'Rp 15.000 / kg',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282101_opak-ibu-hj-atang.jpeg',
+                'desc_short'       => 'Opak Ibu Hj. Atang kemasan kiloan maupun bungkus, dibuat dengan standar mutu kebersihan terbaik.',
+                'desc_long'        => 'Opak Ibu Hj. Atang diproduksi secara konsisten dengan mutu terjamin. Tersedia pilihan kemasan curah per kg maupun eceran.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '15.000 / bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
+                ],
+                'is_active'        => true,
+                'urutan'           => 9,
+            ],
+            [
+                'slug'             => 'opak-ceu-juju',
+                'title'            => 'Opak Ceu Juju',
+                'producer'         => 'Ceu Juju',
+                'nama_pemilik'     => 'Ceu Juju',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '081214915721',
+                'instagram_umkm'   => '@opak_ceu.juju',
+                'price'            => 'Rp 25.000 / pcs',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282118_opak-ceu-juju.jpeg',
+                'desc_short'       => 'Opak Ceu Juju renyah kriuk dengan kemasan praktis dan cita rasa istimewa.',
+                'desc_long'        => 'Opak Ceu Juju diproduksi dengan ketelitian tinggi, menghasilkan opak yang renyah sempurna, gurih seimbang, dan tahan lama.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '12.000 / bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
+                ],
+                'is_active'        => true,
+                'urutan'           => 10,
+            ],
+            [
+                'slug'             => 'opak-abah-utim',
+                'title'            => 'Opak Abah Utim',
+                'producer'         => 'Abah Utim',
+                'nama_pemilik'     => 'Abah Utim',
+                'alamat_umkm'      => 'Kp. Melong, Desa Jambelaer, Kec. Dawuan, Kab. Subang',
+                'jam_operasional'  => 'Senin-Minggu (06:00-17:00)',
+                'no_whatsapp_umkm' => '082315250140',
+                'instagram_umkm'   => '@opak_abah.utim',
+                'price'            => 'Rp 15.000 / kg',
+                'badge'            => 'Makanan',
+                'jenis'            => 'opak',
+                'jenis_label'      => 'Opak',
+                'category'         => ['makanan'],
+                'img'              => '/uploads/produk/1786282136_opak-abah-utim.png',
+                'desc_short'       => 'Opak Abah Utim resep turun-temurun pengrajin sepuh Kp. Melong, rasa otentik Sunda.',
+                'desc_long'        => 'Opak Abah Utim adalah opak tradisional khas warisan sepuh Desa Jambelaer. Dibuat dengan metode tradisional yang menjaga cita rasa asli sejak puluhan tahun lalu.',
+                'details'          => [
+                    'Berat Bersih' => '200 gram / bungkus',
+                    'Harga'        => '12.000 / Bungkus',
+                    'Ketersediaan' => 'Tersedia',
+                    'Sertifikasi'  => 'P-IRT',
+                ],
+                'is_active'        => true,
+                'urutan'           => 11,
             ],
         ];
 
         foreach ($produk as $p) {
-            UMKM::updateOrCreate(['slug' => $p['slug']], $p);
+            UMKMModel::updateOrCreate(['slug' => $p['slug']], $p);
         }
 
         // ── Pengaturan Desa ──────────────────────────────────────────────────
@@ -246,7 +362,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($settings as $s) {
-            Pengaturan::updateOrCreate(['key' => $s['key']], $s);
+            PengaturanModel::updateOrCreate(['key' => $s['key']], $s);
         }
 
         // ── Budaya ──────────────────────────────────────────────────────────
@@ -310,7 +426,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($budayas as $b) {
-            Budaya::updateOrCreate(['title' => $b['title']], $b);
+            BudayaModel::updateOrCreate(['title' => $b['title']], $b);
         }
 
         // ── Berita Desa ──────────────────────────────────────────────────────
@@ -351,7 +467,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($beritaList as $br) {
-            Berita::updateOrCreate(['slug' => $br['slug']], $br);
+            BeritaModel::updateOrCreate(['slug' => $br['slug']], $br);
         }
 
         // ── Wisata ──────────────────────────────────────────────────────────
@@ -429,7 +545,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($wisataList as $w) {
-            Wisata::updateOrCreate(['slug' => $w['slug']], $w);
+            WisataModel::updateOrCreate(['slug' => $w['slug']], $w);
         }
     }
 }

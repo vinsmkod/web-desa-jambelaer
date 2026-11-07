@@ -18,7 +18,7 @@ class KontakController extends Controller
             'pengaduan'       => route('pengaduan.create'),
             'pertanyaan_umum' => route('pertanyaan-umum.create'),
             'daftar_umkm'     => route('pendaftaran-umkm.create'),
-            default           => route('kontak'),
+            default           => route('layanan'),
         };
 
         if ($request->ajax() || $request->wantsJson()) {

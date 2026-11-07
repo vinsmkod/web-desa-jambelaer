@@ -136,7 +136,7 @@
             @endif
 
             <!-- Form -->
-            <form method="POST" action="{{ request()->is('admin*') ? route('admin.login.post') : route('login.post') }}" class="space-y-3.5">
+            <form method="POST" action="{{ route('login.post') }}" class="space-y-3.5">
                 @csrf
 
                 <!-- Email Input -->

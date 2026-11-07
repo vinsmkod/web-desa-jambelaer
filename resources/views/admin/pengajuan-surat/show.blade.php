@@ -175,25 +175,25 @@
                 $isAllowedToAct = false;
                 $allowedOptions = [];
 
-                if ($authUser->role === \App\Models\User::ROLE_STAFF_DESA) {
+                if ($authUser->role === \App\Models\UserModel::ROLE_STAFF_DESA) {
                     $isAllowedToAct = in_array($currentStatus, ['diajukan', 'menunggu', 'diproses']);
                     $allowedOptions = [
                         'diproses' => 'Diproses (Pemeriksaan Dokumen Lengkap & Sesuai)',
                         'ditolak'  => 'Ditolak (Persyaratan Berkas Tidak Lengkap / Tidak Sesuai)',
                     ];
-                } elseif ($authUser->role === \App\Models\User::ROLE_SEKRETARIS_DESA) {
+                } elseif ($authUser->role === \App\Models\UserModel::ROLE_SEKRETARIS_DESA) {
                     $isAllowedToAct = in_array($currentStatus, ['diproses', 'diverifikasi']);
                     $allowedOptions = [
                         'diverifikasi' => 'Diverifikasi (Verifikasi Berkas Disetujui Sekretaris Desa)',
                         'ditolak'      => 'Ditolak (Berkas Ditolak / Perlu Perbaikan)',
                     ];
-                } elseif ($authUser->role === \App\Models\User::ROLE_KEPALA_DESA) {
+                } elseif ($authUser->role === \App\Models\UserModel::ROLE_KEPALA_DESA) {
                     $isAllowedToAct = in_array($currentStatus, ['diverifikasi', 'selesai']);
                     $allowedOptions = [
                         'selesai' => 'Selesai (Disetujui Kepala Desa & Surat Diterbitkan)',
                         'ditolak' => 'Ditolak (Persetujuan Ditolak Kepala Desa)',
                     ];
-                } elseif ($authUser->role === \App\Models\User::ROLE_ADMIN) {
+                } elseif ($authUser->role === \App\Models\UserModel::ROLE_ADMIN) {
                     $isAllowedToAct = true;
                     $allowedOptions = [
                         'diajukan'     => 'Diajukan (Menunggu Pemeriksaan)',

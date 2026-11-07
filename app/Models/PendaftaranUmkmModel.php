@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PendaftaranUmkm extends Model
+class PendaftaranUmkmModel extends Model
 {
     protected $table = 'pendaftaran_umkms';
     protected $primaryKey = 'pendaftaran_umkm_id';
@@ -153,11 +153,11 @@ class PendaftaranUmkm extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
     }
 
     public function produkDipublikasikan(): HasOne
     {
-        return $this->hasOne(UMKM::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
+        return $this->hasOne(UMKMModel::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
     }
 }

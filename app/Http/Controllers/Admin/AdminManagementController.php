@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -12,15 +12,37 @@ use Illuminate\Validation\Rules\Password;
 class AdminManagementController extends Controller
 {
     /**
-     * Menampilkan daftar perangkat desa terdaftar dan form registrasi akun baru (SRS-F-014).
+     * Menampilkan daftar pengguna (Perangkat Desa + Masyarakat) untuk Kelola Pengguna (SRS-F-014).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $admins = User::whereIn('role', User::PERANGKAT_DESA_ROLES)
+        $search = $request->input('search');
+
+        $admins = UserModel::whereIn('role', UserModel::PERANGKAT_DESA_ROLES)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('name', 'like', '%' . $search . '%')
+                       ->orWhere('email', 'like', '%' . $search . '%')
+                       ->orWhere('jabatan', 'like', '%' . $search . '%');
+                });
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.kelola-admin.index', compact('admins'));
+        $masyarakat = UserModel::where('role', UserModel::ROLE_MASYARAKAT)
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('name', 'like', '%' . $search . '%')
+                       ->orWhere('email', 'like', '%' . $search . '%')
+                       ->orWhere('no_hp', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $activeTab = $request->input('tab', 'perangkat');
+
+        return view('admin.kelola-admin.index', compact('admins', 'masyarakat', 'activeTab', 'search'));
     }
 
     /**
@@ -29,10 +51,10 @@ class AdminManagementController extends Controller
     public function create()
     {
         $roles = [
-            User::ROLE_STAFF_DESA        => 'Staff Desa',
-            User::ROLE_KASI_PEMERINTAHAN => 'Kasi Pemerintahan',
-            User::ROLE_SEKRETARIS_DESA   => 'Sekretaris Desa',
-            User::ROLE_KEPALA_DESA       => 'Kepala Desa',
+            UserModel::ROLE_STAFF_DESA        => 'Staff Desa',
+            UserModel::ROLE_KASI_PEMERINTAHAN => 'Kasi Pemerintahan',
+            UserModel::ROLE_SEKRETARIS_DESA   => 'Sekretaris Desa',
+            UserModel::ROLE_KEPALA_DESA       => 'Kepala Desa',
         ];
 
         return view('admin.kelola-admin.create', compact('roles'));
@@ -44,11 +66,11 @@ class AdminManagementController extends Controller
     public function store(Request $request)
     {
         $allowedRoles = [
-            User::ROLE_STAFF_DESA,
-            User::ROLE_KASI_PEMERINTAHAN,
-            User::ROLE_SEKRETARIS_DESA,
-            User::ROLE_KEPALA_DESA,
-            User::ROLE_ADMIN,
+            UserModel::ROLE_STAFF_DESA,
+            UserModel::ROLE_KASI_PEMERINTAHAN,
+            UserModel::ROLE_SEKRETARIS_DESA,
+            UserModel::ROLE_KEPALA_DESA,
+            UserModel::ROLE_ADMIN,
         ];
 
         $request->validate([
@@ -74,7 +96,7 @@ class AdminManagementController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok. Pastikan isian kedua kolom password sama.',
         ]);
 
-        User::create([
+        UserModel::create([
             'name'     => $request->name,
             'email'    => strtolower(trim($request->email)),
             'password' => Hash::make($request->password),
@@ -89,14 +111,14 @@ class AdminManagementController extends Controller
     /**
      * Menampilkan form edit data akun perangkat desa / reset password.
      */
-    public function edit(User $admin)
+    public function edit(UserModel $admin)
     {
         $roles = [
-            User::ROLE_STAFF_DESA        => 'Staff Desa',
-            User::ROLE_KASI_PEMERINTAHAN => 'Kasi Pemerintahan',
-            User::ROLE_SEKRETARIS_DESA   => 'Sekretaris Desa',
-            User::ROLE_KEPALA_DESA       => 'Kepala Desa',
-            User::ROLE_ADMIN             => 'Administrator Sistem',
+            UserModel::ROLE_STAFF_DESA        => 'Staff Desa',
+            UserModel::ROLE_KASI_PEMERINTAHAN => 'Kasi Pemerintahan',
+            UserModel::ROLE_SEKRETARIS_DESA   => 'Sekretaris Desa',
+            UserModel::ROLE_KEPALA_DESA       => 'Kepala Desa',
+            UserModel::ROLE_ADMIN             => 'Administrator Sistem',
         ];
 
         return view('admin.kelola-admin.edit', compact('admin', 'roles'));
@@ -105,14 +127,14 @@ class AdminManagementController extends Controller
     /**
      * Memperbarui data perangkat desa atau mereset password.
      */
-    public function update(Request $request, User $admin)
+    public function update(Request $request, UserModel $admin)
     {
         $allowedRoles = [
-            User::ROLE_STAFF_DESA,
-            User::ROLE_KASI_PEMERINTAHAN,
-            User::ROLE_SEKRETARIS_DESA,
-            User::ROLE_KEPALA_DESA,
-            User::ROLE_ADMIN,
+            UserModel::ROLE_STAFF_DESA,
+            UserModel::ROLE_KASI_PEMERINTAHAN,
+            UserModel::ROLE_SEKRETARIS_DESA,
+            UserModel::ROLE_KEPALA_DESA,
+            UserModel::ROLE_ADMIN,
         ];
 
         $rules = [
@@ -159,22 +181,26 @@ class AdminManagementController extends Controller
     }
 
     /**
-     * Menghapus akun perangkat desa.
+     * Menghapus akun pengguna (Perangkat Desa maupun Masyarakat).
      */
-    public function destroy(User $admin)
+    public function destroy(UserModel $admin)
     {
         if ($admin->user_id === auth()->id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif.');
         }
 
-        if (User::whereIn('role', User::PERANGKAT_DESA_ROLES)->count() <= 1) {
-            return back()->with('error', 'Sistem harus memiliki minimal 1 akun perangkat desa aktif.');
+        // Jika akun yang dihapus adalah perangkat desa, pastikan minimal 1 akun tersisa
+        if ($admin->isPerangkatDesa()) {
+            if (UserModel::whereIn('role', UserModel::PERANGKAT_DESA_ROLES)->count() <= 1) {
+                return back()->with('error', 'Sistem harus memiliki minimal 1 akun perangkat desa aktif.');
+            }
         }
 
         $name = $admin->name;
+        $tab  = $admin->isPerangkatDesa() ? 'perangkat' : 'masyarakat';
         $admin->delete();
 
-        return redirect()->route('admin.kelola-admin.index')
-            ->with('success', 'Akun perangkat desa "' . $name . '" berhasil dihapus.');
+        return redirect()->route('admin.kelola-admin.index', ['tab' => $tab])
+            ->with('success', 'Akun "' . $name . '" berhasil dihapus.');
     }
 }

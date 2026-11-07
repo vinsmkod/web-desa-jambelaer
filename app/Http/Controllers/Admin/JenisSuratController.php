@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\JenisSurat;
+use App\Models\JenisSuratModel;
 use Illuminate\Http\Request;
 
 class JenisSuratController extends Controller
@@ -13,7 +13,7 @@ class JenisSuratController extends Controller
      */
     public function index()
     {
-        $jenisSurats = JenisSurat::withCount('pengajuanSurats')
+        $jenisSurats = JenisSuratModel::withCount('pengajuanSurats')
             ->orderBy('urutan')
             ->orderBy('nama_surat')
             ->get();
@@ -32,7 +32,7 @@ class JenisSuratController extends Controller
     /**
      * Tampilkan detail jenis surat (redirect ke edit).
      */
-    public function show(JenisSurat $jenisSurat)
+    public function show(JenisSuratModel $jenisSurat)
     {
         return redirect()->route('admin.jenis-surat.edit', $jenisSurat);
     }
@@ -40,7 +40,7 @@ class JenisSuratController extends Controller
     /**
      * Tampilkan form edit jenis surat.
      */
-    public function edit(JenisSurat $jenisSurat)
+    public function edit(JenisSuratModel $jenisSurat)
     {
         return view('admin.jenis-surat.edit', compact('jenisSurat'));
     }
@@ -60,9 +60,9 @@ class JenisSuratController extends Controller
         ]);
 
         $validated['is_active'] = ($request->input('is_active', '0') === '1');
-        $validated['urutan'] = $validated['urutan'] ?? (JenisSurat::max('urutan') + 1);
+        $validated['urutan'] = $validated['urutan'] ?? (JenisSuratModel::max('urutan') + 1);
 
-        JenisSurat::create($validated);
+        JenisSuratModel::create($validated);
 
         return redirect()->route('admin.jenis-surat.index')
             ->with('success', 'Jenis surat "' . $validated['nama_surat'] . '" berhasil ditambahkan ke sistem pelayanan.');
@@ -71,7 +71,7 @@ class JenisSuratController extends Controller
     /**
      * Perbarui data jenis surat.
      */
-    public function update(Request $request, JenisSurat $jenisSurat)
+    public function update(Request $request, JenisSuratModel $jenisSurat)
     {
         $validated = $request->validate([
             'nama_surat'         => ['required', 'string', 'max:255'],
@@ -93,7 +93,7 @@ class JenisSuratController extends Controller
     /**
      * Hapus jenis surat.
      */
-    public function destroy(JenisSurat $jenisSurat)
+    public function destroy(JenisSuratModel $jenisSurat)
     {
         $count = $jenisSurat->pengajuanSurats()->count() + $jenisSurat->pesan()->count();
         if ($count > 0) {
@@ -111,7 +111,7 @@ class JenisSuratController extends Controller
     /**
      * Toggle status aktif/non-aktif jenis surat.
      */
-    public function toggleActive(JenisSurat $jenisSurat)
+    public function toggleActive(JenisSuratModel $jenisSurat)
     {
         $jenisSurat->update(['is_active' => !$jenisSurat->is_active]);
 

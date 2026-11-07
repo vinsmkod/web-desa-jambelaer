@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class UserModel extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -42,6 +42,12 @@ class User extends Authenticatable
         'password',
         'role',
         'jabatan',
+        'no_hp',
+        'alamat',
+        'nik',
+        'jenis_kelamin',
+        'rt',
+        'rw',
     ];
 
     /**
@@ -281,27 +287,27 @@ class User extends Authenticatable
      */
     public function agendaAcara(): HasMany
     {
-        return $this->hasMany(AgendaAcara::class, 'user_id', 'user_id');
+        return $this->hasMany(AcaraModel::class, 'user_id', 'user_id');
     }
 
     public function pengajuanSurat(): HasMany
     {
-        return $this->hasMany(PengajuanSurat::class, 'user_id', 'user_id');
+        return $this->hasMany(PengajuanSuratModel::class, 'user_id', 'user_id');
     }
 
     public function pengaduan(): HasMany
     {
-        return $this->hasMany(Pengaduan::class, 'user_id', 'user_id');
+        return $this->hasMany(PengaduanModel::class, 'user_id', 'user_id');
     }
 
     public function pertanyaanUmum(): HasMany
     {
-        return $this->hasMany(PertanyaanUmum::class, 'user_id', 'user_id');
+        return $this->hasMany(PertanyaanUmumModel::class, 'user_id', 'user_id');
     }
 
     public function pendaftaranUmkm(): HasMany
     {
-        return $this->hasMany(PendaftaranUmkm::class, 'user_id', 'user_id');
+        return $this->hasMany(PendaftaranUmkmModel::class, 'user_id', 'user_id');
     }
 
     /**
@@ -309,7 +315,7 @@ class User extends Authenticatable
      */
     public function berita(): HasMany
     {
-        return $this->hasMany(Berita::class, 'created_by', 'user_id');
+        return $this->hasMany(BeritaModel::class, 'created_by', 'user_id');
     }
 
     /**
@@ -317,7 +323,7 @@ class User extends Authenticatable
      */
     public function budaya(): HasMany
     {
-        return $this->hasMany(Budaya::class, 'created_by', 'user_id');
+        return $this->hasMany(BudayaModel::class, 'created_by', 'user_id');
     }
 
     /**
@@ -325,7 +331,7 @@ class User extends Authenticatable
      */
     public function wisata(): HasMany
     {
-        return $this->hasMany(Wisata::class, 'created_by', 'user_id');
+        return $this->hasMany(WisataModel::class, 'created_by', 'user_id');
     }
 
     /**
@@ -333,7 +339,7 @@ class User extends Authenticatable
      */
     public function galeri(): HasMany
     {
-        return $this->hasMany(Galeri::class, 'created_by', 'user_id');
+        return $this->hasMany(GaleriModel::class, 'created_by', 'user_id');
     }
 
     /**
@@ -341,7 +347,7 @@ class User extends Authenticatable
      */
     public function umkm(): HasMany
     {
-        return $this->hasMany(UMKM::class, 'created_by', 'user_id');
+        return $this->hasMany(UMKMModel::class, 'created_by', 'user_id');
     }
 
     public function produk(): HasMany
@@ -354,6 +360,6 @@ class User extends Authenticatable
      */
     public function strukturDesa(): HasMany
     {
-        return $this->hasMany(StrukturDesa::class, 'created_by', 'user_id');
+        return $this->hasMany(StrukturDesaModel::class, 'created_by', 'user_id');
     }
 }

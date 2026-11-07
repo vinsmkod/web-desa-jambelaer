@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Berita;
-use App\Models\Budaya;
-use App\Models\Galeri;
-use App\Models\UMKM;
-use App\Models\Wisata;
+use App\Models\BeritaModel;
+use App\Models\BudayaModel;
+use App\Models\GaleriModel;
+use App\Models\UMKMModel;
+use App\Models\WisataModel;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
@@ -30,17 +30,17 @@ class SitemapController extends Controller
             ['url' => '/budaya',       'priority' => '0.7', 'changefreq' => 'monthly'],
             ['url' => '/galeri',       'priority' => '0.6', 'changefreq' => 'weekly'],
             ['url' => '/acara',        'priority' => '0.7', 'changefreq' => 'daily'],
-            ['url' => '/kontak',       'priority' => '0.5', 'changefreq' => 'yearly'],
+            ['url' => '/layanan',      'priority' => '0.7', 'changefreq' => 'monthly'],
         ];
 
         // ── Berita Published ──────────────────────────────────────────────────
-        $beritas = Berita::where('is_published', true)
+        $beritas = BeritaModel::where('is_published', true)
             ->select('slug', 'updated_at')
             ->orderBy('published_at', 'desc')
             ->get();
 
         // ── Produk UMKM Aktif ─────────────────────────────────────────────────
-        $produkList = UMKM::where('is_active', true)
+        $produkList = UMKMModel::where('is_active', true)
             ->select('slug', 'jenis', 'updated_at')
             ->orderBy('urutan')
             ->get();
@@ -49,18 +49,18 @@ class SitemapController extends Controller
         $jenisUnik = $produkList->whereNotNull('jenis')->pluck('jenis')->unique()->values();
 
         // ── Wisata Aktif ──────────────────────────────────────────────────────
-        $wisataList = Wisata::where('is_active', true)
+        $wisataList = WisataModel::where('is_active', true)
             ->select('slug', 'updated_at')
             ->orderBy('urutan')
             ->get();
 
         // ── Budaya ─────────────────────────────────────────────────────────────
-        $budayaList = Budaya::select('budaya_id', 'slug', 'updated_at')
+        $budayaList = BudayaModel::select('budaya_id', 'slug', 'updated_at')
             ->orderBy('urutan')
             ->get();
 
         // ── Galeri Aktif ──────────────────────────────────────────────────────
-        $galeriList = Galeri::where('is_active', true)
+        $galeriList = GaleriModel::where('is_active', true)
             ->select('galeri_id', 'slug', 'updated_at')
             ->orderBy('urutan')
             ->get();

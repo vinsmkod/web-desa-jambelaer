@@ -188,7 +188,7 @@
                         </div>
                         @endif
 
-                        <a href="{{ route('kontak', ['layanan' => 'pertanyaan_umum']) }}"
+                        <a href="{{ route('pertanyaan-umum.create') }}"
                             class="w-8 h-8 rounded bg-forest-50 border border-forest-100 hover:bg-forest-800 hover:text-white flex items-center justify-center text-forest-800 transition-colors"
                             title="Tanya Seputar Acara">
                             <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>

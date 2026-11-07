@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Berita;
+use App\Models\BeritaModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,13 +17,13 @@ class BeritaController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $query = Berita::orderBy('created_at', 'desc');
+        $query = BeritaModel::orderBy('created_at', 'desc');
 
         // Kasi Pemerintahan hanya dapat mengelola berita kegiatan pemerintahan & pembangunan desa
         if ($user && $user->isKasiPemerintahan()) {
             $query->whereIn('kategori', [
-                Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-                Berita::KATEGORI_PEMBANGUNAN_DESA,
+                BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+                BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
             ]);
         }
 
@@ -39,14 +39,14 @@ class BeritaController extends Controller
     {
         $user = Auth::user();
         $allowedKategori = [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN => 'Kegiatan Pemerintahan',
-            Berita::KATEGORI_PEMBANGUNAN_DESA     => 'Pembangunan Desa',
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN => 'Kegiatan Pemerintahan',
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA     => 'Pembangunan Desa',
         ];
 
         // Staff desa, kepala desa, dan admin dapat mengelola semua kategori
         if (!$user || !$user->isKasiPemerintahan()) {
             $allowedKategori = array_merge([
-                Berita::KATEGORI_UMUM => 'Umum / Kemasyarakatan',
+                BeritaModel::KATEGORI_UMUM => 'Umum / Kemasyarakatan',
             ], $allowedKategori);
         }
 
@@ -60,12 +60,12 @@ class BeritaController extends Controller
     {
         $user = Auth::user();
         $allowedKategoriValues = [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-            Berita::KATEGORI_PEMBANGUNAN_DESA,
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
         ];
 
         if (!$user || !$user->isKasiPemerintahan()) {
-            $allowedKategoriValues[] = Berita::KATEGORI_UMUM;
+            $allowedKategoriValues[] = BeritaModel::KATEGORI_UMUM;
         }
 
         $request->validate([
@@ -90,7 +90,7 @@ class BeritaController extends Controller
         $slug = Str::slug($request->judul);
         $originalSlug = $slug;
         $count = 1;
-        while (Berita::where('slug', $slug)->exists()) {
+        while (BeritaModel::where('slug', $slug)->exists()) {
             $slug = "{$originalSlug}-{$count}";
             $count++;
         }
@@ -100,7 +100,7 @@ class BeritaController extends Controller
             $gambarPath = $request->file('gambar')->store('berita', 'public');
         }
 
-        Berita::create([
+        BeritaModel::create([
             'created_by'   => Auth::id(),
             'judul'        => $request->judul,
             'slug'         => $slug,
@@ -120,26 +120,26 @@ class BeritaController extends Controller
     /**
      * Menampilkan form edit berita.
      */
-    public function edit(Berita $berita)
+    public function edit(BeritaModel $berita)
     {
         $user = Auth::user();
 
         // Kasi Pemerintahan dibatasi hanya untuk kegiatan pemerintahan & rencana pembangunan desa
         if ($user && $user->isKasiPemerintahan() && !in_array($berita->kategori, [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-            Berita::KATEGORI_PEMBANGUNAN_DESA,
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
         ])) {
             abort(403, 'Anda tidak memiliki hak akses untuk mengubah berita di luar kategori kegiatan pemerintahan dan pembangunan desa.');
         }
 
         $allowedKategori = [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN => 'Kegiatan Pemerintahan',
-            Berita::KATEGORI_PEMBANGUNAN_DESA     => 'Pembangunan Desa',
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN => 'Kegiatan Pemerintahan',
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA     => 'Pembangunan Desa',
         ];
 
         if (!$user || !$user->isKasiPemerintahan()) {
             $allowedKategori = array_merge([
-                Berita::KATEGORI_UMUM => 'Umum / Kemasyarakatan',
+                BeritaModel::KATEGORI_UMUM => 'Umum / Kemasyarakatan',
             ], $allowedKategori);
         }
 
@@ -149,24 +149,24 @@ class BeritaController extends Controller
     /**
      * Memperbarui data berita.
      */
-    public function update(Request $request, Berita $berita)
+    public function update(Request $request, BeritaModel $berita)
     {
         $user = Auth::user();
 
         if ($user && $user->isKasiPemerintahan() && !in_array($berita->kategori, [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-            Berita::KATEGORI_PEMBANGUNAN_DESA,
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
         ])) {
             abort(403, 'Anda tidak memiliki hak akses untuk mengubah berita ini.');
         }
 
         $allowedKategoriValues = [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-            Berita::KATEGORI_PEMBANGUNAN_DESA,
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
         ];
 
         if (!$user || !$user->isKasiPemerintahan()) {
-            $allowedKategoriValues[] = Berita::KATEGORI_UMUM;
+            $allowedKategoriValues[] = BeritaModel::KATEGORI_UMUM;
         }
 
         $request->validate([
@@ -192,7 +192,7 @@ class BeritaController extends Controller
             $slug = Str::slug($request->judul);
             $originalSlug = $slug;
             $count = 1;
-            while (Berita::where('slug', $slug)->where('berita_id', '!=', $berita->berita_id)->exists()) {
+            while (BeritaModel::where('slug', $slug)->where('berita_id', '!=', $berita->berita_id)->exists()) {
                 $slug = "{$originalSlug}-{$count}";
                 $count++;
             }
@@ -224,13 +224,13 @@ class BeritaController extends Controller
     /**
      * Menghapus berita dari database.
      */
-    public function destroy(Berita $berita)
+    public function destroy(BeritaModel $berita)
     {
         $user = Auth::user();
 
         if ($user && $user->isKasiPemerintahan() && !in_array($berita->kategori, [
-            Berita::KATEGORI_KEGIATAN_PEMERINTAHAN,
-            Berita::KATEGORI_PEMBANGUNAN_DESA,
+            BeritaModel::KATEGORI_KEGIATAN_PEMERINTAHAN,
+            BeritaModel::KATEGORI_PEMBANGUNAN_DESA,
         ])) {
             abort(403, 'Anda tidak memiliki hak akses untuk menghapus berita ini.');
         }

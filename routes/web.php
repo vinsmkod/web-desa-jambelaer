@@ -10,6 +10,7 @@ use App\Http\Controllers\PertanyaanUmumController;
 use App\Http\Controllers\PendaftaranUmkmController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengajuanSayaController;
+use App\Http\Controllers\ProfilMasyarakatController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\UMKMController;
 use App\Http\Controllers\Admin\UMKMController as AdminUMKMController;
@@ -27,14 +28,14 @@ use App\Http\Controllers\Admin\GaleriController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\WisataController;
-use App\Models\UMKM;
-use App\Models\Pengaturan;
-use App\Models\StrukturDesa;
-use App\Models\Budaya;
-use App\Models\Galeri;
-use App\Models\AgendaAcara;
-use App\Models\Berita;
-use App\Models\Wisata;
+use App\Models\UMKMModel;
+use App\Models\PengaturanModel;
+use App\Models\StrukturDesaModel;
+use App\Models\BudayaModel;
+use App\Models\GaleriModel;
+use App\Models\AcaraModel;
+use App\Models\BeritaModel;
+use App\Models\WisataModel;
 
 // ── Frontend Routes ─────────────────────────────────────────────────────────
 
@@ -44,18 +45,18 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 // Home
 Route::get('/', function () {
     $settings = [
-        'stat_luas'     => Pengaturan::get('stat_luas', '1240'),
-        'stat_penduduk' => Pengaturan::get('stat_penduduk', '4850'),
-        'stat_umkm'     => Pengaturan::get('stat_umkm', '35'),
-        'stat_kk'       => Pengaturan::get('stat_kk', '1250'),
-        'stat_rtrw'     => Pengaturan::get('stat_rtrw', '24'),
-        'stat_dusun'    => Pengaturan::get('stat_dusun', '4'),
+        'stat_luas'     => PengaturanModel::get('stat_luas', '1240'),
+        'stat_penduduk' => PengaturanModel::get('stat_penduduk', '4850'),
+        'stat_umkm'     => PengaturanModel::get('stat_umkm', '35'),
+        'stat_kk'       => PengaturanModel::get('stat_kk', '1250'),
+        'stat_rtrw'     => PengaturanModel::get('stat_rtrw', '24'),
+        'stat_dusun'    => PengaturanModel::get('stat_dusun', '4'),
     ];
-    $umkms   = UMKM::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->take(6)->get();
-    $budayas = Budaya::orderBy('urutan')->orderBy('budaya_id')->take(3)->get();
-    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->take(3)->get();
-    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->take(3)->get();
-    $galeris = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->take(6)->get();
+    $umkms   = UMKMModel::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->take(6)->get();
+    $budayas = BudayaModel::orderBy('urutan')->orderBy('budaya_id')->take(3)->get();
+    $wisatas = WisataModel::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->take(3)->get();
+    $beritas = BeritaModel::where('is_published', true)->orderBy('published_at', 'desc')->take(3)->get();
+    $galeris = GaleriModel::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->take(6)->get();
 
     return view('pages.home', compact('settings', 'umkms', 'budayas', 'wisatas', 'beritas', 'galeris'));
 })->name('home');
@@ -67,7 +68,7 @@ Route::get('/tentang-kami', [ProfilDesaController::class, 'index'])->name('tenta
 
 // Struktur Desa — halaman terpisah (SRS-F-003.1 Lihat Struktur Desa)
 Route::get('/struktur-desa', function () {
-    $struktur = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
+    $struktur = StrukturDesaModel::orderBy('urutan')->orderBy('struktur_desa_id')->get();
     return view('pages.struktur-desa', compact('struktur'));
 })->name('struktur.desa');
 
@@ -78,23 +79,23 @@ Route::get('/umkm/{slug}', [UMKMController::class, 'detail'])->name('umkm.detail
 
 // Budaya
 Route::get('/budaya', function () {
-    $budayas = Budaya::orderBy('urutan')->orderBy('budaya_id')->get();
+    $budayas = BudayaModel::orderBy('urutan')->orderBy('budaya_id')->get();
     return view('pages.budaya', compact('budayas'));
 })->name('budaya');
 
 // Budaya Detail — SEO-friendly slug URL
 Route::get('/budaya/{slug}', function ($slug) {
     if (is_numeric($slug)) {
-        $budaya = Budaya::find((int)$slug);
+        $budaya = BudayaModel::find((int)$slug);
         if ($budaya && $budaya->slug) {
             return redirect()->route('budaya.detail', $budaya->slug, 301);
         }
         abort(404);
     }
 
-    $budaya = Budaya::where('slug', $slug)->first();
+    $budaya = BudayaModel::where('slug', $slug)->first();
 
-    if (!$budaya && Budaya::count() === 0) {
+    if (!$budaya && BudayaModel::count() === 0) {
         $fallbacks = [
             'ruwatan-bumi-hajat-bumi' => [
                 'id' => 1,
@@ -144,8 +145,8 @@ Route::get('/budaya/{slug}', function ($slug) {
     }
 
     $rekomendasi = [];
-    if (Budaya::count() > 0) {
-        $rekomendasi = Budaya::where('slug', '!=', $slug)->orderBy('urutan')->take(3)->get();
+    if (BudayaModel::count() > 0) {
+        $rekomendasi = BudayaModel::where('slug', '!=', $slug)->orderBy('urutan')->take(3)->get();
     } else {
         $allFallbacks = [
             'ruwatan-bumi-hajat-bumi' => (object)['id' => 1, 'slug' => 'ruwatan-bumi-hajat-bumi', 'title' => 'Ruwatan Bumi', 'kategori' => 'Upacara Adat', 'img_url' => asset('uploads/img/budaya.webp'), 'excerpt' => 'Upacara adat tanda syukur hasil bumi.'],
@@ -162,14 +163,14 @@ Route::get('/budaya/{slug}', function ($slug) {
 
 // Wisata
 Route::get('/wisata', function () {
-    $wisatas = Wisata::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->get();
-    $kategoriList = Wisata::kategoriList();
+    $wisatas = WisataModel::where('is_active', true)->orderBy('urutan')->orderBy('wisata_id')->get();
+    $kategoriList = WisataModel::kategoriList();
     return view('pages.wisata', compact('wisatas', 'kategoriList'));
 })->name('wisata');
 
 Route::get('/wisata/{slug}', function ($slug) {
-    $wisata = Wisata::where('slug', $slug)->where('is_active', true)->firstOrFail();
-    $rekomendasi = Wisata::where('is_active', true)
+    $wisata = WisataModel::where('slug', $slug)->where('is_active', true)->firstOrFail();
+    $rekomendasi = WisataModel::where('is_active', true)
         ->where('wisata_id', '!=', $wisata->wisata_id)
         ->orderBy('urutan')
         ->take(3)
@@ -179,24 +180,24 @@ Route::get('/wisata/{slug}', function ($slug) {
 
 // Galeri – Daftar foto galeri desa
 Route::get('/galeri', function () {
-    $galeris      = Galeri::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->get();
-    $kategoriList = Galeri::kategoriList();
+    $galeris      = GaleriModel::where('is_active', true)->orderBy('urutan')->orderBy('galeri_id')->get();
+    $kategoriList = GaleriModel::kategoriList();
     return view('pages.galeri', compact('galeris', 'kategoriList'));
 })->name('galeri');
 
 // Galeri – Detail foto SEO-friendly slug
 Route::get('/galeri/{slug}', function ($slug) {
     if (is_numeric($slug)) {
-        $foto = Galeri::where('is_active', true)->find((int)$slug);
+        $foto = GaleriModel::where('is_active', true)->find((int)$slug);
         if ($foto && $foto->slug) {
             return redirect()->route('galeri.detail', $foto->slug, 301);
         }
         if (!$foto) abort(404);
     } else {
-        $foto = Galeri::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $foto = GaleriModel::where('slug', $slug)->where('is_active', true)->firstOrFail();
     }
 
-    $lainnya = Galeri::where('is_active', true)
+    $lainnya = GaleriModel::where('is_active', true)
         ->where('galeri_id', '!=', $foto->galeri_id)
         ->where('kategori', $foto->kategori)
         ->orderBy('urutan')
@@ -206,22 +207,23 @@ Route::get('/galeri/{slug}', function ($slug) {
     return view('pages.galeri-detail', compact('foto', 'lainnya'));
 })->name('galeri.detail');
 
-// Kontak & Pusat Informasi Layanan Masyarakat
-Route::get('/kontak', function () {
+// Layanan & Kontak Masyarakat Desa Jambelaer
+Route::get('/layanan', function () {
     $sosmed = [
-        'instagram' => Pengaturan::get('sosmed_instagram', ''),
-        'youtube'   => Pengaturan::get('sosmed_youtube', ''),
-        'tiktok'    => Pengaturan::get('sosmed_tiktok', ''),
+        'instagram' => PengaturanModel::get('sosmed_instagram', ''),
+        'youtube'   => PengaturanModel::get('sosmed_youtube', ''),
+        'tiktok'    => PengaturanModel::get('sosmed_tiktok', ''),
     ];
-    $mapsUrl = Pengaturan::get('maps_embed_url', '');
+    $mapsUrl = PengaturanModel::get('maps_embed_url', '');
     return view('pages.kontak', compact('sosmed', 'mapsUrl'));
+})->name('layanan');
+
+// Redirect 301 permanen dari URL lama /kontak ke /layanan
+Route::get('/kontak', function () {
+    return redirect()->route('layanan', [], 301);
 })->name('kontak');
 
 Route::post('/kontak', [KontakController::class, 'store'])->middleware('throttle:6,1')->name('kontak.store');
-
-Route::get('/layanan', function () {
-    return redirect()->route('kontak');
-})->name('layanan');
 
 // ── 4 Modul Layanan Masyarakat Terpisah ───────────────────────────────────────
 
@@ -250,6 +252,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ── Riwayat & Tracking Layanan Masyarakat (Wajib Login) ──────────────────────
 Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function () {
+    // ── Profil Akun Masyarakat ──
+    Route::get('/profil', [ProfilMasyarakatController::class, 'edit'])->name('profil.edit');
+    Route::put('/profil', [ProfilMasyarakatController::class, 'update'])->name('profil.update');
+    Route::get('/profil-saya', fn() => redirect()->route('profil.edit'))->name('profil.saya');
+
     Route::get('/pengajuan-saya', [PengajuanSayaController::class, 'index'])->name('pengajuan.saya');
     Route::get('/pengajuan-saya/{jenis}/{id}', [PengajuanSayaController::class, 'showDetail'])->name('pengajuan.show.detail');
     Route::get('/pengajuan-saya/{id}', [PengajuanSayaController::class, 'show'])->whereNumber('id')->name('pengajuan.show');
@@ -291,11 +298,11 @@ Route::middleware([\App\Http\Middleware\MasyarakatAuth::class])->group(function 
 
 // Acara – Daftar agenda acara desa yang dipublikasikan (Informasi Publik)
 Route::get('/acara', function () {
-    AgendaAcara::cleanupExpiredAcara();
+    AcaraModel::cleanupExpiredAcara();
 
     $today = now()->toDateString();
 
-    $acaras = AgendaAcara::where('dipublikasikan', true)
+    $acaras = AcaraModel::where('dipublikasikan', true)
         ->whereDate('tanggal_acara', '>=', $today)
         ->orderBy('tanggal_acara', 'asc')
         ->orderBy('waktu_acara', 'asc')
@@ -310,15 +317,15 @@ Route::get('/acara', function () {
 
 // Berita – Portal Berita Publik
 Route::get('/berita', function () {
-    $featuredBerita = Berita::where('is_published', true)->orderBy('published_at', 'desc')->first();
-    $beritas = Berita::where('is_published', true)->orderBy('published_at', 'desc')->orderBy('berita_id', 'desc')->paginate(9);
+    $featuredBerita = BeritaModel::where('is_published', true)->orderBy('published_at', 'desc')->first();
+    $beritas = BeritaModel::where('is_published', true)->orderBy('published_at', 'desc')->orderBy('berita_id', 'desc')->paginate(9);
 
     return view('pages.berita', compact('beritas', 'featuredBerita'));
 })->name('berita');
 
 // Berita – Detail Artikel
 Route::get('/berita/{slug}', function ($slug) {
-    $berita = Berita::where('slug', $slug)->where('is_published', true)->firstOrFail();
+    $berita = BeritaModel::where('slug', $slug)->where('is_published', true)->firstOrFail();
 
     $sessionKey = 'viewed_berita_' . $berita->berita_id;
     if (!auth()->check() && !session()->has($sessionKey)) {
@@ -327,7 +334,7 @@ Route::get('/berita/{slug}', function ($slug) {
         session()->put($sessionKey, true);
     }
 
-    $rekomendasi = Berita::where('is_published', true)
+    $rekomendasi = BeritaModel::where('is_published', true)
         ->where('berita_id', '!=', $berita->berita_id)
         ->orderBy('published_at', 'desc')
         ->take(4)
@@ -339,13 +346,8 @@ Route::get('/berita/{slug}', function ($slug) {
 // ── Admin Routes ─────────────────────────────────────────────────────────────
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Login (public)
-    Route::get('/login', [AuthController::class, 'showAdminLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'adminLogin'])->middleware('throttle:5,1')->name('login.post');
-
     // Protected routes — semua aktor perangkat desa melewati AdminAuth middleware
     Route::middleware(\App\Http\Middleware\AdminAuth::class)->group(function () {
-        Route::post('/logout', [AuthController::class, 'adminLogout'])->name('logout');
 
         // Dashboard — dapat diakses semua perangkat desa
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

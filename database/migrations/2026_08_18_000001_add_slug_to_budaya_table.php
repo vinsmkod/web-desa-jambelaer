@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use App\Models\Budaya;
+use App\Models\BudayaModel;
 
 return new class extends Migration
 {
@@ -19,14 +19,14 @@ return new class extends Migration
         });
 
         // Generate slug untuk data yang sudah ada
-        $budayas = Budaya::all();
+        $budayas = BudayaModel::all();
         foreach ($budayas as $budaya) {
             $baseSlug = Str::slug($budaya->title, '-');
             $slug = $baseSlug;
             $counter = 1;
 
             // Pastikan slug unik
-            while (Budaya::where('slug', $slug)->where('id', '!=', $budaya->id)->exists()) {
+            while (BudayaModel::where('slug', $slug)->where('id', '!=', $budaya->id)->exists()) {
                 $slug = $baseSlug . '-' . $counter;
                 $counter++;
             }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class Budaya extends Model
+class BudayaModel extends Model
 {
     protected $table = 'budaya';
     protected $primaryKey = 'budaya_id';
@@ -93,7 +93,7 @@ class Budaya extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'created_by', 'user_id');
     }
 }
 

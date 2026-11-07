@@ -25,7 +25,7 @@
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <a href="{{ route('kontak') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
+        <a href="{{ route('layanan') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
         <span class="text-forest-800 font-semibold">Pertanyaan Umum</span>
     </nav>
@@ -170,9 +170,10 @@
                         <p class="text-xs text-stone-400 font-light">
                             Pertanyaan akan dijawab oleh staf pelayanan desa dan jawaban dapat dilihat pada menu Riwayat Pengajuan.
                         </p>
-                        <button type="submit" class="btn-primary !bg-sky-600 !border-sky-600 hover:!bg-sky-700 w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            Kirim Pertanyaan
+                        <button type="submit" class="w-full sm:w-auto btn-submit-layanan">
+                            <span class="btn-spinner"></span>
+                            <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
+                            <span class="btn-text">Kirim Pertanyaan</span>
                         </button>
                     </div>
                 </form>

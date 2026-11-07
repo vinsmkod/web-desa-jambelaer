@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Galeri;
+use App\Models\GaleriModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -12,13 +12,13 @@ class GaleriController extends Controller
 {
     public function index()
     {
-        $galeri = Galeri::orderBy('urutan')->orderBy('galeri_id')->paginate(5)->withQueryString();
+        $galeri = GaleriModel::orderBy('urutan')->orderBy('galeri_id')->paginate(5)->withQueryString();
         return view('admin.galeri.index', compact('galeri'));
     }
 
     public function create()
     {
-        $kategoriList = Galeri::kategoriList();
+        $kategoriList = GaleriModel::kategoriList();
         return view('admin.galeri.create', compact('kategoriList'));
     }
 
@@ -45,24 +45,24 @@ class GaleriController extends Controller
         $data['is_active']  = $request->boolean('is_active');
         $data['urutan']     = $request->input('urutan', 0);
 
-        Galeri::create($data);
+        GaleriModel::create($data);
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Foto galeri berhasil ditambahkan!');
     }
 
-    public function show(Galeri $galeri)
+    public function show(GaleriModel $galeri)
     {
         return redirect()->route('admin.galeri.index');
     }
 
-    public function edit(Galeri $galeri)
+    public function edit(GaleriModel $galeri)
     {
-        $kategoriList = Galeri::kategoriList();
+        $kategoriList = GaleriModel::kategoriList();
         return view('admin.galeri.edit', compact('galeri', 'kategoriList'));
     }
 
-    public function update(Request $request, Galeri $galeri)
+    public function update(Request $request, GaleriModel $galeri)
     {
         $data = $request->validate([
             'judul'             => ['required', 'string', 'max:255'],
@@ -95,7 +95,7 @@ class GaleriController extends Controller
             ->with('success', 'Foto galeri berhasil diperbarui!');
     }
 
-    public function destroy(Galeri $galeri)
+    public function destroy(GaleriModel $galeri)
     {
         if ($galeri->foto && file_exists(public_path($galeri->foto))) {
             @unlink(public_path($galeri->foto));

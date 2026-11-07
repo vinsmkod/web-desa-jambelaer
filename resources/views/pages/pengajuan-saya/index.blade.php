@@ -9,7 +9,7 @@
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <a href="{{ route('kontak') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
+        <a href="{{ route('layanan') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
         <span class="text-forest-800 font-semibold">Pengajuan Saya</span>
     </nav>
@@ -32,7 +32,12 @@
             </p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('kontak') }}#layanan-hub"
+            <a href="{{ route('profil.edit') }}"
+                class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-bold text-white transition-all shadow-sm">
+                <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                Profil Saya
+            </a>
+            <a href="{{ route('layanan') }}#layanan-hub"
                 class="btn-primary bg-sand-500 hover:bg-sand-600 !text-forest-950 border-sand-400 text-xs py-2.5 px-5 gap-2 shadow-lg">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 Buat Pengajuan Baru
@@ -140,7 +145,7 @@
                 Anda belum pernah membuat pengajuan layanan. Silakan pilih layanan desa untuk memulai.
             @endif
         </p>
-        <a href="{{ route('kontak') }}#layanan-hub"
+        <a href="{{ route('layanan') }}#layanan-hub"
             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-semibold text-xs shadow-md transition-all">
             <i data-lucide="plus" class="w-4 h-4"></i>
             Ajukan Permohonan Sekarang

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TentangTimeline extends Model
+class TentangTimelineModel extends Model
 {
     protected $table = 'tentang_timeline';
     protected $primaryKey = 'tentang_timeline_id';

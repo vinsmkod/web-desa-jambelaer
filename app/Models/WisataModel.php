@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class Wisata extends Model
+class WisataModel extends Model
 {
     use HasFactory;
 
@@ -88,7 +88,7 @@ class Wisata extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'created_by', 'user_id');
     }
 }
 

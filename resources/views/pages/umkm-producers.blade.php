@@ -56,7 +56,7 @@
 
                 {{-- Image --}}
                 <div class="relative overflow-hidden h-52">
-                    <img src="{{ $product->img }}" alt="{{ $product->title }}"
+                    <img src="{{ $product->img_url }}" alt="{{ $product->title }}"
                          class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700">
                     {{-- Gradient overlay --}}
                     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 via-forest-900/10 to-transparent"></div>

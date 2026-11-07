@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PengajuanSurat;
-use App\Models\Pengaduan;
-use App\Models\PertanyaanUmum;
-use App\Models\PendaftaranUmkm;
+use App\Models\PengajuanSuratModel;
+use App\Models\PengaduanModel;
+use App\Models\PertanyaanUmumModel;
+use App\Models\PendaftaranUmkmModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -23,7 +23,7 @@ class PengajuanSayaController extends Controller
         $search = $request->query('q');
 
         // 1. Ambil data dari masing-masing tabel
-        $surats = PengajuanSurat::with('jenisSurat')->where('user_id', $userId)->get()->map(function ($item) {
+        $surats = PengajuanSuratModel::with('jenisSurat')->where('user_id', $userId)->get()->map(function ($item) {
             $item->jenis_layanan = 'pengajuan_surat';
             $item->jenis_layanan_label = $item->jenisSurat ? $item->jenisSurat->nama_surat : 'Pengajuan Surat';
             $item->primary_id = $item->pengajuan_surat_id;
@@ -33,7 +33,7 @@ class PengajuanSayaController extends Controller
             return $item;
         });
 
-        $pengaduans = Pengaduan::where('user_id', $userId)->get()->map(function ($item) {
+        $pengaduans = PengaduanModel::where('user_id', $userId)->get()->map(function ($item) {
             $item->jenis_layanan = 'pengaduan';
             $item->jenis_layanan_label = 'Pengaduan Masyarakat';
             $item->primary_id = $item->pengaduan_id;
@@ -44,7 +44,7 @@ class PengajuanSayaController extends Controller
             return $item;
         });
 
-        $pertanyaans = PertanyaanUmum::where('user_id', $userId)->get()->map(function ($item) {
+        $pertanyaans = PertanyaanUmumModel::where('user_id', $userId)->get()->map(function ($item) {
             $item->jenis_layanan = 'pertanyaan_umum';
             $item->jenis_layanan_label = 'Pertanyaan Umum';
             $item->primary_id = $item->pertanyaan_id;
@@ -55,7 +55,7 @@ class PengajuanSayaController extends Controller
             return $item;
         });
 
-        $umkms = PendaftaranUmkm::where('user_id', $userId)->get()->map(function ($item) {
+        $umkms = PendaftaranUmkmModel::where('user_id', $userId)->get()->map(function ($item) {
             $item->jenis_layanan = 'pendaftaran_umkm';
             $item->jenis_layanan_label = 'Pendaftaran UMKM';
             $item->primary_id = $item->pendaftaran_umkm_id;
@@ -174,24 +174,24 @@ class PengajuanSayaController extends Controller
         switch ($jenis) {
             case 'surat':
             case 'pengajuan_surat':
-                $data = PengajuanSurat::with('jenisSurat')->findOrFail($id);
+                $data = PengajuanSuratModel::with('jenisSurat')->findOrFail($id);
                 $jenisLayanan = 'pengajuan_surat';
                 break;
 
             case 'pengaduan':
-                $data = Pengaduan::findOrFail($id);
+                $data = PengaduanModel::findOrFail($id);
                 $jenisLayanan = 'pengaduan';
                 break;
 
             case 'pertanyaan':
             case 'pertanyaan_umum':
-                $data = PertanyaanUmum::findOrFail($id);
+                $data = PertanyaanUmumModel::findOrFail($id);
                 $jenisLayanan = 'pertanyaan_umum';
                 break;
 
             case 'umkm':
             case 'pendaftaran_umkm':
-                $data = PendaftaranUmkm::with('produkDipublikasikan')->findOrFail($id);
+                $data = PendaftaranUmkmModel::with('produkDipublikasikan')->findOrFail($id);
                 $jenisLayanan = 'pendaftaran_umkm';
                 break;
 

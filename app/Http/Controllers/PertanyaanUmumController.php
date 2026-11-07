@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PertanyaanUmum;
-use App\Models\Pengaturan;
+use App\Models\PertanyaanUmumModel;
+use App\Models\PengaturanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -16,9 +16,9 @@ class PertanyaanUmumController extends Controller
     public function create()
     {
         $settings = [
-            'desa_telepon' => Pengaturan::get('desa_telepon', '0813-2476-8193'),
-            'desa_email'   => Pengaturan::get('desa_email', 'pemdes@jambelaer.desa.id'),
-            'desa_alamat'  => Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer No. 12, Kec. Dawuan, Subang'),
+            'desa_telepon' => PengaturanModel::get('desa_telepon', '0813-2476-8193'),
+            'desa_email'   => PengaturanModel::get('desa_email', 'pemdes@jambelaer.desa.id'),
+            'desa_alamat'  => PengaturanModel::get('desa_alamat', 'Jl. Raya Jambelaer No. 12, Kec. Dawuan, Subang'),
         ];
 
         return view('pages.pertanyaan-umum', compact('settings'));
@@ -70,9 +70,9 @@ class PertanyaanUmumController extends Controller
         $user = Auth::user();
 
         // 3. Buat Pertanyaan Umum
-        $nomorPertanyaan = PertanyaanUmum::generateNomorPertanyaan();
+        $nomorPertanyaan = PertanyaanUmumModel::generateNomorPertanyaan();
 
-        $pertanyaan = PertanyaanUmum::create([
+        $pertanyaan = PertanyaanUmumModel::create([
             'nomor_pertanyaan' => $nomorPertanyaan,
             'user_id'          => $user->user_id,
             'nama'             => $request->nama,
@@ -105,7 +105,7 @@ class PertanyaanUmumController extends Controller
      */
     public function edit(int $id)
     {
-        $pertanyaan = PertanyaanUmum::findOrFail($id);
+        $pertanyaan = PertanyaanUmumModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pertanyaan->user_id !== (int) Auth::id()) {
@@ -127,7 +127,7 @@ class PertanyaanUmumController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $pertanyaan = PertanyaanUmum::findOrFail($id);
+        $pertanyaan = PertanyaanUmumModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR)
         if ((int) $pertanyaan->user_id !== (int) Auth::id()) {
@@ -176,7 +176,7 @@ class PertanyaanUmumController extends Controller
      */
     public function batal(int $id)
     {
-        $pertanyaan = PertanyaanUmum::findOrFail($id);
+        $pertanyaan = PertanyaanUmumModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pertanyaan->user_id !== (int) Auth::id()) {

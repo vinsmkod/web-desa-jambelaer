@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Helpers\SecurityHelper;
-use App\Models\Pengaturan;
-use App\Models\TentangMisi;
-use App\Models\TentangTimeline;
+use App\Models\ProfilDesaModel;
+use App\Models\TentangMisiModel;
+use App\Models\TentangTimelineModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -24,17 +24,17 @@ class ProfilDesaController extends Controller
      */
     public function index()
     {
-        $settings = Pengaturan::all()->keyBy('key');
+        $settings = ProfilDesaModel::all()->keyBy('key');
 
         $tentang = [];
-        foreach (Pengaturan::tentangDefaults() as $key => $meta) {
-            $tentang[$key] = Pengaturan::getOrNull($key) ?? $meta['value'];
+        foreach (ProfilDesaModel::tentangDefaults() as $key => $meta) {
+            $tentang[$key] = ProfilDesaModel::getOrNull($key) ?? $meta['value'];
         }
 
-        $timelineList       = TentangTimeline::orderBy('urutan')->orderBy('tentang_timeline_id')->get();
-        $misiList           = TentangMisi::orderBy('urutan')->orderBy('tentang_misi_id')->get();
-        $nextTimelineUrutan = (TentangTimeline::max('urutan') ?? 0) + 1;
-        $nextMisiUrutan     = (TentangMisi::max('urutan') ?? 0) + 1;
+        $timelineList       = TentangTimelineModel::orderBy('urutan')->orderBy('tentang_timeline_id')->get();
+        $misiList           = TentangMisiModel::orderBy('urutan')->orderBy('tentang_misi_id')->get();
+        $nextTimelineUrutan = (TentangTimelineModel::max('urutan') ?? 0) + 1;
+        $nextMisiUrutan     = (TentangMisiModel::max('urutan') ?? 0) + 1;
 
         return view('admin.tentang_desa.index', compact(
             'settings',
@@ -56,7 +56,7 @@ class ProfilDesaController extends Controller
      */
     private function resequenceTimeline(): void
     {
-        $items = TentangTimeline::orderBy('urutan')->orderBy('tentang_timeline_id')->get();
+        $items = TentangTimelineModel::orderBy('urutan')->orderBy('tentang_timeline_id')->get();
         foreach ($items as $index => $item) {
             if ($item->urutan != ($index + 1)) {
                 $item->update(['urutan' => $index + 1]);
@@ -69,7 +69,7 @@ class ProfilDesaController extends Controller
      */
     private function resequenceMisi(): void
     {
-        $items = TentangMisi::orderBy('urutan')->orderBy('tentang_misi_id')->get();
+        $items = TentangMisiModel::orderBy('urutan')->orderBy('tentang_misi_id')->get();
         foreach ($items as $index => $item) {
             if ($item->urutan != ($index + 1)) {
                 $item->update(['urutan' => $index + 1]);
@@ -87,7 +87,7 @@ class ProfilDesaController extends Controller
             'tentang_sejarah' => ['required', 'string', 'max:5000'],
         ]);
 
-        Pengaturan::set('tentang_sejarah', $validated['tentang_sejarah']);
+        ProfilDesaModel::set('tentang_sejarah', $validated['tentang_sejarah']);
 
         return back()->with('success', 'Deskripsi Sejarah Desa berhasil disimpan!');
     }
@@ -103,18 +103,18 @@ class ProfilDesaController extends Controller
             'judul'     => ['required', 'string', 'max:150'],
             'deskripsi' => ['required', 'string', 'max:2000'],
             'ikon'      => ['nullable', 'string', 'max:60'],
-            'warna'     => ['nullable', 'string', 'max:30', Rule::in(array_keys(TentangTimeline::$palettes))],
+            'warna'     => ['nullable', 'string', 'max:30', Rule::in(array_keys(TentangTimelineModel::$palettes))],
             'urutan'    => ['nullable', 'integer', 'min:1'],
         ]);
 
-        $maxUrutan           = TentangTimeline::max('urutan') ?? 0;
+        $maxUrutan           = TentangTimelineModel::max('urutan') ?? 0;
         $validated['urutan'] = ($request->filled('urutan') && $request->urutan > 0) ? $request->urutan : ($maxUrutan + 1);
 
         // Hanya tag inline aman (strong/b/em/i/br) yang dipertahankan.
         $validated['deskripsi'] = SecurityHelper::sanitizeInlineHtml($validated['deskripsi']);
         $validated['ikon']      = $request->filled('ikon') ? preg_replace('/[^a-z0-9\-_]/i', '', $validated['ikon']) : null;
 
-        TentangTimeline::create($validated);
+        TentangTimelineModel::create($validated);
         $this->resequenceTimeline();
 
         return back()->with('success', 'Timeline sejarah berhasil ditambahkan!');
@@ -124,14 +124,14 @@ class ProfilDesaController extends Controller
      * Section: Sejarah Desa → ubah item timeline.
      * Route: PUT /admin/tentang-desa/timeline/{timeline}
      */
-    public function timelineUpdate(Request $request, TentangTimeline $timeline)
+    public function timelineUpdate(Request $request, TentangTimelineModel $timeline)
     {
         $validated = $request->validate([
             'tahun'     => ['required', 'string', 'max:60'],
             'judul'     => ['required', 'string', 'max:150'],
             'deskripsi' => ['required', 'string', 'max:2000'],
             'ikon'      => ['nullable', 'string', 'max:60'],
-            'warna'     => ['nullable', 'string', 'max:30', Rule::in(array_keys(TentangTimeline::$palettes))],
+            'warna'     => ['nullable', 'string', 'max:30', Rule::in(array_keys(TentangTimelineModel::$palettes))],
             'urutan'    => ['nullable', 'integer', 'min:1'],
         ]);
 
@@ -151,7 +151,7 @@ class ProfilDesaController extends Controller
      * Section: Sejarah Desa → hapus item timeline.
      * Route: DELETE /admin/tentang-desa/timeline/{timeline}
      */
-    public function timelineDestroy(TentangTimeline $timeline)
+    public function timelineDestroy(TentangTimelineModel $timeline)
     {
         $timeline->delete();
         $this->resequenceTimeline();
@@ -171,15 +171,15 @@ class ProfilDesaController extends Controller
             'kades_foto_file' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
-        Pengaturan::set('kades_nama', $validated['kades_nama']);
-        Pengaturan::set('kades_jabatan', $validated['kades_jabatan']);
+        ProfilDesaModel::set('kades_nama', $validated['kades_nama']);
+        ProfilDesaModel::set('kades_jabatan', $validated['kades_jabatan']);
 
         // Upload foto kepala desa (sama dengan mekanisme uploads/kades yang sudah ada)
         if ($request->hasFile('kades_foto_file')) {
             $file     = $request->file('kades_foto_file');
             $filename = 'kades_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/kades'), $filename);
-            Pengaturan::set('kades_foto', '/uploads/kades/' . $filename);
+            ProfilDesaModel::set('kades_foto', '/uploads/kades/' . $filename);
         }
 
         return back()->with('success', 'Data Kepala Desa berhasil disimpan!');
@@ -199,7 +199,7 @@ class ProfilDesaController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            Pengaturan::set($key, $value ?? '');
+            ProfilDesaModel::set($key, $value ?? '');
         }
 
         return back()->with('success', 'Sambutan Kepala Desa berhasil disimpan!');
@@ -221,7 +221,7 @@ class ProfilDesaController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            Pengaturan::set($key, $value);
+            ProfilDesaModel::set($key, $value);
         }
 
         return back()->with('success', 'Profil wilayah desa berhasil disimpan!');
@@ -240,7 +240,7 @@ class ProfilDesaController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            Pengaturan::set($key, $value ?? '');
+            ProfilDesaModel::set($key, $value ?? '');
         }
 
         return back()->with('success', 'Potensi utama desa berhasil disimpan!');
@@ -259,7 +259,7 @@ class ProfilDesaController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            Pengaturan::set($key, $value ?? '');
+            ProfilDesaModel::set($key, $value ?? '');
         }
 
         return back()->with('success', 'Informasi administrasi desa berhasil disimpan!');
@@ -277,7 +277,7 @@ class ProfilDesaController extends Controller
         ]);
 
         foreach ($validated as $key => $value) {
-            Pengaturan::set($key, $value ?? '');
+            ProfilDesaModel::set($key, $value ?? '');
         }
 
         return back()->with('success', 'Visi desa berhasil disimpan!');
@@ -294,10 +294,10 @@ class ProfilDesaController extends Controller
             'urutan' => ['nullable', 'integer', 'min:1'],
         ]);
 
-        $maxUrutan           = TentangMisi::max('urutan') ?? 0;
+        $maxUrutan           = TentangMisiModel::max('urutan') ?? 0;
         $validated['urutan'] = ($request->filled('urutan') && $request->urutan > 0) ? $request->urutan : ($maxUrutan + 1);
 
-        TentangMisi::create($validated);
+        TentangMisiModel::create($validated);
         $this->resequenceMisi();
 
         return back()->with('success', 'Misi berhasil ditambahkan!');
@@ -307,7 +307,7 @@ class ProfilDesaController extends Controller
      * Section: Visi & Misi → ubah item misi.
      * Route: PUT /admin/tentang-desa/misi/{misi}
      */
-    public function misiUpdate(Request $request, TentangMisi $misi)
+    public function misiUpdate(Request $request, TentangMisiModel $misi)
     {
         $validated = $request->validate([
             'isi'    => ['required', 'string', 'max:1000'],
@@ -326,7 +326,7 @@ class ProfilDesaController extends Controller
      * Section: Visi & Misi → hapus item misi.
      * Route: DELETE /admin/tentang-desa/misi/{misi}
      */
-    public function misiDestroy(TentangMisi $misi)
+    public function misiDestroy(TentangMisiModel $misi)
     {
         $misi->delete();
         $this->resequenceMisi();
@@ -354,9 +354,9 @@ class ProfilDesaController extends Controller
                 ->withInput();
         }
 
-        Pengaturan::set('maps_embed_url', $sanitized ?? '');
-        Pengaturan::set('tentang_alamat', $validated['tentang_alamat']);
-        Pengaturan::set('tentang_maps_link', $validated['tentang_maps_link']);
+        ProfilDesaModel::set('maps_embed_url', $sanitized ?? '');
+        ProfilDesaModel::set('tentang_alamat', $validated['tentang_alamat']);
+        ProfilDesaModel::set('tentang_maps_link', $validated['tentang_maps_link']);
 
         return back()->with('success', 'Peta wilayah desa berhasil disimpan!');
     }

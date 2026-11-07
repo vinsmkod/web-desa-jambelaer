@@ -2,20 +2,20 @@
 
 namespace Tests\Feature;
 
-use App\Models\AgendaAcara;
-use App\Models\Berita;
-use App\Models\Budaya;
-use App\Models\Galeri;
-use App\Models\JenisSurat;
-use App\Models\PendaftaranUmkm;
-use App\Models\Pengaduan;
-use App\Models\PengajuanSurat;
-use App\Models\PertanyaanUmum;
-use App\Models\RiwayatPengajuanSurat;
-use App\Models\StrukturDesa;
-use App\Models\UMKM;
-use App\Models\User;
-use App\Models\Wisata;
+use App\Models\AcaraModel;
+use App\Models\BeritaModel;
+use App\Models\BudayaModel;
+use App\Models\GaleriModel;
+use App\Models\JenisSuratModel;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\PengaduanModel;
+use App\Models\PengajuanSuratModel;
+use App\Models\PertanyaanUmumModel;
+use App\Models\RiwayatPengajuanSuratModel;
+use App\Models\StrukturDesaModel;
+use App\Models\UMKMModel;
+use App\Models\UserModel;
+use App\Models\WisataModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
@@ -26,12 +26,12 @@ class SrsFullFunctionalAuditTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected User $staff;
-    protected User $kasi;
-    protected User $sekdes;
-    protected User $kades;
-    protected User $masyarakat;
-    protected User $masyarakatLain;
+    protected UserModel $staff;
+    protected UserModel $kasi;
+    protected UserModel $sekdes;
+    protected UserModel $kades;
+    protected UserModel $masyarakat;
+    protected UserModel $masyarakatLain;
 
     protected function setUp(): void
     {
@@ -39,50 +39,50 @@ class SrsFullFunctionalAuditTest extends TestCase
 
         Storage::fake('public');
 
-        $this->staff = User::create([
+        $this->staff = UserModel::create([
             'name'     => 'Staff Audit',
             'email'    => 'staff_audit_' . uniqid() . '@jambelaer.desa.id',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_STAFF_DESA,
+            'role'     => UserModel::ROLE_STAFF_DESA,
             'jabatan'  => 'Staff Pelayanan',
         ]);
 
-        $this->kasi = User::create([
+        $this->kasi = UserModel::create([
             'name'     => 'Kasi Audit',
             'email'    => 'kasi_audit_' . uniqid() . '@jambelaer.desa.id',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_KASI_PEMERINTAHAN,
+            'role'     => UserModel::ROLE_KASI_PEMERINTAHAN,
             'jabatan'  => 'Kasi Pemerintahan',
         ]);
 
-        $this->sekdes = User::create([
+        $this->sekdes = UserModel::create([
             'name'     => 'Sekdes Audit',
             'email'    => 'sekdes_audit_' . uniqid() . '@jambelaer.desa.id',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_SEKRETARIS_DESA,
+            'role'     => UserModel::ROLE_SEKRETARIS_DESA,
             'jabatan'  => 'Sekretaris Desa',
         ]);
 
-        $this->kades = User::create([
+        $this->kades = UserModel::create([
             'name'     => 'Kades Audit',
             'email'    => 'kades_audit_' . uniqid() . '@jambelaer.desa.id',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_KEPALA_DESA,
+            'role'     => UserModel::ROLE_KEPALA_DESA,
             'jabatan'  => 'Kepala Desa',
         ]);
 
-        $this->masyarakat = User::create([
+        $this->masyarakat = UserModel::create([
             'name'     => 'Warga Audit Utama',
             'email'    => 'warga_audit_' . uniqid() . '@gmail.com',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_MASYARAKAT,
+            'role'     => UserModel::ROLE_MASYARAKAT,
         ]);
 
-        $this->masyarakatLain = User::create([
+        $this->masyarakatLain = UserModel::create([
             'name'     => 'Warga Audit Kedua',
             'email'    => 'warga2_audit_' . uniqid() . '@gmail.com',
             'password' => Hash::make('password123'),
-            'role'     => User::ROLE_MASYARAKAT,
+            'role'     => UserModel::ROLE_MASYARAKAT,
         ]);
     }
 
@@ -99,9 +99,9 @@ class SrsFullFunctionalAuditTest extends TestCase
         $resWarga->assertRedirect('/pengajuan-saya');
         $this->assertAuthenticatedAs($this->masyarakat);
 
-        // 2. Login Perangkat Desa via panel admin
+        // 2. Login Perangkat Desa via halaman login terpadu
         $this->post('/logout');
-        $resAdmin = $this->post('/admin/login', [
+        $resAdmin = $this->post('/login', [
             'email'    => $this->staff->email,
             'password' => 'password123',
         ]);
@@ -109,8 +109,8 @@ class SrsFullFunctionalAuditTest extends TestCase
         $this->assertAuthenticatedAs($this->staff);
 
         // 3. Password salah ditolak
-        $this->post('/admin/logout');
-        $resSalah = $this->post('/admin/login', [
+        $this->post('/logout');
+        $resSalah = $this->post('/login', [
             'email'    => $this->staff->email,
             'password' => 'passwordsalah',
         ]);
@@ -215,7 +215,7 @@ class SrsFullFunctionalAuditTest extends TestCase
     public function test_srs_f_004_1_lihat_data_berita_publik(): void
     {
         $this->get('/berita')->assertStatus(200);
-        $berita = Berita::where('is_published', true)->first();
+        $berita = BeritaModel::where('is_published', true)->first();
         if ($berita) {
             $this->get('/berita/' . $berita->slug)->assertStatus(200);
         }
@@ -238,7 +238,7 @@ class SrsFullFunctionalAuditTest extends TestCase
     {
         $this->get('/umkm')->assertStatus(200);
 
-        $umkm = UMKM::first();
+        $umkm = UMKMModel::first();
         if ($umkm) {
             $res = $this->get('/umkm/' . $umkm->slug);
             $res->assertStatus(200);
@@ -293,7 +293,7 @@ class SrsFullFunctionalAuditTest extends TestCase
      */
     public function test_srs_f_010_alur_pengajuan_surat_berjenjang(): void
     {
-        $jenisSurat = JenisSurat::first() ?: JenisSurat::create([
+        $jenisSurat = JenisSuratModel::first() ?: JenisSuratModel::create([
             'nama_surat' => 'Surat Keterangan Usaha',
             'kode_surat' => 'SKU',
             'is_active'  => true,
@@ -316,7 +316,7 @@ class SrsFullFunctionalAuditTest extends TestCase
         ]);
         $resAjukan->assertRedirect();
 
-        $surat = PengajuanSurat::where('user_id', $this->masyarakat->user_id)->latest()->first();
+        $surat = PengajuanSuratModel::where('user_id', $this->masyarakat->user_id)->latest()->first();
         $this->assertNotNull($surat);
         $this->assertEquals('diajukan', $surat->status);
 
@@ -365,14 +365,14 @@ class SrsFullFunctionalAuditTest extends TestCase
         $this->assertEquals($this->kades->user_id, $surat->disetujui_by);
 
         // 8. Verifikasi pencatatan jejak audit riwayat_pengajuan_surats
-        $riwayats = RiwayatPengajuanSurat::where('pengajuan_surat_id', $surat->pengajuan_surat_id)->orderBy('id')->get();
+        $riwayats = RiwayatPengajuanSuratModel::where('pengajuan_surat_id', $surat->pengajuan_surat_id)->orderBy('id')->get();
         $this->assertCount(3, $riwayats);
         $this->assertEquals('diproses', $riwayats[0]->status_baru);
         $this->assertEquals('diverifikasi', $riwayats[1]->status_baru);
         $this->assertEquals('selesai', $riwayats[2]->status_baru);
 
         // 9. Uji pembatalan pengajuan oleh masyarakat pada pengajuan baru (SRS-F-010.1)
-        $suratBaru = PengajuanSurat::create([
+        $suratBaru = PengajuanSuratModel::create([
             'jenis_surat_id'  => $jenisSurat->id,
             'user_id'         => $this->masyarakat->user_id,
             'nomor_pengajuan' => 'BATAL-' . uniqid(),
@@ -403,7 +403,7 @@ class SrsFullFunctionalAuditTest extends TestCase
         ]);
         $resPengaduan->assertRedirect();
 
-        $pengaduan = Pengaduan::where('user_id', $this->masyarakat->user_id)->latest()->first();
+        $pengaduan = PengaduanModel::where('user_id', $this->masyarakat->user_id)->latest()->first();
         $this->assertNotNull($pengaduan);
         $this->assertEquals('diajukan', $pengaduan->status);
 
@@ -434,7 +434,7 @@ class SrsFullFunctionalAuditTest extends TestCase
         ]);
         $resTanya->assertRedirect();
 
-        $tanya = PertanyaanUmum::where('user_id', $this->masyarakat->user_id)->latest()->first();
+        $tanya = PertanyaanUmumModel::where('user_id', $this->masyarakat->user_id)->latest()->first();
         $this->assertNotNull($tanya);
 
         // 2. Staff Desa menjawab pertanyaan
@@ -466,7 +466,7 @@ class SrsFullFunctionalAuditTest extends TestCase
         ]);
         $resDaftar->assertRedirect();
 
-        $pendaftaran = PendaftaranUmkm::where('user_id', $this->masyarakat->user_id)->latest()->first();
+        $pendaftaran = PendaftaranUmkmModel::where('user_id', $this->masyarakat->user_id)->latest()->first();
         $this->assertNotNull($pendaftaran);
 
         // 2. Staff Desa memverifikasi dan mempublikasikan ke katalog UMKM
@@ -477,7 +477,7 @@ class SrsFullFunctionalAuditTest extends TestCase
         $this->assertEquals('disetujui', $pendaftaran->status);
 
         // Pastikan produk tampil di tabel UMKM
-        $produk = UMKM::where('pendaftaran_umkm_id', $pendaftaran->pendaftaran_umkm_id)->first();
+        $produk = UMKMModel::where('pendaftaran_umkm_id', $pendaftaran->pendaftaran_umkm_id)->first();
         $this->assertNotNull($produk);
         $this->assertTrue($produk->is_active);
     }
@@ -501,14 +501,14 @@ class SrsFullFunctionalAuditTest extends TestCase
             'email'                 => $newEmail,
             'password'              => 'password123',
             'password_confirmation' => 'password123',
-            'role'                  => User::ROLE_KASI_PEMERINTAHAN,
+            'role'                  => UserModel::ROLE_KASI_PEMERINTAHAN,
             'jabatan'               => 'Kasi Pemerintahan Desa',
         ]);
         $resCreate->assertRedirect(route('admin.kelola-admin.index'));
 
-        $createdUser = User::where('email', $newEmail)->first();
+        $createdUser = UserModel::where('email', $newEmail)->first();
         $this->assertNotNull($createdUser);
-        $this->assertEquals(User::ROLE_KASI_PEMERINTAHAN, $createdUser->role);
+        $this->assertEquals(UserModel::ROLE_KASI_PEMERINTAHAN, $createdUser->role);
         $this->assertEquals('Kasi Pemerintahan Desa', $createdUser->jabatan);
     }
 
@@ -517,12 +517,12 @@ class SrsFullFunctionalAuditTest extends TestCase
      */
     public function test_srs_f_015_logout_session(): void
     {
-        // 1. Logout Masyarakat
-        $this->actingAs($this->masyarakat)->post('/logout')->assertRedirect(route('home'));
+        // 1. Logout Masyarakat — diarahkan ke halaman login (/login)
+        $this->actingAs($this->masyarakat)->post('/logout')->assertRedirect(route('login'));
         $this->assertGuest();
 
-        // 2. Logout Admin
-        $this->actingAs($this->staff)->post('/admin/logout')->assertRedirect(route('admin.login'));
+        // 2. Logout Admin — diarahkan ke halaman login (/login)
+        $this->actingAs($this->staff)->post('/logout')->assertRedirect(route('login'));
         $this->assertGuest();
     }
 
@@ -540,9 +540,9 @@ class SrsFullFunctionalAuditTest extends TestCase
         ]);
         $resReg->assertRedirect(route('pengajuan.saya'));
 
-        $wargaBaru = User::where('email', $regEmail)->first();
+        $wargaBaru = UserModel::where('email', $regEmail)->first();
         $this->assertNotNull($wargaBaru);
-        $this->assertEquals(User::ROLE_MASYARAKAT, $wargaBaru->role);
+        $this->assertEquals(UserModel::ROLE_MASYARAKAT, $wargaBaru->role);
         $this->assertTrue($wargaBaru->isMasyarakat());
     }
 }

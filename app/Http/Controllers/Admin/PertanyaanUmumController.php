@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PertanyaanUmum;
+use App\Models\PertanyaanUmumModel;
 use Illuminate\Http\Request;
 
 class PertanyaanUmumController extends Controller
@@ -16,13 +16,13 @@ class PertanyaanUmumController extends Controller
         $status = $request->get('status', 'semua');
         $search = $request->get('q');
 
-        $query = PertanyaanUmum::with('user')->latest();
+        $query = PertanyaanUmumModel::with('user')->latest();
 
         $stats = [
-            'total'    => PertanyaanUmum::count(),
-            'diajukan' => PertanyaanUmum::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'dijawab'  => PertanyaanUmum::where('status', 'dijawab')->count(),
-            'selesai'  => PertanyaanUmum::where('status', 'selesai')->count(),
+            'total'    => PertanyaanUmumModel::count(),
+            'diajukan' => PertanyaanUmumModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'dijawab'  => PertanyaanUmumModel::where('status', 'dijawab')->count(),
+            'selesai'  => PertanyaanUmumModel::where('status', 'selesai')->count(),
         ];
 
         if ($status && $status !== 'semua') {
@@ -50,7 +50,7 @@ class PertanyaanUmumController extends Controller
     /**
      * Tampilkan detail pertanyaan dan form respon jawaban.
      */
-    public function show(PertanyaanUmum $pertanyaanUmum)
+    public function show(PertanyaanUmumModel $pertanyaanUmum)
     {
         $pertanyaanUmum->load('user');
         return view('admin.pertanyaan-umum.show', compact('pertanyaanUmum'));
@@ -59,7 +59,7 @@ class PertanyaanUmumController extends Controller
     /**
      * Berikan jawaban resmi admin dan perbarui status pertanyaan.
      */
-    public function updateStatus(Request $request, PertanyaanUmum $pertanyaanUmum)
+    public function updateStatus(Request $request, PertanyaanUmumModel $pertanyaanUmum)
     {
         $validated = $request->validate([
             'status'        => ['required', 'string', 'in:diajukan,dijawab,selesai'],
@@ -77,7 +77,7 @@ class PertanyaanUmumController extends Controller
     /**
      * Hapus pertanyaan umum.
      */
-    public function destroy(PertanyaanUmum $pertanyaanUmum)
+    public function destroy(PertanyaanUmumModel $pertanyaanUmum)
     {
         $nomor = $pertanyaanUmum->nomor_pertanyaan;
         $pertanyaanUmum->delete();

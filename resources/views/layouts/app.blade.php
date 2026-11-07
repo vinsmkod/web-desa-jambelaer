@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 
 <head>
@@ -384,6 +384,87 @@
             transform: translateY(-1px);
         }
 
+        /* ── Tombol Utama Layanan Masyarakat (Kirim/Submit) ── */
+        .btn-submit-layanan {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 50px;
+            height: 50px;
+            padding: 0 1.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            color: #ffffff !important;
+            background-color: #174b35 !important;
+            border: 1.5px solid #174b35 !important;
+            border-radius: 9999px !important;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(23, 75, 53, 0.2);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            user-select: none;
+        }
+
+        .btn-submit-layanan:hover:not(:disabled) {
+            background-color: #103b29 !important;
+            border-color: #103b29 !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(16, 59, 41, 0.32);
+        }
+
+        .btn-submit-layanan:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(16, 59, 41, 0.2);
+        }
+
+        .btn-submit-layanan:focus-visible {
+            outline: 2px solid #103b29;
+            outline-offset: 3px;
+            box-shadow: 0 0 0 4px rgba(23, 75, 53, 0.25);
+        }
+
+        .btn-submit-layanan:disabled,
+        .btn-submit-layanan[disabled] {
+            opacity: 0.55 !important;
+            cursor: not-allowed !important;
+            background-color: #4a6356 !important;
+            border-color: #4a6356 !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .btn-submit-layanan .btn-spinner {
+            display: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: btn-spin 0.75s linear infinite;
+        }
+
+        .btn-submit-layanan.is-loading .btn-spinner {
+            display: inline-block;
+        }
+
+        .btn-submit-layanan.is-loading .btn-icon {
+            display: none !important;
+        }
+
+        .btn-submit-layanan.is-loading {
+            pointer-events: none;
+            opacity: 0.85;
+            cursor: wait;
+        }
+
+        @keyframes btn-spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* â”€â”€ Paper Texture Overlay â”€â”€ */
         .paper-bg {
             background-color: #fdfaf5;
@@ -501,7 +582,7 @@
 
                 <!-- Desktop Primary CTA & User Auth -->
                 <div class="hidden lg:flex items-center gap-2">
-                    <a href="{{ route('kontak') }}" class="btn-primary text-[11px] py-2 px-4 gap-1.5 {{ request()->routeIs('kontak') ? '!bg-forest-700 !border-forest-700 ring-2 ring-forest-300' : '' }}">
+                    <a href="{{ route('layanan') }}" class="btn-primary text-[11px] py-2 px-4 gap-1.5 {{ request()->routeIs('layanan') ? '!bg-forest-700 !border-forest-700 ring-2 ring-forest-300' : '' }}">
                         <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
                         Layanan Masyarakat
                     </a>
@@ -539,6 +620,10 @@
                                 @if(Auth::user()->isAdmin())
                                 <a href="{{ route('admin.dashboard') }}" role="menuitem">
                                     <span class="dp-icon"><i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i></span>Dashboard Admin
+                                </a>
+                                @else
+                                <a href="{{ route('profil.edit') }}" role="menuitem">
+                                    <span class="dp-icon"><i data-lucide="user" class="w-3.5 h-3.5"></i></span>Profil Saya
                                 </a>
                                 @endif
 
@@ -651,6 +736,10 @@
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
                             <i data-lucide="layout-dashboard" class="w-4 h-4 mr-2.5 text-forest-700"></i>Dashboard Admin
                         </a>
+                        @else
+                        <a href="{{ route('profil.edit') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
+                            <i data-lucide="user" class="w-4 h-4 mr-2.5 text-forest-700"></i>Profil Saya
+                        </a>
                         @endif
 
                         <a href="{{ route('pengajuan.saya') }}" class="flex items-center px-3 py-2 rounded-lg text-sm font-semibold text-stone-700 hover:bg-forest-50 hover:text-forest-800 transition-all">
@@ -668,7 +757,7 @@
 
                 {{-- CTA --}}
                 <div class="pt-2 pb-2 px-1">
-                    <a href="{{ route('kontak') }}" class="btn-primary w-full justify-center text-[11px] py-2.5 gap-2">
+                    <a href="{{ route('layanan') }}" class="btn-primary w-full justify-center text-[11px] py-2.5 gap-2">
                         <i data-lucide="headphones" class="w-4 h-4"></i>Layanan Masyarakat
                     </a>
                 </div>
@@ -703,9 +792,9 @@
                     </p>
                     <!-- Social Icons -->
                     @php
-                        $footerIg = \App\Models\Pengaturan::get('sosmed_instagram', '');
-                        $footerYt = \App\Models\Pengaturan::get('sosmed_youtube', '');
-                        $footerTt = \App\Models\Pengaturan::get('sosmed_tiktok', '');
+                        $footerIg = \App\Models\PengaturanModel::get('sosmed_instagram', '');
+                        $footerYt = \App\Models\PengaturanModel::get('sosmed_youtube', '');
+                        $footerTt = \App\Models\PengaturanModel::get('sosmed_tiktok', '');
                     @endphp
                     <div class="flex items-center gap-2 pt-1">
                         @if($footerIg)
@@ -770,8 +859,8 @@
                     <h4 class="font-display font-bold text-[11px] tracking-widest uppercase text-sand-400">Layanan Publik</h4>
                     <ul class="space-y-2">
                         <li><a href="{{ route('pengajuan.surat') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengajuan Surat</a></li>
-                        <li><a href="{{ route('kontak') }}?jenis=pertanyaan_umum" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pertanyaan Umum</a></li>
-                        <li><a href="{{ route('kontak') }}?jenis=pengaduan" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengaduan Warga</a></li>
+                        <li><a href="{{ route('pertanyaan-umum.create') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pertanyaan Umum</a></li>
+                        <li><a href="{{ route('pengaduan.create') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pengaduan Warga</a></li>
                         <li><a href="{{ route('pengajuan.saya') }}" class="text-sm text-white/50 hover:text-sand-300 font-light transition-colors flex items-center gap-1.5"><i data-lucide="chevron-right" class="w-3 h-3"></i>Pantau Pengajuan</a></li>
                     </ul>
                 </div>
@@ -782,19 +871,19 @@
                     <ul class="space-y-3">
                         <li class="flex items-start gap-2.5">
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0 mt-0.5"></i>
-                            <span class="text-xs text-white/50 font-light leading-relaxed">{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270') }}</span>
+                            <span class="text-xs text-white/50 font-light leading-relaxed">{{ \App\Models\PengaturanModel::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan, Subang, Jawa Barat 41270') }}</span>
                         </li>
                         <li class="flex items-center gap-2.5">
                             <i data-lucide="phone" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
-                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_telepon', '081324768193') }}</span>
+                            <span class="text-xs text-white/50 font-light">{{ \App\Models\PengaturanModel::get('desa_telepon', '081324768193') }}</span>
                         </li>
                         <li class="flex items-center gap-2.5">
                             <i data-lucide="mail" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
-                            <span class="text-xs text-white/50 font-light break-all">{{ \App\Models\Pengaturan::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
+                            <span class="text-xs text-white/50 font-light break-all">{{ \App\Models\PengaturanModel::get('desa_email', 'info@jambelaer-subang.desa.id') }}</span>
                         </li>
                         <li class="flex items-center gap-2.5">
                             <i data-lucide="clock" class="w-3.5 h-3.5 text-sand-400 flex-shrink-0"></i>
-                            <span class="text-xs text-white/50 font-light">{{ \App\Models\Pengaturan::get('desa_jam_buka', 'Senin â€“ Jumat: 08:00 â€“ 15:30 WIB') }}</span>
+                            <span class="text-xs text-white/50 font-light">{{ \App\Models\PengaturanModel::get('desa_jam_buka', 'Senin â€“ Jumat: 08:00 â€“ 15:30 WIB') }}</span>
                         </li>
                     </ul>
                 </div>
@@ -973,6 +1062,49 @@
                     once: true,
                     offset: 40,
                     delay: 50,
+                });
+            }
+        });
+
+        // ── Auto Loading & Double-Submit Protection for Layanan Masyarakat Buttons ──
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form').forEach(function(form) {
+                if (form.id === 'contact-form') return; // Handled by its own AJAX script
+
+                const submitBtn = form.querySelector('.btn-submit-layanan');
+                if (!submitBtn) return;
+
+                form.addEventListener('submit', function(e) {
+                    if (form.checkValidity && !form.checkValidity()) {
+                        return;
+                    }
+
+                    if (submitBtn.dataset.submitting === 'true') {
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    submitBtn.dataset.submitting = 'true';
+                    submitBtn.classList.add('is-loading');
+
+                    const textSpan = submitBtn.querySelector('.btn-text');
+                    if (textSpan) {
+                        submitBtn.dataset.origText = textSpan.textContent;
+                        textSpan.textContent = 'Memproses...';
+                    }
+                });
+            });
+        });
+
+        window.addEventListener('pageshow', function(e) {
+            if (e.persisted) {
+                document.querySelectorAll('.btn-submit-layanan').forEach(function(btn) {
+                    btn.classList.remove('is-loading');
+                    delete btn.dataset.submitting;
+                    const textSpan = btn.querySelector('.btn-text');
+                    if (textSpan && btn.dataset.origText) {
+                        textSpan.textContent = btn.dataset.origText;
+                    }
                 });
             }
         });

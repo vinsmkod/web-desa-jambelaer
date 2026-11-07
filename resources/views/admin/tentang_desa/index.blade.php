@@ -161,7 +161,7 @@
                     <div>
                         <label class="form-label">Warna <span class="text-slate-400 normal-case font-normal">(opsional)</span></label>
                         <select name="warna" class="form-input">
-                            @foreach(\App\Models\TentangTimeline::$palettes as $name => $palette)
+                            @foreach(\App\Models\TentangTimelineModel::$palettes as $name => $palette)
                             <option value="{{ $name }}">{{ ucfirst($name) }}</option>
                             @endforeach
                         </select>
@@ -682,7 +682,7 @@
                 <div>
                     <label class="form-label">Warna</label>
                     <select name="warna" id="tl-warna" class="form-input">
-                        @foreach(\App\Models\TentangTimeline::$palettes as $name => $palette)
+                        @foreach(\App\Models\TentangTimelineModel::$palettes as $name => $palette)
                         <option value="{{ $name }}">{{ ucfirst($name) }}</option>
                         @endforeach
                     </select>

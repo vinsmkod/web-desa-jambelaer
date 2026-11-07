@@ -470,7 +470,7 @@
                 </form>
                 @endif
 
-                <a href="{{ route('kontak') }}#layanan-hub" class="btn-primary text-xs">
+                <a href="{{ route('layanan') }}#layanan-hub" class="btn-primary text-xs">
                     Buat Pengajuan Lain
                 </a>
             </div>

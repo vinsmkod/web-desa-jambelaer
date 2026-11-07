@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Budaya;
+use App\Models\BudayaModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +11,7 @@ class BudayaController extends Controller
 {
     public function index()
     {
-        $budayaList = Budaya::orderBy('urutan')->orderBy('budaya_id')->paginate(5)->withQueryString();
+        $budayaList = BudayaModel::orderBy('urutan')->orderBy('budaya_id')->paginate(5)->withQueryString();
         return view('admin.budaya.index', compact('budayaList'));
     }
 
@@ -39,7 +39,7 @@ class BudayaController extends Controller
             $imgPath = '/uploads/budaya/' . $filename;
         }
 
-        Budaya::create([
+        BudayaModel::create([
             'created_by' => Auth::id(),
             'kategori'   => $request->kategori,
             'title'      => $request->title,
@@ -52,12 +52,12 @@ class BudayaController extends Controller
         return redirect()->route('admin.budaya.index')->with('success', 'Budaya baru berhasil ditambahkan!');
     }
 
-    public function edit(Budaya $budaya)
+    public function edit(BudayaModel $budaya)
     {
         return view('admin.budaya.edit', compact('budaya'));
     }
 
-    public function update(Request $request, Budaya $budaya)
+    public function update(Request $request, BudayaModel $budaya)
     {
         $request->validate([
             'kategori' => ['required', 'string', 'max:50'],
@@ -91,7 +91,7 @@ class BudayaController extends Controller
         return redirect()->route('admin.budaya.index')->with('success', 'Data budaya berhasil diperbarui!');
     }
 
-    public function destroy(Budaya $budaya)
+    public function destroy(BudayaModel $budaya)
     {
         if ($budaya->img && file_exists(public_path($budaya->img))) {
             @unlink(public_path($budaya->img));

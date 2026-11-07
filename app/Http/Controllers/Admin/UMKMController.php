@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UMKM;
+use App\Models\UMKMModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -12,8 +12,8 @@ class UMKMController extends Controller
 {
     public function index(Request $request)
     {
-        $allProduk = UMKM::orderBy('urutan')->orderBy('produk_id')->get();
-        $produk    = UMKM::orderBy('urutan')->orderBy('produk_id')->paginate(5)->withQueryString();
+        $allProduk = UMKMModel::orderBy('urutan')->orderBy('produk_id')->get();
+        $produk    = UMKMModel::orderBy('urutan')->orderBy('produk_id')->paginate(5)->withQueryString();
         return view('admin.produk.index', compact('produk', 'allProduk'));
     }
 
@@ -71,23 +71,23 @@ class UMKMController extends Controller
         $slug = Str::slug($data['title']);
         $originalSlug = $slug;
         $counter = 1;
-        while (UMKM::where('slug', $slug)->exists()) {
+        while (UMKMModel::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $counter++;
         }
         $data['slug'] = $slug;
 
-        UMKM::create($data);
+        UMKMModel::create($data);
 
         return redirect()->route('admin.produk.index')
             ->with('success', 'Produk UMKM berhasil ditambahkan!');
     }
 
-    public function edit(UMKM $produk)
+    public function edit(UMKMModel $produk)
     {
         return view('admin.produk.edit', compact('produk'));
     }
 
-    public function update(Request $request, UMKM $produk)
+    public function update(Request $request, UMKMModel $produk)
     {
         $data = $request->validate([
             'title'            => ['required', 'string', 'max:255'],
@@ -140,7 +140,7 @@ class UMKMController extends Controller
             ->with('success', 'Produk UMKM berhasil diperbarui!');
     }
 
-    public function destroy(UMKM $produk)
+    public function destroy(UMKMModel $produk)
     {
         if ($produk->img && file_exists(public_path($produk->img))) {
             @unlink(public_path($produk->img));

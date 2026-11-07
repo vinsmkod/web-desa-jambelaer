@@ -87,7 +87,7 @@
                     class="form-input" onchange="previewImg(event)">
                 <div id="img-preview" class="mt-3">
                     <p class="text-xs text-slate-500 mb-1.5 font-medium">Pratinjau / Gambar Saat Ini:</p>
-                    <img id="img-preview-el" src="{{ $produk->img }}" alt="Preview"
+                    <img id="img-preview-el" src="{{ $produk->img_url }}" alt="Preview"
                          class="h-32 rounded-xl object-cover border border-slate-200 shadow-md">
                 </div>
             </div>

@@ -25,7 +25,7 @@
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <a href="{{ route('kontak') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
+        <a href="{{ route('layanan') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
         <span class="text-forest-800 font-semibold">Pengajuan Surat</span>
     </nav>
@@ -142,14 +142,55 @@
                             <i data-lucide="chevron-down" class="w-4 h-4 absolute right-4 top-4 text-stone-400 pointer-events-none"></i>
                         </div>
 
-                        {{-- Dynamic Info Card for Selected Surat --}}
-                        <div id="surat-info-card" class="mt-3 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-xs {{ old('jenis_surat_id', $selectedSurat->id ?? '') ? '' : 'hidden' }}">
+                        {{-- Info Card: Default (sebelum jenis surat dipilih) --}}
+                        <div id="surat-info-default" class="mt-3 p-4 rounded-2xl bg-stone-50 border border-stone-200 text-xs {{ old('jenis_surat_id', $selectedSurat->id ?? '') ? 'hidden' : '' }}">
                             <div class="flex items-start gap-2.5">
-                                <i data-lucide="info" class="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5"></i>
-                                <div class="space-y-1">
-                                    <p id="surat-info-desc" class="text-stone-700 font-medium leading-relaxed"></p>
-                                    <p id="surat-info-syarat" class="text-amber-900 font-semibold"></p>
+                                <i data-lucide="info" class="w-4 h-4 text-stone-400 flex-shrink-0 mt-0.5"></i>
+                                <p class="text-stone-500 leading-relaxed">
+                                    Pilih jenis surat di atas untuk melihat informasi dokumen yang perlu disiapkan.
+                                    Setiap jenis surat memiliki dokumen pendukung yang berbeda.
+                                </p>
+                            </div>
+                        </div>
+
+                        {{-- Info Card: Dinamis setelah jenis surat dipilih --}}
+                        <div id="surat-info-card" class="mt-3 rounded-2xl border text-xs overflow-hidden {{ old('jenis_surat_id', $selectedSurat->id ?? '') ? '' : 'hidden' }}">
+                            {{-- Header kartu --}}
+                            <div class="flex items-center gap-2 px-4 py-2.5 bg-amber-50 border-b border-amber-200">
+                                <i data-lucide="file-check" class="w-3.5 h-3.5 text-amber-700 flex-shrink-0"></i>
+                                <span id="surat-info-title" class="font-bold text-amber-900 text-[11px] uppercase tracking-wide"></span>
+                            </div>
+                            {{-- Isi kartu --}}
+                            <div class="px-4 py-3.5 bg-amber-50/50 space-y-3">
+                                {{-- Deskripsi singkat --}}
+                                <p id="surat-info-desc" class="text-stone-600 leading-relaxed"></p>
+
+                                {{-- Dokumen Utama (selalu sama untuk semua surat) --}}
+                                <div>
+                                    <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1.5">Dokumen Utama (Wajib)</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-forest-100 text-forest-800 font-semibold border border-forest-200">
+                                            <i data-lucide="credit-card" class="w-3 h-3"></i> KTP
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-forest-100 text-forest-800 font-semibold border border-forest-200">
+                                            <i data-lucide="users" class="w-3 h-3"></i> Kartu Keluarga (KK)
+                                        </span>
+                                    </div>
                                 </div>
+
+                                {{-- Dokumen Pendukung (dari data persyaratan_khusus) --}}
+                                <div id="surat-info-syarat-wrap">
+                                    <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-1.5">Dokumen Pendukung (Jika Diperlukan)</p>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-amber-100/60 border border-amber-200/80">
+                                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-700 flex-shrink-0 mt-0.5"></i>
+                                        <p id="surat-info-syarat" class="text-amber-900 leading-relaxed"></p>
+                                    </div>
+                                </div>
+
+                                {{-- Catatan panduan umum --}}
+                                <p class="text-[11px] text-stone-400 leading-relaxed border-t border-stone-200 pt-2.5">
+                                    Informasi di atas merupakan panduan awal. Petugas desa dapat meminta dokumen tambahan sesuai kebutuhan verifikasi.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -259,7 +300,8 @@
                                 </div>
                                 <div>
                                     <span class="text-xs font-bold text-stone-800 block">Dokumen Pendukung Lainnya <span class="text-stone-400 font-normal">(Opsional)</span></span>
-                                    <span id="label-file-pendukung" class="text-[11px] text-stone-400 block">Surat pengantar RT/RW, foto tempat usaha (SKU), surat kematian, dll.</span>
+                                    <span id="keterangan-pendukung" class="text-[11px] text-stone-400 block">Dokumen tambahan menyesuaikan jenis surat yang diajukan.</span>
+                                    <span id="label-file-pendukung" class="text-[11px] text-stone-400 block hidden"></span>
                                 </div>
                             </div>
                             <button type="button" onclick="document.getElementById('dokumen_pendukung').click()"
@@ -277,9 +319,10 @@
                         <p class="text-[11px] text-stone-400 font-light leading-relaxed">
                             Dengan mengirimkan formulir ini, Anda menyatakan bahwa data yang diisi adalah benar dan sah sesuai dokumen kependudukan asli.
                         </p>
-                        <button type="submit" class="w-full sm:w-auto btn-primary px-8 py-3.5 text-xs font-bold justify-center shadow-md">
-                            <i data-lucide="send" class="w-4 h-4"></i>
-                            Kirim Pengajuan Surat
+                        <button type="submit" class="w-full sm:w-auto btn-submit-layanan">
+                            <span class="btn-spinner"></span>
+                            <i data-lucide="send" class="w-4 h-4 btn-icon"></i>
+                            <span class="btn-text">Kirim Pengajuan Surat</span>
                         </button>
                     </div>
                 </form>
@@ -381,40 +424,105 @@
 
 @push('scripts')
 <script>
-    // Dinamis info jenis surat
-    const selectSurat = document.getElementById('jenis_surat_id');
-    const infoCard = document.getElementById('surat-info-card');
-    const descText = document.getElementById('surat-info-desc');
-    const syaratText = document.getElementById('surat-info-syarat');
+    // ── Teks keterangan dokumen pendukung per kode surat ─────────────────────
+    const keteranganPendukung = {
+        'SKD'  : 'Dokumen pendukung domisili jika diperlukan.',
+        'SKU'  : 'Foto tempat usaha, SPPT, atau dokumen pendukung usaha.',
+        'SKBM' : 'Dokumen pendukung status belum menikah jika diperlukan.',
+        'SKSM' : 'Buku nikah atau dokumen perkawinan jika diperlukan.',
+        'SKAW' : 'Akta kematian pewaris dan dokumen identitas ahli waris sesuai ketentuan.',
+        'SKTM' : 'Dokumen pendukung sesuai keperluan pengajuan.',
+        'SP'   : 'Akta kelahiran, ijazah, SPPT, atau dokumen lain sesuai isi surat.',
+    };
+    const DEFAULT_KETERANGAN = 'Dokumen tambahan menyesuaikan jenis surat yang diajukan.';
+
+    // ── Dinamis info jenis surat ─────────────────────────────────────────────
+    const selectSurat   = document.getElementById('jenis_surat_id');
+    const infoDefault   = document.getElementById('surat-info-default');
+    const infoCard      = document.getElementById('surat-info-card');
+    const infoTitle     = document.getElementById('surat-info-title');
+    const descText      = document.getElementById('surat-info-desc');
+    const syaratText    = document.getElementById('surat-info-syarat');
+    const syaratWrap    = document.getElementById('surat-info-syarat-wrap');
+    const keteranganEl  = document.getElementById('keterangan-pendukung');
 
     function updateSuratInfo() {
-        const selected = selectSurat.options[selectSurat.selectedIndex];
+        const selected = selectSurat ? selectSurat.options[selectSurat.selectedIndex] : null;
+
         if (selected && selected.value) {
-            const desc = selected.getAttribute('data-desc');
+            const nama   = selected.text.replace(/\s*\(.*?\)\s*$/, '').trim();
+            const desc   = selected.getAttribute('data-desc');
             const syarat = selected.getAttribute('data-syarat');
 
-            descText.textContent = desc ? desc : 'Surat keterangan resmi yang diterbitkan oleh Pemerintah Desa Jambelaer.';
-            syaratText.textContent = syarat ? 'Persyaratan khusus: ' + syarat : 'Persyaratan utama: Lampirkan foto/scan KTP dan Kartu Keluarga (KK).';
-            infoCard.classList.remove('hidden');
+            // Judul kartu = nama jenis surat yang dipilih
+            if (infoTitle) infoTitle.textContent = nama;
+
+            // Deskripsi singkat surat
+            if (descText) {
+                descText.textContent = desc
+                    ? desc
+                    : 'Surat keterangan resmi yang diterbitkan oleh Pemerintah Desa Jambelaer.';
+            }
+
+            // Persyaratan khusus (dari kolom persyaratan_khusus di tabel jenis_surat)
+            if (syaratText && syaratWrap) {
+                let syaratDisplay = '';
+                if (syarat) {
+                    // Bersihkan awalan "KTP, KK, " agar tidak duplikat dengan badge Dokumen Utama
+                    syaratDisplay = syarat
+                        .replace(/^(KTP(,?\s*(dan\s*)?|\s*dan\s*)KK(,?\s*dan\s*|\s*,\s*)?)/i, '')
+                        .replace(/^(KTP\s*,\s*KK\s*,?\s*(dan\s*)?)/i, '')
+                        .trim()
+                        .replace(/^,\s*/, '');
+                }
+
+                if (syaratDisplay) {
+                    syaratText.textContent = syaratDisplay.charAt(0).toUpperCase() + syaratDisplay.slice(1);
+                    syaratWrap.classList.remove('hidden');
+                } else {
+                    syaratWrap.classList.add('hidden');
+                }
+            }
+
+            // ── Teks keterangan Dokumen Pendukung Lainnya ────────────────────
+            if (keteranganEl) {
+                // Ambil kode surat dari teks option, misal: "Surat Keterangan Usaha (SKU)" → "SKU"
+                const kodeMatch = selected.text.match(/\(([^)]+)\)\s*$/);
+                const kode      = kodeMatch ? kodeMatch[1].trim().toUpperCase() : '';
+                keteranganEl.textContent = keteranganPendukung[kode] || DEFAULT_KETERANGAN;
+            }
+
+            // Tampilkan info card, sembunyikan default
+            if (infoDefault) infoDefault.classList.add('hidden');
+            if (infoCard)    infoCard.classList.remove('hidden');
         } else {
-            infoCard.classList.add('hidden');
+            // Belum ada pilihan — tampilkan panduan umum
+            if (infoDefault) infoDefault.classList.remove('hidden');
+            if (infoCard)    infoCard.classList.add('hidden');
+
+            // Reset keterangan pendukung ke default
+            if (keteranganEl) keteranganEl.textContent = DEFAULT_KETERANGAN;
         }
     }
 
     if (selectSurat) {
         selectSurat.addEventListener('change', updateSuratInfo);
-        updateSuratInfo();
+        updateSuratInfo(); // jalankan langsung untuk kondisi old() atau edit
     }
 
-    // Helper tampilan nama file yang diunggah
+    // ── Helper tampilan nama file yang diunggah ───────────────────────────────
     function updateFileName(input, labelId) {
         const label = document.getElementById(labelId);
+        if (!label) return;
         if (input.files && input.files[0]) {
             const fileName = input.files[0].name;
             const fileSize = (input.files[0].size / (1024 * 1024)).toFixed(2);
+            // Untuk input dokumen_pendukung: tampilkan nama file di label-file-pendukung,
+            // bukan di keterangan-pendukung (agar teks keterangan dinamis tidak tertimpa)
             label.textContent = `✓ ${fileName} (${fileSize} MB)`;
             label.classList.remove('text-stone-400');
             label.classList.add('text-forest-800', 'font-semibold');
+            label.classList.remove('hidden');
         }
     }
 </script>

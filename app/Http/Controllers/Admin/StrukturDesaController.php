@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\StrukturDesa;
+use App\Models\StrukturDesaModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -16,7 +16,7 @@ class StrukturDesaController extends Controller
      */
     private function resequence(): void
     {
-        $items = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->get();
+        $items = StrukturDesaModel::orderBy('urutan')->orderBy('struktur_desa_id')->get();
         foreach ($items as $index => $item) {
             if ($item->urutan != ($index + 1)) {
                 $item->update(['urutan' => $index + 1]);
@@ -27,8 +27,8 @@ class StrukturDesaController extends Controller
     public function index()
     {
         // Tidak memanggil resequence() di sini agar tidak ada N query UPDATE setiap halaman dibuka
-        $strukturList = StrukturDesa::orderBy('urutan')->orderBy('struktur_desa_id')->paginate(5);
-        $nextUrutan   = (StrukturDesa::max('urutan') ?? 0) + 1;
+        $strukturList = StrukturDesaModel::orderBy('urutan')->orderBy('struktur_desa_id')->paginate(5);
+        $nextUrutan   = (StrukturDesaModel::max('urutan') ?? 0) + 1;
 
         return view('admin.tentang.index', compact('strukturList', 'nextUrutan'));
     }
@@ -50,10 +50,10 @@ class StrukturDesaController extends Controller
             $fotoPath = '/uploads/struktur/' . $filename;
         }
 
-        $maxUrutan = StrukturDesa::max('urutan') ?? 0;
+        $maxUrutan = StrukturDesaModel::max('urutan') ?? 0;
         $urutan    = ($request->filled('urutan') && $request->urutan > 0) ? $request->urutan : ($maxUrutan + 1);
 
-        StrukturDesa::create([
+        StrukturDesaModel::create([
             'created_by' => Auth::id(),
             'nama'       => $request->nama,
             'jabatan'    => $request->jabatan,
@@ -66,7 +66,7 @@ class StrukturDesaController extends Controller
         return back()->with('success', 'Anggota struktur berhasil ditambahkan!');
     }
 
-    public function update(Request $request, StrukturDesa $struktur)
+    public function update(Request $request, StrukturDesaModel $struktur)
     {
         $request->validate([
             'nama'     => ['required', 'string', 'max:100'],
@@ -98,7 +98,7 @@ class StrukturDesaController extends Controller
         return back()->with('success', 'Data anggota struktur berhasil diperbarui!');
     }
 
-    public function destroy(StrukturDesa $struktur)
+    public function destroy(StrukturDesaModel $struktur)
     {
         if ($struktur->foto && file_exists(public_path($struktur->foto))) {
             @unlink(public_path($struktur->foto));
@@ -115,12 +115,12 @@ class StrukturDesaController extends Controller
         return $this->store($request);
     }
 
-    public function strukturUpdate(Request $request, StrukturDesa $struktur)
+    public function strukturUpdate(Request $request, StrukturDesaModel $struktur)
     {
         return $this->update($request, $struktur);
     }
 
-    public function strukturDestroy(StrukturDesa $struktur)
+    public function strukturDestroy(StrukturDesaModel $struktur)
     {
         return $this->destroy($struktur);
     }

@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\JenisSurat;
-use App\Models\Pengaduan;
-use App\Models\PengajuanSurat;
-use App\Models\PertanyaanUmum;
-use App\Models\PendaftaranUmkm;
-use App\Models\UMKM;
-use App\Models\User;
+use App\Models\JenisSuratModel;
+use App\Models\PengaduanModel;
+use App\Models\PengajuanSuratModel;
+use App\Models\PertanyaanUmumModel;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\UMKMModel;
+use App\Models\UserModel;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -32,13 +32,18 @@ class LayananMasyarakatFlowTest extends TestCase
             '/galeri',
             '/acara',
             '/berita',
-            '/kontak',
+            '/layanan',
         ];
 
         foreach ($publicRoutes as $route) {
             $response = $this->get($route);
             $response->assertStatus(200);
         }
+
+        // URL lama /kontak harus redirect 301 ke /layanan
+        $redirectResponse = $this->get('/kontak');
+        $redirectResponse->assertStatus(301);
+        $redirectResponse->assertRedirect('/layanan');
     }
 
     /**
@@ -79,7 +84,7 @@ class LayananMasyarakatFlowTest extends TestCase
 
         $response->assertRedirect(route('pengajuan.saya'));
 
-        $user = User::where('email', $email)->first();
+        $user = UserModel::where('email', $email)->first();
         $this->assertNotNull($user);
         $this->assertEquals('masyarakat', $user->role);
         $this->assertTrue($user->isMasyarakat());
@@ -95,7 +100,7 @@ class LayananMasyarakatFlowTest extends TestCase
     {
         Storage::fake('public');
 
-        $user = User::create([
+        $user = UserModel::create([
             'name'     => 'Siti Rahma',
             'email'    => 'siti_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
@@ -103,7 +108,7 @@ class LayananMasyarakatFlowTest extends TestCase
         ]);
 
         // 4a. Service 1: Pengajuan Surat
-        $jenisSurat = JenisSurat::first() ?: JenisSurat::create([
+        $jenisSurat = JenisSuratModel::first() ?: JenisSuratModel::create([
             'nama_surat' => 'Surat Keterangan Domisili',
             'kode_surat' => 'SKD',
             'is_active'  => true,
@@ -126,7 +131,7 @@ class LayananMasyarakatFlowTest extends TestCase
 
         $resSurat->assertSessionHasNoErrors();
         $resSurat->assertRedirect();
-        $surat = PengajuanSurat::where('user_id', $user->user_id)->latest()->first();
+        $surat = PengajuanSuratModel::where('user_id', $user->user_id)->latest()->first();
         $this->assertNotNull($surat);
         $this->assertEquals('diajukan', $surat->status);
         $this->assertNotNull($surat->file_ktp);
@@ -145,7 +150,7 @@ class LayananMasyarakatFlowTest extends TestCase
 
         $resPengaduan->assertSessionHasNoErrors();
         $resPengaduan->assertRedirect();
-        $pengaduan = Pengaduan::where('user_id', $user->user_id)->latest()->first();
+        $pengaduan = PengaduanModel::where('user_id', $user->user_id)->latest()->first();
         $this->assertNotNull($pengaduan);
         $this->assertEquals('diajukan', $pengaduan->status);
         $this->assertNotNull($pengaduan->foto_bukti);
@@ -160,7 +165,7 @@ class LayananMasyarakatFlowTest extends TestCase
 
         $resPertanyaan->assertSessionHasNoErrors();
         $resPertanyaan->assertRedirect();
-        $pertanyaan = PertanyaanUmum::where('user_id', $user->user_id)->latest()->first();
+        $pertanyaan = PertanyaanUmumModel::where('user_id', $user->user_id)->latest()->first();
         $this->assertNotNull($pertanyaan);
         $this->assertEquals('diajukan', $pertanyaan->status);
 
@@ -181,7 +186,7 @@ class LayananMasyarakatFlowTest extends TestCase
 
         $resUmkm->assertSessionHasNoErrors();
         $resUmkm->assertRedirect();
-        $umkm = PendaftaranUmkm::where('user_id', $user->user_id)->latest()->first();
+        $umkm = PendaftaranUmkmModel::where('user_id', $user->user_id)->latest()->first();
         $this->assertNotNull($umkm);
         $this->assertEquals('diajukan', $umkm->status);
         $this->assertNotNull($umkm->foto_produk);
@@ -200,23 +205,23 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_citizen_cannot_view_other_citizens_submission(): void
     {
-        $userA = User::create([
+        $userA = UserModel::create([
             'name'     => 'Warga A',
             'email'    => 'wargaa_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'masyarakat',
         ]);
 
-        $userB = User::create([
+        $userB = UserModel::create([
             'name'     => 'Warga B',
             'email'    => 'wargab_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'masyarakat',
         ]);
 
-        $pengaduanA = Pengaduan::create([
+        $pengaduanA = PengaduanModel::create([
             'user_id'         => $userA->user_id,
-            'nomor_pengaduan' => Pengaduan::generateNomorPengaduan(),
+            'nomor_pengaduan' => PengaduanModel::generateNomorPengaduan(),
             'nama'            => $userA->name,
             'no_whatsapp'     => '081234567890',
             'judul'           => 'Rahasia Warga A',
@@ -239,7 +244,7 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_citizen_cannot_access_admin_dashboard(): void
     {
-        $citizen = User::create([
+        $citizen = UserModel::create([
             'name'     => 'Warga Biasa',
             'email'    => 'warga_biasa_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
@@ -255,7 +260,7 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_admin_can_access_admin_dashboard(): void
     {
-        $admin = User::create([
+        $admin = UserModel::create([
             'name'     => 'Admin Dashboard Tester',
             'email'    => 'admin_dash_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
@@ -279,7 +284,7 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_citizen_can_access_all_four_service_form_pages_and_legacy_tracking(): void
     {
-        $citizen = User::create([
+        $citizen = UserModel::create([
             'name'     => 'Warga Form Tester',
             'email'    => 'warga_form_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
@@ -301,23 +306,23 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_admin_processes_submission_and_citizen_sees_update_on_website(): void
     {
-        $admin = User::create([
+        $admin = UserModel::create([
             'name'     => 'Admin Desa',
             'email'    => 'admin_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'admin',
         ]);
 
-        $citizen = User::create([
+        $citizen = UserModel::create([
             'name'     => 'Deden Permana',
             'email'    => 'deden_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'masyarakat',
         ]);
 
-        $pengaduan = Pengaduan::create([
+        $pengaduan = PengaduanModel::create([
             'user_id'         => $citizen->user_id,
-            'nomor_pengaduan' => Pengaduan::generateNomorPengaduan(),
+            'nomor_pengaduan' => PengaduanModel::generateNomorPengaduan(),
             'nama'            => $citizen->name,
             'no_whatsapp'     => '081234567899',
             'judul'           => 'Saluran Air Tersumbat di RT 05',
@@ -367,23 +372,23 @@ class LayananMasyarakatFlowTest extends TestCase
      */
     public function test_umkm_approval_and_publication_creates_product(): void
     {
-        $admin = User::create([
+        $admin = UserModel::create([
             'name'     => 'Admin Desa',
             'email'    => 'admin_umkm_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'admin',
         ]);
 
-        $citizen = User::create([
+        $citizen = UserModel::create([
             'name'     => 'Pengusaha Madu',
             'email'    => 'madu_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'masyarakat',
         ]);
 
-        $umkm = PendaftaranUmkm::create([
+        $umkm = PendaftaranUmkmModel::create([
             'user_id'            => $citizen->user_id,
-            'nomor_pendaftaran'  => PendaftaranUmkm::generateNomorPendaftaran(),
+            'nomor_pendaftaran'  => PendaftaranUmkmModel::generateNomorPendaftaran(),
             'nama_usaha'         => 'Madu Hutan Jambelaer',
             'nama_pemilik'       => 'Pak Kosasih',
             'nomor_whatsapp'     => '081298765432',
@@ -407,7 +412,7 @@ class LayananMasyarakatFlowTest extends TestCase
         $this->assertEquals('disetujui', $umkm->status);
 
         // Check Produk / UMKM created and linked via pendaftaran_umkm_id
-        $produk = UMKM::where('pendaftaran_umkm_id', $umkm->pendaftaran_umkm_id)->first();
+        $produk = UMKMModel::where('pendaftaran_umkm_id', $umkm->pendaftaran_umkm_id)->first();
         $this->assertNotNull($produk);
         $this->assertEquals('Madu Hutan Jambelaer', $produk->title);
         $this->assertEquals('Pak Kosasih', $produk->producer);
@@ -430,16 +435,16 @@ class LayananMasyarakatFlowTest extends TestCase
         $resLogin->assertSee('Portal Masuk Sistem', false);
 
         $resAdminLogin = $this->get('/admin/login');
-        $resAdminLogin->assertStatus(200);
+        $this->assertTrue(in_array($resAdminLogin->status(), [301, 302, 404]));
 
-        $admin = User::create([
+        $admin = UserModel::create([
             'name'     => 'Administrator Desa',
             'email'    => 'admin_test_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
             'role'     => 'admin',
         ]);
 
-        $citizen = User::create([
+        $citizen = UserModel::create([
             'name'     => 'Warga Biasa',
             'email'    => 'citizen_test_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),

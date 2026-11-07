@@ -16,7 +16,7 @@
         <div>
             <a href="{{ route('admin.jenis-surat.index') }}" class="btn-secondary text-xs">
                 <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-                Kelola Jenis Surat ({{ \App\Models\JenisSurat::count() }})
+                Kelola Jenis Surat ({{ \App\Models\JenisSuratModel::count() }})
             </a>
         </div>
     </div>

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RiwayatPengajuanSurat extends Model
+class RiwayatPengajuanSuratModel extends Model
 {
     protected $table = 'riwayat_pengajuan_surats';
     public $timestamps = false;
@@ -27,12 +27,12 @@ class RiwayatPengajuanSurat extends Model
 
     public function pengajuanSurat(): BelongsTo
     {
-        return $this->belongsTo(PengajuanSurat::class, 'pengajuan_surat_id', 'pengajuan_surat_id');
+        return $this->belongsTo(PengajuanSuratModel::class, 'pengajuan_surat_id', 'pengajuan_surat_id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
     }
 
     public function getRoleBadgeClassAttribute(): string

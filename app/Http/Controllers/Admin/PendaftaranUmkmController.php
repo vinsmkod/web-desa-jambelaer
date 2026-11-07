@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PendaftaranUmkm;
-use App\Models\UMKM;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\UMKMModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -20,15 +20,15 @@ class PendaftaranUmkmController extends Controller
         $status = $request->get('status', 'semua');
         $search = $request->get('q');
 
-        $query = PendaftaranUmkm::with(['user', 'produkDipublikasikan'])->latest();
+        $query = PendaftaranUmkmModel::with(['user', 'produkDipublikasikan'])->latest();
 
         $stats = [
-            'total'        => PendaftaranUmkm::count(),
-            'diajukan'     => PendaftaranUmkm::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'diverifikasi' => PendaftaranUmkm::where('status', 'diverifikasi')->count(),
-            'diproses'     => PendaftaranUmkm::where('status', 'diproses')->count(),
-            'disetujui'    => PendaftaranUmkm::whereIn('status', ['disetujui', 'selesai'])->count(),
-            'ditolak'      => PendaftaranUmkm::where('status', 'ditolak')->count(),
+            'total'        => PendaftaranUmkmModel::count(),
+            'diajukan'     => PendaftaranUmkmModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'diverifikasi' => PendaftaranUmkmModel::where('status', 'diverifikasi')->count(),
+            'diproses'     => PendaftaranUmkmModel::where('status', 'diproses')->count(),
+            'disetujui'    => PendaftaranUmkmModel::whereIn('status', ['disetujui', 'selesai'])->count(),
+            'ditolak'      => PendaftaranUmkmModel::where('status', 'ditolak')->count(),
         ];
 
         if ($status && $status !== 'semua') {
@@ -60,7 +60,7 @@ class PendaftaranUmkmController extends Controller
     /**
      * Tampilkan detail pendaftaran UMKM dan pemeriksaan dokumen.
      */
-    public function show(PendaftaranUmkm $pendaftaranUmkm)
+    public function show(PendaftaranUmkmModel $pendaftaranUmkm)
     {
         $pendaftaranUmkm->load(['user', 'produkDipublikasikan']);
         return view('admin.pendaftaran-umkm.show', compact('pendaftaranUmkm'));
@@ -69,7 +69,7 @@ class PendaftaranUmkmController extends Controller
     /**
      * Perbarui status verifikasi pendaftaran UMKM.
      */
-    public function updateStatus(Request $request, PendaftaranUmkm $pendaftaranUmkm)
+    public function updateStatus(Request $request, PendaftaranUmkmModel $pendaftaranUmkm)
     {
         $validated = $request->validate([
             'status'        => ['required', 'string', 'in:diajukan,diverifikasi,diproses,disetujui,ditolak'],
@@ -87,7 +87,7 @@ class PendaftaranUmkmController extends Controller
     /**
      * Publikasikan UMKM yang telah disetujui langsung ke Katalog Produk Desa (SRS-F-005).
      */
-    public function publikasikan(Request $request, PendaftaranUmkm $pendaftaranUmkm)
+    public function publikasikan(Request $request, PendaftaranUmkmModel $pendaftaranUmkm)
     {
         // Pastikan status pendaftaran sudah disetujui atau setujui secara langsung
         $pendaftaranUmkm->update([
@@ -96,7 +96,7 @@ class PendaftaranUmkmController extends Controller
         ]);
 
         // Cek apakah sudah pernah dipublikasikan
-        $existingProduk = UMKM::where('pendaftaran_umkm_id', $pendaftaranUmkm->pendaftaran_umkm_id)->first();
+        $existingProduk = UMKMModel::where('pendaftaran_umkm_id', $pendaftaranUmkm->pendaftaran_umkm_id)->first();
 
         if ($existingProduk) {
             $existingProduk->update(['is_active' => true]);
@@ -109,14 +109,14 @@ class PendaftaranUmkmController extends Controller
         $slug = Str::slug($baseTitle);
         $originalSlug = $slug;
         $counter = 1;
-        while (UMKM::where('slug', $slug)->exists()) {
+        while (UMKMModel::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $counter++;
         }
 
         // Gambar produk: gunakan foto produk pemohon
         $imgPath = $pendaftaranUmkm->foto_produk ?: 'uploads/img/DESA_JAMBELAER.png';
 
-        $produk = UMKM::create([
+        $produk = UMKMModel::create([
             'pendaftaran_umkm_id' => $pendaftaranUmkm->pendaftaran_umkm_id,
             'created_by'          => Auth::id(),
             'slug'                => $slug,
@@ -150,7 +150,7 @@ class PendaftaranUmkmController extends Controller
     /**
      * Hapus pendaftaran UMKM.
      */
-    public function destroy(PendaftaranUmkm $pendaftaranUmkm)
+    public function destroy(PendaftaranUmkmModel $pendaftaranUmkm)
     {
         if ($pendaftaranUmkm->foto_produk && Storage::disk('public')->exists($pendaftaranUmkm->foto_produk)) {
             Storage::disk('public')->delete($pendaftaranUmkm->foto_produk);

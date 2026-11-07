@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengaturan;
+use App\Models\PengaturanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -35,7 +35,7 @@ class PengaturanController extends Controller
 
     public function index()
     {
-        $settings = Pengaturan::where('group', '!=', 'tentang')
+        $settings = PengaturanModel::where('group', '!=', 'tentang')
             ->orderBy('group')
             ->orderBy('pengaturan_id')
             ->get()
@@ -70,7 +70,7 @@ class PengaturanController extends Controller
         }
 
         foreach ($inputs as $key => $value) {
-            Pengaturan::set($key, $value ?? '');
+            PengaturanModel::set($key, $value ?? '');
         }
 
         return back()->with('success', 'Pengaturan berhasil disimpan!');

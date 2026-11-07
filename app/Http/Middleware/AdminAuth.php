@@ -12,7 +12,7 @@ class AdminAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('admin.login')
+            return redirect()->route('login')
                 ->with('error', 'Silakan login terlebih dahulu.');
         }
 
@@ -31,7 +31,7 @@ class AdminAuth
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('admin.login')
+            return redirect()->route('login')
                 ->with('error', "Sesi Anda telah berakhir karena tidak aktif selama {$timeoutMinutes} menit. Silakan login kembali.");
         }
 

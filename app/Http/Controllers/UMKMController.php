@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UMKM;
+use App\Models\UMKMModel;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ class UMKMController extends Controller
      */
     public function index(): View
     {
-        $products           = UMKM::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->get();
+        $products           = UMKMModel::where('is_active', true)->orderBy('urutan')->orderBy('produk_id')->get();
         $jenisGroups        = $products->whereNotNull('jenis')->groupBy('jenis');
         $individualProducts = $products->filter(fn($p) => is_null($p->jenis));
 
@@ -25,7 +25,7 @@ class UMKMController extends Controller
      */
     public function jenis(string $jenis): View
     {
-        $producers = UMKM::where('is_active', true)
+        $producers = UMKMModel::where('is_active', true)
             ->where('jenis', $jenis)
             ->orderBy('urutan')
             ->orderBy('produk_id')
@@ -45,8 +45,8 @@ class UMKMController extends Controller
      */
     public function detail(string $slug): View
     {
-        $product     = UMKM::where('slug', $slug)->where('is_active', true)->firstOrFail();
-        $allProducts = UMKM::where('is_active', true)->where('slug', '!=', $slug)->take(4)->get();
+        $product     = UMKMModel::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $allProducts = UMKMModel::where('is_active', true)->where('slug', '!=', $slug)->take(4)->get();
 
         return view('pages.umkm-detail', compact('product', 'allProducts'));
     }

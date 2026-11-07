@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AgendaAcara;
+use App\Models\AcaraModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,12 +16,12 @@ class AcaraController extends Controller
      */
     public function index(Request $request)
     {
-        AgendaAcara::cleanupExpiredAcara();
+        AcaraModel::cleanupExpiredAcara();
 
         $tab = $request->query('tab', 'semua');
         $search = $request->query('q');
 
-        $query = AgendaAcara::query();
+        $query = AcaraModel::query();
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -66,7 +66,7 @@ class AcaraController extends Controller
                         ->withQueryString();
 
         // Hitung statistik untuk cards & tabs
-        $activeQuery = AgendaAcara::where(function ($q) {
+        $activeQuery = AcaraModel::where(function ($q) {
             $q->whereNull('is_archived')->orWhere('is_archived', false);
         });
 
@@ -74,7 +74,7 @@ class AcaraController extends Controller
             'total'  => (clone $activeQuery)->count(),
             'publik' => (clone $activeQuery)->where('dipublikasikan', true)->count(),
             'draf'   => (clone $activeQuery)->where('dipublikasikan', false)->count(),
-            'arsip'  => AgendaAcara::where('is_archived', true)->count(),
+            'arsip'  => AcaraModel::where('is_archived', true)->count(),
         ];
 
         return view('admin.acara.index', compact('acaras', 'stats', 'tab', 'search'));
@@ -136,7 +136,7 @@ class AcaraController extends Controller
 
         $dipublikasikan = ($request->has('dipublikasikan') || $request->dipublikasikan == '1');
 
-        $acara = AgendaAcara::create([
+        $acara = AcaraModel::create([
             'user_id'          => Auth::id(),
             'nama_acara'       => $request->nama_acara,
             'tanggal_acara'    => $request->tanggal_acara,
@@ -163,7 +163,7 @@ class AcaraController extends Controller
     /**
      * Tampilkan detail agenda acara
      */
-    public function show(AgendaAcara $acara)
+    public function show(AcaraModel $acara)
     {
         $acara->update(['is_read' => true]);
         return view('admin.acara.show', ['acara' => $acara, 'pesan' => $acara]);
@@ -172,7 +172,7 @@ class AcaraController extends Controller
     /**
      * Form edit agenda acara
      */
-    public function edit(AgendaAcara $acara)
+    public function edit(AcaraModel $acara)
     {
         return view('admin.acara.edit', ['acara' => $acara, 'pesan' => $acara]);
     }
@@ -180,7 +180,7 @@ class AcaraController extends Controller
     /**
      * Perbarui data agenda acara
      */
-    public function update(Request $request, AgendaAcara $acara)
+    public function update(Request $request, AcaraModel $acara)
     {
         $request->validate([
             'nama_acara'       => ['required', 'string', 'max:150'],
@@ -259,7 +259,7 @@ class AcaraController extends Controller
     /**
      * Hapus agenda acara
      */
-    public function destroy(AgendaAcara $acara)
+    public function destroy(AcaraModel $acara)
     {
         if ($acara->foto_bukti) {
             if (file_exists(public_path($acara->foto_bukti))) {
@@ -283,7 +283,7 @@ class AcaraController extends Controller
     /**
      * Toggle status publikasi agenda acara ke website desa
      */
-    public function publikasiAcara(AgendaAcara $acara, Request $request)
+    public function publikasiAcara(AcaraModel $acara, Request $request)
     {
         $newStatus = !$acara->dipublikasikan;
         $acara->update(['dipublikasikan' => $newStatus]);
@@ -295,7 +295,7 @@ class AcaraController extends Controller
     /**
      * Update status agenda acara (disetujui, menunggu, ditolak)
      */
-    public function updateStatus(Request $request, AgendaAcara $acara)
+    public function updateStatus(Request $request, AcaraModel $acara)
     {
         $request->validate([
             'status'        => ['required', 'string', 'in:disetujui,menunggu,ditolak'],

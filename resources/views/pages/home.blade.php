@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Sistem Informasi Desa Jambelaer | Kecamatan Dawuan, Kabupaten Subang')
 @section('meta_desc', 'Portal resmi Pemerintah Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat. Temukan informasi profil desa, berita terkini, produk UMKM unggulan, destinasi wisata, budaya lokal, dan layanan publik desa.')
@@ -32,13 +32,13 @@
                 },
                 "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": "{{ \App\Models\Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan') }}",
+                    "streetAddress": "{{ \App\Models\PengaturanModel::get('desa_alamat', 'Jl. Raya Jambelaer, Dawuan') }}",
                     "addressLocality": "Kecamatan Dawuan",
                     "addressRegion": "Kabupaten Subang",
                     "addressCountry": "ID"
                 },
-                "telephone": "{{ \App\Models\Pengaturan::get('desa_telepon', '') }}",
-                "email": "{{ \App\Models\Pengaturan::get('desa_email', '') }}",
+                "telephone": "{{ \App\Models\PengaturanModel::get('desa_telepon', '') }}",
+                "email": "{{ \App\Models\PengaturanModel::get('desa_email', '') }}",
                 "areaServed": {
                     "@type": "AdministrativeArea",
                     "name": "Desa Jambelaer, Kecamatan Dawuan, Kabupaten Subang, Jawa Barat, Indonesia"
@@ -96,7 +96,7 @@
                         <i data-lucide="shopping-bag" class="w-4 h-4 mr-2"></i>
                         Jelajahi UMKM
                     </a>
-                    <a href="{{ route('kontak') }}" class="inline-flex items-center text-xs font-semibold text-sand-300 hover:text-white px-3 py-2 transition-colors">
+                    <a href="{{ route('layanan') }}" class="inline-flex items-center text-xs font-semibold text-sand-300 hover:text-white px-3 py-2 transition-colors">
                         <i data-lucide="message-square" class="w-4 h-4 mr-1.5"></i>
                         Layanan & Pengaduan
                     </a>
@@ -213,12 +213,12 @@
      3. SAMBUTAN KEPALA DESA + SEKILAS PROFIL â€” Institutional Welcome
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 @php
-$kadesNama = \App\Models\Pengaturan::get('kades_nama', 'Sahar Dwi Anugrah, S.Kom');
-$kadesJabatan = \App\Models\Pengaturan::get('kades_jabatan', 'Kepala Desa Jambelaer');
-$kadesFoto = \App\Models\Pengaturan::get('kades_foto', '');
-$sambutanJudul = \App\Models\Pengaturan::get('sambutan_judul', 'Sambutan Kepala Desa');
-$sambutanQuote = \App\Models\Pengaturan::get('sambutan_quote', 'Membangun Desa Jambelaer yang Mandiri, Sejahtera, dan Berakar pada Nilai Budaya Sunda.');
-$sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di portal resmi Sistem Informasi Desa Jambelaer. Website ini merupakan wujud keterbukaan informasi publik dan dedikasi kami dalam melayani seluruh warga serta mempromosikan potensi lokal desa.');
+$kadesNama = \App\Models\PengaturanModel::get('kades_nama', 'Sahar Dwi Anugrah, S.Kom');
+$kadesJabatan = \App\Models\PengaturanModel::get('kades_jabatan', 'Kepala Desa Jambelaer');
+$kadesFoto = \App\Models\PengaturanModel::get('kades_foto', '');
+$sambutanJudul = \App\Models\PengaturanModel::get('sambutan_judul', 'Sambutan Kepala Desa');
+$sambutanQuote = \App\Models\PengaturanModel::get('sambutan_quote', 'Membangun Desa Jambelaer yang Mandiri, Sejahtera, dan Berakar pada Nilai Budaya Sunda.');
+$sambutanTeks = \App\Models\PengaturanModel::get('sambutan_teks', 'Selamat datang di portal resmi Sistem Informasi Desa Jambelaer. Website ini merupakan wujud keterbukaan informasi publik dan dedikasi kami dalam melayani seluruh warga serta mempromosikan potensi lokal desa.');
 @endphp
 <section class="py-16 sm:py-20 bg-stone-50/60 border-b border-stone-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -286,7 +286,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                         Selengkapnya Tentang Desa
                         <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                     </a>
-                    <a href="{{ route('kontak') }}" class="btn-secondary">
+                    <a href="{{ route('layanan') }}" class="btn-secondary">
                         <i data-lucide="message-square" class="w-4 h-4 mr-2"></i>
                         Sampaikan Aspirasi
                     </a>
@@ -471,7 +471,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                     </p>
                 </div>
                 <div class="pt-4">
-                    <a href="{{ route('kontak') }}?jenis=pertanyaan_umum" class="text-xs font-bold text-forest-800 hover:text-forest-600 inline-flex items-center">
+                    <a href="{{ route('pertanyaan-umum.create') }}" class="text-xs font-bold text-forest-800 hover:text-forest-600 inline-flex items-center">
                         Kirim Tanya <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
                     </a>
                 </div>
@@ -489,7 +489,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                     </p>
                 </div>
                 <div class="pt-4">
-                    <a href="{{ route('kontak') }}?jenis=pengaduan" class="text-xs font-bold text-rose-700 hover:text-rose-900 inline-flex items-center">
+                    <a href="{{ route('pengaduan.create') }}" class="text-xs font-bold text-rose-700 hover:text-rose-900 inline-flex items-center">
                         Ajukan Aduan <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
                     </a>
                 </div>
@@ -507,7 +507,7 @@ $sambutanTeks = \App\Models\Pengaturan::get('sambutan_teks', 'Selamat datang di 
                     </p>
                 </div>
                 <div class="pt-4">
-                    <a href="{{ route('kontak') }}?jenis=daftar_umkm" class="text-xs font-bold text-amber-700 hover:text-amber-900 inline-flex items-center">
+                    <a href="{{ route('pendaftaran-umkm.create') }}" class="text-xs font-bold text-amber-700 hover:text-amber-900 inline-flex items-center">
                         Daftar Usaha <i data-lucide="chevron-right" class="w-3.5 h-3.5 ml-0.5"></i>
                     </a>
                 </div>

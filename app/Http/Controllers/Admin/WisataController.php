@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\SecurityHelper;
 use App\Http\Controllers\Controller;
-use App\Models\Wisata;
+use App\Models\WisataModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -13,7 +13,7 @@ class WisataController extends Controller
 {
     public function index()
     {
-        $wisataList = Wisata::orderBy('urutan')
+        $wisataList = WisataModel::orderBy('urutan')
             ->orderBy('wisata_id')
             ->paginate(5)
             ->withQueryString();
@@ -23,7 +23,7 @@ class WisataController extends Controller
 
     public function create()
     {
-        $categories = Wisata::kategoriList();
+        $categories = WisataModel::kategoriList();
         return view('admin.wisata.create', compact('categories'));
     }
 
@@ -54,11 +54,11 @@ class WisataController extends Controller
         $slug = Str::slug($request->nama);
         $originalSlug = $slug;
         $count = 1;
-        while (Wisata::where('slug', $slug)->exists()) {
+        while (WisataModel::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $count++;
         }
 
-        Wisata::create([
+        WisataModel::create([
             'created_by' => Auth::id(),
             'nama' => $request->nama,
             'slug' => $slug,
@@ -77,13 +77,13 @@ class WisataController extends Controller
         return redirect()->route('admin.wisata.index')->with('success', 'Destinasi wisata baru berhasil ditambahkan!');
     }
 
-    public function edit(Wisata $wisata)
+    public function edit(WisataModel $wisata)
     {
-        $categories = Wisata::kategoriList();
+        $categories = WisataModel::kategoriList();
         return view('admin.wisata.edit', compact('wisata', 'categories'));
     }
 
-    public function update(Request $request, Wisata $wisata)
+    public function update(Request $request, WisataModel $wisata)
     {
         $request->validate([
             'nama' => ['required', 'string', 'max:100'],
@@ -115,7 +115,7 @@ class WisataController extends Controller
             $slug = Str::slug($request->nama);
             $originalSlug = $slug;
             $count = 1;
-            while (Wisata::where('slug', $slug)->where('wisata_id', '!=', $wisata->wisata_id)->exists()) {
+            while (WisataModel::where('slug', $slug)->where('wisata_id', '!=', $wisata->wisata_id)->exists()) {
                 $slug = $originalSlug . '-' . $count++;
             }
         }
@@ -138,7 +138,7 @@ class WisataController extends Controller
         return redirect()->route('admin.wisata.index')->with('success', 'Data wisata berhasil diperbarui!');
     }
 
-    public function destroy(Wisata $wisata)
+    public function destroy(WisataModel $wisata)
     {
         if ($wisata->gambar && file_exists(public_path($wisata->gambar))) {
             @unlink(public_path($wisata->gambar));

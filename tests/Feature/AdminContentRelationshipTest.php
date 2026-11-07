@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Berita;
-use App\Models\Budaya;
-use App\Models\Galeri;
-use App\Models\AgendaAcara;
-use App\Models\PendaftaranUmkm;
-use App\Models\UMKM;
-use App\Models\StrukturDesa;
-use App\Models\User;
+use App\Models\BeritaModel;
+use App\Models\BudayaModel;
+use App\Models\GaleriModel;
+use App\Models\AcaraModel;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\UMKMModel;
+use App\Models\StrukturDesaModel;
+use App\Models\UserModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\CreatesApplication;
 
@@ -19,7 +19,7 @@ class AdminContentRelationshipTest extends \Tests\TestCase
     public function test_user_content_relationships_and_foreign_keys(): void
     {
         // 1. Create a test admin user
-        $user = User::create([
+        $user = UserModel::create([
             'name'     => 'Test Admin Unit',
             'email'    => 'testadmin_' . uniqid() . '@jambelaer.id',
             'password' => bcrypt('password123'),
@@ -28,7 +28,7 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         $this->assertNotNull($user->user_id);
 
         // 2. Test Berita relationship
-        $berita = Berita::create([
+        $berita = BeritaModel::create([
             'created_by'   => $user->user_id,
             'judul'        => 'Test Judul Berita ' . uniqid(),
             'slug'         => 'test-slug-berita-' . uniqid(),
@@ -39,12 +39,12 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $berita->created_by);
-        $this->assertInstanceOf(User::class, $berita->user);
+        $this->assertInstanceOf(UserModel::class, $berita->user);
         $this->assertEquals($user->user_id, $berita->user->user_id);
         $this->assertTrue($user->berita->contains('berita_id', $berita->berita_id));
 
         // 3. Test Budaya relationship
-        $budaya = Budaya::create([
+        $budaya = BudayaModel::create([
             'created_by' => $user->user_id,
             'kategori'   => 'Tradisi',
             'title'      => 'Test Budaya ' . uniqid(),
@@ -54,12 +54,12 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $budaya->created_by);
-        $this->assertInstanceOf(User::class, $budaya->user);
+        $this->assertInstanceOf(UserModel::class, $budaya->user);
         $this->assertEquals($user->user_id, $budaya->user->user_id);
         $this->assertTrue($user->budaya->contains('budaya_id', $budaya->budaya_id));
 
         // 4. Test Wisata relationship
-        $wisata = \App\Models\Wisata::create([
+        $wisata = \App\Models\WisataModel::create([
             'created_by'      => $user->user_id,
             'nama'            => 'Test Wisata ' . uniqid(),
             'slug'            => 'test-wisata-' . uniqid(),
@@ -72,12 +72,12 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $wisata->created_by);
-        $this->assertInstanceOf(User::class, $wisata->user);
+        $this->assertInstanceOf(UserModel::class, $wisata->user);
         $this->assertEquals($user->user_id, $wisata->user->user_id);
         $this->assertTrue($user->wisata->contains('wisata_id', $wisata->wisata_id));
 
         // 5. Test Galeri relationship
-        $galeri = Galeri::create([
+        $galeri = GaleriModel::create([
             'created_by' => $user->user_id,
             'judul'      => 'Test Galeri ' . uniqid(),
             'kategori'   => 'kegiatan_desa',
@@ -87,12 +87,12 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $galeri->created_by);
-        $this->assertInstanceOf(User::class, $galeri->user);
+        $this->assertInstanceOf(UserModel::class, $galeri->user);
         $this->assertEquals($user->user_id, $galeri->user->user_id);
         $this->assertTrue($user->galeri->contains('galeri_id', $galeri->galeri_id));
 
         // 6. Test PendaftaranUmkm & Produk relationship
-        $pendaftaran = PendaftaranUmkm::create([
+        $pendaftaran = PendaftaranUmkmModel::create([
             'nomor_pendaftaran' => 'UMKM-' . uniqid(),
             'user_id'           => $user->user_id,
             'nama_usaha'        => 'Usaha Warga Test',
@@ -104,7 +104,7 @@ class AdminContentRelationshipTest extends \Tests\TestCase
             'status'            => 'disetujui',
         ]);
 
-        $produk = UMKM::create([
+        $produk = UMKMModel::create([
             'created_by'          => $user->user_id,
             'pendaftaran_umkm_id' => $pendaftaran->pendaftaran_umkm_id,
             'title'               => 'Produk UMKM Test ' . uniqid(),
@@ -122,13 +122,13 @@ class AdminContentRelationshipTest extends \Tests\TestCase
 
         $this->assertEquals($user->user_id, $produk->created_by);
         $this->assertEquals($pendaftaran->pendaftaran_umkm_id, $produk->pendaftaran_umkm_id);
-        $this->assertInstanceOf(User::class, $produk->user);
-        $this->assertInstanceOf(PendaftaranUmkm::class, $produk->pendaftaranUmkm);
+        $this->assertInstanceOf(UserModel::class, $produk->user);
+        $this->assertInstanceOf(PendaftaranUmkmModel::class, $produk->pendaftaranUmkm);
         $this->assertEquals($user->user_id, $produk->user->user_id);
         $this->assertTrue($user->produk->contains('produk_id', $produk->produk_id));
 
         // 6b. Test AgendaAcara relationship
-        $acara = AgendaAcara::create([
+        $acara = AcaraModel::create([
             'user_id'          => $user->user_id,
             'nama_acara'       => 'Pentas Seni Desa ' . uniqid(),
             'tanggal_acara'    => now()->addDays(5)->toDateString(),
@@ -141,11 +141,11 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $acara->user_id);
-        $this->assertInstanceOf(User::class, $acara->user);
+        $this->assertInstanceOf(UserModel::class, $acara->user);
         $this->assertTrue($user->agendaAcara->contains('agenda_acara_id', $acara->agenda_acara_id));
 
         // 7. Test Struktur Desa relationship
-        $struktur = StrukturDesa::create([
+        $struktur = StrukturDesaModel::create([
             'created_by' => $user->user_id,
             'nama'       => 'Anggota Test ' . uniqid(),
             'jabatan'    => 'Staff Test',
@@ -153,7 +153,7 @@ class AdminContentRelationshipTest extends \Tests\TestCase
         ]);
 
         $this->assertEquals($user->user_id, $struktur->created_by);
-        $this->assertInstanceOf(User::class, $struktur->user);
+        $this->assertInstanceOf(UserModel::class, $struktur->user);
         $this->assertEquals($user->user_id, $struktur->user->user_id);
         $this->assertTrue($user->strukturDesa->contains('struktur_desa_id', $struktur->struktur_desa_id));
 

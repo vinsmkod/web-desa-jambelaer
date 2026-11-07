@@ -87,7 +87,7 @@
                         <i data-lucide="users" class="w-3 h-3"></i>
                         {{ $producerCount }} Produsen
                     </span>
-                    <img src="{{ $firstProd->img }}" alt="{{ $firstProd->jenis_label ?? ucfirst($jenisSlug) }}"
+                    <img src="{{ $firstProd->img_url }}" alt="{{ $firstProd->jenis_label ?? ucfirst($jenisSlug) }}"
                         class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500">
                     {{-- Overlay dengan nama jenis --}}
                     <div class="absolute inset-0 bg-gradient-to-t from-forest-950/80 to-transparent flex items-end p-4">
@@ -131,7 +131,7 @@
                         : 'bg-forest-50 border border-forest-100 text-forest-900') }}">
                         {{ $product->badge }}
                     </span>
-                    <img src="{{ $product->img }}" alt="{{ $product->title }}"
+                    <img src="{{ $product->img_url }}" alt="{{ $product->title }}"
                         class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500">
                 </div>
 

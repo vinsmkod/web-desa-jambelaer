@@ -73,7 +73,7 @@
             {{-- ── Left: Image ── --}}
             <div class="lg:col-span-5 space-y-6 reveal-on-scroll">
                 <div class="relative rounded-xl overflow-hidden shadow-sm border border-stone-200 bg-white">
-                    <img src="{{ $product->img }}" alt="Produk {{ $product->title }} dari UMKM {{ $product->producer ?? 'Desa Jambelaer' }}"
+                    <img src="{{ $product->img_url }}" alt="Produk {{ $product->title }} dari UMKM {{ $product->producer ?? 'Desa Jambelaer' }}"
                          class="w-full h-80 lg:h-[420px] object-cover"
                          loading="eager" width="600" height="420">
                     <span class="absolute top-4 left-4 px-2.5 py-1 rounded text-[10px] font-extrabold tracking-wider uppercase shadow-sm
@@ -90,7 +90,7 @@
                         @foreach($allProducts->take(4) as $p)
                         <a href="{{ route('umkm.detail', $p->slug) }}"
                            class="group flex items-center gap-3 p-2.5 bg-white rounded-lg border border-stone-200 hover:border-forest-200 hover:shadow-sm transition-all">
-                            <img src="{{ $p->img }}" alt="Produk {{ $p->title }} UMKM Desa Jambelaer"
+                            <img src="{{ $p->img_url }}" alt="Produk {{ $p->title }} UMKM Desa Jambelaer"
                                  class="w-12 h-12 object-cover rounded flex-shrink-0"
                                  loading="lazy" width="48" height="48">
                             <div class="min-w-0">

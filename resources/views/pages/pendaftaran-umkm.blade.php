@@ -25,7 +25,7 @@
     <nav class="flex items-center gap-1.5 text-xs text-stone-500 mb-4 reveal-fade-up">
         <a href="{{ route('home') }}" class="hover:text-forest-800 transition-colors">Beranda</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
-        <a href="{{ route('kontak') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
+        <a href="{{ route('layanan') }}" class="hover:text-forest-800 transition-colors">Layanan Masyarakat</a>
         <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-stone-300"></i>
         <span class="text-forest-800 font-semibold">Pendaftaran UMKM</span>
     </nav>
@@ -242,9 +242,10 @@
                         <p class="text-xs text-stone-400 font-light">
                             Data pendaftaran akan diverifikasi oleh Admin sebelum dipublikasikan di halaman katalog UMKM desa.
                         </p>
-                        <button type="submit" class="btn-primary !bg-emerald-700 !border-emerald-700 hover:!bg-emerald-800 w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i>
-                            Kirim Pendaftaran UMKM
+                        <button type="submit" class="w-full sm:w-auto btn-submit-layanan">
+                            <span class="btn-spinner"></span>
+                            <i data-lucide="store" class="w-4 h-4 btn-icon"></i>
+                            <span class="btn-text">Daftarkan UMKM</span>
                         </button>
                     </div>
                 </form>

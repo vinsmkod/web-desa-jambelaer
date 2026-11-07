@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\JenisSurat;
-use App\Models\Pengaduan;
-use App\Models\PengajuanSurat;
-use App\Models\PertanyaanUmum;
-use App\Models\PendaftaranUmkm;
-use App\Models\User;
+use App\Models\JenisSuratModel;
+use App\Models\PengaduanModel;
+use App\Models\PengajuanSuratModel;
+use App\Models\PertanyaanUmumModel;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\UserModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +19,7 @@ class EditPengajuanSendiriTest extends TestCase
 
     private function makeMasyarakat(string $name = 'Warga Edit'): User
     {
-        return User::create([
+        return UserModel::create([
             'name'     => $name . ' ' . uniqid(),
             'email'    => 'edit_' . uniqid() . '@jambelaer.desa.id',
             'password' => bcrypt('password123'),
@@ -29,7 +29,7 @@ class EditPengajuanSendiriTest extends TestCase
 
     private function makeJenisSurat(): JenisSurat
     {
-        return JenisSurat::first() ?: JenisSurat::create([
+        return JenisSuratModel::first() ?: JenisSuratModel::create([
             'nama_surat'  => 'Surat Keterangan Domisili',
             'kode_surat'  => 'SKD',
             'deskripsi'   => 'Surat keterangan tempat tinggal',
@@ -38,10 +38,10 @@ class EditPengajuanSendiriTest extends TestCase
         ]);
     }
 
-    private function makeSurat(User $user, string $status = 'diajukan'): PengajuanSurat
+    private function makeSurat(UserModel $user, string $status = 'diajukan'): PengajuanSurat
     {
-        return PengajuanSurat::create([
-            'nomor_pengajuan' => PengajuanSurat::generateNomorPengajuan(),
+        return PengajuanSuratModel::create([
+            'nomor_pengajuan' => PengajuanSuratModel::generateNomorPengajuan(),
             'user_id'         => $user->user_id,
             'jenis_surat_id'  => $this->makeJenisSurat()->id,
             'nik'             => '3201234567890001',
@@ -54,10 +54,10 @@ class EditPengajuanSendiriTest extends TestCase
         ]);
     }
 
-    private function makePengaduan(User $user, string $status = 'diajukan'): Pengaduan
+    private function makePengaduan(UserModel $user, string $status = 'diajukan'): Pengaduan
     {
-        return Pengaduan::create([
-            'nomor_pengaduan' => Pengaduan::generateNomorPengaduan(),
+        return PengaduanModel::create([
+            'nomor_pengaduan' => PengaduanModel::generateNomorPengaduan(),
             'user_id'         => $user->user_id,
             'nama'            => $user->name,
             'email'           => $user->email,
@@ -69,10 +69,10 @@ class EditPengajuanSendiriTest extends TestCase
         ]);
     }
 
-    private function makePertanyaan(User $user, string $status = 'diajukan'): PertanyaanUmum
+    private function makePertanyaan(UserModel $user, string $status = 'diajukan'): PertanyaanUmum
     {
-        return PertanyaanUmum::create([
-            'nomor_pertanyaan' => PertanyaanUmum::generateNomorPertanyaan(),
+        return PertanyaanUmumModel::create([
+            'nomor_pertanyaan' => PertanyaanUmumModel::generateNomorPertanyaan(),
             'user_id'          => $user->user_id,
             'nama'             => $user->name,
             'email'            => $user->email,
@@ -83,10 +83,10 @@ class EditPengajuanSendiriTest extends TestCase
         ]);
     }
 
-    private function makeUmkm(User $user, string $status = 'diajukan'): PendaftaranUmkm
+    private function makeUmkm(UserModel $user, string $status = 'diajukan'): PendaftaranUmkm
     {
-        return PendaftaranUmkm::create([
-            'nomor_pendaftaran' => PendaftaranUmkm::generateNomorPendaftaran(),
+        return PendaftaranUmkmModel::create([
+            'nomor_pendaftaran' => PendaftaranUmkmModel::generateNomorPendaftaran(),
             'user_id'           => $user->user_id,
             'nama_usaha'        => 'Keripik Jambelaer',
             'nama_pemilik'      => $user->name,

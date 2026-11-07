@@ -75,7 +75,7 @@
                     {{-- Kolom: Gambar + Nama --}}
                     <td class="px-5 py-3.5">
                         <div class="flex items-center gap-3">
-                            <img src="{{ $p->img }}" alt="{{ $p->title }}"
+                            <img src="{{ $p->img_url }}" alt="{{ $p->title }}"
                                  class="w-12 h-12 rounded-xl object-cover bg-slate-100 border border-slate-200 flex-shrink-0">
                             <div>
                                 <p class="font-semibold text-slate-800">{{ $p->title }}</p>

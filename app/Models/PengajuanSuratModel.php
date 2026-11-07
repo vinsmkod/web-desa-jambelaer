@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PengajuanSurat extends Model
+class PengajuanSuratModel extends Model
 {
     protected $table = 'pengajuan_surats';
     protected $primaryKey = 'pengajuan_surat_id';
@@ -123,9 +123,9 @@ class PengajuanSurat extends Model
     /**
      * Catat log riwayat setiap perubahan status & tindak lanjut proses surat.
      */
-    public function logRiwayat(string $statusAwal, string $statusBaru, ?User $actor, ?string $catatan = null): RiwayatPengajuanSurat
+    public function logRiwayat(string $statusAwal, string $statusBaru, ?UserModel $actor, ?string $catatan = null): RiwayatPengajuanSuratModel
     {
-        return RiwayatPengajuanSurat::create([
+        return RiwayatPengajuanSuratModel::create([
             'pengajuan_surat_id' => $this->pengajuan_surat_id,
             'user_id'            => $actor?->user_id,
             'actor_name'         => $actor ? $actor->name : 'Sistem / Pemohon',
@@ -141,31 +141,31 @@ class PengajuanSurat extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'user_id');
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
     }
 
     public function jenisSurat(): BelongsTo
     {
-        return $this->belongsTo(JenisSurat::class, 'jenis_surat_id', 'id');
+        return $this->belongsTo(JenisSuratModel::class, 'jenis_surat_id', 'id');
     }
 
     public function diprosesBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'diproses_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'diproses_by', 'user_id');
     }
 
     public function diverifikasiBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'diverifikasi_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'diverifikasi_by', 'user_id');
     }
 
     public function disetujuiBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'disetujui_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'disetujui_by', 'user_id');
     }
 
     public function riwayat(): HasMany
     {
-        return $this->hasMany(RiwayatPengajuanSurat::class, 'pengajuan_surat_id', 'pengajuan_surat_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(RiwayatPengajuanSuratModel::class, 'pengajuan_surat_id', 'pengajuan_surat_id')->orderBy('created_at', 'asc');
     }
 }

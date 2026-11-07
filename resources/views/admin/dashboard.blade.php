@@ -128,7 +128,7 @@
                 <i data-lucide="file-text" class="w-4 h-4"></i>
             </div>
             <div class="min-w-0">
-                <p class="text-base font-bold font-display text-slate-900 leading-tight">{{ \App\Models\JenisSurat::count() }}</p>
+                <p class="text-base font-bold font-display text-slate-900 leading-tight">{{ \App\Models\JenisSuratModel::count() }}</p>
                 <p class="text-xs text-slate-500 font-medium truncate mt-0.5">Master Jenis Surat</p>
             </div>
         </a>
@@ -316,7 +316,7 @@
                 @foreach($produk_terbaru as $p)
                 <a href="{{ route('admin.produk.edit', $p) }}"
                    class="flex items-center gap-3.5 px-6 py-3.5 hover:bg-slate-50/80 transition-colors group">
-                    <img src="{{ $p->img }}" alt="{{ $p->title }}"
+                    <img src="{{ $p->img_url }}" alt="{{ $p->title }}"
                          class="w-10 h-10 rounded-xl object-cover border border-slate-200 flex-shrink-0 shadow-xs">
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate group-hover:text-forest-800 transition-colors">{{ $p->title }}</p>

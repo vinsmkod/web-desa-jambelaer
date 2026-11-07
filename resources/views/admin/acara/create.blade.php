@@ -120,7 +120,7 @@
                     <label class="form-label">
                         Nomor WhatsApp Narahubung
                     </label>
-                    <input type="text" name="no_whatsapp" value="{{ old('no_whatsapp', \App\Models\Pengaturan::get('desa_telepon', '081324768193')) }}"
+                    <input type="text" name="no_whatsapp" value="{{ old('no_whatsapp', \App\Models\PengaturanModel::get('desa_telepon', '081324768193')) }}"
                            placeholder="081234567890"
                            class="form-input font-mono">
                     <p class="text-[11px] text-slate-400 mt-1">Digunakan untuk tombol "Hubungi Panitia via WhatsApp" di website.</p>

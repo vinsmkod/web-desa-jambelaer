@@ -3,35 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\UMKM;
-use App\Models\PengajuanSurat;
-use App\Models\Pengaduan;
-use App\Models\PertanyaanUmum;
-use App\Models\PendaftaranUmkm;
-use App\Models\AgendaAcara;
+use App\Models\UMKMModel;
+use App\Models\PengajuanSuratModel;
+use App\Models\PengaduanModel;
+use App\Models\PertanyaanUmumModel;
+use App\Models\PendaftaranUmkmModel;
+use App\Models\AcaraModel;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $stats = [
-            'total_produk'    => UMKM::count(),
-            'produk_aktif'    => UMKM::where('is_active', true)->count(),
+            'total_produk'    => UMKMModel::count(),
+            'produk_aktif'    => UMKMModel::where('is_active', true)->count(),
             // 4 Modul Layanan Masyarakat Baru
-            'pengajuan_surat' => PengajuanSurat::count(),
-            'pengajuan_surat_pending' => PengajuanSurat::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'pengaduan'       => Pengaduan::count(),
-            'pengaduan_pending' => Pengaduan::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'pertanyaan_umum' => PertanyaanUmum::count(),
-            'pertanyaan_pending' => PertanyaanUmum::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'pendaftaran_umkm' => PendaftaranUmkm::count(),
-            'umkm_pending'    => PendaftaranUmkm::whereIn('status', ['diajukan', 'menunggu'])->count(),
-            'agenda_acara'    => AgendaAcara::count(),
+            'pengajuan_surat' => PengajuanSuratModel::count(),
+            'pengajuan_surat_pending' => PengajuanSuratModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'pengaduan'       => PengaduanModel::count(),
+            'pengaduan_pending' => PengaduanModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'pertanyaan_umum' => PertanyaanUmumModel::count(),
+            'pertanyaan_pending' => PertanyaanUmumModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'pendaftaran_umkm' => PendaftaranUmkmModel::count(),
+            'umkm_pending'    => PendaftaranUmkmModel::whereIn('status', ['diajukan', 'menunggu'])->count(),
+            'agenda_acara'    => AcaraModel::count(),
         ];
 
 
         // Ambil aktivitas terbaru dari 4 layanan
-        $surat_terbaru = PengajuanSurat::with(['jenisSurat', 'user'])->latest()->take(3)->get()->map(function ($s) {
+        $surat_terbaru = PengajuanSuratModel::with(['jenisSurat', 'user'])->latest()->take(3)->get()->map(function ($s) {
             return (object)[
                 'type' => 'surat',
                 'badge' => 'Pengajuan Surat',
@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ];
         });
 
-        $pengaduan_terbaru = Pengaduan::with('user')->latest()->take(3)->get()->map(function ($p) {
+        $pengaduan_terbaru = PengaduanModel::with('user')->latest()->take(3)->get()->map(function ($p) {
             return (object)[
                 'type' => 'pengaduan',
                 'badge' => 'Pengaduan',
@@ -59,7 +59,7 @@ class DashboardController extends Controller
             ];
         });
 
-        $pertanyaan_terbaru = PertanyaanUmum::with('user')->latest()->take(3)->get()->map(function ($q) {
+        $pertanyaan_terbaru = PertanyaanUmumModel::with('user')->latest()->take(3)->get()->map(function ($q) {
             return (object)[
                 'type' => 'pertanyaan',
                 'badge' => 'Pertanyaan Umum',
@@ -73,7 +73,7 @@ class DashboardController extends Controller
             ];
         });
 
-        $umkm_terbaru = PendaftaranUmkm::latest()->take(3)->get()->map(function ($u) {
+        $umkm_terbaru = PendaftaranUmkmModel::latest()->take(3)->get()->map(function ($u) {
             return (object)[
                 'type' => 'umkm',
                 'badge' => 'Pendaftaran UMKM',
@@ -96,24 +96,24 @@ class DashboardController extends Controller
             ->take(6)
             ->values();
 
-        $produk_terbaru  = UMKM::latest()->take(5)->get();
+        $produk_terbaru  = UMKMModel::latest()->take(5)->get();
 
         // Chart data 7 hari terakhir dari 4 layanan
         $startDate = now()->subDays(6)->startOfDay();
 
-        $suratChart = PengajuanSurat::where('created_at', '>=', $startDate)
+        $suratChart = PengajuanSuratModel::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as tgl, COUNT(*) as total')
             ->groupBy('tgl')->pluck('total', 'tgl');
 
-        $pengaduanChart = Pengaduan::where('created_at', '>=', $startDate)
+        $pengaduanChart = PengaduanModel::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as tgl, COUNT(*) as total')
             ->groupBy('tgl')->pluck('total', 'tgl');
 
-        $pertanyaanChart = PertanyaanUmum::where('created_at', '>=', $startDate)
+        $pertanyaanChart = PertanyaanUmumModel::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as tgl, COUNT(*) as total')
             ->groupBy('tgl')->pluck('total', 'tgl');
 
-        $umkmChart = PendaftaranUmkm::where('created_at', '>=', $startDate)
+        $umkmChart = PendaftaranUmkmModel::where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as tgl, COUNT(*) as total')
             ->groupBy('tgl')->pluck('total', 'tgl');
 

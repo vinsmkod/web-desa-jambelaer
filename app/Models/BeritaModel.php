@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class Berita extends Model
+class BeritaModel extends Model
 {
     use HasFactory;
 
@@ -82,6 +82,6 @@ class Berita extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'created_by', 'user_id');
     }
 }

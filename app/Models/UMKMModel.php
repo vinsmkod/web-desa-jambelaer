@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UMKM extends Model
+class UMKMModel extends Model
 {
     use HasFactory;
 
@@ -33,7 +33,7 @@ class UMKM extends Model
 
     /**
      * URL gambar produk UMKM dengan fallback aman.
-     * Menangani URL penuh (http/https), path lokal storage/, dan path langsung di public/.
+     * Menangani URL penuh (http/https), path lokal storage/, dan path langsung di public/ (termasuk uploads/produk).
      */
     public function getImgUrlAttribute(): string
     {
@@ -42,13 +42,32 @@ class UMKM extends Model
             if (filter_var($this->img, FILTER_VALIDATE_URL)) {
                 return $this->img;
             }
+
+            $cleanPath = ltrim($this->img, '/\\');
+
             // Cek di storage/
-            if (file_exists(public_path('storage/' . $this->img))) {
-                return asset('storage/' . $this->img);
+            if (file_exists(public_path('storage/' . $cleanPath))) {
+                return asset('storage/' . $cleanPath);
             }
-            // Cek di public/ langsung
-            if (file_exists(public_path($this->img))) {
-                return asset($this->img);
+            // Cek di public/ langsung (misal uploads/produk/...)
+            if (file_exists(public_path($cleanPath))) {
+                return asset($cleanPath);
+            }
+            // Cek langsung di uploads/produk jika hanya menyimpan nama file
+            if (file_exists(public_path('uploads/produk/' . basename($cleanPath)))) {
+                return asset('uploads/produk/' . basename($cleanPath));
+            }
+        }
+
+        // Cek fallback jika ada file di uploads/produk yang sesuai dengan slug produk
+        if (!empty($this->slug)) {
+            $matches = glob(public_path('uploads/produk/*_' . $this->slug . '.*'));
+            if (!empty($matches)) {
+                return asset('uploads/produk/' . basename($matches[0]));
+            }
+            $matchesAlt = glob(public_path('uploads/produk/*' . $this->slug . '*'));
+            if (!empty($matchesAlt)) {
+                return asset('uploads/produk/' . basename($matchesAlt[0]));
             }
         }
 
@@ -63,7 +82,7 @@ class UMKM extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by', 'user_id');
+        return $this->belongsTo(UserModel::class, 'created_by', 'user_id');
     }
 
     /**
@@ -71,6 +90,6 @@ class UMKM extends Model
      */
     public function pendaftaranUmkm(): BelongsTo
     {
-        return $this->belongsTo(PendaftaranUmkm::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
+        return $this->belongsTo(PendaftaranUmkmModel::class, 'pendaftaran_umkm_id', 'pendaftaran_umkm_id');
     }
 }

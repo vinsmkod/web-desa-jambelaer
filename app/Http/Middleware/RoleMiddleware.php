@@ -24,10 +24,10 @@ class RoleMiddleware
                 return response()->json([
                     'success' => false,
                     'message' => 'Silakan login terlebih dahulu.',
-                    'redirect' => route('admin.login'),
+                    'redirect' => route('login'),
                 ], 401);
             }
-            return redirect()->route('admin.login')->with('error', 'Silakan login terlebih dahulu.');
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
         $user = Auth::user();

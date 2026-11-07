@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Pengaturan;
+use App\Models\PengaturanModel;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        foreach (Pengaturan::tentangDefaults() as $key => $meta) {
-            if (Pengaturan::where('key', $key)->doesntExist()) {
-                Pengaturan::create([
+        foreach (PengaturanModel::tentangDefaults() as $key => $meta) {
+            if (PengaturanModel::where('key', $key)->doesntExist()) {
+                PengaturanModel::create([
                     'key'   => $key,
                     'value' => $meta['value'],
                     'label' => $meta['label'],
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Pengaturan::whereIn('key', array_keys(Pengaturan::tentangDefaults()))->delete();
+        PengaturanModel::whereIn('key', array_keys(PengaturanModel::tentangDefaults()))->delete();
     }
 };

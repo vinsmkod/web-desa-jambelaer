@@ -1,0 +1,718 @@
+classDiagram
+    direction TB
+
+    %% =========================================================================
+    %% VIEW LAYER (Blade Presentation Templates)
+    %% =========================================================================
+    class View_Login {
+        <<boundary>>
+        +file: pages.auth.login
+    }
+    class View_Register {
+        <<boundary>>
+        +file: pages.auth.register
+    }
+    class View_ProfilDesa {
+        <<boundary>>
+        +file: pages.profil-desa
+    }
+    class View_StrukturDesa {
+        <<boundary>>
+        +file: pages.struktur-desa
+    }
+    class View_Berita {
+        <<boundary>>
+        +files: pages.berita, berita-detail
+    }
+    class View_UMKM {
+        <<boundary>>
+        +files: pages.umkm, umkm-detail
+    }
+    class View_Wisata {
+        <<boundary>>
+        +files: pages.wisata, wisata-detail
+    }
+    class View_Budaya {
+        <<boundary>>
+        +files: pages.budaya, budaya-detail
+    }
+    class View_Galeri {
+        <<boundary>>
+        +files: pages.galeri, galeri-detail
+    }
+    class View_Acara {
+        <<boundary>>
+        +file: pages.acara
+    }
+    class View_PengajuanSurat {
+        <<boundary>>
+        +file: pages.pengajuan-surat
+    }
+    class View_Pengaduan {
+        <<boundary>>
+        +file: pages.pengaduan
+    }
+    class View_PertanyaanUmum {
+        <<boundary>>
+        +file: pages.pertanyaan-umum
+    }
+    class View_PendaftaranUmkm {
+        <<boundary>>
+        +file: pages.pendaftaran-umkm
+    }
+    class View_PengajuanSaya {
+        <<boundary>>
+        +files: pages.pengajuan-saya.*
+    }
+
+    class View_AdminDashboard {
+        <<boundary>>
+        +file: admin.dashboard
+    }
+    class View_AdminPengajuanSurat {
+        <<boundary>>
+        +files: admin.pengajuan-surat.*
+    }
+    class View_AdminJenisSurat {
+        <<boundary>>
+        +files: admin.jenis-surat.*
+    }
+    class View_AdminPengaduan {
+        <<boundary>>
+        +files: admin.pengaduan.*
+    }
+    class View_AdminPertanyaanUmum {
+        <<boundary>>
+        +files: admin.pertanyaan-umum.*
+    }
+    class View_AdminPendaftaranUmkm {
+        <<boundary>>
+        +files: admin.pendaftaran-umkm.*
+    }
+    class View_AdminBerita {
+        <<boundary>>
+        +files: admin.berita.*
+    }
+    class View_AdminUMKM {
+        <<boundary>>
+        +files: admin.produk.*
+    }
+    class View_AdminWisata {
+        <<boundary>>
+        +files: admin.wisata.*
+    }
+    class View_AdminBudaya {
+        <<boundary>>
+        +files: admin.budaya.*
+    }
+    class View_AdminGaleri {
+        <<boundary>>
+        +files: admin.galeri.*
+    }
+    class View_AdminAcara {
+        <<boundary>>
+        +files: admin.acara.*
+    }
+    class View_AdminProfilDesa {
+        <<boundary>>
+        +file: admin.tentang_desa.index
+    }
+    class View_AdminStruktur {
+        <<boundary>>
+        +file: admin.tentang.index
+    }
+    class View_AdminKelolaAdmin {
+        <<boundary>>
+        +files: admin.kelola-admin.*
+    }
+    class View_AdminPengaturan {
+        <<boundary>>
+        +file: admin.pengaturan.index
+    }
+
+    %% =========================================================================
+    %% CONTROLLER LAYER (Application Business Logic)
+    %% =========================================================================
+    class AuthController {
+        <<control>>
+        +showLoginForm()
+        +login(request)
+        +showRegisterForm()
+        +register(request)
+        +logout(request)
+        +showAdminLoginForm()
+        +adminLogin(request)
+        +adminLogout(request)
+    }
+
+    class PengajuanSuratController {
+        <<control>>
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +batal(id)
+    }
+
+    class PengaduanController {
+        <<control>>
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +batal(id)
+    }
+
+    class PertanyaanUmumController {
+        <<control>>
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +batal(id)
+    }
+
+    class PendaftaranUmkmController {
+        <<control>>
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +batal(id)
+    }
+
+    class PengajuanSayaController {
+        <<control>>
+        +index()
+        +showDetail(jenis, id)
+        +show(id)
+    }
+
+    class ProfilDesaController {
+        <<control>>
+        +index()
+    }
+
+    class UMKMController {
+        <<control>>
+        +index()
+        +jenis(jenis)
+        +detail(slug)
+    }
+
+    class Admin_DashboardController {
+        <<control>>
+        +index()
+    }
+
+    class Admin_PengajuanSuratController {
+        <<control>>
+        +index()
+        +show(id)
+        +updateStatus(request, id)
+        +destroy(id)
+    }
+
+    class Admin_JenisSuratController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+        +toggleActive(id)
+    }
+
+    class Admin_PengaduanController {
+        <<control>>
+        +index()
+        +show(id)
+        +updateStatus(request, id)
+        +destroy(id)
+    }
+
+    class Admin_PertanyaanUmumController {
+        <<control>>
+        +index()
+        +show(id)
+        +updateStatus(request, id)
+        +destroy(id)
+    }
+
+    class Admin_PendaftaranUmkmController {
+        <<control>>
+        +index()
+        +show(id)
+        +updateStatus(request, id)
+        +publikasikan(id)
+        +destroy(id)
+    }
+
+    class Admin_BeritaController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_UMKMController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_WisataController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_BudayaController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_GaleriController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_AcaraController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+        +publikasiAcara(id)
+        +updateStatus(request, id)
+    }
+
+    class Admin_ProfilDesaController {
+        <<control>>
+        +index()
+        +desaUpdateSejarah(request)
+        +timelineStore(request)
+        +timelineUpdate(request, id)
+        +timelineDestroy(id)
+        +desaUpdateKades(request)
+        +desaUpdateSambutan(request)
+        +desaUpdateWilayah(request)
+        +desaUpdatePotensi(request)
+        +desaUpdateAdministrasi(request)
+        +desaUpdateVisi(request)
+        +misiStore(request)
+        +misiUpdate(request, id)
+        +misiDestroy(id)
+        +desaUpdatePeta(request)
+    }
+
+    class Admin_StrukturDesaController {
+        <<control>>
+        +index()
+        +store(request)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_AdminManagementController {
+        <<control>>
+        +index()
+        +create()
+        +store(request)
+        +edit(id)
+        +update(request, id)
+        +destroy(id)
+    }
+
+    class Admin_PengaturanController {
+        <<control>>
+        +index()
+        +update(request)
+    }
+
+    %% =========================================================================
+    %% MODEL LAYER (Eloquent Entities)
+    %% =========================================================================
+    class User {
+        <<entity>>
+        +bigint user_id PK
+        +string name
+        +string email
+        +string password
+        +string role
+        +string nik
+        +string no_hp
+        +text alamat
+        +string rt
+        +string rw
+        +string jenis_kelamin
+        +pengajuanSurat() HasMany
+        +pengaduan() HasMany
+        +pertanyaanUmum() HasMany
+        +pendaftaranUmkm() HasMany
+        +berita() HasMany
+        +umkm() HasMany
+        +wisata() HasMany
+        +budaya() HasMany
+        +galeri() HasMany
+        +agendaAcara() HasMany
+        +strukturDesa() HasMany
+    }
+
+    class JenisSurat {
+        <<entity>>
+        +bigint id PK
+        +string kode_surat
+        +string nama_surat
+        +text deskripsi
+        +json persyaratan
+        +string format_nomor
+        +boolean is_active
+        +pengajuanSurats() HasMany
+    }
+
+    class PengajuanSurat {
+        <<entity>>
+        +bigint pengajuan_surat_id PK
+        +string nomor_pengajuan
+        +bigint user_id FK
+        +bigint jenis_surat_id FK
+        +string status
+        +text keperluan
+        +json data_isian
+        +json dokumen_persyaratan
+        +string nomor_surat
+        +date tanggal_surat
+        +text catatan_petugas
+        +bigint diproses_oleh FK
+        +bigint diverifikasi_oleh FK
+        +bigint disetujui_oleh FK
+        +string file_surat
+        +user() BelongsTo
+        +jenisSurat() BelongsTo
+        +diprosesBy() BelongsTo
+        +diverifikasiBy() BelongsTo
+        +disetujuiBy() BelongsTo
+        +riwayat() HasMany
+    }
+
+    class RiwayatPengajuanSurat {
+        <<entity>>
+        +bigint id PK
+        +bigint pengajuan_surat_id FK
+        +bigint user_id FK
+        +string status
+        +text catatan
+        +pengajuanSurat() BelongsTo
+        +user() BelongsTo
+    }
+
+    class Pengaduan {
+        <<entity>>
+        +bigint pengaduan_id PK
+        +string kode_pengaduan
+        +bigint user_id FK
+        +string nama_pengadu
+        +string email
+        +string nomor_telepon
+        +string judul
+        +text deskripsi
+        +string kategori
+        +string lokasi
+        +string lampiran
+        +string status
+        +text tanggapan
+        +bigint ditanggapi_oleh FK
+        +timestamp ditanggapi_pada
+        +user() BelongsTo
+    }
+
+    class PertanyaanUmum {
+        <<entity>>
+        +bigint pertanyaan_id PK
+        +string kode_pertanyaan
+        +bigint user_id FK
+        +string nama_penanya
+        +string email
+        +string nomor_telepon
+        +string subjek
+        +text pesan
+        +string status
+        +text jawaban
+        +bigint dijawab_oleh FK
+        +timestamp dijawab_pada
+        +user() BelongsTo
+    }
+
+    class PendaftaranUmkm {
+        <<entity>>
+        +bigint pendaftaran_umkm_id PK
+        +string kode_pendaftaran
+        +bigint user_id FK
+        +string nama_pemilik
+        +string nama_usaha
+        +string nomor_telepon
+        +string email
+        +text alamat_usaha
+        +string kategori_usaha
+        +text deskripsi_usaha
+        +string foto_produk
+        +string status
+        +text catatan
+        +bigint disetujui_oleh FK
+        +timestamp disetujui_pada
+        +user() BelongsTo
+        +produkDipublikasikan() HasOne
+    }
+
+    class UMKM {
+        <<entity>>
+        +bigint produk_id PK
+        +string nama_usaha
+        +string pemilik
+        +string jenis_usaha
+        +text deskripsi
+        +text alamat
+        +string kontak
+        +string foto
+        +string status
+        +bigint pendaftaran_umkm_id FK
+        +bigint user_id FK
+        +user() BelongsTo
+        +pendaftaranUmkm() BelongsTo
+    }
+
+    class Berita {
+        <<entity>>
+        +bigint berita_id PK
+        +string judul
+        +string slug
+        +text ringkasan
+        +text konten
+        +string kategori
+        +string gambar
+        +boolean is_published
+        +int views
+        +bigint user_id FK
+        +timestamp published_at
+        +user() BelongsTo
+    }
+
+    class Wisata {
+        <<entity>>
+        +bigint wisata_id PK
+        +string nama
+        +string slug
+        +text deskripsi
+        +text fasilitas
+        +string lokasi
+        +decimal harga_tiket
+        +string jam_operasional
+        +string kontak
+        +string foto
+        +boolean is_active
+        +bigint user_id FK
+        +user() BelongsTo
+    }
+
+    class Budaya {
+        <<entity>>
+        +bigint budaya_id PK
+        +string nama
+        +string slug
+        +text deskripsi
+        +text sejarah
+        +string kategori
+        +string lokasi
+        +string jadwal
+        +string foto
+        +bigint user_id FK
+        +user() BelongsTo
+    }
+
+    class Galeri {
+        <<entity>>
+        +bigint galeri_id PK
+        +string judul
+        +string slug
+        +text deskripsi
+        +string kategori
+        +string file
+        +string tipe
+        +boolean is_active
+        +bigint user_id FK
+        +user() BelongsTo
+    }
+
+    class AgendaAcara {
+        <<entity>>
+        +bigint agenda_acara_id PK
+        +string judul
+        +string slug
+        +text deskripsi
+        +string lokasi
+        +date tanggal_mulai
+        +date tanggal_selesai
+        +string waktu
+        +string penyelenggara
+        +string kontak
+        +string foto
+        +string status
+        +bigint user_id FK
+        +user() BelongsTo
+    }
+
+    class StrukturDesa {
+        <<entity>>
+        +bigint struktur_desa_id PK
+        +string nama
+        +string jabatan
+        +string nip
+        +int urutan
+        +string foto
+        +string status
+        +date periode_mulai
+        +date periode_selesai
+        +bigint user_id FK
+        +user() BelongsTo
+    }
+
+    class Pengaturan {
+        <<entity>>
+        +bigint pengaturan_id PK
+        +string key
+        +text value
+    }
+
+    class TentangTimeline {
+        <<entity>>
+        +bigint tentang_timeline_id PK
+        +string tahun
+        +text peristiwa
+    }
+
+    class TentangMisi {
+        <<entity>>
+        +bigint tentang_misi_id PK
+        +text misi
+    }
+
+    %% =========================================================================
+    %% VIEW TO CONTROLLER RELATIONS (Interactions / Requests)
+    %% =========================================================================
+    View_Login ..> AuthController : "submits"
+    View_Register ..> AuthController : "submits"
+    View_ProfilDesa ..> ProfilDesaController : "requests"
+    View_UMKM ..> UMKMController : "requests"
+    View_PengajuanSurat ..> PengajuanSuratController : "submits"
+    View_Pengaduan ..> PengaduanController : "submits"
+    View_PertanyaanUmum ..> PertanyaanUmumController : "submits"
+    View_PendaftaranUmkm ..> PendaftaranUmkmController : "submits"
+    View_PengajuanSaya ..> PengajuanSayaController : "requests"
+
+    View_AdminDashboard ..> Admin_DashboardController : "renders"
+    View_AdminPengajuanSurat ..> Admin_PengajuanSuratController : "manages"
+    View_AdminJenisSurat ..> Admin_JenisSuratController : "manages"
+    View_AdminPengaduan ..> Admin_PengaduanController : "manages"
+    View_AdminPertanyaanUmum ..> Admin_PertanyaanUmumController : "manages"
+    View_AdminPendaftaranUmkm ..> Admin_PendaftaranUmkmController : "manages"
+    View_AdminBerita ..> Admin_BeritaController : "manages"
+    View_AdminUMKM ..> Admin_UMKMController : "manages"
+    View_AdminWisata ..> Admin_WisataController : "manages"
+    View_AdminBudaya ..> Admin_BudayaController : "manages"
+    View_AdminGaleri ..> Admin_GaleriController : "manages"
+    View_AdminAcara ..> Admin_AcaraController : "manages"
+    View_AdminProfilDesa ..> Admin_ProfilDesaController : "manages"
+    View_AdminStruktur ..> Admin_StrukturDesaController : "manages"
+    View_AdminKelolaAdmin ..> Admin_AdminManagementController : "manages"
+    View_AdminPengaturan ..> Admin_PengaturanController : "manages"
+
+    %% =========================================================================
+    %% CONTROLLER TO MODEL RELATIONS (Query / Persistence)
+    %% =========================================================================
+    AuthController ..> User : "authenticates"
+    PengajuanSuratController ..> PengajuanSurat : "creates/updates"
+    PengajuanSuratController ..> JenisSurat : "fetches"
+    PengaduanController ..> Pengaduan : "creates/updates"
+    PertanyaanUmumController ..> PertanyaanUmum : "creates/updates"
+    PendaftaranUmkmController ..> PendaftaranUmkm : "creates/updates"
+    PengajuanSayaController ..> PengajuanSurat : "queries"
+    PengajuanSayaController ..> Pengaduan : "queries"
+    PengajuanSayaController ..> PertanyaanUmum : "queries"
+    PengajuanSayaController ..> PendaftaranUmkm : "queries"
+    ProfilDesaController ..> Pengaturan : "queries"
+    ProfilDesaController ..> TentangTimeline : "queries"
+    ProfilDesaController ..> TentangMisi : "queries"
+    ProfilDesaController ..> StrukturDesa : "queries"
+    UMKMController ..> UMKM : "queries"
+
+    Admin_DashboardController ..> PengajuanSurat : "aggregates"
+    Admin_DashboardController ..> Pengaduan : "aggregates"
+    Admin_DashboardController ..> Berita : "aggregates"
+    Admin_DashboardController ..> UMKM : "aggregates"
+    Admin_PengajuanSuratController ..> PengajuanSurat : "manages"
+    Admin_PengajuanSuratController ..> RiwayatPengajuanSurat : "logs"
+    Admin_JenisSuratController ..> JenisSurat : "CRUD"
+    Admin_PengaduanController ..> Pengaduan : "responds"
+    Admin_PertanyaanUmumController ..> PertanyaanUmum : "answers"
+    Admin_PendaftaranUmkmController ..> PendaftaranUmkm : "verifies"
+    Admin_PendaftaranUmkmController ..> UMKM : "publishes"
+    Admin_BeritaController ..> Berita : "CRUD"
+    Admin_UMKMController ..> UMKM : "CRUD"
+    Admin_WisataController ..> Wisata : "CRUD"
+    Admin_BudayaController ..> Budaya : "CRUD"
+    Admin_GaleriController ..> Galeri : "CRUD"
+    Admin_AcaraController ..> AgendaAcara : "CRUD"
+    Admin_ProfilDesaController ..> Pengaturan : "updates"
+    Admin_ProfilDesaController ..> TentangTimeline : "CRUD"
+    Admin_ProfilDesaController ..> TentangMisi : "CRUD"
+    Admin_StrukturDesaController ..> StrukturDesa : "CRUD"
+    Admin_AdminManagementController ..> User : "CRUD"
+    Admin_PengaturanController ..> Pengaturan : "updates"
+
+    %% =========================================================================
+    %% MODEL TO MODEL RELATIONS (Eloquent Association)
+    %% =========================================================================
+    User "1" --> "0..*" PengajuanSurat : user_id
+    User "0..1" --> "0..*" PengajuanSurat : diproses_oleh
+    User "0..1" --> "0..*" PengajuanSurat : diverifikasi_oleh
+    User "0..1" --> "0..*" PengajuanSurat : disetujui_oleh
+    JenisSurat "1" --> "0..*" PengajuanSurat : jenis_surat_id
+    PengajuanSurat "1" --> "0..*" RiwayatPengajuanSurat : pengajuan_surat_id
+    User "1" --> "0..*" RiwayatPengajuanSurat : user_id
+    User "1" --> "0..*" Pengaduan : user_id
+    User "1" --> "0..*" PertanyaanUmum : user_id
+    User "1" --> "0..*" PendaftaranUmkm : user_id
+    PendaftaranUmkm "0..1" --> "0..1" UMKM : pendaftaran_umkm_id
+    User "1" --> "0..*" UMKM : user_id
+    User "1" --> "0..*" Berita : user_id
+    User "1" --> "0..*" Wisata : user_id
+    User "1" --> "0..*" Budaya : user_id
+    User "1" --> "0..*" Galeri : user_id
+    User "1" --> "0..*" AgendaAcara : user_id
+    User "1" --> "0..*" StrukturDesa : user_id
+

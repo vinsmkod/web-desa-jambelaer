@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * AuthController — menangani autentikasi untuk Admin maupun Masyarakat.
+ * AuthController — menangani autentikasi terpadu untuk seluruh pengguna.
  *
- * Admin  : /admin/login  → view admin.auth.login   → redirect admin.dashboard
- * Publik : /login        → view pages.auth.login   → redirect pengajuan.saya
+ * Satu halaman login: /login
+ * Setelah login, sistem memeriksa atribut `role` dan mengarahkan ke halaman yang sesuai:
+ *   - masyarakat                            → pengajuan.saya
+ *   - staff_desa, kasi_pemerintahan,
+ *     sekretaris_desa, kepala_desa, admin   → admin.dashboard
  */
 class AuthController extends Controller
 {
-    // ══════════════════════════════════════════════════════════════════
-    //  LOGIN MASYARAKAT (publik)
-    // ══════════════════════════════════════════════════════════════════
-
     /**
-     * Tampilkan halaman login untuk masyarakat.
+     * Tampilkan halaman login terpadu untuk seluruh pengguna.
      */
     public function showLoginForm()
     {
@@ -35,7 +34,8 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses autentikasi login masyarakat.
+     * Proses autentikasi login — berlaku untuk masyarakat maupun perangkat desa/admin.
+     * Percabangan dilakukan berdasarkan atribut `role` pada tabel users.
      */
     public function login(Request $request)
     {
@@ -53,12 +53,14 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
+            // Perangkat desa & admin diarahkan ke dashboard backoffice
             if ($user->isAdmin()) {
                 session(['admin_last_activity' => time()]);
                 return redirect()->intended(route('admin.dashboard'))
-                    ->with('success', 'Selamat datang kembali, ' . $user->name . ' (Administrator)!');
+                    ->with('success', 'Selamat datang kembali, ' . $user->name . ' (' . $user->role_label . ')!');
             }
 
+            // Masyarakat diarahkan ke halaman layanan mandiri
             return redirect()->intended(route('pengajuan.saya'))
                 ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
@@ -69,7 +71,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Tampilkan halaman registrasi warga.
+     * Tampilkan halaman registrasi akun mandiri untuk masyarakat.
      */
     public function showRegisterForm()
     {
@@ -99,22 +101,19 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        $user = User::create([
+        UserModel::create([
             'name'     => $validated['name'],
             'email'    => strtolower(trim($validated['email'])),
             'password' => Hash::make($validated['password']),
             'role'     => 'masyarakat',
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('pengajuan.saya'))
-            ->with('success', 'Pendaftaran akun berhasil! Anda kini dapat menggunakan seluruh layanan masyarakat Desa Jambelaer.');
+        return redirect()->route('login')
+            ->with('success', 'Pendaftaran akun berhasil! Silakan masuk menggunakan email dan password yang telah Anda daftarkan.');
     }
 
     /**
-     * Proses logout masyarakat.
+     * Proses logout terpadu — berlaku untuk seluruh role pengguna.
      */
     public function logout(Request $request)
     {
@@ -122,75 +121,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('home')
+        return redirect()->route('login')
             ->with('success', 'Anda telah berhasil keluar.');
-    }
-
-    // ══════════════════════════════════════════════════════════════════
-    //  LOGIN ADMIN
-    // ══════════════════════════════════════════════════════════════════
-
-    /**
-     * Tampilkan halaman login admin.
-     */
-    public function showAdminLoginForm()
-    {
-        if (Auth::check()) {
-            if (Auth::user()->isAdmin()) {
-                return redirect()->route('admin.dashboard');
-            }
-            return redirect()->route('pengajuan.saya');
-        }
-
-        return view('admin.auth.login');
-    }
-
-    /**
-     * Proses autentikasi login admin.
-     */
-    public function adminLogin(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ], [
-            'email.required'    => 'Alamat email wajib diisi.',
-            'email.email'       => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
-        ]);
-
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            $user = Auth::user();
-
-            if ($user->isAdmin()) {
-                session(['admin_last_activity' => time()]);
-                return redirect()->intended(route('admin.dashboard'))
-                    ->with('success', 'Selamat datang kembali, ' . $user->name . ' (' . $user->role_label . ')!');
-            }
-
-            // Bukan perangkat desa / admin — tolak akses dan logout
-            Auth::logout();
-            return back()->withErrors([
-                'email' => 'Akun ini tidak memiliki hak akses sebagai Perangkat Desa atau Administrator.',
-            ])->onlyInput('email');
-        }
-
-        return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email');
-    }
-
-    /**
-     * Proses logout admin — kembali ke halaman login admin.
-     */
-    public function adminLogout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()->route('admin.login')
-            ->with('success', 'Anda berhasil logout.');
     }
 }

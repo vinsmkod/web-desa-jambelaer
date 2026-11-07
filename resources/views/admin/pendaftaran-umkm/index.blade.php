@@ -27,7 +27,7 @@
             </div>
             <div>
                 <span class="text-xs text-gray-500 font-medium">Menunggu Verifikasi</span>
-                <p class="text-2xl font-bold text-amber-600">{{ \App\Models\PendaftaranUmkm::whereIn('status', ['menunggu_verifikasi', 'diproses'])->count() }}</p>
+                <p class="text-2xl font-bold text-amber-600">{{ \App\Models\PendaftaranUmkmModel::whereIn('status', ['menunggu_verifikasi', 'diproses'])->count() }}</p>
             </div>
         </div>
 
@@ -39,7 +39,7 @@
             </div>
             <div>
                 <span class="text-xs text-gray-500 font-medium">Disetujui</span>
-                <p class="text-2xl font-bold text-blue-600">{{ \App\Models\PendaftaranUmkm::where('status', 'disetujui')->count() }}</p>
+                <p class="text-2xl font-bold text-blue-600">{{ \App\Models\PendaftaranUmkmModel::where('status', 'disetujui')->count() }}</p>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
             </div>
             <div>
                 <span class="text-xs text-gray-500 font-medium">Telah Dipublikasikan</span>
-                <p class="text-2xl font-bold text-purple-600">{{ \App\Models\PendaftaranUmkm::has('produkDipublikasikan')->count() }}</p>
+                <p class="text-2xl font-bold text-purple-600">{{ \App\Models\PendaftaranUmkmModel::has('produkDipublikasikan')->count() }}</p>
             </div>
         </div>
     </div>

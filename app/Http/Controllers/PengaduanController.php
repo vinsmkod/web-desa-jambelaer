@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengaduan;
-use App\Models\Pengaturan;
+use App\Models\PengaduanModel;
+use App\Models\PengaturanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,9 +17,9 @@ class PengaduanController extends Controller
     public function create()
     {
         $settings = [
-            'desa_telepon' => Pengaturan::get('desa_telepon', '0813-2476-8193'),
-            'desa_email'   => Pengaturan::get('desa_email', 'pemdes@jambelaer.desa.id'),
-            'desa_alamat'  => Pengaturan::get('desa_alamat', 'Jl. Raya Jambelaer No. 12, Kec. Dawuan, Subang'),
+            'desa_telepon' => PengaturanModel::get('desa_telepon', '0813-2476-8193'),
+            'desa_email'   => PengaturanModel::get('desa_email', 'pemdes@jambelaer.desa.id'),
+            'desa_alamat'  => PengaturanModel::get('desa_alamat', 'Jl. Raya Jambelaer No. 12, Kec. Dawuan, Subang'),
         ];
 
         return view('pages.pengaduan', compact('settings'));
@@ -81,9 +81,9 @@ class PengaduanController extends Controller
         }
 
         // 4. Buat Pengaduan
-        $nomorPengaduan = Pengaduan::generateNomorPengaduan();
+        $nomorPengaduan = PengaduanModel::generateNomorPengaduan();
 
-        $pengaduan = Pengaduan::create([
+        $pengaduan = PengaduanModel::create([
             'nomor_pengaduan' => $nomorPengaduan,
             'user_id'         => $user->user_id,
             'nama'            => $request->nama,
@@ -118,7 +118,7 @@ class PengaduanController extends Controller
      */
     public function edit(int $id)
     {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan = PengaduanModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pengaduan->user_id !== (int) Auth::id()) {
@@ -140,7 +140,7 @@ class PengaduanController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan = PengaduanModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR)
         if ((int) $pengaduan->user_id !== (int) Auth::id()) {
@@ -203,7 +203,7 @@ class PengaduanController extends Controller
      */
     public function batal(int $id)
     {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan = PengaduanModel::findOrFail($id);
 
         // Otorisasi ketat (cegah IDOR): hanya pemilik sendiri
         if ((int) $pengaduan->user_id !== (int) Auth::id()) {
